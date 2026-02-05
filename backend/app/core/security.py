@@ -1,0 +1,30 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
+
+
+def setup_cors(app: FastAPI) -> None:
+    """
+    Configure CORS middleware for the application
+    """
+    # Allowed origins
+    origins = [
+        "http://localhost:3000",  # Next.js dev
+        "http://localhost:3001",
+        "http://127.0.0.1:3000",
+    ]
+    
+    # Add production origins if not in development
+    if settings.ENVIRONMENT == "production":
+        origins.extend([
+            "https://your-frontend-domain.com",
+            "https://www.your-frontend-domain.com",
+        ])
+    
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
