@@ -29,23 +29,13 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
             (
                 SELECT 
                     'experience' as type,
-                    id,
+                    experiences.id,
                     role as title,
-                    context as description,
-                    1 - (embedding <=> CAST(:embedding AS vector)) as score
-                FROM experiences
-                WHERE embedding IS NOT NULL
-            )
-            UNION ALL
-            (
-                SELECT 
-                    'project' as type,
-                    id,
-                    name as title,
-                    objective || ' ' || problem || ' ' || solution || ' ' || description as description,
-                    1 - (embedding <=> CAST(:embedding AS vector)) as score
-                FROM projects
-                WHERE embedding IS NOT NULL
+                    TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date,   'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description   as description,
+                    1 - (experiences.embedding <=> CAST(:embedding AS vector)) as score
+                FROM experiences, projects
+                WHERE experiences.embedding IS NOT NULL 
+                AND experiences.id = projects.experience_id
             )
             UNION ALL
             (
@@ -53,7 +43,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
                     'formation' as type,
                     id,
                     degree as title,
-                    description,
+                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description,
                     1 - (embedding <=> CAST(:embedding AS vector)) as score
                 FROM formations
                 WHERE embedding IS NOT NULL
@@ -66,7 +56,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
         
         result = await db.execute(
             query_sql, 
-            {"embedding": embedding_str, "top_k": top_k}
+            {"embedding": embedding_str, "top_k": 20}
         )
         rows = result.fetchall()
         
@@ -80,6 +70,8 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
             }
             for row in rows
         ]
+        for c in context_chunks:
+            print("-----------------------", c)
         
         return context_chunks
 

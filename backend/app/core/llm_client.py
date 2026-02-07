@@ -18,6 +18,7 @@ litellm.success_callback = []  # Pas de callback externe
 
 # Pricing (USD per 1M tokens)
 PRICING = {
+    "gemini/gemini-2.5-flash": {"input": 0.30, "output": 0.30},
     "mistral-small-latest": {"input": 0.25, "output": 0.25},
     "groq/llama-3-70b-8192": {"input": 0.0, "output": 0.0}  # Gratuit
 }
@@ -36,7 +37,7 @@ def calculate_cost(model: str, tokens: int) -> float:
 async def generate_with_fallback(
     system_prompt: str,
     user_prompt: str,
-    max_tokens: int = 500,
+    max_tokens: int = 5000,
     temperature: float = 0.3
 ) -> Dict:
     """
@@ -55,6 +56,7 @@ async def generate_with_fallback(
     """
     # Liste des modèles à tenter (ordre de priorité)
     models = [
+        ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
         ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
         ("groq/llama-3-70b-8192", settings.GROQ_API_KEY)
     ]

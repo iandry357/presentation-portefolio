@@ -13,6 +13,7 @@ from typing import List, Dict, Tuple
 import time
 import hashlib
 import argparse
+import chardet
 
 try:
     from voyageai import Client as VoyageClient
@@ -29,8 +30,8 @@ except ImportError as e:
 
 VOYAGE_MODEL       = "voyage-3"              # → 1024 dim fixe
 EMBEDDING_DIM      = 1024
-BATCH_SIZE_EMBED   = 1
-SLEEP_BETWEEN_CALLS = 25
+BATCH_SIZE_EMBED   = 3
+SLEEP_BETWEEN_CALLS = 2
 
 # Racine du projet dans le conteneur
 PROJECT_ROOT = "/app"
@@ -47,11 +48,11 @@ OUTPUT_SQL = os.path.join(PROJECT_ROOT, "scripts", "init.sql")
 EMBEDDINGS_CACHE = os.path.join(PROJECT_ROOT, "scripts", "embeddings_cache.json")
 
 DB_PARAMS = {
-    "host":     os.getenv("POSTGRES_HOST", "localhost"),
+    "host":     os.getenv("POSTGRES_HOST", "postgres"),
     "port":     int(os.getenv("POSTGRES_PORT", "5432")),
     "dbname":   os.getenv("POSTGRES_DB", "portfolio_rag"),
-    "user":     os.getenv("POSTGRES_USER", "postgres"),
-    "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
+    "user":     os.getenv("POSTGRES_USER", "postgresDefault"),
+    "password": os.getenv("POSTGRES_PASSWORD", "postgresDefault"),
     "client_encoding": "UTF8", 
 }
 
@@ -77,10 +78,50 @@ def pg_quote(value):
     quoted = adapted.getquoted()
     if isinstance(quoted, bytes):
         try:
-            return quoted.decode('utf-8')
+            return quoted.decode('utf-8', errors='replace')
         except UnicodeDecodeError:
-            return quoted.decode('latin-1')
+            return quoted.decode('latin-1', errors='replace')
     return str(quoted)
+
+# from psycopg2.extensions import adapt, AsIs
+# import os
+
+# def pg_quote(value):
+#     """
+#     Échappe proprement pour PostgreSQL via psycopg2.adapt()
+#     Fonctionne même sans connexion active (fallback manuel)
+#     """
+#     if value is None or value == "":
+#         return "NULL"
+
+#     if not isinstance(value, (str, bytes)):
+#         value = str(value)
+
+#     try:
+#         # Tentative normale
+#         adapted = adapt(value)
+#         quoted = adapted.getquoted()
+
+#         if isinstance(quoted, bytes):
+#             # Avec connexion → UTF-8
+#             # Sans connexion → peut être latin-1 ou autre → on force UTF-8 safe
+#             return quoted.decode('utf-8', errors='surrogateescape')
+        
+#         return quoted  # déjà str
+
+#     except UnicodeEncodeError:
+#         # Cas où latin-1 est tenté en interne → fallback manuel sûr
+#         # On échappe nous-mêmes (équivalent à ce que ferait psycopg2 en UTF-8)
+#         if isinstance(value, bytes):
+#             value = value.decode('utf-8', errors='replace')
+        
+#         escaped = value.replace("'", "''").replace("\\", "\\\\")
+#         return f"E'{escaped}'"   # E'' = échappement standard + UTF-8
+
+#     except Exception as e:
+#         # Tout autre erreur inattendue → fallback
+#         escaped = str(value).replace("'", "''").replace("\\", "\\\\")
+#         return f"E'{escaped}'"
 
 
 def pg_array(arr: List[str]) -> str:
@@ -99,14 +140,19 @@ def pg_vector(vec: List[float]) -> str:
     """
     return f"'[{','.join(f'{x:.7f}' for x in vec)}]'::vector"
 
+def detect_encoding(file_path: str) -> str:
+    with open(file_path, "rb") as f:
+        raw_data = f.read(10000)  # Lit les 10 000 premiers octets pour la détection
+        return chardet.detect(raw_data)["encoding"]
 
 def load_json(path: str) -> list:
     if not os.path.exists(path):
         print(f"Fichier absent : {path}")
         return []
-    with open(path, encoding="utf-8") as f:
+    encoding = detect_encoding(path)
+    with open(path, encoding=encoding, errors="replace") as f:
+    # with open(path, encoding="utf-8") as f:
         return json.load(f)
-
 
 def normalize_skill_key(s: Dict) -> Tuple[str, str, str]:
     name = (s.get("name") or "").strip().lower()
@@ -131,10 +177,20 @@ def collect_unique_skills(exps: List, forms: List, globals_sk: List) -> List[Dic
 
 def text_experience(exp: Dict) -> str:
     parts = [
-        f"Entreprise : {exp.get('company','')}",
+        f"Date : {str(exp.get('start_date',''))} à {str(exp.get('end_date',''))}",
+        f"Entreprise : {exp.get('company','')}, {exp.get('location')}",
         f"Rôle : {exp.get('role','')}",
         f"Type : {exp.get('mission_type','')}",
         exp.get("context", ""),
+        exp.get("projects", [])[0].get('objective', ''),
+        exp.get("projects", [])[0].get('problem', ''),
+        exp.get("projects", [])[0].get('solution', ''),
+        exp.get("projects", [])[0].get('results', ''),
+        exp.get("projects", [])[0].get('impact', ''),
+        # exp['projects']['problem'],
+        # exp['projects']['solution'],
+        # exp['projects']['results'],
+        # exp['projects']['impact'],
         f"Technologies : {', '.join(exp.get('technologies',[]))}",
     ]
     return " | ".join(filter(None, parts)) or "Expérience professionnelle"
@@ -143,6 +199,7 @@ def text_experience(exp: Dict) -> str:
 def text_project(proj: Dict) -> str:
     parts = [
         f"Projet : {proj.get('name','')}",
+        f"Date : {str(proj.get('start_date',''))} à {str(proj.get('end_date',''))}",
         proj.get("description", ""),
         f"Objectif : {proj.get('objective','')}",
         f"Problème : {proj.get('problem','')}",
@@ -157,6 +214,7 @@ def text_project(proj: Dict) -> str:
 def text_formation(form: Dict) -> str:
     parts = [
         f"{form.get('degree','')} à {form.get('institution','')}",
+        f"Date : {str(form.get('start_date',''))} à {str(form.get('end_date',''))}",
         f"Domaine : {form.get('field','')}",
         form.get("description", ""),
         f"Apprentissages clés : {form.get('key_learnings','')}",
@@ -304,7 +362,7 @@ def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, p
         location = pg_quote(exp.get("location", ""))
         context = pg_quote(exp.get("context", ""))
         techs = pg_array(exp.get("technologies", []))
-        embedding = pg_vector(exp_embs[i])
+        embedding = pg_vector(exp_embs[i]) if len(exp_embs) > 0 else " "
         
         lines.append(
             f"  INSERT INTO experiences (company, role, mission_type, start_date, end_date, "
@@ -327,7 +385,7 @@ def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, p
         loc = pg_quote(form.get("location", ""))
         desc = pg_quote(form.get("description", ""))
         learn = pg_quote(form.get("key_learnings", ""))
-        embedding = pg_vector(form_embs[i])
+        embedding = pg_vector(form_embs[i]) if len(form_embs) > 0 else " "
         
         lines.append(
             f"  INSERT INTO formations (institution, degree, field, start_date, end_date, "
@@ -354,7 +412,7 @@ def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, p
         duration = proj.get("duration_months", "NULL")
         collabs = pg_quote(proj.get("collaborators", ""))
         proj_type = pg_quote(proj.get("project_type", ""))
-        embedding = pg_vector(proj_embs[proj_idx])
+        embedding = pg_vector(proj_embs[proj_idx]) if len(proj_embs) > 0 else " "
         
         lines.append(
             f"  INSERT INTO projects (experience_id, name, description, objective, problem, "
@@ -402,6 +460,7 @@ def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, p
     sql_content = "\n".join(lines)
     
     # Sauvegarde backup
+    sql_content = sql_content.encode("utf-8", errors="replace").decode("utf-8")
     with open(OUTPUT_SQL, "w", encoding="utf-8") as f:
         f.write(sql_content)
     print(f"✓ {OUTPUT_SQL} généré")
@@ -468,6 +527,9 @@ def main():
     exp_embs  = get_embeddings(exp_texts,  vo, use_cache)
     proj_embs = get_embeddings(proj_texts, vo, use_cache)
     form_embs = get_embeddings(form_texts, vo, use_cache)
+    # exp_embs  = []
+    # proj_embs = []
+    # form_embs = []
 
     # Génération SQL
     sql_content = generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, proj_list)

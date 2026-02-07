@@ -14,6 +14,7 @@ psycopg2-binary==2.9.9
 pgvector==0.2.5
 litellm==1.30.0
 voyageai==0.2.1
+google-generativeai>=0.8.0
 
 # Observability
 langsmith==0.1.0
@@ -22,3 +23,8 @@ langsmith==0.1.0
 python-dotenv==1.0.1
 httpx==0.26.0
 python-multipart==0.0.9
+
+PyMuPDF==1.23.26
+Pillow==10.2.0
+
+Chardet

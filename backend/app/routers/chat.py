@@ -7,6 +7,8 @@ from app.schemas.chat import ChatRequest, ChatResponse, SourceReference
 from app.services.rag import rag_pipeline
 from app.core.config import settings
 import logging
+from app.core.database import AsyncSessionLocal
+from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +39,14 @@ async def chat(request: ChatRequest):
             )
             for chunk in result['context_chunks'][:3]
         ]
+
+        # Récupérer question_count pour cette session
+        async with AsyncSessionLocal() as db:
+            result_count = await db.execute(
+                text("SELECT question_count FROM chat_sessions WHERE session_id = :sid"),
+                {"sid": request.session_id}
+            )
+            count = result_count.scalar() or 1
         
         return ChatResponse(
             query_id=result['query_id'],
@@ -44,7 +54,9 @@ async def chat(request: ChatRequest):
             sources=sources,
             tokens_used=result['tokens_used'],
             cost=result['cost'],
-            provider_used=result['provider_used']
+            provider_used=result['provider_used'],
+            questions_count=count,
+            questions_remaining=3 - count
         )
         
     except Exception as e:

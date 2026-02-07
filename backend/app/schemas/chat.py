@@ -23,4 +23,6 @@ class ChatResponse(BaseModel):
     sources: List[SourceReference]
     tokens_used: int
     cost: float  
-    provider_used: str      
+    provider_used: str    
+    questions_count: int
+    questions_remaining: int  

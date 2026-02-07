@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     VOYAGE_API_KEY: str
     MISTRAL_API_KEY: str
     GROQ_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
     LANGSMITH_API_KEY: Optional[str] = None
     LANGSMITH_PROJECT: str = "portfolio-rag"
 
@@ -28,8 +29,8 @@ class Settings(BaseSettings):
     # RAG Config
     EMBEDDING_MODEL: str = "voyage-3"
     EMBEDDING_DIMENSIONS: int = 1024
-    RETRIEVAL_TOP_K: int = 6
-    RETRIEVAL_SCORE_THRESHOLD: float = 0.5
+    RETRIEVAL_TOP_K: int = 20
+    RETRIEVAL_SCORE_THRESHOLD: float = 0.2
 
     class Config:
         # env_file = ".env"

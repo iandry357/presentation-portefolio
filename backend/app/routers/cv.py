@@ -57,6 +57,29 @@ async def download_cv():
         )
 
 
+@router.get("/page/{page_number}")
+async def get_cv_page_image(page_number: int):
+    """
+    Retourne une page du CV en PNG (pré-générée).
+    """
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            text("SELECT image_data FROM cv_pages WHERE page_number = :page"),
+            {"page": page_number}
+        )
+        row = result.fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail=f"Page {page_number} non trouvée")
+        
+        image_data = bytes(row[0])
+        
+        return Response(
+            content=image_data,
+            media_type="image/png",
+            headers={"Cache-Control": "public, max-age=86400"}  # Cache 24h
+        )
+
 # Anciens endpoints (stubs pour RAG futur)
 @router.get("/skills")
 async def get_skills():

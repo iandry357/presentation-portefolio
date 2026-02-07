@@ -1,0 +1,14 @@
+
+# Depuis backend/
+docker exec -i portfolio_rag_db psql -U cvuser -d portfolio_db < migrations/sql/001_init_schema.sql
+docker exec -i portfolio_rag_db psql -U cvuser -d portfolio_db < migrations/sql/002_complete_logging.sql
+# Lister les tables
+docker exec -it portfolio_rag_db psql -U cvuser -d portfolio_db -c "\dt"
+
+# Vérifier l'extension pgvector
+docker exec -it portfolio_rag_db psql -U cvuser -d portfolio_db -c "SELECT * FROM pg_extension WHERE extname='vector';"
+
+docker compose exec seeder psql -h postgres -p 5432 -U cvuser -d portfolio_db -f /app/scripts/init.sql
+
+docker exec -it portfolio_rag_backend python /app/scripts/seed_data.py  
+docker exec -it portfolio_rag_backend python /app/scripts/upload_cv_pdf.py   --database-url="postgresql://cvuser:cvpwd@postgres:5432/portfolio_db"   --pdf-path="/app/scripts/data/IandryRakotoniaina_CV_2026.pdf"
