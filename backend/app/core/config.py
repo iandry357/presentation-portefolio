@@ -32,8 +32,8 @@ class Settings(BaseSettings):
     # RAG Config
     EMBEDDING_MODEL: str = "voyage-3"
     EMBEDDING_DIMENSIONS: int = 1024
-    RETRIEVAL_TOP_K: int = 20
-    RETRIEVAL_SCORE_THRESHOLD: float = 0.2
+    RETRIEVAL_TOP_K: int = 10
+    RETRIEVAL_SCORE_THRESHOLD: float = 0.13
 
     class Config:
         # env_file = ".env"

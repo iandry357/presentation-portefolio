@@ -43,7 +43,7 @@ async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
 
 Question : {question}
 
-Sois sympathique si la question concerne une question sociale mais oriente toujours vers les compétences de Ian'ch.
+Sois sympathique si la question concerne une question sociale mais oriente toujours vers les informations concernant de Ian'ch.
 Réponds en français, synthétique, percutant, simple et structurée. Mets en avant les réalisations et la méthodologies.
 Il faut que tu restes bien sur un raisonnement où la chronologie est très importante, il ne faut pas sauter des années car chaque année est importante pour mon parcours.
 Privilégie l'énurmation par bullets points dans la narration pour ne pas avoir un grop bloc de texte à chaque fois et que la lecture soit plus symphatique.
