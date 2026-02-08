@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
 import os
+from pydantic import Field
 
 
 class Settings(BaseSettings):
