@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     LANGSMITH_PROJECT: str = "portfolio-rag"
 
     # App Config
-    ENVIRONMENT: str = "development"
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     LOG_LEVEL: str = "INFO"
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
