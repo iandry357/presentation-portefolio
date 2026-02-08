@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     API_PORT: int = 8000
     SECRET_KEY: str
 
+    CORS_ORIGINS: str = Field(default="", env="CORS_ORIGINS")
+
     # RAG Config
     EMBEDDING_MODEL: str = "voyage-3"
     EMBEDDING_DIMENSIONS: int = 1024
