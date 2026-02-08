@@ -33,9 +33,9 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
                     role as title,
                     TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date,   'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description   as description,
                     1 - (experiences.embedding <=> CAST(:embedding AS vector)) as score
-                FROM experiences, projects
+                FROM experiences
+                LEFT JOIN projects ON experiences.id = projects.experience_id
                 WHERE experiences.embedding IS NOT NULL 
-                AND experiences.id = projects.experience_id
             )
             UNION ALL
             (
@@ -43,9 +43,20 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
                     'formation' as type,
                     id,
                     degree as title,
-                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description,
+                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description as description,
                     1 - (embedding <=> CAST(:embedding AS vector)) as score
                 FROM formations
+                WHERE embedding IS NOT NULL
+            )
+            UNION ALL
+            (
+                SELECT 
+                    'information' as type,
+                    id,
+                    'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé ' || prononciation || ' né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
+                    'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion as description,
+                    1 - (embedding <=> CAST(:embedding AS vector)) as score
+                FROM informations
                 WHERE embedding IS NOT NULL
             )
             ORDER BY score DESC
@@ -245,8 +256,10 @@ async def rag_pipeline(
     # 1. Vectorisation + mesure latency
     logger.info(f"🔍 RAG Pipeline [{query_id}]: vectorizing...")
     start_retrieval = time.perf_counter()
+    modelEmbeddings = "voyage"
+    # modelEmbeddings = "mistral"
     
-    embedding = await vectorize_query(question)
+    embedding = await vectorize_query(question, modelEmbeddings)
     embedding_tokens = len(question.split())  # Approximation
     
     # 2. Recherche contexte

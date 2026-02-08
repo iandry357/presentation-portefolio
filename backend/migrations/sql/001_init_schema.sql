@@ -31,6 +31,32 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- ============================================================================
+-- TABLE: informations
+-- ============================================================================
+
+CREATE TABLE informations (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255),
+    prononciation VARCHAR(255),
+    date_naissance DATE,
+    pays_naissance VARCHAR(255),
+    location VARCHAR(255),
+    passion TEXT,
+    embedding VECTOR(1024),
+    created_at TIMESTAMP DEFAULT now() NOT NULL,
+    updated_at TIMESTAMP DEFAULT now() NOT NULL
+);
+
+
+-- Trigger updated_at
+CREATE TRIGGER informations_updated_at
+    BEFORE UPDATE ON informations
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 -- ============================================================================
 -- TABLE: experiences
 -- ============================================================================

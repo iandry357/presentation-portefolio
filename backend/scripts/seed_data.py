@@ -14,6 +14,7 @@ import time
 import hashlib
 import argparse
 import chardet
+from litellm import embedding
 
 try:
     from voyageai import Client as VoyageClient
@@ -42,6 +43,7 @@ FILES = {
     "experiences": os.path.join(DATA_DIR, "experiences.json"),
     "formations":  os.path.join(DATA_DIR, "formations.json"),
     "skills":      os.path.join(DATA_DIR, "skills.json"),
+    "informations":      os.path.join(DATA_DIR, "informations.json"),
 }
 
 OUTPUT_SQL = os.path.join(PROJECT_ROOT, "scripts", "init.sql")
@@ -174,6 +176,15 @@ def collect_unique_skills(exps: List, forms: List, globals_sk: List) -> List[Dic
                 seen[key] = sk
     return list(seen.values())
 
+def text_information(exp: Dict) -> str:
+    
+    parts = [
+        f"Je suis {str(exp.get('prenom',''))} {str(exp.get('nom',''))}, avec mon prénom qui se prononce {exp.get('prononciation')} ",
+        f"Je suis née à {exp.get('pays_naissance')} le {exp.get('date_naissance')}",
+        f"Je suis arrivé en {exp.get('location')} en 2015",
+        f"En plus de ma grande passion pour l'informatique, je suis également {exp.get('passion')}"
+    ]
+    return " | ".join(filter(None, parts)) or "Informations sociales"
 
 def text_experience(exp: Dict) -> str:
     parts = [
@@ -256,7 +267,7 @@ def save_embeddings_cache(cache: Dict):
         print(f"⚠️  Erreur sauvegarde cache : {e}")
 
 
-def get_embeddings(texts: List[str], client: VoyageClient, use_cache: bool = True) -> List[List[float]]:
+def get_embeddings(texts: List[str], modelEmbeddings: str, use_cache: bool = True) -> List[List[float]]:
     if not texts:
         return []
     
@@ -280,13 +291,29 @@ def get_embeddings(texts: List[str], client: VoyageClient, use_cache: bool = Tru
     # Calculer les embeddings manquants
     if texts_to_compute:
         print(f"🔄 Calcul de {len(texts_to_compute)} embeddings (cache: {len(texts) - len(texts_to_compute)})")
+
+        if modelEmbeddings == "voyage":
+            client = VoyageClient(api_key=VOYAGE_API_KEY)
+        # if modelEmbeddings == "mistral"
         
         computed_embs = []
         for i in range(0, len(texts_to_compute), BATCH_SIZE_EMBED):
             batch = texts_to_compute[i:i+BATCH_SIZE_EMBED]
             try:
-                resp = client.embed(batch, model=VOYAGE_MODEL, input_type="document")
-                computed_embs.extend(resp.embeddings)
+                if modelEmbeddings == "voyage":
+                    resp = client.embed(batch, model=VOYAGE_MODEL, input_type="document")
+                    computed_embs.extend(resp.embeddings)
+                if modelEmbeddings == "mistral":
+                    response = embedding(model="mistral/mistral-embed", input=batch)
+                    embeddings = [d["embedding"] for d in response.data] 
+                    # embeddings = response.data[0]['embedding']
+                    computed_embs.extend(embeddings)
+
+
+
+
+
+                # computed_embs.extend(resp.embeddings)
             except Exception as e:
                 print(f"✗ Erreur embedding batch {i//BATCH_SIZE_EMBED +1}: {e}")
                 computed_embs.extend([[0.0]*EMBEDDING_DIM for _ in batch])
@@ -313,7 +340,7 @@ def get_embeddings(texts: List[str], client: VoyageClient, use_cache: bool = Tru
 #  SQL generation avec bloc PL/pgSQL
 # ────────────────────────────────────────────────
 
-def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, proj_list):
+def generate_sql_file(infos, exps, forms, all_skills, info_embs, exp_embs, proj_embs, form_embs, proj_list):
     """
     Génère init.sql avec bloc DO $$ pour utiliser des variables temporaires
     """
@@ -348,6 +375,27 @@ def generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, p
             f"VALUES ({n}, {c}, {l}) ON CONFLICT (name) DO UPDATE "
             f"SET category = EXCLUDED.category, proficiency_level = EXCLUDED.proficiency_level;"
         )
+    lines.append("")
+
+    # 2. INFORMATION avec RETURNING INTO ───────────────
+    lines.append("  -- 1.1. Informations")
+    for i, info in enumerate(infos):
+        nom = pg_quote(info.get("nom"))
+        prenom = pg_quote(info.get("prenom"))
+        prononciation = pg_quote(info.get("prononciation"))
+        date_naissance = f"'{info['date_naissance']}'" if info.get("date_naissance") else "NULL"
+        pays_naissance = pg_quote(info.get("pays_naissance"))
+        loc = pg_quote(info.get("location", ""))
+        passion = pg_quote(info.get("passion", ""))
+        embedding = pg_vector(info_embs[i]) if len(info_embs) > 0 else " "
+        
+        lines.append(
+            f"  INSERT INTO informations (nom, prenom, prononciation, date_naissance, pays_naissance, "
+            f"location, passion, embedding) "
+            f"VALUES ({nom}, {prenom}, {prononciation}, {date_naissance}, {pays_naissance}, "
+            f"{loc}, {passion}, {embedding});"
+        )
+
     lines.append("")
 
     # 2. EXPERIENCES avec RETURNING INTO ───────────────
@@ -493,6 +541,10 @@ def main():
     parser = argparse.ArgumentParser(description="Seed database avec embeddings Voyage AI")
     parser.add_argument('--force-recompute', action='store_true',
                        help="Forcer le recalcul de tous les embeddings (ignorer le cache)")
+    parser.add_argument(
+        '--model-embeddings',
+        default='voyage'
+    )
     args = parser.parse_args()
     
     use_cache = not args.force_recompute
@@ -504,18 +556,23 @@ def main():
     exps  = load_json(FILES["experiences"])
     forms = load_json(FILES["formations"])
     g_sk  = load_json(FILES["skills"])
+    infos = load_json(FILES["informations"])
 
     if not any([exps, forms, g_sk]):
         print("✗ Aucune donnée trouvée")
         return
 
-    vo = VoyageClient(api_key=VOYAGE_API_KEY)
+    # vo = VoyageClient(api_key=VOYAGE_API_KEY)
+    modelEmbeddings = "voyage"
+    modelEmbeddings = "mistral"
+    modelEmbeddings = args.model_embeddings
 
     # Skills uniques
     all_skills = collect_unique_skills(exps, forms, g_sk)
     print(f"✓ {len(all_skills)} compétences uniques")
 
     # Textes → embeddings
+    info_texts = [text_information(i) for i in infos]
     exp_texts  = [text_experience(e)  for e in exps]
     form_texts = [text_formation(f)   for f in forms]
 
@@ -524,15 +581,16 @@ def main():
 
     print(f"🔢 Embeddings à calculer : exp={len(exp_texts)} | proj={len(proj_texts)} | form={len(form_texts)}")
 
-    exp_embs  = get_embeddings(exp_texts,  vo, use_cache)
-    proj_embs = get_embeddings(proj_texts, vo, use_cache)
-    form_embs = get_embeddings(form_texts, vo, use_cache)
+    info_embs  = get_embeddings(info_texts,  modelEmbeddings, use_cache)
+    exp_embs  = get_embeddings(exp_texts,  modelEmbeddings, use_cache)
+    proj_embs = get_embeddings(proj_texts, modelEmbeddings, use_cache)
+    form_embs = get_embeddings(form_texts, modelEmbeddings, use_cache)
     # exp_embs  = []
     # proj_embs = []
     # form_embs = []
 
     # Génération SQL
-    sql_content = generate_sql_file(exps, forms, all_skills, exp_embs, proj_embs, form_embs, proj_list)
+    sql_content = generate_sql_file(infos, exps, forms, all_skills, info_embs, exp_embs, proj_embs, form_embs, proj_list)
     
     # Exécution directe
     execute_sql(sql_content)

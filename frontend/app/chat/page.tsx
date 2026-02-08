@@ -10,6 +10,9 @@ import {
   incrementQuestionCount,
   getRemainingTime,
   formatRemainingTime,
+  saveMessages,
+  loadMessages,
+  clearMessages
 } from '@/lib/session';
 import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
@@ -40,6 +43,7 @@ export default function ChatPage() {
       setRemainingTime(remaining);
       
       if (remaining === null) {
+        clearMessages();
         // Cooldown terminé, rafraîchir session
         setSession(getOrCreateSession());
       }
@@ -50,17 +54,35 @@ export default function ChatPage() {
 
   // Message initial
   useEffect(() => {
-    if (messages.length === 0) {
+    const savedMessages = loadMessages();
+    if (savedMessages.length > 0) {
+      setMessages(savedMessages);
+    } else {
       setMessages([
         {
           role: 'assistant',
           content:
             "Bonjour ! Je suis l'assistant virtuel d'Iandry (prononcé Ian'ch) RAKOTONIAINA. Posez-moi des questions sur son experience professionnelle, sa formation ou ses projets. Vous pouvez poser 3 questions",
-          timestamp: Date.now(),
+          timestamp: 0,
         },
       ]);
     }
   }, []);
+
+  // useEffect(() => {
+  //   const savedMessages = loadMessages();
+    
+  //   if (savedMessages.length > 0) {
+  //     setMessages(savedMessages);
+  //   } else {
+  //     // Message initial seulement si vide
+  //     setMessages([{
+  //       role: 'assistant',
+  //       content: "Bonjour ! Je suis l'assistant virtuel...",
+  //       timestamp: 0,
+  //     }]);
+  //   }
+  // }, []);
 
   const handleSend = async (messageText: string) => {
     if (!canAskQuestion()) return;
@@ -89,7 +111,12 @@ export default function ChatPage() {
         sources: response.sources,
         timestamp: Date.now(),
       };
-      setMessages((prev) => [...prev, assistantMessage]);
+      // setMessages((prev) => [...prev, assistantMessage]);
+      setMessages((prev) => {
+        const newMessages = [...prev, assistantMessage];
+        saveMessages(newMessages); // ← ajoute ça
+        return newMessages;
+      });
 
       // Vérifier cooldown
       const remaining = getRemainingTime();

@@ -36,7 +36,7 @@ async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
 # Il faut que tu privilégies les expériences professionnelles par rapport à sa formation sauf si questions concernant sa formation
 # Si la réponse n'est pas dans le contexte, dis-le clairement."""
 
-    system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Ian'ch RAKOTONIAINA"""
+    system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Iandry (prononcé Ian'ch) RAKOTONIAINA"""
     
     user_prompt = f"""Contexte (CV d'Ian'ch) :
 {context}

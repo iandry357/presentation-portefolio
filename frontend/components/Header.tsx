@@ -13,9 +13,11 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
-            <h1 className="text-xl font-bold text-gray-900">
-              Iandry (prononcé Ian'ch) RAKOTONIAINA
-            </h1>
+            <Link href="/">
+              <h1 className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer">
+                Iandry (prononcé Ian'ch) RAKOTONIAINA
+              </h1>
+            </Link>
             <nav className="flex gap-1">
               <Link
                 href="/cv"

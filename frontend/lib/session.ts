@@ -1,6 +1,6 @@
 
 import { v4 as uuidv4 } from 'uuid';
-import { Session } from '@/types';
+import { Session, Message } from '@/types';
 
 const SESSION_KEY = 'cv_rag_session';
 const MAX_QUESTIONS = 3;
@@ -52,6 +52,25 @@ export function createNewSession(): Session {
 export function saveSession(session: Session): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+// Sauvegarder messages
+export function saveMessages(messages: Message[]) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('chat_messages', JSON.stringify(messages));
+}
+
+// Charger messages
+export function loadMessages(): Message[] {
+  if (typeof window === 'undefined') return [];
+  const stored = localStorage.getItem('chat_messages');
+  return stored ? JSON.parse(stored) : [];
+}
+
+// Nettoyer (quand session expire)
+export function clearMessages() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('chat_messages');
 }
 
 export function incrementQuestionCount(): void {
