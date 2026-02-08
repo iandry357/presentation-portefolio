@@ -12,14 +12,18 @@ def setup_cors(app: FastAPI) -> None:
         "http://localhost:3000",  # Next.js dev
         "http://localhost:3001",
         "http://127.0.0.1:3000",
+        "https://presentation-portefolio.vercel.app/",
     ]
     
     # Add production origins if not in development
+    # if settings.ENVIRONMENT == "production":
+    #     origins.extend([
+    #         "https://your-frontend-domain.com",
+    #         "https://www.your-frontend-domain.com",
+    #     ])
     if settings.ENVIRONMENT == "production":
-        origins.extend([
-            "https://your-frontend-domain.com",
-            "https://www.your-frontend-domain.com",
-        ])
+        production_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
+        origins.extend(production_origins)
     
     app.add_middleware(
         CORSMiddleware,
