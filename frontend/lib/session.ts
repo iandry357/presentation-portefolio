@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Session, Message } from '@/types';
 
 const SESSION_KEY = 'cv_rag_session';
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 5;
 // const COOLDOWN_MS = 60 * 60 * 1000; // 1 heure
-const COOLDOWN_MS = 30;
+const COOLDOWN_MS = 3 * 60 * 1000;
 
 export function getOrCreateSession(): Session {
   if (typeof window === 'undefined') {
@@ -97,6 +97,20 @@ export function getRemainingTime(): number | null {
   const remaining = COOLDOWN_MS - timeSinceLastQuestion;
   
   return remaining > 0 ? remaining : null;
+}
+
+export function shouldClearSession(): boolean {
+  const session = getOrCreateSession();
+  
+  // Clear seulement si limite atteinte ET cooldown terminé
+  if (session.questionsCount < MAX_QUESTIONS) {
+    return false;
+  }
+  
+  const now = Date.now();
+  const timeSinceLastQuestion = now - session.lastQuestionAt;
+  
+  return timeSinceLastQuestion >= COOLDOWN_MS;
 }
 
 export function formatRemainingTime(ms: number): string {

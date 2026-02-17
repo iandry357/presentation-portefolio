@@ -18,9 +18,11 @@ litellm.success_callback = []  # Pas de callback externe
 
 # Pricing (USD per 1M tokens)
 PRICING = {
-    "gemini/gemini-2.5-flash": {"input": 0.30, "output": 0.30},
     "mistral-small-latest": {"input": 0.25, "output": 0.25},
-    "groq/llama-3-70b-8192": {"input": 0.0, "output": 0.0}  # Gratuit
+    "openai/gpt-oss-120b": {"input": 0.59, "output": 0.79},
+    "groq/llama-3.3-70b-versatile": {"input": 0.59, "output": 0.79},
+    "groq/llama-3.1-8b-instant": {"input": 0.05, "output": 0.08},
+    "gemini/gemini-2.5-flash": {"input": 0.30, "output": 0.30},
 }
 
 
@@ -56,9 +58,11 @@ async def generate_with_fallback(
     """
     # Liste des modèles à tenter (ordre de priorité)
     models = [
-        ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
         ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
-        ("groq/llama-3-70b-8192", settings.GROQ_API_KEY)
+        ("openai/gpt-oss-120b", settings.OPENAI_API_KEY),
+        ("groq/llama-3.1-8b-instant", settings.GROQ_API_KEY),
+        ("groq/llama-3.3-70b-versatile", settings.GROQ_API_KEY ),
+        ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY)
     ]
     
     messages = [

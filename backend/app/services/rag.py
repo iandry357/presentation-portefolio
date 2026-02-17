@@ -10,6 +10,7 @@ from app.services.llm import generate_response
 from sqlalchemy import text
 import logging
 import json
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
                     'experience' as type,
                     experiences.id,
                     role as title,
-                    TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date,   'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description   as description,
+                    TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date,   'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || ' ' || stack as description,
                     1 - (experiences.embedding <=> CAST(:embedding AS vector)) as score
                 FROM experiences
                 LEFT JOIN projects ON experiences.id = projects.experience_id
@@ -43,7 +44,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
                     'formation' as type,
                     id,
                     degree as title,
-                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description as description,
+                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description || ' ' || key_learnings as description,
                     1 - (embedding <=> CAST(:embedding AS vector)) as score
                 FROM formations
                 WHERE embedding IS NOT NULL
@@ -67,7 +68,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
         
         result = await db.execute(
             query_sql, 
-            {"embedding": embedding_str, "top_k": 20}
+            {"embedding": embedding_str, "top_k": 5}
         )
         rows = result.fetchall()
         
@@ -86,6 +87,42 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
         
         return context_chunks
 
+async def get_recent_history(session_id: str) -> List[Dict]:
+    """
+    Récupère les N derniers messages de la session pour contexte.
+    
+    Returns:
+        List[{role: str, content: str}] (ordre chronologique)
+    """
+    async with AsyncSessionLocal() as db:
+        query_sql = text("""
+            SELECT role, content, tokens_used
+            FROM chat_messages
+            WHERE session_id = :session_id
+            ORDER BY created_at DESC
+            LIMIT :limit
+        """)
+        
+        result = await db.execute(query_sql, {
+            "session_id": session_id,
+            "limit": settings.HISTORY_LIMIT_MESSAGES
+        })
+        rows = result.fetchall()
+        
+        # Inverser pour avoir ordre chronologique (plus vieux → plus récent)
+        history = []
+        for row in reversed(rows):
+            role, content, tokens = row
+            
+            # Truncate si réponse assistant trop longue
+            if role == "assistant" and tokens > settings.HISTORY_TRUNCATE_THRESHOLD:
+                # Approximation : 1 token ≈ 4 chars
+                max_chars = settings.HISTORY_TRUNCATE_MAX * 4
+                content = content[:max_chars] + "... [tronqué]"
+            
+            history.append({"role": role, "content": content})
+        
+        return history
 
 async def log_query_metrics(
     query_id: str,
@@ -286,8 +323,16 @@ async def rag_pipeline(
     # 3. Génération + mesure latency
     logger.info(f"✍️ RAG Pipeline [{query_id}]: generating with {len(filtered_chunks)} chunks...")
     start_generation = time.perf_counter()
+
+    history = await get_recent_history(session_id)
     
-    llm_result = await generate_response(question, filtered_chunks)
+    # 4. Génération + mesure latency
+    logger.info(f"✏️ RAG Pipeline [{query_id}]: generating with {len(filtered_chunks)} chunks + {len(history)} history msgs...")
+    start_generation = time.perf_counter()
+    
+    llm_result = await generate_response(question, filtered_chunks, history)
+    
+    # llm_result = await generate_response(question, filtered_chunks)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     
     # 4. Update session

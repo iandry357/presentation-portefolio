@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     MISTRAL_API_KEY: str
     GROQ_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+    OPENAI_API_KEY: str = ""
     LANGSMITH_API_KEY: Optional[str] = None
     LANGSMITH_PROJECT: str = "portfolio-rag"
 
@@ -34,6 +35,11 @@ class Settings(BaseSettings):
     EMBEDDING_DIMENSIONS: int = 1024
     RETRIEVAL_TOP_K: int = 10
     RETRIEVAL_SCORE_THRESHOLD: float = 0.13
+
+    # Historique conversationnel
+    HISTORY_LIMIT_MESSAGES: int = 4  # 2 Q-A = 4 messages
+    HISTORY_TRUNCATE_THRESHOLD: int = 1000  # tokens
+    HISTORY_TRUNCATE_MAX: int = 400  # tokens
 
     class Config:
         # env_file = ".env"

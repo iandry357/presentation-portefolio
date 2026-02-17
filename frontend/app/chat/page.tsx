@@ -9,6 +9,7 @@ import {
   canAskQuestion,
   incrementQuestionCount,
   getRemainingTime,
+  shouldClearSession,
   formatRemainingTime,
   saveMessages,
   loadMessages,
@@ -42,7 +43,8 @@ export default function ChatPage() {
       const remaining = getRemainingTime();
       setRemainingTime(remaining);
       
-      if (remaining === null) {
+      // if (remaining === null) {
+      if (shouldClearSession()) {
         clearMessages();
         // Cooldown terminé, rafraîchir session
         setSession(getOrCreateSession());
@@ -62,7 +64,7 @@ export default function ChatPage() {
         {
           role: 'assistant',
           content:
-            "Bonjour ! Je suis l'assistant virtuel d'Iandry (prononcé Ian'ch) RAKOTONIAINA. Posez-moi des questions sur son experience professionnelle, sa formation ou ses projets. Vous pouvez poser 3 questions",
+            "Bonjour ! Je suis l'assistant virtuel d'Iandry (prononcé Ian'ch) RAKOTONIAINA. Posez-moi des questions sur son experience professionnelle, sa formation ou ses projets. Vous pouvez poser 5 questions",
           timestamp: 0,
         },
       ]);
@@ -93,7 +95,12 @@ export default function ChatPage() {
       content: messageText,
       timestamp: Date.now(),
     };
-    setMessages((prev) => [...prev, userMessage]);
+    // setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => {
+      const newMessages = [...prev, userMessage];
+      saveMessages(newMessages);
+      return newMessages;
+    });
     setIsLoading(true);
 
     try {
@@ -129,7 +136,12 @@ export default function ChatPage() {
           "Désolé, une erreur s'est produite. Veuillez réessayer dans quelques instants.",
         timestamp: Date.now(),
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      // setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => {
+        const newMessages = [...prev, errorMessage];
+        saveMessages(newMessages);
+        return newMessages;
+      });
     } finally {
       setIsLoading(false);
     }
@@ -175,7 +187,7 @@ export default function ChatPage() {
         onSend={handleSend}
         disabled={isLimitReached || isLoading}
         questionsCount={session.questionsCount}
-        questionsRemaining={3 - session.questionsCount}
+        questionsRemaining={5 - session.questionsCount}
       />
     </div>
   );
