@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI application
 app = FastAPI(
     title="Portfolio CV",
-    description="AI-powered portfolio with RAG capabilities",
+    description="AI-powered portfolio cv with RAG capabilities",
     version="0.1.0",
     lifespan=lifespan,
 )
