@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: rg.fr-par.scw.cloud
-  NAMESPACE: portefolio-sv-registry
+  NAMESPACE: portfolio-sv-registry
   IMAGE_NAME: backend
 
 jobs:
