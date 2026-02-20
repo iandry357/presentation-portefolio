@@ -52,5 +52,4 @@ jobs:
           SCW_DEFAULT_REGION: fr-par
         run: |
           scw container container update \
-            container-id=${{ secrets.SCW_CONTAINER_FRONTEND_ID }} \
-            redeploy=true
+            container-id=${{ secrets.SCW_CONTAINER_FRONTEND_ID }} 
