@@ -41,12 +41,13 @@ jobs:
         run: |
           curl -s https://raw.githubusercontent.com/scaleway/scaleway-cli/master/scripts/get.sh | sh
 
-      - name: Deploy to Scaleway Serverless Container
+      - name: Deploy to Scaleway Container
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_PROJECT_ID }}
+          SCW_DEFAULT_REGION: fr-par
         run: |
           scw container container update \
-            ${{ secrets.SCW_ACCESS_KEY }} \
-            secret-key=${{ secrets.SCW_SECRET_KEY }} \
-            project-id=${{ secrets.SCW_PROJECT_ID }} \
-            region=fr-par \
-            container-id=7b4f8a8d-8bae-41f6-bef0-94131c681e6e \
+            container-id=${{ secrets.SCW_CONTAINER_ID }} \
             redeploy=true
