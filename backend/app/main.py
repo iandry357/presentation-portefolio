@@ -7,11 +7,14 @@ from app.core.database import init_db, close_db
 from app.core.security import setup_cors
 from app.routers import health, cv, chat
 
+from app.core.logging_config import setup_logging
+setup_logging()
+
 # Configure logging
-logging.basicConfig(
-    level=getattr(logging, settings.LOG_LEVEL),
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+# logging.basicConfig(
+#     level=getattr(logging, settings.LOG_LEVEL),
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+# )
 logger = logging.getLogger(__name__)
 
 

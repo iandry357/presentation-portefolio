@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     MISTRAL_API_KEY: str
     GROQ_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+    OPENAI_API_KEY: str = ""
     LANGSMITH_API_KEY: Optional[str] = None
     LANGSMITH_PROJECT: str = "portfolio-rag"
 
@@ -34,6 +35,10 @@ class Settings(BaseSettings):
     EMBEDDING_DIMENSIONS: int = 1024
     RETRIEVAL_TOP_K: int = 10
     RETRIEVAL_SCORE_THRESHOLD: float = 0.13
+
+    # Scaleway Cockpit
+    COCKPIT_TOKEN: str
+    COCKPIT_LOGS_URL: str
 
     class Config:
         # env_file = ".env"
