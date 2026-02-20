@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 };
 
 module.exports = {
+  output: 'standalone',
   experimental: {
     turbo: false, // Désactive Turbopack
   },
