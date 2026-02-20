@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
     yield
     
     # Shutdown
-    logger.info("Shutting down Portfolio RAG API..")
+    logger.info("Shutting down Portfolio RAG API...")
     await close_db()
 
 
