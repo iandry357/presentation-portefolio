@@ -20,7 +20,7 @@ export default function HomePage() {
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             7 ans d'expérience<br />
-            Recherche appliquée → Industriel
+            Recherche appliquée → Consulting industriel
           </p>
         </div>
 
