@@ -23,7 +23,7 @@ def setup_logging():
             loki_handler = logging_loki.LokiHandler(
                 url=f"{settings.COCKPIT_LOGS_URL}/loki/api/v1/push",
                 tags={"application": "portfolio-cv-backend", "environment": "production"},
-                auth=("", settings.COCKPIT_TOKEN),
+                auth=(settings.COCKPIT_TOKEN, ""),
                 version="1",
             )
             loki_handler.setLevel(log_level)
