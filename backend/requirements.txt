@@ -30,3 +30,7 @@ Pillow==10.2.0
 Chardet
 
 python-logging-loki
+
+crewai
+rank-bm25
+apscheduler

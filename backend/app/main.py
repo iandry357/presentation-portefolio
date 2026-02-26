@@ -7,6 +7,12 @@ from app.core.database import init_db, close_db
 from app.core.security import setup_cors
 from app.routers import health, cv, chat
 
+from app.routers.jobs import router as jobs_router
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+from app.scheduler.job_pipeline import schedule_pipeline
+
 from app.core.logging_config import setup_logging
 setup_logging()
 
@@ -26,9 +32,19 @@ async def lifespan(app: FastAPI):
     if not db_connected:
         logger.error("Failed to connect to database. Exiting...")
         raise Exception("Database connection failed")
+
+    # Scheduler pipeline jobs (prod uniquement)
+    scheduler = AsyncIOScheduler()
+    if settings.ENVIRONMENT == "production":
+        scheduler.add_job(schedule_pipeline, CronTrigger(hour="8,13,18"))
+        scheduler.start()
+        logger.info("✅ Scheduler démarré : pipeline jobs 3x/jour (8h, 13h, 18h)")
     
     yield
     
+    # Shutdown
+    if settings.ENVIRONMENT == "production":
+        scheduler.shutdown()
     # Shutdown
     logger.info("Shutting down Portfolio RAG API...")
     await close_db()
@@ -49,6 +65,7 @@ setup_cors(app)
 app.include_router(health.router)
 app.include_router(cv.router)
 app.include_router(chat.router)
+app.include_router(jobs_router)
 
 @app.get("/")
 async def root():
