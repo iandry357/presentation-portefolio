@@ -18,7 +18,7 @@ voyageai>=0.2.1
 # ── AI / Agents ────────────────────────────────────────────────
 # litellm et httpx sont des dépendances transitives de crewai,
 # on laisse pip les résoudre pour éviter les conflits
-crewai>=1.10.0
+crewai>=0.80.0
 litellm>=1.81.16
 
 # ── Observability ──────────────────────────────────────────────
