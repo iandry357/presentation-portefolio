@@ -5,6 +5,7 @@ import { ExternalLink, MapPin, Briefcase, Clock, Euro, Building2, CheckCircle } 
 import { JobOfferDetail, JobEnriched } from '@/types';
 import { updateJobStatus, enrichJob } from '@/lib/api';
 import RecalculButton from '@/components/jobs/RecalculButton';
+import ReactMarkdown from 'react-markdown';
 
 // ============================================================================
 // Section helper
@@ -193,6 +194,11 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
                   className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: enriched.summary.replace(/\n/g, '<br/>') }}
                 />
+                {/* <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none overflow-auto break-words">
+                    <ReactMarkdown>
+                    {enriched.summary}
+                    </ReactMarkdown>
+                </div> */}
               </Section>
             )}
 

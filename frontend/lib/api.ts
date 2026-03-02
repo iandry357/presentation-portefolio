@@ -180,3 +180,20 @@ export async function triggerPipeline(region?: string): Promise<{
 
   return response.json();
 }
+
+export async function resetJobs() {
+  const response = await fetch(`${API_URL}/jobs/reset`, {  // ← adapte le chemin si tu utilises un proxy ou une base url différente
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // credentials: 'include',   // si tu as de l'auth plus tard
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Erreur ${response.status}`);
+  }
+
+  return response.json();
+}

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Briefcase, RefreshCw, Play } from 'lucide-react';
+import { Briefcase, RefreshCw, Play, Trash2 } from 'lucide-react';
 import { JobFilters, JobOfferSummary } from '@/types';
-import { getJobs, triggerPipeline } from '@/lib/api';
+import { getJobs, triggerPipeline, resetJobs } from '@/lib/api';
 import JobCard from '@/components/jobs/JobCard';
 import JobFiltersPanel from '@/components/jobs/JobFilters';
 
@@ -29,6 +29,8 @@ export default function JobsPage() {
   const [error, setError] = useState<string | null>(null);
   const [triggering, setTriggering] = useState(false);
   const [triggerResult, setTriggerResult] = useState<string | null>(null);
+  const [resetting, setResetting] = useState(false);           // nouveau
+  const [resetResult, setResetResult] = useState<string | null>(null);  // nouveau
 
   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
 
@@ -71,6 +73,29 @@ export default function JobsPage() {
       setTriggerResult(e instanceof Error ? e.message : 'Erreur pipeline');
     } finally {
       setTriggering(false);
+    }
+  };
+
+  // ============================================================================
+  // Reset offres (nouveau)
+  // ============================================================================
+
+  const handleReset = async () => {
+    if (!confirm("Supprimer toutes les offres sauf celles marquées 'postulé' ou 'enregistré' ?\nCette action est irréversible.")) {
+      return;
+    }
+
+    setResetting(true);
+    setResetResult(null);
+
+    try {
+      const result = await resetJobs();
+      setResetResult(`${result.message} (${result.deleted} supprimée(s))`);
+      await loadOffers();  // recharge la liste
+    } catch (err: any) {
+      setResetResult(err.message || 'Erreur lors du reset');
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -118,6 +143,19 @@ export default function JobsPage() {
                 {triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'}
               </button>
             )}
+
+            {/* Nouveau bouton Reset – visible en dev ou toujours selon ton choix */}
+            {isDev && (   // ← ou retire cette condition si tu veux le montrer en prod
+              <button
+                onClick={handleReset}
+                disabled={resetting || loading}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                title="Supprime toutes les offres sauf postulé/enregistré"
+              >
+                <Trash2 className="w-4 h-4" />
+                {resetting ? 'Reset en cours...' : 'Nettoyer les offres'}
+              </button>
+            )}
           </div>
         </div>
 
@@ -125,6 +163,19 @@ export default function JobsPage() {
         {triggerResult && (
           <div className="text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-3 rounded-lg">
             {triggerResult}
+          </div>
+        )}
+
+        {/* Nouveau → Résultat reset */}
+        {resetResult && (
+          <div
+            className={`text-sm px-4 py-3 rounded-lg ${
+              resetResult.includes('Erreur')
+                ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                : 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+            }`}
+          >
+            {resetResult}
           </div>
         )}
 
