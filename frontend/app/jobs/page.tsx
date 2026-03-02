@@ -32,7 +32,8 @@ export default function JobsPage() {
   const [resetting, setResetting] = useState(false);           // nouveau
   const [resetResult, setResetResult] = useState<string | null>(null);  // nouveau
 
-  const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
+//   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
+  const isDev = true;
 
   // ============================================================================
   // Chargement des offres
