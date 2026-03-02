@@ -93,7 +93,9 @@ def build_redacteur_task(
         description=base_description,
         expected_output=(
             "Une fiche rédigée en markdown avec les 6 sections demandées. "
-            "Ton clair et professionnel. Maximum 400 mots."
+            "Ton clair et professionnel. Maximum 400 mots. "
+            "Ne pas envelopper la réponse dans des balises de code (pas de ```markdown). "
+            "Retourner uniquement le texte markdown brut."
         ),
         agent=agent,
         context=context_tasks,

@@ -6,6 +6,7 @@ import { JobOfferDetail, JobEnriched } from '@/types';
 import { updateJobStatus, enrichJob } from '@/lib/api';
 import RecalculButton from '@/components/jobs/RecalculButton';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // ============================================================================
 // Section helper
@@ -187,18 +188,26 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
         {enriched && (
           <div className="space-y-6">
 
+            {/* {enriched.summary && console.log("SUMMARY:", enriched.summary)} */}
+
             {/* Résumé rédigé */}
             {enriched.summary && (
               <Section title="Synthèse">
-                <div
+                {/* <div
                   className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: enriched.summary.replace(/\n/g, '<br/>') }}
-                />
+                /> */}
                 {/* <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none overflow-auto break-words">
                     <ReactMarkdown>
                     {enriched.summary}
                     </ReactMarkdown>
                 </div> */}
+                {/* <div className="prose prose-sm dark:prose-invert max-w-none"> */}
+                <div className="prose prose-sm dark:prose-invert max-w-none break-words overflow-hidden">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {enriched.summary}
+                    </ReactMarkdown>
+                </div>
               </Section>
             )}
 

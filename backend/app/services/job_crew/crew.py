@@ -120,7 +120,13 @@ async def run_enrichment_crew(
     # Récupération des outputs par task
     parsed_data = _safe_parse_json(parser_task.output.raw)
     analysis    = _safe_parse_json(analyste_task.output.raw)
-    summary     = redacteur_task.output.raw
+    # summary     = redacteur_task.output.raw
+    raw_summary = redacteur_task.output.raw.strip()
+    if raw_summary.startswith("```"):
+        raw_summary = raw_summary.split("```")[1]
+        if raw_summary.startswith("markdown"):
+            raw_summary = raw_summary[8:]
+    summary = raw_summary.strip()
 
     logger.info(f"Crew terminé pour : {offer_raw.get('intitule', 'N/A')}")
 
