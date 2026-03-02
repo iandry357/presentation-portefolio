@@ -305,11 +305,11 @@ async def trigger_pipeline(
     db: AsyncSession = Depends(get_db),
 ):
     print(settings.ENVIRONMENT)
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=403,
-            detail="Déclenchement manuel désactivé en production"
-        )
+    # if settings.ENVIRONMENT == "production":
+    #     raise HTTPException(
+    #         status_code=403,
+    #         detail="Déclenchement manuel désactivé en production"
+    #     )
 
     from scheduler.job_pipeline import run_pipeline
     result = await run_pipeline(db=db, region=body.region)
