@@ -29,3 +29,70 @@ export interface Session {
   questionsCount: number;
   lastQuestionAt: number;
 }
+
+// ============================================================================
+// Jobs — Types France Travail
+// ============================================================================
+
+export type JobStatus = 'nouveau' | 'existant' | 'ferme' | 'consulte' | 'postule';
+
+export interface JobOfferSummary {
+  id: number;
+  ft_id: string;
+  title: string;
+  company_name: string | null;
+  location_label: string | null;
+  contract_type: string | null;
+  contract_label: string | null;
+  work_time: string | null;
+  salary_label: string | null;
+  experience_label: string | null;
+  sector_label: string | null;
+  offer_url: string | null;
+  ft_published_at: string | null;
+  status: JobStatus;
+  applied_at: string | null;
+  has_enriched: boolean;
+}
+
+export interface JobOfferDetail extends JobOfferSummary {
+  description: string | null;
+  rome_code: string | null;
+  location_postal_code: string | null;
+  location_lat: number | null;
+  location_lng: number | null;
+  company_description: string | null;
+  company_url: string | null;
+  naf_code: string | null;
+  raw_data: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobEnriched {
+  id: number;
+  job_offer_id: number;
+  parsed_data: Record<string, unknown> | null;
+  analysis: Record<string, unknown> | null;
+  summary: string | null;
+  recalcul_count: number;
+  recalcul_remaining: number;
+  recalcul_history: Array<{ instruction: string; recalcul_at: string }> | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobListResponse {
+  total: number;
+  items: JobOfferSummary[];
+}
+
+export interface JobFilters {
+  contract_type?: string;
+  status?: string;
+  hide_consulted: boolean;
+  postal_code?: string;
+  max_days_old?: number;
+  page: number;
+  page_size: number;
+}

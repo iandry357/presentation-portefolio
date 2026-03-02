@@ -37,8 +37,11 @@ class Settings(BaseSettings):
     RETRIEVAL_SCORE_THRESHOLD: float = 0.13
 
     # Scaleway Cockpit
-    COCKPIT_TOKEN: str
-    COCKPIT_LOGS_URL: str
+    # COCKPIT_TOKEN: str
+    # COCKPIT_LOGS_URL: str
+
+    FRANCE_TRAVAIL_CLIENT_ID: str = ""
+    FRANCE_TRAVAIL_CLIENT_SECRET: str = ""
 
     class Config:
         # env_file = ".env"

@@ -41,6 +41,17 @@ export default function Header() {
               >
                 Chat
               </Link>
+              <Link
+                href="/jobs"
+                className={cn(
+                  'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                  pathname === '/jobs' || pathname.startsWith('/jobs/')
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                )}
+              >
+                Jobs
+              </Link>
             </nav>
           </div>
         </div>
