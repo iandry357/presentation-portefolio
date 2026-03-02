@@ -1,0 +1,194 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Briefcase, RefreshCw, Play } from 'lucide-react';
+import { JobFilters, JobOfferSummary } from '@/types';
+import { getJobs, triggerPipeline } from '@/lib/api';
+import JobCard from '@/components/jobs/JobCard';
+import JobFiltersPanel from '@/components/jobs/JobFilters';
+
+// ============================================================================
+// Filtres par défaut
+// ============================================================================
+
+const DEFAULT_FILTERS: JobFilters = {
+  page: 1,
+  page_size: 20,
+  hide_consulted: false,
+};
+
+// ============================================================================
+// Page Jobs
+// ============================================================================
+
+export default function JobsPage() {
+  const [filters, setFilters] = useState<JobFilters>(DEFAULT_FILTERS);
+  const [offers, setOffers] = useState<JobOfferSummary[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [triggering, setTriggering] = useState(false);
+  const [triggerResult, setTriggerResult] = useState<string | null>(null);
+
+  const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
+
+  // ============================================================================
+  // Chargement des offres
+  // ============================================================================
+
+  const loadOffers = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getJobs(filters);
+      setOffers(data.items);
+      setTotal(data.total);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur de chargement');
+    } finally {
+      setLoading(false);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    loadOffers();
+  }, [loadOffers]);
+
+  // ============================================================================
+  // Déclenchement manuel pipeline
+  // ============================================================================
+
+  const handleTrigger = async () => {
+    setTriggering(true);
+    setTriggerResult(null);
+    try {
+      const result = await triggerPipeline();
+      setTriggerResult(
+        `${result.message} — ${result.offers_collected} collectées, ${result.offers_scored} scorées, ${result.offers_enriched} nouvelles`
+      );
+      await loadOffers();
+    } catch (e) {
+      setTriggerResult(e instanceof Error ? e.message : 'Erreur pipeline');
+    } finally {
+      setTriggering(false);
+    }
+  };
+
+  // ============================================================================
+  // Pagination
+  // ============================================================================
+
+  const totalPages = Math.ceil(total / filters.page_size);
+
+  return (
+    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 px-4 py-8">
+      <div className="max-w-6xl mx-auto space-y-6">
+
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <Briefcase className="w-6 h-6" />
+              Offres d'emploi
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              {total} offre{total > 1 ? 's' : ''} correspondant à votre profil
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Refresh */}
+            <button
+              onClick={loadOffers}
+              disabled={loading}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              title="Rafraîchir"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+
+            {/* Trigger pipeline (dev uniquement) */}
+            {isDev && (
+              <button
+                onClick={handleTrigger}
+                disabled={triggering}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
+              >
+                <Play className="w-4 h-4" />
+                {triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Résultat pipeline */}
+        {triggerResult && (
+          <div className="text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-3 rounded-lg">
+            {triggerResult}
+          </div>
+        )}
+
+        {/* Layout principal */}
+        <div className="flex gap-6 items-start">
+
+          {/* Filtres */}
+          <aside className="w-56 shrink-0 sticky top-4">
+            <JobFiltersPanel filters={filters} onChange={setFilters} />
+          </aside>
+
+          {/* Liste offres */}
+          <div className="flex-1 space-y-4">
+            {error && (
+              <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            {loading && (
+              <div className="space-y-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+                ))}
+              </div>
+            )}
+
+            {!loading && !error && offers.length === 0 && (
+              <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+                <Briefcase className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p>Aucune offre trouvée</p>
+                <p className="text-sm mt-1">Modifiez vos filtres ou lancez le pipeline</p>
+              </div>
+            )}
+
+            {!loading && offers.map(offer => (
+              <JobCard key={offer.id} offer={offer} />
+            ))}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-4">
+                <button
+                  onClick={() => setFilters(f => ({ ...f, page: f.page - 1 }))}
+                  disabled={filters.page === 1}
+                  className="px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Précédent
+                </button>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {filters.page} / {totalPages}
+                </span>
+                <button
+                  onClick={() => setFilters(f => ({ ...f, page: f.page + 1 }))}
+                  disabled={filters.page === totalPages}
+                  className="px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Suivant
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
