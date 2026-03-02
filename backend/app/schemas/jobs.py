@@ -24,7 +24,8 @@ class JobOfferSummary(BaseModel):
     ft_published_at: Optional[datetime]
     status: str
     applied_at: Optional[datetime]
-    has_enriched: bool  # indique si la fiche enrichie existe déjà
+    # has_enriched: bool  # indique si la fiche enrichie existe déjà
+    has_enriched: bool = False
 
     class Config:
         from_attributes = True
@@ -60,7 +61,7 @@ class JobEnrichedResponse(BaseModel):
     analysis: Optional[Dict[str, Any]]
     summary: Optional[str]
     recalcul_count: int
-    recalcul_remaining: int     # calculé : 3 - recalcul_count
+    recalcul_remaining: int = 0     # calculé : 3 - recalcul_count
     recalcul_history: Optional[List[Dict[str, Any]]]
     created_at: datetime
     updated_at: datetime

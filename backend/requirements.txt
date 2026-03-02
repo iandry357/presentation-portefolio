@@ -1,36 +1,35 @@
-# Core FastAPI
-fastapi==0.110.0
-uvicorn[standard]==0.27.1
-pydantic==2.6.1
-pydantic-settings==2.1.0
+# ── Core FastAPI ───────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.1
+pydantic>=2.7.0
+pydantic-settings>=2.10.1
+python-multipart>=0.0.9
 
-# Database
-sqlalchemy[asyncio]==2.0.27
-asyncpg==0.29.0
-alembic==1.13.1
-psycopg2-binary==2.9.9
+# ── Database ───────────────────────────────────────────────────
+sqlalchemy[asyncio]>=2.0.27
+asyncpg>=0.29.0
+alembic>=1.13.1
+psycopg2-binary>=2.9.9
 
-# Vector & AI
-pgvector==0.2.5
-litellm==1.30.0
-voyageai==0.2.1
-google-generativeai>=0.8.0
+# ── Vector & Embeddings ────────────────────────────────────────
+pgvector>=0.2.5
+voyageai>=0.2.1
 
-# Observability
-langsmith==0.1.0
+# ── AI / Agents ────────────────────────────────────────────────
+# litellm et httpx sont des dépendances transitives de crewai,
+# on laisse pip les résoudre pour éviter les conflits
+crewai>=0.80.0
+litellm>=1.44.22
 
-# Utils
-python-dotenv==1.0.1
-httpx==0.26.0
-python-multipart==0.0.9
+# ── Observability ──────────────────────────────────────────────
+langsmith>=0.1.0
 
-PyMuPDF==1.23.26
-Pillow==10.2.0
-
-Chardet
-
+# ── Utils ──────────────────────────────────────────────────────
+python-dotenv>=1.0.1
+httpx>=0.28.1
+chardet
+PyMuPDF>=1.23.26
+Pillow>=10.2.0
 python-logging-loki
-
-crewai
 rank-bm25
 apscheduler

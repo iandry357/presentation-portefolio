@@ -9,6 +9,7 @@ import litellm
 from litellm import completion
 from app.core.config import settings
 import logging
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,8 @@ async def generate_with_fallback(
     system_prompt: str,
     user_prompt: str,
     max_tokens: int = 5000,
-    temperature: float = 0.3
+    temperature: float = 0.3,
+    models: Optional[List[str]] = None,
 ) -> Dict:
     """
     Génère réponse LLM avec fallback automatique.
@@ -55,11 +57,21 @@ async def generate_with_fallback(
         }
     """
     # Liste des modèles à tenter (ordre de priorité)
-    models = [
-        ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
-        ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
-        ("groq/llama-3-70b-8192", settings.GROQ_API_KEY)
-    ]
+    # models = [
+    #     ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
+    #     ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
+    #     ("groq/llama-3-70b-8192", settings.GROQ_API_KEY)
+    # ]
+
+    _all_models = {
+        "gemini": ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
+        "mistral": ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
+        "groq": ("groq/llama-3-70b-8192", settings.GROQ_API_KEY),
+    }
+    _default_order = ["gemini", "mistral", "groq"]
+    selected = models if models else _default_order
+    models_to_try = [_all_models[m] for m in selected if m in _all_models]
+
     
     messages = [
         {"role": "system", "content": system_prompt},
@@ -68,7 +80,7 @@ async def generate_with_fallback(
     
     last_error = None
     
-    for model, api_key in models:
+    for model, api_key in models_to_try:
         if not api_key:
             logger.warning(f"⚠️ {model} skipped (no API key)")
             continue

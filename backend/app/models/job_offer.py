@@ -4,6 +4,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 from app.core.database import Base
+from sqlalchemy.orm import relationship
 
 
 class JobOffer(Base):
@@ -27,6 +28,7 @@ class JobOffer(Base):
 
     # ROME
     rome_code            = Column(String(10), index=True)
+    rome_source_intitule = Column(String(255), nullable=True, index=True)
 
     # Localisation
     location_label       = Column(String(255))
@@ -72,10 +74,19 @@ class JobOffer(Base):
 
     __table_args__ = (
         CheckConstraint(
-            "status IN ('nouveau', 'existant', 'ferme', 'consulte', 'postule')",
+            "status IN ('nouveau', 'existant', 'ferme', 'consulte', 'postule', 'enregistre')",
             name="job_offers_status_check"
         ),
+        CheckConstraint(
+            "label IN ('basique', 'medium', 'priorité')",
+            name="job_offers_label_check"
+        ),
     )
+
+    label = Column(String(20), nullable=False, index=True)
+    score = Column(Float, nullable=False)
+
+    enriched = relationship("JobEnriched", back_populates="job_offer", uselist=False, lazy="selectin")
 
     def __repr__(self):
         return f"<JobOffer ft_id={self.ft_id} title={self.title} status={self.status}>"

@@ -3,7 +3,8 @@ from sqlalchemy import (
     DateTime, JSON, ForeignKey, CheckConstraint
 )
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from app.core.database import Base
 
 
@@ -33,7 +34,13 @@ class JobEnriched(Base):
     updated_at     = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Relation ORM vers l'offre brute
-    job_offer      = relationship("JobOffer", backref="enriched", lazy="selectin")
+    # job_offer      = relationship("JobOffer", backref="enriched", lazy="selectin")   
+    # job_offer = relationship(
+    #     "JobOffer",
+    #     backref=backref("enriched", lazy="selectin"),
+    #     lazy="selectin"
+    # )
+    job_offer = relationship("JobOffer", back_populates="enriched", lazy="selectin")
 
     __table_args__ = (
         CheckConstraint(
@@ -41,6 +48,8 @@ class JobEnriched(Base):
             name="job_enriched_recalcul_max_check"
         ),
     )
+
+ 
 
     def __repr__(self):
         return f"<JobEnriched job_offer_id={self.job_offer_id} score={self.score} recalcul={self.recalcul_count}/3>"

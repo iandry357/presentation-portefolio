@@ -103,18 +103,14 @@ async def predict_rome_codes(profile_text: str) -> list[dict]:
 # ============================================================================
 # Offres - Recherche
 # ============================================================================
-
 async def search_offers(
     rome_codes: list[str],
     region: Optional[str] = None,
     range_start: int = 0,
-    range_end: int = 49,
+    range_end: int = 99,
+    min_creation_date: Optional[str] = None,
+    max_creation_date: Optional[str] = None,
 ) -> list[dict]:
-    """
-    Recherche des offres par codes ROME et zone géographique.
-
-    Retourne la liste brute des offres retournées par France Travail.
-    """
     region = region or ft.DEFAULT_REGION
 
     params = {
@@ -123,6 +119,11 @@ async def search_offers(
         "range":    f"{range_start}-{range_end}",
     }
 
+    if min_creation_date:
+        params["minCreationDate"] = min_creation_date
+    if max_creation_date:
+        params["maxCreationDate"] = max_creation_date
+
     async with httpx.AsyncClient(timeout=30) as client:
         resp = await client.get(
             ft.OFFRES_URL,
@@ -130,7 +131,6 @@ async def search_offers(
             headers=await _headers(),
         )
 
-        # 204 = aucun résultat
         if resp.status_code == 204:
             logger.info("Aucune offre retournée par France Travail")
             return []
@@ -139,7 +139,11 @@ async def search_offers(
         data = resp.json()
 
     offers = data.get("resultats", [])
-    logger.info(f"France Travail : {len(offers)} offre(s) collectée(s)")
+    logger.info(
+        f"France Travail : {len(offers)} offre(s) "
+        f"[{min_creation_date} → {max_creation_date}] "
+        f"range {range_start}-{range_end}"
+    )
     return offers
 
 

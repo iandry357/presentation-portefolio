@@ -30,7 +30,7 @@ ROMEO_URL     = f"{BASE_URL}/romeo/v2/predictionMetiers"
 
 ROMEO_NOM_APPELANT  = "portfolio-iandry"
 ROMEO_NB_RESULTATS  = 5
-ROMEO_SEUIL_SCORE   = 0.6
+ROMEO_SEUIL_SCORE   = 0.7
 
 # ============================================================================
 # Collecte - Zone géographique
@@ -44,7 +44,7 @@ DEFAULT_REGION = "11"
 # Collecte - Limites et pagination
 # ============================================================================
 
-OFFRES_MAX_RESULTS  = 50   # nb max d'offres par appel (range France Travail)
+OFFRES_MAX_RESULTS  = 100   # nb max d'offres par appel (range France Travail)
 OFFRES_RANGE_START  = 0
 
 # ============================================================================
@@ -52,10 +52,10 @@ OFFRES_RANGE_START  = 0
 # ============================================================================
 
 # Seuil minimum de score pgvector pour passer à l'enrichissement Crew
-SCORING_THRESHOLD   = 0.6
+SCORING_THRESHOLD   = 0.8
 
 # Nombre d'offres max retenues après scoring pour enrichissement
-SCORING_TOP_K       = 20
+SCORING_TOP_K       = 5
 
 # ============================================================================
 # Enrichissement Crew
@@ -69,3 +69,7 @@ RECALCUL_MAX        = 3     # nombre max de recalculs par offre
 
 RATE_LIMIT_OFFRES   = 10
 RATE_LIMIT_ROMEO    = 3
+
+OFFRES_NEW_TARGET   = 200   # nb de nouvelles offres cible par pipeline
+OFFRES_FENETRE_JOURS = 90  # fenêtre temporelle totale en jours (3 mois)
+OFFRES_TRANCHE_JOURS = 7   # taille de chaque tranche de pagination

@@ -12,7 +12,8 @@ def _llm_parser() -> LLM:
         if settings.ENVIRONMENT == "production"
         else "openai/gpt-5-nano"  # dev - à remplacer par le nom exact
     )
-    return LLM(model=model, api_key=settings.OPENAI_API_KEY, temperature=0.1)
+    # return LLM(model=model, api_key=settings.OPENAI_API_KEY, temperature=0.1)
+    return LLM(model=model, api_key=settings.OPENAI_API_KEY)
 
 
 def _llm_analyste() -> LLM:

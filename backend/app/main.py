@@ -11,7 +11,8 @@ from app.routers.jobs import router as jobs_router
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from app.scheduler.job_pipeline import schedule_pipeline
+# from app.scheduler.job_pipeline import schedule_pipeline
+from scheduler.job_pipeline import schedule_pipeline
 
 from app.core.logging_config import setup_logging
 setup_logging()

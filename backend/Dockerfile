@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app /app/app/
 COPY ./scripts /app/scripts/
 COPY ./migrations /app/migrations
-
+COPY migrate.py /app/
+COPY ./scheduler /app/scheduler/
 
 # Expose port
 EXPOSE 8000

@@ -1,11 +1,12 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
+from sqlalchemy import select, func, and_, delete
 from typing import Optional
 from datetime import datetime, timedelta
 
 from app.core.database import get_db
+from sqlalchemy.orm import selectinload
 from app.core.config import settings
 from app.core import france_travail_config as ft
 from app.models.job_offer import JobOffer
@@ -105,7 +106,17 @@ async def list_jobs(
 
 @router.get("/{job_id}", response_model=JobOfferDetail)
 async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
-    offer = await db.get(JobOffer, job_id)
+    # offer = await db.get(JobOffer, job_id)
+    # if not offer:
+    #     raise HTTPException(status_code=404, detail="Offre introuvable")
+    
+
+    result = await db.execute(
+        select(JobOffer)
+        .options(selectinload(JobOffer.enriched))
+        .where(JobOffer.id == job_id)
+    )
+    offer = result.scalar_one_or_none()
     if not offer:
         raise HTTPException(status_code=404, detail="Offre introuvable")
 
@@ -113,8 +124,16 @@ async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
     if offer.status == "nouveau" or offer.status == "existant":
         offer.status = "consulte"
         await db.commit()
+        await db.refresh(offer)
 
-    return JobOfferDetail.model_validate(offer)
+    # Après db.refresh(offer) et avant return :
+    enriched_check = await db.execute(
+        select(JobEnriched.id).where(JobEnriched.job_offer_id == job_id)
+    )
+    detail = JobOfferDetail.model_validate(offer)
+    detail.has_enriched = enriched_check.scalar_one_or_none() is not None
+    return detail
+    # return JobOfferDetail.model_validate(offer)
 
 
 # ============================================================================
@@ -171,11 +190,13 @@ async def enrich_job(
         raise HTTPException(status_code=404, detail="Offre introuvable")
 
     # Vérifier qu'une fiche n'existe pas déjà
-    existing = await db.execute(
+    existing_result = await db.execute(
         select(JobEnriched).where(JobEnriched.job_offer_id == job_id)
     )
-    if existing.scalar_one_or_none():
-        raise HTTPException(status_code=409, detail="Fiche enrichie déjà existante")
+    # if existing.scalar_one_or_none():
+    #     raise HTTPException(status_code=409, detail="Fiche enrichie déjà existante")
+
+    existing  = existing_result.scalar_one_or_none()
 
     profile_text = await build_profile_text(db)
     result = await run_enrichment_crew(
@@ -184,17 +205,34 @@ async def enrich_job(
         initial_prompt="Analyse cette offre d'emploi en détail.",
     )
 
-    enriched = JobEnriched(
-        job_offer_id=job_id,
-        score=offer.raw_data.get("_score", 0.0),
-        parsed_data=result["parsed_data"],
-        analysis=result["analysis"],
-        summary=result["summary"],
-        initial_prompt="Analyse cette offre d'emploi en détail.",
-        recalcul_history=[],
-        recalcul_count=0,
-    )
-    db.add(enriched)
+    # enriched = JobEnriched(
+    #     job_offer_id=job_id,
+    #     score=offer.raw_data.get("_score", 0.0),
+    #     parsed_data=result["parsed_data"],
+    #     analysis=result["analysis"],
+    #     summary=result["summary"],
+    #     initial_prompt="Analyse cette offre d'emploi en détail.",
+    #     recalcul_history=[],
+    #     recalcul_count=0,
+    # )
+    if existing:
+        existing.parsed_data = result["parsed_data"]
+        existing.analysis = result["analysis"]
+        existing.summary = result["summary"]
+        enriched = existing
+    else:
+        enriched = JobEnriched(
+            job_offer_id=job_id,
+            score=offer.raw_data.get("_score", 0.0),
+            parsed_data=result["parsed_data"],
+            analysis=result["analysis"],
+            summary=result["summary"],
+            initial_prompt="Analyse cette offre d'emploi en détail.",
+            recalcul_history=[],
+            recalcul_count=0,
+        )
+        # db.add(enriched)
+        db.add(enriched)
     await db.commit()
     await db.refresh(enriched)
 
@@ -266,12 +304,71 @@ async def trigger_pipeline(
     body: TriggerPipelineRequest,
     db: AsyncSession = Depends(get_db),
 ):
+    print(settings.ENVIRONMENT)
     if settings.ENVIRONMENT == "production":
         raise HTTPException(
             status_code=403,
             detail="Déclenchement manuel désactivé en production"
         )
 
-    from app.scheduler.job_pipeline import run_pipeline
+    from scheduler.job_pipeline import run_pipeline
     result = await run_pipeline(db=db, region=body.region)
     return result
+
+# ============================================================================
+# DELETE /jobs/reset — Suppression des offres non prioritaires
+# ============================================================================
+
+# @router.delete("/reset")
+# async def reset_jobs(db: AsyncSession = Depends(get_db)):
+#     """
+#     Supprime toutes les offres sauf celles avec statut 'postule' ou 'enregistre'.
+#     Utilisé pour repartir sur une base propre avant un nouveau pipeline.
+#     """
+#     result = await db.execute(
+#         select(JobOffer).where(
+#             JobOffer.status.notin_(["postule", "enregistre"])
+#         )
+#     )
+#     offers = result.scalars().all()
+#     count = len(offers)
+
+#     for offer in offers:
+#         await db.delete(offer)
+
+#     await db.commit()
+#     logger.info(f"Reset jobs : {count} offre(s) supprimée(s)")
+#     return {"message": f"{count} offre(s) supprimée(s)", "deleted": count}
+@router.delete("/reset")
+async def reset_jobs(db: AsyncSession = Depends(get_db)):
+    """
+    Supprime toutes les offres sauf celles avec statut 'postule' ou 'enregistre'.
+    Utilisé pour repartir sur une base propre avant un nouveau pipeline.
+    """
+    try:
+        result = await db.execute(
+            select(JobOffer).where(
+                JobOffer.status.notin_(["postule", "enregistre"])
+            )
+        )
+        offers = result.scalars().all()
+        count = len(offers)
+
+        # Supprimer d'abord les entrées liées dans job_enriched
+        for offer in offers:
+            await db.execute(
+                delete(JobEnriched).where(JobEnriched.job_offer_id == offer.id)
+            )
+
+        # Supprimer ensuite les offres
+        for offer in offers:
+            await db.delete(offer)
+
+        await db.commit()
+        logger.info(f"Reset jobs : {count} offre(s) supprimée(s)")
+        return {"message": f"{count} offre(s) supprimée(s)", "deleted": count}
+
+    except Exception as e:
+        await db.rollback()
+        logger.error(f"Erreur lors du reset : {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur interne : {str(e)}")
