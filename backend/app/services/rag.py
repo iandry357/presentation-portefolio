@@ -10,6 +10,7 @@ from app.services.llm import generate_response
 from sqlalchemy import text
 import logging
 import json
+from app.services.embeddings import rerank_chunks
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +137,7 @@ async def log_query_metrics(
             "session_id": session_id,
             "query_text": query_text,
             "retrieved_chunks": str(chunks_jsonb).replace("'", '"'),  # JSON string
-            "retrieval_method": "vector",
+            "retrieval_method": "vector+rerank",
             "nb_chunks_retrieved": len(retrieved_chunks),
             "llm_provider": llm_result["provider_used"],
             "embedding_tokens": embedding_tokens,
@@ -267,10 +268,11 @@ async def rag_pipeline(
     latency_retrieval_ms = int((time.perf_counter() - start_retrieval) * 1000)
     
     # Filtrer par score
-    filtered_chunks = [
-        chunk for chunk in context_chunks 
-        if chunk['score'] >= score_threshold
-    ]
+    # filtered_chunks = [
+    #     chunk for chunk in context_chunks 
+    #     if chunk['score'] >= score_threshold
+    # ]
+    filtered_chunks = await rerank_chunks(question, context_chunks, top_k=5)
     
     if not filtered_chunks:
         logger.warning(f"⚠️ No relevant context (threshold={score_threshold})")
