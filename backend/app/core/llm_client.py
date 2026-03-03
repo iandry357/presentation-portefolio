@@ -38,6 +38,7 @@ def calculate_cost(model: str, tokens: int) -> float:
 async def generate_with_fallback(
     system_prompt: str,
     user_prompt: str,
+    history: List[Dict] = [],
     max_tokens: int = 5000,
     temperature: float = 0.3,
     models: Optional[List[str]] = None,
@@ -75,6 +76,7 @@ async def generate_with_fallback(
     
     messages = [
         {"role": "system", "content": system_prompt},
+        *history,
         {"role": "user", "content": user_prompt}
     ]
     

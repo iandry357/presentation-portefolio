@@ -5,7 +5,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
+# async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
+async def generate_response(question: str, context_chunks: List[Dict], history: List[Dict] = []) -> Dict:
     """
     Génère réponse via LLM (Mistral → Groq fallback) avec contexte RAG.
     
@@ -53,6 +54,7 @@ N'invente rien du tout, si la question est assez éloignée du contexte propose 
     result = await generate_with_fallback(
         system_prompt=system_prompt,
         user_prompt=user_prompt,
+        history=history,
         max_tokens=5000,
         temperature=0.3
     )
