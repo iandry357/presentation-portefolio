@@ -254,6 +254,26 @@ async def fetch_conversation_history(session_id: str, limit: int = 6) -> List[Di
     logger.info(f"📜 History loaded: {len(history)} messages for session {session_id}")
     return history
 
+async def summarize_history(history: List[Dict]) -> str:
+    """
+    Compresse l'historique conversationnel en un résumé court via Groq.
+    Retourne une string vide si pas d'historique.
+    """
+    if not history:
+        return ""
+
+    exchanges = "\n".join([f"{m['role']}: {m['content']}" for m in history])
+
+    result = await generate_with_fallback(
+        system_prompt="Tu résumes en 2-3 phrases maximum les échanges d'une conversation. Garde uniquement les sujets abordés et les informations mentionnées. Ne réponds qu'avec le résumé, rien d'autre.",
+        user_prompt=exchanges,
+        models=["groq"],
+        max_tokens=200,
+        temperature=0.1
+    )
+    logger.info(f"📝 History summarized: {result['tokens_used']} tokens")
+    return result["response"]
+
 async def rag_pipeline(
     question: str,
     session_id: str,
@@ -311,9 +331,11 @@ async def rag_pipeline(
     start_generation = time.perf_counter()
 
     # Récupérer historique conversationnel
+    # history = await fetch_conversation_history(session_id)
+    # llm_result = await generate_response(question, filtered_chunks, history)
     history = await fetch_conversation_history(session_id)
-    
-    llm_result = await generate_response(question, filtered_chunks, history)
+    history_summary = await summarize_history(history)
+    llm_result = await generate_response(question, filtered_chunks, history_summary)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     
     # 4. Update session
