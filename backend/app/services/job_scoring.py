@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 from datetime import datetime, timedelta
 from app.services.job_profile import build_profile_text
+from app.services.embeddings import voyage_rerank
 
 logger = logging.getLogger(__name__)
 
