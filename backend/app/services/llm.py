@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 # async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
-async def generate_response(question: str, context_chunks: List[Dict], history: List[Dict] = []) -> Dict:
+async def generate_response(question: str, context_chunks: List[Dict], history_summary: str = "") -> Dict:
     """
     Génère réponse via LLM (Mistral → Groq fallback) avec contexte RAG.
     
@@ -41,6 +41,8 @@ async def generate_response(question: str, context_chunks: List[Dict], history: 
     
     user_prompt = f"""Contexte (CV d'Yan'ch) :
 {context}
+
+{f"Contexte conversation précédente : {history_summary}" if history_summary else ""}
 
 Question : {question}
 
