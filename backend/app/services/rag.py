@@ -44,7 +44,7 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
             FROM informations WHERE embedding IS NOT NULL
         """))
         all_chunks = [
-            {"type": r[0], "id": r[1], "title": r[2], "description": r[3]}
+            {"type": r[0], "id": r[1], "title": r[2], "description": r[3], "cid": f"{r[0]}_{r[1]}"}
             for r in rows_all.fetchall()
         ]
 
@@ -64,27 +64,29 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
             ORDER BY score DESC
             LIMIT :top_k
         """), {"emb": embedding_str, "top_k": top_k})
-        vec_ranks = {r[0]: i for i, r in enumerate(rows_vec.fetchall())}
+        # vec_ranks = {r[0]: i for i, r in enumerate(rows_vec.fetchall())}
+        vec_ranks = {f"{r[0]}_{r[1]}": i for i, r in enumerate(rows_vec.fetchall())}
 
     # --- Score BM25 ---
     corpus = [c["description"].lower().split() for c in all_chunks]
     bm25 = BM25Okapi(corpus)
     bm25_scores = bm25.get_scores(query.lower().split())
     bm25_ranked = sorted(range(len(all_chunks)), key=lambda i: bm25_scores[i], reverse=True)
-    bm25_ranks = {all_chunks[i]["id"]: rank for rank, i in enumerate(bm25_ranked)}
+    # bm25_ranks = {all_chunks[i]["id"]: rank for rank, i in enumerate(bm25_ranked)}
+    bm25_ranks = {all_chunks[i]["cid"]: rank for rank, i in enumerate(bm25_ranked)}
 
     # --- Fusion RRF (k=60 standard) ---
     K = 60
     rrf_scores = {}
     for chunk in all_chunks:
-        cid = chunk["id"]
+        cid = chunk["cid"]
         rank_vec = vec_ranks.get(cid, len(all_chunks))
         rank_bm25 = bm25_ranks.get(cid, len(all_chunks))
         rrf_scores[cid] = (1 / (K + rank_vec)) + (1 / (K + rank_bm25))
 
     # --- Tri final + reconstruction chunks ---
     sorted_ids = sorted(rrf_scores, key=lambda cid: rrf_scores[cid], reverse=True)[:top_k]
-    id_to_chunk = {c["id"]: c for c in all_chunks}
+    id_to_chunk = {c["cid"]: c for c in all_chunks}
 
     result = []
     for cid in sorted_ids:
