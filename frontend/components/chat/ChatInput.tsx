@@ -38,7 +38,7 @@ export default function ChatInput({
         {/* Compteur */}
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-gray-600">
-            Question <span className="font-semibold">{questionsCount}/3</span>
+            Question <span className="font-semibold">{questionsCount}/5</span>
           </span>
           <span className="text-xs text-gray-500">
             {questionsRemaining} restante{questionsRemaining > 1 ? 's' : ''}

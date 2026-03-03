@@ -62,7 +62,7 @@ export default function ChatPage() {
         {
           role: 'assistant',
           content:
-            "Bonjour ! Je suis l'assistant virtuel d'Iandry (prononcé Yan'ch) RAKOTONIAINA. Posez-moi des questions sur son experience professionnelle, sa formation ou ses projets. Vous pouvez poser 3 questions",
+            "Bonjour ! Je suis l'assistant virtuel d'Iandry (prononcé Yan'ch) RAKOTONIAINA. Posez-moi des questions sur son experience professionnelle, sa formation ou ses projets. Vous pouvez poser 5 questions",
           timestamp: 0,
         },
       ]);
@@ -175,7 +175,7 @@ export default function ChatPage() {
         onSend={handleSend}
         disabled={isLimitReached || isLoading}
         questionsCount={session.questionsCount}
-        questionsRemaining={3 - session.questionsCount}
+        questionsRemaining={5 - session.questionsCount}
       />
     </div>
   );
