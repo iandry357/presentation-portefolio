@@ -21,7 +21,7 @@ litellm.success_callback = []  # Pas de callback externe
 PRICING = {
     "gemini/gemini-2.5-flash": {"input": 0.30, "output": 0.30},
     "mistral-small-latest": {"input": 0.25, "output": 0.25},
-    "groq/llama-3-70b-8192": {"input": 0.0, "output": 0.0}  # Gratuit
+    "groq/llama-3.1-8b-instant": {"input": 0.0, "output": 0.0}  # Gratuit
 }
 
 
@@ -66,7 +66,7 @@ async def generate_with_fallback(
     _all_models = {
         "gemini": ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
         "mistral": ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
-        "groq": ("groq/llama-3-70b-8192", settings.GROQ_API_KEY),
+        "groq": ("groq/llama-3.1-8b-instant", settings.GROQ_API_KEY),
     }
     _default_order = ["gemini", "mistral", "groq"]
     selected = models if models else _default_order

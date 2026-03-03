@@ -25,8 +25,7 @@ async def chat(request: ChatRequest):
         result = await rag_pipeline(
             question=request.message,
             session_id=request.session_id,
-            top_k=settings.RETRIEVAL_TOP_K,
-            score_threshold=settings.RETRIEVAL_SCORE_THRESHOLD
+            top_k=settings.RETRIEVAL_TOP_K
         )
         
         # Construire sources (top 3)
@@ -56,7 +55,7 @@ async def chat(request: ChatRequest):
             cost=result['cost'],
             provider_used=result['provider_used'],
             questions_count=count,
-            questions_remaining=3 - count
+            questions_remaining=5 - count
         )
         
     except Exception as e:
