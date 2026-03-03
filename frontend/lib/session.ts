@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Session, Message } from '@/types';
 
 const SESSION_KEY = 'cv_rag_session';
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 5;
 // const COOLDOWN_MS = 60 * 60 * 1000; // 1 heure
 const COOLDOWN_MS = 30;
 
