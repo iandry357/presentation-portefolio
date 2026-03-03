@@ -15,7 +15,7 @@ export default function Header() {
           <div className="flex items-center gap-8">
             <Link href="/">
               <h1 className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer">
-                Iandry (prononcé Ian'ch) RAKOTONIAINA
+                Iandry (prononcé Yan'ch) RAKOTONIAINA
               </h1>
             </Link>
             <nav className="flex gap-1">
