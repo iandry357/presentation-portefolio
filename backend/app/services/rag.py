@@ -68,7 +68,7 @@ async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
         
         result = await db.execute(
             query_sql, 
-            {"embedding": embedding_str, "top_k": 20}
+            {"embedding": embedding_str, "top_k": top_k}
         )
         rows = result.fetchall()
         
@@ -232,6 +232,27 @@ async def update_session_metrics(
         
         await db.commit()
 
+async def fetch_conversation_history(session_id: str, limit: int = 6) -> List[Dict]:
+    """
+    Récupère les N derniers messages de la session pour la mémoire conversationnelle.
+    Retourne une liste ordonnée du plus ancien au plus récent.
+    """
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            text("""
+                SELECT role, content FROM chat_messages
+                WHERE session_id = :sid
+                ORDER BY created_at DESC
+                LIMIT :limit
+            """),
+            {"sid": session_id, "limit": limit}
+        )
+        rows = result.fetchall()
+
+    # DESC en DB → on reverse pour avoir ordre chronologique
+    history = [{"role": row[0], "content": row[1]} for row in reversed(rows)]
+    logger.info(f"📜 History loaded: {len(history)} messages for session {session_id}")
+    return history
 
 async def rag_pipeline(
     question: str,
@@ -288,8 +309,11 @@ async def rag_pipeline(
     # 3. Génération + mesure latency
     logger.info(f"✍️ RAG Pipeline [{query_id}]: generating with {len(filtered_chunks)} chunks...")
     start_generation = time.perf_counter()
+
+    # Récupérer historique conversationnel
+    history = await fetch_conversation_history(session_id)
     
-    llm_result = await generate_response(question, filtered_chunks)
+    llm_result = await generate_response(question, filtered_chunks, history)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     
     # 4. Update session
