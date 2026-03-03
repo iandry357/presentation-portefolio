@@ -7,6 +7,7 @@ from typing import List, Dict
 from app.core.database import AsyncSessionLocal
 from app.services.embeddings import vectorize_query
 from app.services.llm import generate_response
+from app.core.llm_client import generate_with_fallback
 from sqlalchemy import text
 import logging
 import json
@@ -281,27 +282,66 @@ async def summarize_history(history: List[Dict]) -> str:
     logger.info(f"📝 History summarized: {result['tokens_used']} tokens")
     return result["response"]
 
-async def classify_question(question: str) -> str:
+async def analyze_question(question: str) -> Dict:
     """
-    Classifie la question via Groq : GENERAL ou SPECIFIC.
-    GENERAL  → question de présentation, sociale, vague
-    SPECIFIC → question ciblée sur une expérience, skill, date, entreprise
+    Classifie la question : GENERAL ou SPECIFIC.
+    GENERAL → résumé profil direct
+    SPECIFIC → pipeline hybrid search + rerank avec historique enrichi
     """
+    # context_block = f"Résumé conversation précédente : {history_summary}" if history_summary else "Pas de conversation précédente."
+    context_block = f" "
+
     result = await generate_with_fallback(
-        system_prompt="Tu es un classificateur. Réponds UNIQUEMENT par GENERAL ou SPECIFIC. GENERAL = question vague ou de présentation sur quelqu'un. SPECIFIC = question ciblée sur une expérience, technologie, date ou entreprise précise.",
+        system_prompt="""Tu es un classificateur. Réponds UNIQUEMENT en JSON valide sans markdown.
+{"type": "GENERAL" ou "SPECIFIC"}
+
+GENERAL = présentation globale, question sociale, demande de résumé complet.
+Exemples : "présente-toi", "tu fais quoi", "c'est quoi ton parcours", "bonjour".
+
+SPECIFIC = toute autre question : expérience, technologie, date, entreprise,
+période temporelle, continuité d'un sujet précédent.
+Exemples : "et avant ça ?", "tu as utilisé Python ?", "c'était quand ?", "tu y es resté combien de temps ?".""",
+        # user_prompt=f"{context_block}\n\nQuestion : {question}",
         user_prompt=question,
         models=["groq"],
-        max_tokens=10,
+        max_tokens=30,
         temperature=0.0
     )
-    label = result["response"].strip().upper()
-    logger.info(f"🔀 Query classified: {label}")
-    return label if label in ["GENERAL", "SPECIFIC"] else "SPECIFIC"
+
+    try:
+        parsed = json.loads(result["response"])
+        q_type = parsed.get("type", "SPECIFIC").upper()
+        if q_type not in ["GENERAL", "SPECIFIC"]:
+            q_type = "SPECIFIC"
+    except Exception:
+        logger.warning("⚠️ analyze_question parse failed, fallback SPECIFIC")
+        q_type = "SPECIFIC"
+
+    logger.info(f"🔀 Question analyzed: type={q_type}")
+    return {"type": q_type}
+
+async def reformulate_question(question: str, history_summary: str) -> str:
+    """
+    Reformule une question de continuité en question autonome
+    exploitable par la recherche vectorielle.
+    """
+    result = await generate_with_fallback(
+        system_prompt="""Tu reformules une question vague en question explicite et autonome,
+en utilisant le contexte de la conversation précédente.
+Réponds UNIQUEMENT avec la question reformulée, rien d'autre.""",
+        user_prompt=f"Conversation précédente : {history_summary}\n\nQuestion à reformuler : {question}",
+        models=["groq"],
+        max_tokens=50,
+        temperature=0.0
+    )
+    reformulated = result["response"].strip()
+    logger.info(f"✏️ Reformulated: '{question}' → '{reformulated}'")
+    return reformulated
 
 async def rag_pipeline(
     question: str,
     session_id: str,
-    top_k: int = 6
+    top_k: int = 15
 ) -> Dict:
     """
     Pipeline RAG complet avec logging.
@@ -324,9 +364,29 @@ async def rag_pipeline(
     modelEmbeddings = "voyage"
     # modelEmbeddings = "mistral"
     
-    query_type = await classify_question(question)
+    # query_type = await classify_question(question)
 
-    if query_type == "GENERAL":
+    # if query_type == "GENERAL":
+    #     async with AsyncSessionLocal() as db:
+    #         profile_text = await build_profile_text(db)
+    #     filtered_chunks = [{
+    #         "type": "profile",
+    #         "id": 0,
+    #         "title": "Résumé profil",
+    #         "description": profile_text,
+    #         "score": 1.0
+    #     }]
+    #     logger.info("🗺️ GENERAL question → résumé profil direct")
+    # else:
+    #     embedding = await vectorize_query(question, modelEmbeddings)
+    #     context_chunks = await search_context(question, embedding, top_k)
+    #     filtered_chunks = await rerank_chunks(question, context_chunks, top_k=5)
+    history = await fetch_conversation_history(session_id)
+    history_summary = await summarize_history(history)
+
+    analysis = await analyze_question(question)
+
+    if analysis["type"] == "GENERAL":
         async with AsyncSessionLocal() as db:
             profile_text = await build_profile_text(db)
         filtered_chunks = [{
@@ -336,17 +396,21 @@ async def rag_pipeline(
             "description": profile_text,
             "score": 1.0
         }]
-        logger.info("🗺️ GENERAL question → résumé profil direct")
+        logger.info("🗺️ GENERAL → résumé profil direct")
     else:
-        embedding = await vectorize_query(question, modelEmbeddings)
-        context_chunks = await search_context(question, embedding, top_k)
-        filtered_chunks = await rerank_chunks(question, context_chunks, top_k=5)
+        # Approche 1 — enrichissement systématique avant embedding
+        search_question = f"{question} {history_summary}".strip() if history_summary else question
+        logger.info(f"🔍 Search question enrichie: '{search_question[:100]}...'")
+
+        embedding = await vectorize_query(search_question, modelEmbeddings)
+        context_chunks = await search_context(search_question, embedding, top_k)
+        filtered_chunks = await rerank_chunks(search_question, context_chunks, top_k=5)
 
     embedding_tokens = len(question.split())
     latency_retrieval_ms = int((time.perf_counter() - start_retrieval) * 1000)
     
     if not filtered_chunks:
-        logger.warning(f"⚠️ No relevant context (threshold={score_threshold})")
+        logger.warning(f"⚠️ No relevant context founded")
         return {
             "query_id": query_id,
             "response": "Désolé, je n'ai pas trouvé d'information pertinente dans mon CV pour répondre à cette question.",
@@ -363,8 +427,8 @@ async def rag_pipeline(
     # Récupérer historique conversationnel
     # history = await fetch_conversation_history(session_id)
     # llm_result = await generate_response(question, filtered_chunks, history)
-    history = await fetch_conversation_history(session_id)
-    history_summary = await summarize_history(history)
+    # history = await fetch_conversation_history(session_id)
+    # history_summary = await summarize_history(history)
     llm_result = await generate_response(question, filtered_chunks, history_summary)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     

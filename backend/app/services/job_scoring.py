@@ -92,35 +92,6 @@ def _cosine_similarity(a: list[float], b: list[float]) -> float:
     return dot / (norm_a * norm_b)
 
 
-# ============================================================================
-# VoyageAI - Reranker
-# ============================================================================
-
-async def _voyage_rerank(query: str, documents: list[str], top_k: int) -> list[dict]:
-    """
-    Reranke les documents vs la query avec VoyageAI rerank-2.
-
-    Retourne une liste triée de {"index": int, "relevance_score": float}
-    """
-    url = "https://api.voyageai.com/v1/rerank"
-    headers = {
-        "Authorization": f"Bearer {settings.VOYAGE_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "query":     query,
-        "documents": documents,
-        "model":     "rerank-2",
-        "top_k":     top_k,
-    }
-
-    async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.post(url, headers=headers, json=payload)
-        resp.raise_for_status()
-        data = resp.json()
-
-    return data.get("data", [])
-
 
 # ============================================================================
 # Pipeline de scoring principal
@@ -191,7 +162,7 @@ async def score_and_filter_offers(offers: list[dict], db: AsyncSession) -> list[
     candidate_texts = [_offer_to_text(o) for o in candidate_offers]
     top_k = max(1, len(candidate_offers) // 2)
 
-    reranked = await _voyage_rerank(profile, candidate_texts, top_k=top_k)
+    reranked = await voyage_rerank(profile, candidate_texts, top_k=top_k)
 
     # Index des offres retenues en "priorité"
     priorite_indices = {item["index"] for item in reranked}

@@ -19,7 +19,7 @@ export default function SessionLimitBanner({
             Limite de questions atteinte
           </h3>
           <p className="text-sm text-amber-700 mt-1">
-            Vous avez posé 3 questions. Nouvelle session disponible dans{' '}
+            Vous avez posé 5 questions. Nouvelle session disponible dans{' '}
             <span className="font-semibold">{remainingTime}</span>.
           </p>
           <p className="text-xs text-amber-600 mt-2">
