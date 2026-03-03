@@ -25,25 +25,25 @@ async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
     ])
     
     # Prompts
-#     system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Ian'ch RAKOTONIAINA.
-# Sois courtois, sympathique. Oriente la personne sur les informations concernant Ian'ch
+#     system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Yan'ch RAKOTONIAINA.
+# Sois courtois, sympathique. Oriente la personne sur les informations concernant Yan'ch
 # Utilise UNIQUEMENT les informations fournies dans le contexte pour répondre.
 # Il faut que tu privilégies les expériences professionnelles par rapport à sa formation sauf si questions concernant sa formation
 # Si la réponse n'est pas dans le contexte, dis-le clairement."""
 
-#     system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Ian'ch RAKOTONIAINA.
-# Sois courtois, sympathique. Oriente la personne sur les informations concernant Ian'ch
+#     system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Yan'ch RAKOTONIAINA.
+# Sois courtois, sympathique. Oriente la personne sur les informations concernant Yan'ch
 # Il faut que tu privilégies les expériences professionnelles par rapport à sa formation sauf si questions concernant sa formation
 # Si la réponse n'est pas dans le contexte, dis-le clairement."""
 
-    system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Iandry (prononcé Ian'ch) RAKOTONIAINA"""
+    system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Iandry (prononcé Yan'ch) RAKOTONIAINA"""
     
-    user_prompt = f"""Contexte (CV d'Ian'ch) :
+    user_prompt = f"""Contexte (CV d'Yan'ch) :
 {context}
 
 Question : {question}
 
-Sois sympathique si la question concerne une question sociale mais oriente toujours vers les informations concernant de Ian'ch.
+Sois sympathique si la question concerne une question sociale mais oriente toujours vers les informations concernant de Yan'ch.
 Réponds en français, synthétique, percutant, simple et structurée. Mets en avant les réalisations et la méthodologies.
 Il faut que tu restes bien sur un raisonnement où la chronologie est très importante, il ne faut pas sauter des années car chaque année est importante pour mon parcours.
 Privilégie l'énurmation par bullets points dans la narration pour ne pas avoir un grop bloc de texte à chaque fois et que la lecture soit plus symphatique.
