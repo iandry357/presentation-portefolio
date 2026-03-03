@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { MapPin, Clock, Briefcase, Euro, ExternalLink } from 'lucide-react';
 import { JobOfferSummary, JobStatus } from '@/types';
+import { FT_BASE_URL } from '@/lib/api';
+
 
 // ============================================================================
 // Badge statut
@@ -119,15 +121,21 @@ export default function JobCard({ offer }: JobCardProps) {
         </div>
       )}
 
+      {offer.description && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
+          {offer.description.split(' ').slice(0, 20).join(' ')}...
+        </p>
+      )}
+
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
         <span className="text-xs text-gray-400 dark:text-gray-500">
           {formatDate(offer.ft_published_at)}
         </span>
         <div className="flex items-center gap-3">
-          {offer.offer_url && (
+          
             <a
-              href={offer.offer_url}
+              href={`${FT_BASE_URL}${offer.ft_id}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}
@@ -136,7 +144,7 @@ export default function JobCard({ offer }: JobCardProps) {
               <ExternalLink className="w-3.5 h-3.5" />
               Voir l'offre
             </a>
-          )}
+          
           <Link
             href={`/jobs/${offer.id}`}
             className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"
