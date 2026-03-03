@@ -11,82 +11,89 @@ from sqlalchemy import text
 import logging
 import json
 from app.services.embeddings import rerank_chunks
+from rank_bm25 import BM25Okapi
+from app.services.job_profile import build_profile_text
 
 logger = logging.getLogger(__name__)
 
 # Pricing Voyage AI
 VOYAGE_PRICE_PER_MILLION = 0.13
 
-
-async def search_context(embedding: List[float], top_k: int = 6) -> List[Dict]:
+async def search_context(query: str, embedding: List[float], top_k: int = 15) -> List[Dict]:
     """
-    Recherche vector similarity dans experiences + projects + formations.
-    
-    Returns:
-        Liste de dicts avec {type, id, title, description, score}
+    Hybrid Search : cosinus pgvector + BM25 fusionnés via RRF.
     """
     async with AsyncSessionLocal() as db:
-        query_sql = text("""
-            (
-                SELECT 
-                    'experience' as type,
-                    experiences.id,
-                    role as title,
-                    TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date,   'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description   as description,
-                    1 - (experiences.embedding <=> CAST(:embedding AS vector)) as score
-                FROM experiences
+        # --- Chargement complet des chunks pour BM25 ---
+        rows_all = await db.execute(text("""
+            SELECT 'experience' as type, experiences.id,
+                role as title,
+                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description as description
+            FROM experiences
+            LEFT JOIN projects ON experiences.id = projects.experience_id
+            WHERE experiences.embedding IS NOT NULL
+            UNION ALL
+            SELECT 'formation', id, degree,
+                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description
+            FROM formations WHERE embedding IS NOT NULL
+            UNION ALL
+            SELECT 'information', id,
+                'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé ' || prononciation || ' né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
+                'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion
+            FROM informations WHERE embedding IS NOT NULL
+        """))
+        all_chunks = [
+            {"type": r[0], "id": r[1], "title": r[2], "description": r[3]}
+            for r in rows_all.fetchall()
+        ]
+
+        # --- Score vectoriel pgvector ---
+        embedding_str = "[" + ",".join(map(str, embedding)) + "]"
+        rows_vec = await db.execute(text("""
+            SELECT id, 1 - (embedding <=> CAST(:emb AS vector)) as score
+            FROM (
+                SELECT experiences.id, experiences.embedding FROM experiences
                 LEFT JOIN projects ON experiences.id = projects.experience_id
-                WHERE experiences.embedding IS NOT NULL 
-            )
-            UNION ALL
-            (
-                SELECT 
-                    'formation' as type,
-                    id,
-                    degree as title,
-                    TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date,   'YYYY-MM-DD') || ' description ' || description as description,
-                    1 - (embedding <=> CAST(:embedding AS vector)) as score
-                FROM formations
-                WHERE embedding IS NOT NULL
-            )
-            UNION ALL
-            (
-                SELECT 
-                    'information' as type,
-                    id,
-                    'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé ' || prononciation || ' né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
-                    'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion as description,
-                    1 - (embedding <=> CAST(:embedding AS vector)) as score
-                FROM informations
-                WHERE embedding IS NOT NULL
-            )
+                WHERE experiences.embedding IS NOT NULL
+                UNION ALL
+                SELECT id, embedding FROM formations WHERE embedding IS NOT NULL
+                UNION ALL
+                SELECT id, embedding FROM informations WHERE embedding IS NOT NULL
+            ) sub
             ORDER BY score DESC
             LIMIT :top_k
-        """)
-        
-        embedding_str = "[" + ",".join(map(str, embedding)) + "]"
-        
-        result = await db.execute(
-            query_sql, 
-            {"embedding": embedding_str, "top_k": top_k}
-        )
-        rows = result.fetchall()
-        
-        context_chunks = [
-            {
-                "type": row[0],
-                "id": row[1],
-                "title": row[2],
-                "description": row[3],
-                "score": float(row[4])
-            }
-            for row in rows
-        ]
-        for c in context_chunks:
-            print("-----------------------", c)
-        
-        return context_chunks
+        """), {"emb": embedding_str, "top_k": top_k})
+        vec_ranks = {r[0]: i for i, r in enumerate(rows_vec.fetchall())}
 
+    # --- Score BM25 ---
+    corpus = [c["description"].lower().split() for c in all_chunks]
+    bm25 = BM25Okapi(corpus)
+    bm25_scores = bm25.get_scores(query.lower().split())
+    bm25_ranked = sorted(range(len(all_chunks)), key=lambda i: bm25_scores[i], reverse=True)
+    bm25_ranks = {all_chunks[i]["id"]: rank for rank, i in enumerate(bm25_ranked)}
+
+    # --- Fusion RRF (k=60 standard) ---
+    K = 60
+    rrf_scores = {}
+    for chunk in all_chunks:
+        cid = chunk["id"]
+        rank_vec = vec_ranks.get(cid, len(all_chunks))
+        rank_bm25 = bm25_ranks.get(cid, len(all_chunks))
+        rrf_scores[cid] = (1 / (K + rank_vec)) + (1 / (K + rank_bm25))
+
+    # --- Tri final + reconstruction chunks ---
+    sorted_ids = sorted(rrf_scores, key=lambda cid: rrf_scores[cid], reverse=True)[:top_k]
+    id_to_chunk = {c["id"]: c for c in all_chunks}
+
+    result = []
+    for cid in sorted_ids:
+        if cid in id_to_chunk:
+            chunk = id_to_chunk[cid].copy()
+            chunk["score"] = round(rrf_scores[cid], 6)
+            result.append(chunk)
+
+    logger.info(f"🔍 Hybrid search: {len(result)} chunks (BM25+cosinus RRF)")
+    return result
 
 async def log_query_metrics(
     query_id: str,
@@ -274,11 +281,27 @@ async def summarize_history(history: List[Dict]) -> str:
     logger.info(f"📝 History summarized: {result['tokens_used']} tokens")
     return result["response"]
 
+async def classify_question(question: str) -> str:
+    """
+    Classifie la question via Groq : GENERAL ou SPECIFIC.
+    GENERAL  → question de présentation, sociale, vague
+    SPECIFIC → question ciblée sur une expérience, skill, date, entreprise
+    """
+    result = await generate_with_fallback(
+        system_prompt="Tu es un classificateur. Réponds UNIQUEMENT par GENERAL ou SPECIFIC. GENERAL = question vague ou de présentation sur quelqu'un. SPECIFIC = question ciblée sur une expérience, technologie, date ou entreprise précise.",
+        user_prompt=question,
+        models=["groq"],
+        max_tokens=10,
+        temperature=0.0
+    )
+    label = result["response"].strip().upper()
+    logger.info(f"🔀 Query classified: {label}")
+    return label if label in ["GENERAL", "SPECIFIC"] else "SPECIFIC"
+
 async def rag_pipeline(
     question: str,
     session_id: str,
-    top_k: int = 6,
-    score_threshold: float = 0.7
+    top_k: int = 6
 ) -> Dict:
     """
     Pipeline RAG complet avec logging.
@@ -301,19 +324,26 @@ async def rag_pipeline(
     modelEmbeddings = "voyage"
     # modelEmbeddings = "mistral"
     
-    embedding = await vectorize_query(question, modelEmbeddings)
-    embedding_tokens = len(question.split())  # Approximation
-    
-    # 2. Recherche contexte
-    context_chunks = await search_context(embedding, top_k)
+    query_type = await classify_question(question)
+
+    if query_type == "GENERAL":
+        async with AsyncSessionLocal() as db:
+            profile_text = await build_profile_text(db)
+        filtered_chunks = [{
+            "type": "profile",
+            "id": 0,
+            "title": "Résumé profil",
+            "description": profile_text,
+            "score": 1.0
+        }]
+        logger.info("🗺️ GENERAL question → résumé profil direct")
+    else:
+        embedding = await vectorize_query(question, modelEmbeddings)
+        context_chunks = await search_context(question, embedding, top_k)
+        filtered_chunks = await rerank_chunks(question, context_chunks, top_k=5)
+
+    embedding_tokens = len(question.split())
     latency_retrieval_ms = int((time.perf_counter() - start_retrieval) * 1000)
-    
-    # Filtrer par score
-    # filtered_chunks = [
-    #     chunk for chunk in context_chunks 
-    #     if chunk['score'] >= score_threshold
-    # ]
-    filtered_chunks = await rerank_chunks(question, context_chunks, top_k=5)
     
     if not filtered_chunks:
         logger.warning(f"⚠️ No relevant context (threshold={score_threshold})")
