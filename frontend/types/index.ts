@@ -40,6 +40,7 @@ export interface JobOfferSummary {
   id: number;
   ft_id: string;
   title: string;
+  description: string | null;
   company_name: string | null;
   location_label: string | null;
   contract_type: string | null;
@@ -56,7 +57,7 @@ export interface JobOfferSummary {
 }
 
 export interface JobOfferDetail extends JobOfferSummary {
-  description: string | null;
+  // description: string | null;
   rome_code: string | null;
   location_postal_code: string | null;
   location_lat: number | null;

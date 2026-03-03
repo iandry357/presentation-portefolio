@@ -12,6 +12,7 @@ class JobOfferSummary(BaseModel):
     id: int
     ft_id: str
     title: str
+    description: Optional[str]
     company_name: Optional[str]
     location_label: Optional[str]
     contract_type: Optional[str]
@@ -33,7 +34,7 @@ class JobOfferSummary(BaseModel):
 
 class JobOfferDetail(JobOfferSummary):
     """Vue complète pour la page détail — inclut les données brutes."""
-    description: Optional[str]
+    # description: Optional[str]
     rome_code: Optional[str]
     location_postal_code: Optional[str]
     location_lat: Optional[float]

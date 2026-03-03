@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { ExternalLink, MapPin, Briefcase, Clock, Euro, Building2, CheckCircle } from 'lucide-react';
 import { JobOfferDetail, JobEnriched } from '@/types';
-import { updateJobStatus, enrichJob } from '@/lib/api';
+// import { updateJobStatus, enrichJob } from '@/lib/api';
 import RecalculButton from '@/components/jobs/RecalculButton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { updateJobStatus, enrichJob, FT_BASE_URL } from '@/lib/api';
 
 // ============================================================================
 // Section helper
@@ -128,9 +129,9 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
         </div>
 
         {/* Lien offre originale */}
-        {offer.offer_url && (
+        
           <a
-            href={offer.offer_url}
+            href={`${FT_BASE_URL}${offer.ft_id}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
@@ -138,7 +139,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
             <ExternalLink className="w-4 h-4" />
             Voir l'offre sur France Travail
           </a>
-        )}
+        
       </div>
 
       {/* Description brute */}
