@@ -1,25 +1,31 @@
 import Link from 'next/link';
 import { MapPin, Clock, Briefcase, Euro, ExternalLink } from 'lucide-react';
 import { JobOfferSummary, JobStatus } from '@/types';
+import { FT_BASE_URL } from '@/lib/api';
+
 
 // ============================================================================
 // Badge statut
 // ============================================================================
 
 const STATUS_STYLES: Record<JobStatus, string> = {
-  nouveau:  'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-  existant: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
-  ferme:    'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300',
-  consulte: 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300',
-  postule:  'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+  nouveau:    'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+  existant:   'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+  ferme:      'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300',
+  consulte:   'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300',
+  postule:    'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+  enregistre: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+  manuel:     'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
 };
 
 const STATUS_LABELS: Record<JobStatus, string> = {
-  nouveau:  'Nouveau',
-  existant: 'Existant',
-  ferme:    'Fermé',
-  consulte: 'Consulté',
-  postule:  'Postulé',
+  nouveau:    'Nouveau',
+  existant:   'Existant',
+  ferme:      'Fermé',
+  consulte:   'Consulté',
+  postule:    'Postulé',
+  enregistre: 'Enregistré',
+  manuel:     'Manuel',
 };
 
 function StatusBadge({ status }: { status: JobStatus }) {
@@ -119,15 +125,21 @@ export default function JobCard({ offer }: JobCardProps) {
         </div>
       )}
 
+      {offer.description && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
+          {offer.description.split(' ').slice(0, 20).join(' ')}...
+        </p>
+      )}
+
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
         <span className="text-xs text-gray-400 dark:text-gray-500">
           {formatDate(offer.ft_published_at)}
         </span>
         <div className="flex items-center gap-3">
-          {offer.offer_url && (
+          
             <a
-              href={offer.offer_url}
+              href={`${FT_BASE_URL}${offer.ft_id}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}
@@ -136,7 +148,7 @@ export default function JobCard({ offer }: JobCardProps) {
               <ExternalLink className="w-3.5 h-3.5" />
               Voir l'offre
             </a>
-          )}
+          
           <Link
             href={`/jobs/${offer.id}`}
             className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"

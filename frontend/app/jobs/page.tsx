@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Briefcase, RefreshCw, Play, Trash2 } from 'lucide-react';
 import { JobFilters, JobOfferSummary } from '@/types';
-import { getJobs, triggerPipeline, resetJobs } from '@/lib/api';
+import { getJobs, triggerPipeline, resetJobs, addManualJob  } from '@/lib/api';
 import JobCard from '@/components/jobs/JobCard';
 import JobFiltersPanel from '@/components/jobs/JobFilters';
 
@@ -31,6 +31,10 @@ export default function JobsPage() {
   const [triggerResult, setTriggerResult] = useState<string | null>(null);
   const [resetting, setResetting] = useState(false);           // nouveau
   const [resetResult, setResetResult] = useState<string | null>(null);  // nouveau
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualFtId, setManualFtId] = useState('');
+  const [manualLoading, setManualLoading] = useState(false);
+  const [manualResult, setManualResult] = useState<string | null>(null);
 
 //   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
   const isDev = true;
@@ -100,6 +104,24 @@ export default function JobsPage() {
     }
   };
 
+  const handleManualAdd = async () => {
+    if (!manualFtId.trim()) return;
+    setManualLoading(true);
+    setManualResult(null);
+    try {
+      const result = await addManualJob(manualFtId.trim());
+      // setManualResult(`Offre "${result.title}" ajoutée avec succès`);
+      setManualFtId('');
+      setShowManualModal(false);
+      setManualResult(`Offre "${result.title}" ajoutée avec succès`);
+      await loadOffers();
+    } catch (e) {
+      setManualResult(e instanceof Error ? e.message : 'Erreur ajout manuel');
+    } finally {
+      setManualLoading(false);
+    }
+  };
+
   // ============================================================================
   // Pagination
   // ============================================================================
@@ -122,10 +144,12 @@ export default function JobsPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2"> */}
+          <div className="flex sm:flex-row flex-col items-end sm:items-center gap-2">
             {/* Refresh */}
             <button
-              onClick={loadOffers}
+              // onClick={loadOffers}
+              onClick={() => { setResetResult(null); setTriggerResult(null); setManualResult(null); loadOffers(); }}
               disabled={loading}
               className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               title="Rafraîchir"
@@ -141,7 +165,8 @@ export default function JobsPage() {
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
               >
                 <Play className="w-4 h-4" />
-                {triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'}
+                {/* {triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'} */}
+                <span className="hidden sm:inline">{triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'}</span>
               </button>
             )}
 
@@ -154,8 +179,60 @@ export default function JobsPage() {
                 title="Supprime toutes les offres sauf postulé/enregistré"
               >
                 <Trash2 className="w-4 h-4" />
-                {resetting ? 'Reset en cours...' : 'Nettoyer les offres'}
+                {/* {resetting ? 'Reset en cours...' : 'Nettoyer les offres'} */}
+                <span className="hidden sm:inline">{resetting ? 'Reset en cours...' : 'Nettoyer les offres'}</span>
               </button>
+            )}
+            {/* Bouton ajout manuel */}
+            <button
+              onClick={() => setShowManualModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              <span className="sm:hidden">+</span>
+              <span className="hidden sm:inline">+ Ajouter une offre</span>
+            </button>
+
+            {/* Modale ajout manuel */}
+            {showManualModal && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm space-y-4 shadow-xl">
+                  <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                    Ajouter une offre manuellement
+                  </h2>
+                  <div className="space-y-2">
+                    <label className="text-sm text-gray-600 dark:text-gray-400">
+                      Numéro de l'offre France Travail
+                    </label>
+                    <input
+                      type="text"
+                      value={manualFtId}
+                      onChange={e => setManualFtId(e.target.value)}
+                      placeholder="ex: 9548593"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  {manualResult && (
+                    <p className={`text-sm ${manualResult.includes('Erreur') || manualResult.includes('introuvable') ? 'text-red-500' : 'text-green-600'}`}>
+                      {manualResult}
+                    </p>
+                  )}
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => { setShowManualModal(false); setManualResult(null); setManualFtId(''); }}
+                      className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={handleManualAdd}
+                      disabled={manualLoading || !manualFtId.trim()}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium disabled:opacity-50"
+                    >
+                      {manualLoading ? 'Ajout en cours...' : 'Ajouter'}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -177,6 +254,12 @@ export default function JobsPage() {
             }`}
           >
             {resetResult}
+          </div>
+        )}
+
+        {manualResult && (
+          <div className="text-sm bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg">
+            {manualResult}
           </div>
         )}
 

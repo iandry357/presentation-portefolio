@@ -26,7 +26,7 @@ async def _update_statuses(db: AsyncSession, active_ft_ids: set[str]) -> None:
     - ferme    : offres absentes du dernier passage scheduler
     """
     result = await db.execute(
-        select(JobOffer).where(JobOffer.status.notin_(["ferme", "postule"]))
+        select(JobOffer).where(JobOffer.status.notin_(["ferme", "postule", "enregistre", "manuel"]))
     )
     offers = result.scalars().all()
 
