@@ -50,7 +50,9 @@ async def _get_token() -> str:
 
 async def _headers() -> dict:
     token = await _get_token()
-    return {"Authorization": f"Bearer {token}"}
+    return {"Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+        }
 
 
 # ============================================================================
@@ -161,10 +163,14 @@ async def get_offer_detail(ft_id: str) -> Optional[dict]:
             f"{ft.OFFRE_URL}/{ft_id}",
             headers=await _headers(),
         )
+        print(f"---- {ft.OFFRE_URL}/{ft_id}")
 
         if resp.status_code == 404:
-            logger.warning(f"Offre {ft_id} introuvable sur France Travail")
+            logger.warning(f"Offre {ft_id} introuvable sur France Travail. Le partenaire n'a probablement pas déposé explicitement l'offre")
             return None
 
         resp.raise_for_status()
+        if not resp.content:
+            logger.warning(f"Offre {ft_id} : réponse vide de France Travail")
+            return None
         return resp.json()

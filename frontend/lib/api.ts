@@ -2,6 +2,7 @@
 import { ChatResponse } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
 
 export async function sendMessage(
   message: string,
@@ -104,7 +105,7 @@ export async function getJobEnriched(id: number): Promise<JobEnriched> {
 
 export async function updateJobStatus(
   id: number,
-  status: 'consulte' | 'postule'
+  status: 'consulte' | 'postule' | 'enregistre'
 ): Promise<void> {
   const response = await fetch(`${API_URL}/jobs/${id}/status`, {
     method: 'PATCH',
@@ -193,6 +194,21 @@ export async function resetJobs() {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.detail || `Erreur ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function addManualJob(ft_id: string): Promise<JobOfferDetail> {
+  const response = await fetch(`${API_URL}/jobs/manual`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ft_id }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
   return response.json();
