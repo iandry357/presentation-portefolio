@@ -11,6 +11,8 @@ from app.core.config import settings
 from app.core import france_travail_config as ft
 from app.models.job_offer import JobOffer
 from app.models.job_enriched import JobEnriched
+from app.services.france_travail_client import get_offer_detail
+from scheduler.job_pipeline import _map_offer_to_model
 from app.schemas.jobs import (
     JobListResponse,
     JobOfferSummary,
@@ -20,6 +22,7 @@ from app.schemas.jobs import (
     StatusUpdateRequest,
     TriggerPipelineRequest,
     PipelineTriggerResponse,
+    ManualJobRequest, 
 )
 from app.services.job_crew.crew import run_enrichment_crew
 from app.services.job_scoring import build_profile_text
@@ -99,6 +102,43 @@ async def list_jobs(
 
     return JobListResponse(total=total, items=items)
 
+# ============================================================================
+# POST /jobs/manual — Ajout manuel d'une offre par ft_id
+# ============================================================================
+
+@router.post("/manual", response_model=JobOfferDetail)
+async def add_manual_job(
+    body: ManualJobRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    # Vérifier si l'offre existe déjà
+    existing_result = await db.execute(
+        select(JobOffer).where(JobOffer.ft_id == body.ft_id)
+    )
+    existing = existing_result.scalar_one_or_none()
+
+    if existing:
+        existing.status = "manuel"
+        await db.commit()
+        await db.refresh(existing)
+        detail = JobOfferDetail.model_validate(existing)
+        detail.has_enriched = False
+        return detail
+
+    # Récupérer l'offre depuis France Travail
+    raw = await get_offer_detail(body.ft_id)
+    if not raw:
+        raise HTTPException(status_code=404, detail=f"Offre {body.ft_id} introuvable sur France Travail. Le partenaire n'a probablement pas déposé explicitement l'offre")
+
+    job = _map_offer_to_model(raw)
+    job.status = "manuel"
+    db.add(job)
+    await db.commit()
+    await db.refresh(job)
+
+    detail = JobOfferDetail.model_validate(job)
+    detail.has_enriched = False
+    return detail
 
 # ============================================================================
 # GET /jobs/{id} — Détail offre + fiche enrichie
@@ -348,7 +388,8 @@ async def reset_jobs(db: AsyncSession = Depends(get_db)):
     try:
         result = await db.execute(
             select(JobOffer).where(
-                JobOffer.status.notin_(["postule", "enregistre"])
+                # JobOffer.status.notin_(["postule", "enregistre"])
+                JobOffer.status.notin_(["postule", "enregistre", "manuel"])
             )
         )
         offers = result.scalars().all()
@@ -372,3 +413,4 @@ async def reset_jobs(db: AsyncSession = Depends(get_db)):
         await db.rollback()
         logger.error(f"Erreur lors du reset : {e}")
         raise HTTPException(status_code=500, detail=f"Erreur interne : {str(e)}")
+

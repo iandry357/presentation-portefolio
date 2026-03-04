@@ -79,10 +79,15 @@ class RecalculRequest(BaseModel):
     """Requête de recalcul d'une fiche enrichie."""
     instruction: str = Field(..., min_length=5, max_length=500)
 
+class ManualJobRequest(BaseModel):
+    """Ajout manuel d'une offre par son identifiant France Travail."""
+    ft_id: str = Field(..., min_length=3, max_length=50)
+
 
 class StatusUpdateRequest(BaseModel):
     """Mise à jour manuelle du statut d'une offre."""
-    status: str = Field(..., pattern="^(consulte|postule)$")
+    # status: str = Field(..., pattern="^(consulte|postule)$")
+    status: str = Field(..., pattern="^(consulte|postule|enregistre)$")
 
 
 class TriggerPipelineRequest(BaseModel):

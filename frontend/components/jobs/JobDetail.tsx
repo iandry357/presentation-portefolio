@@ -38,6 +38,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
   const [status, setStatus] = useState(offer.status);
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState<string | null>(null);
+  const [enregistre, setEnregistre] = useState(offer.status === 'enregistre');
 
   // ============================================================================
   // Marquer comme postulé
@@ -69,6 +70,15 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
     }
   };
 
+  const handleEnregistre = async () => {
+    try {
+      await updateJobStatus(offer.id, 'enregistre');
+      setEnregistre(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className="space-y-8">
 
@@ -91,25 +101,40 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
             )}
           </div>
 
-          {/* Bouton postuler */}
-          {status !== 'postule' ? (
-            <button
-              onClick={handlePostule}
-              className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
-            >
-              Marquer comme postulé
-            </button>
-          ) : (
-            <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg text-sm font-medium">
-              <CheckCircle className="w-4 h-4" />
-              Postulé
-              {offer.applied_at && (
-                <span className="text-xs opacity-70 ml-1">
-                  {new Date(offer.applied_at).toLocaleDateString('fr-FR')}
-                </span>
-              )}
-            </span>
-          )}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            {/* Bouton postuler */}
+            {status !== 'postule' ? (
+              <button
+                onClick={handlePostule}
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                Marquer comme postulé
+              </button>
+            ) : (
+              <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg text-sm font-medium">
+                <CheckCircle className="w-4 h-4" />
+                Postulé
+                {offer.applied_at && (
+                  <span className="text-xs opacity-70 ml-1">
+                    {new Date(offer.applied_at).toLocaleDateString('fr-FR')}
+                  </span>
+                )}
+              </span>
+            )}
+
+            {!enregistre ? (
+              <button
+                onClick={handleEnregistre}
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                Enregistrer
+              </button>
+            ) : (
+              <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium">
+                Enregistré
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Infos clés */}
