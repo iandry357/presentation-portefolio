@@ -24,6 +24,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function AnimatedDots() {
+  return (
+    <span className="inline-flex gap-0.5">
+      <span className="animate-bounce [animation-delay:0ms]">.</span>
+      <span className="animate-bounce [animation-delay:150ms]">.</span>
+      <span className="animate-bounce [animation-delay:300ms]">.</span>
+    </span>
+  );
+}
+
 // ============================================================================
 // JobDetail
 // ============================================================================
@@ -205,7 +215,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
               disabled={enriching}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
             >
-              {enriching ? 'Génération en cours...' : 'Générer la fiche'}
+              {enriching ? <>Génération en cours<AnimatedDots /></> : 'Générer la fiche'}
             </button>
           </div>
         )}
