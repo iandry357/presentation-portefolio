@@ -127,7 +127,7 @@ export default function JobCard({ offer }: JobCardProps) {
 
       {offer.description && (
         <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
-          {offer.description.split(' ').slice(0, 20).join(' ')}...
+          {offer.description.split(' ').slice(0, 19).join(' ')}...
         </p>
       )}
 
