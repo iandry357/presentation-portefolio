@@ -1,5 +1,19 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FileText, MessageSquare } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Iandry RAKOTONIAINA — Data Scientist & AI-ML Engineer',
+  description:
+    "Portefolio de Iandry RAKOTONIAINA, Data Scientist / Data Engineer / AI-ML Engineer, 7 ans d\'expérience en recherche appliquée et consulting industriel.",
+  openGraph: {
+    title: 'Iandry RAKOTONIAINA — Data Scientist & AI-ML Engineer',
+    description:
+      "Portefolio de Iandry RAKOTONIAINA, Data Scientist / Data Engineer / AI-ML Engineer, 7 ans d\'expérience en recherche appliquée et consulting industriel.",
+    url: 'https://portfoliocvcy2iktuv-portfolio-cv-frontend.functions.fnc.fr-par.scw.cloud',
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
   return (
