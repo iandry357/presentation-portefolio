@@ -118,7 +118,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
                 onClick={handlePostule}
                 className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
-                Marquer comme postulé
+                Postuler
               </button>
             ) : (
               <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg text-sm font-medium">
