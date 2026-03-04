@@ -6,7 +6,7 @@ import { Download, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-rea
 import Image from 'next/image';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-const TOTAL_PAGES = 2;
+const TOTAL_PAGES = 1;
 
 export default function CVPage() {
   const pdfUrl = getPdfUrl();
