@@ -9,19 +9,23 @@ import { FT_BASE_URL } from '@/lib/api';
 // ============================================================================
 
 const STATUS_STYLES: Record<JobStatus, string> = {
-  nouveau:  'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-  existant: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
-  ferme:    'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300',
-  consulte: 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300',
-  postule:  'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+  nouveau:    'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+  existant:   'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+  ferme:      'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300',
+  consulte:   'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300',
+  postule:    'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+  enregistre: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+  manuel:     'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
 };
 
 const STATUS_LABELS: Record<JobStatus, string> = {
-  nouveau:  'Nouveau',
-  existant: 'Existant',
-  ferme:    'Fermé',
-  consulte: 'Consulté',
-  postule:  'Postulé',
+  nouveau:    'Nouveau',
+  existant:   'Existant',
+  ferme:      'Fermé',
+  consulte:   'Consulté',
+  postule:    'Postulé',
+  enregistre: 'Enregistré',
+  manuel:     'Manuel',
 };
 
 function StatusBadge({ status }: { status: JobStatus }) {
