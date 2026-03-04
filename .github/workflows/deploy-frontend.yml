@@ -36,6 +36,8 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=https://portfoliocvcy2iktuv-portfolio-cv-backend.functions.fnc.fr-par.scw.cloud
             NEXT_PUBLIC_FT_BASE_URL=https://candidat.francetravail.fr/offres/recherche/detail/
+            NEXT_PUBLIC_GA_ID=${{ secrets.NEXT_PUBLIC_GA_ID }}
+            NEXT_PUBLIC_ENV=production
           tags: |
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ github.sha }}

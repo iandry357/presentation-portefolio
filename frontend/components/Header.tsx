@@ -14,8 +14,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href="/">
-              <h1 className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer">
+              {/* <h1 className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer">
                 Iandry (prononcé Yan'ch) RAKOTONIAINA
+              </h1> */}
+              <h1 className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer">
+                <span className="hidden sm:inline">Iandry (prononcé Yan'ch) RAKOTONIAINA</span>
+                <span className="sm:hidden">Yan'ch RAKOTONIAINA</span>
               </h1>
             </Link>
             <nav className="flex gap-1">
