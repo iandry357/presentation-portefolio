@@ -17,6 +17,16 @@ const DEFAULT_FILTERS: JobFilters = {
   hide_consulted: false,
 };
 
+function AnimatedDots() {
+  return (
+    <span className="inline-flex gap-0.5">
+      <span className="animate-bounce [animation-delay:0ms]">.</span>
+      <span className="animate-bounce [animation-delay:150ms]">.</span>
+      <span className="animate-bounce [animation-delay:300ms]">.</span>
+    </span>
+  );
+}
+
 // ============================================================================
 // Page Jobs
 // ============================================================================
@@ -166,7 +176,7 @@ export default function JobsPage() {
               >
                 <Play className="w-4 h-4" />
                 {/* {triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'} */}
-                <span className="hidden sm:inline">{triggering ? 'Pipeline en cours...' : 'Lancer le pipeline'}</span>
+                <span className="hidden sm:inline">{triggering ? <>Pipeline en cours<AnimatedDots /></> : 'Lancer le pipeline'}</span>
               </button>
             )}
 
@@ -180,7 +190,7 @@ export default function JobsPage() {
               >
                 <Trash2 className="w-4 h-4" />
                 {/* {resetting ? 'Reset en cours...' : 'Nettoyer les offres'} */}
-                <span className="hidden sm:inline">{resetting ? 'Reset en cours...' : 'Nettoyer les offres'}</span>
+                <span className="hidden sm:inline">{resetting ? <>Reset en cours<AnimatedDots /></> : 'Nettoyer les offres'}</span>
               </button>
             )}
             {/* Bouton ajout manuel */}
