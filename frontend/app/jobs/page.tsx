@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Briefcase, RefreshCw, Play, Trash2 } from 'lucide-react';
+import { Briefcase, RefreshCw, Play, Trash2, Filter  } from 'lucide-react';
 import { JobFilters, JobOfferSummary } from '@/types';
 import { getJobs, triggerPipeline, resetJobs, addManualJob  } from '@/lib/api';
 import JobCard from '@/components/jobs/JobCard';
@@ -45,6 +45,7 @@ export default function JobsPage() {
   const [manualFtId, setManualFtId] = useState('');
   const [manualLoading, setManualLoading] = useState(false);
   const [manualResult, setManualResult] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
 //   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
   const isDev = true;
@@ -277,7 +278,39 @@ export default function JobsPage() {
         <div className="flex gap-6 items-start">
 
           {/* Filtres */}
-          <aside className="w-56 shrink-0 sticky top-4">
+          {/* <aside className="w-56 shrink-0 sticky top-4">
+            <JobFiltersPanel filters={filters} onChange={setFilters} />
+          </aside> */}
+          {/* Bouton filtre mobile */}
+          <button
+            onClick={() => setShowFilters(true)}
+            className="sm:hidden flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-100"
+          >
+            <Filter className="w-4 h-4" />
+            Filtres
+          </button>
+
+          {/* Overlay mobile */}
+          {showFilters && (
+            <div
+              className="fixed inset-0 bg-black/40 z-40 sm:hidden"
+              onClick={() => setShowFilters(false)}
+            >
+              <div
+                className="absolute left-0 top-0 h-full w-72 bg-white dark:bg-gray-800 overflow-y-auto p-4 z-50"
+                onClick={e => e.stopPropagation()}
+              >
+                <JobFiltersPanel
+                  filters={filters}
+                  onChange={setFilters}
+                  onClose={() => setShowFilters(false)}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Sidebar desktop */}
+          <aside className="hidden sm:block w-56 shrink-0 sticky top-4">
             <JobFiltersPanel filters={filters} onChange={setFilters} />
           </aside>
 

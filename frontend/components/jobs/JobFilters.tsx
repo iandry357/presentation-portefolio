@@ -38,12 +38,14 @@ const MAX_DAYS_OPTIONS = [
 interface JobFiltersProps {
   filters: JobFilters;
   onChange: (filters: JobFilters) => void;
+  onClose?: () => void;
 }
 
-export default function JobFiltersPanel({ filters, onChange }: JobFiltersProps) {
-  const update = (patch: Partial<JobFilters>) =>
+export default function JobFiltersPanel({ filters, onChange, onClose  }: JobFiltersProps) {
+  const update = (patch: Partial<JobFilters>) => {
     onChange({ ...filters, page: 1, ...patch });
-
+    onClose?.();
+  };
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4">
       <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Filtres</h2>
