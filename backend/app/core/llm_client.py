@@ -97,7 +97,9 @@ async def generate_with_fallback(
                 max_tokens=max_tokens,
                 temperature=temperature,
                 api_key=api_key,
-                timeout=10.0  # 10s timeout par provider
+                timeout=30.0,  # 10s timeout par provider,
+                request_timeout=30.0,
+                num_retries=2
             )
             
             latency_ms = int((time.perf_counter() - start_time) * 1000)
