@@ -35,7 +35,7 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
             WHERE experiences.embedding IS NOT NULL
             UNION ALL
             SELECT 'formation', id, degree,
-                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description || ' ' || fields || ' ' || key_learnings
+                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description || ' ' || field || ' ' || key_learnings
             FROM formations WHERE embedding IS NOT NULL
             UNION ALL
             SELECT 'information', id,
