@@ -13,7 +13,7 @@ import logging
 import json
 from app.services.embeddings import rerank_chunks
 from rank_bm25 import BM25Okapi
-from app.services.job_profile import build_profile_text
+from app.services.job_profile import build_profile_text, build_profile_text_chat
 
 logger = logging.getLogger(__name__)
 
@@ -29,42 +29,53 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
         rows_all = await db.execute(text("""
             SELECT 'experience' as type, experiences.id,
                 role as title,
-                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || ' ' || stack || ' ' || collaborators as description
+                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || '. Avec les technologies : ' || stack || ' et travaillé avec ' || collaborators as description,
+                experiences.start_date,
+                experiences.end_date,
+                experiences.is_stage
             FROM experiences
             LEFT JOIN projects ON experiences.id = projects.experience_id
             WHERE experiences.embedding IS NOT NULL
             UNION ALL
             SELECT 'formation', id, degree,
-                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description || ' ' || field || ' ' || key_learnings
+                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description || ' ' || field || ' ' || key_learnings,
+                start_date,
+                end_date,
+                FALSE as is_stage
             FROM formations WHERE embedding IS NOT NULL
             UNION ALL
             SELECT 'information', id,
-                'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé ' || prononciation || ' né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
-                'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion
+                'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé Yan''ch né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
+                'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion,
+                NULL as start_date,
+                NULL as end_date,
+                FALSE as is_stage
             FROM informations WHERE embedding IS NOT NULL
         """))
+
         all_chunks = [
-            {"type": r[0], "id": r[1], "title": r[2], "description": r[3], "cid": f"{r[0]}_{r[1]}"}
+            {"type": r[0], "id": r[1], "title": r[2], "description": r[3], "cid": f"{r[0]}_{r[1]}", "start_date": r[4], "end_date": r[5], "is_stage": r[6] if r[0] == "experience" else False}
             for r in rows_all.fetchall()
         ]
 
         # --- Score vectoriel pgvector ---
         embedding_str = "[" + ",".join(map(str, embedding)) + "]"
         rows_vec = await db.execute(text("""
-            SELECT id, 1 - (embedding <=> CAST(:emb AS vector)) as score
+            SELECT type, id, 1 - (embedding <=> CAST(:emb AS vector)) as score
             FROM (
-                SELECT experiences.id, experiences.embedding FROM experiences
+                SELECT 'experience' as type, experiences.id, experiences.embedding FROM experiences
                 LEFT JOIN projects ON experiences.id = projects.experience_id
                 WHERE experiences.embedding IS NOT NULL
                 UNION ALL
-                SELECT id, embedding FROM formations WHERE embedding IS NOT NULL
+                SELECT 'formation' as type, id, embedding FROM formations WHERE embedding IS NOT NULL
                 UNION ALL
-                SELECT id, embedding FROM informations WHERE embedding IS NOT NULL
+                SELECT 'information' as type, id, embedding FROM informations WHERE embedding IS NOT NULL
             ) sub
             ORDER BY score DESC
             LIMIT :top_k
         """), {"emb": embedding_str, "top_k": top_k})
         # vec_ranks = {r[0]: i for i, r in enumerate(rows_vec.fetchall())}
+        # vec_ranks = {f"{r[0]}_{r[1]}": i for i, r in enumerate(rows_vec.fetchall())}
         vec_ranks = {f"{r[0]}_{r[1]}": i for i, r in enumerate(rows_vec.fetchall())}
 
     # --- Score BM25 ---
@@ -83,6 +94,20 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
         rank_vec = vec_ranks.get(cid, len(all_chunks))
         rank_bm25 = bm25_ranks.get(cid, len(all_chunks))
         rrf_scores[cid] = (1 / (K + rank_vec)) + (1 / (K + rank_bm25))
+
+    # --- Recency boost ---
+    RECENCY_WEIGHT = 0.005
+    dates = [c["start_date"] for c in all_chunks if c.get("start_date") is not None]
+    if dates:
+        date_min = min(dates)
+        date_max = max(dates)
+        date_range = (date_max - date_min).days or 1  # évite division par zéro
+
+        for chunk in all_chunks:
+            cid = chunk["cid"]
+            if chunk.get("start_date") is not None:
+                recency = (chunk["start_date"] - date_min).days / date_range
+                rrf_scores[cid] = rrf_scores.get(cid, 0) + (RECENCY_WEIGHT * recency)
 
     # --- Tri final + reconstruction chunks ---
     sorted_ids = sorted(rrf_scores, key=lambda cid: rrf_scores[cid], reverse=True)[:top_k]
@@ -295,14 +320,18 @@ async def analyze_question(question: str) -> Dict:
 
     result = await generate_with_fallback(
         system_prompt="""Tu es un classificateur. Réponds UNIQUEMENT en JSON valide sans markdown.
-{"type": "GENERAL" ou "SPECIFIC"}
+{"type": "GENERAL" ou "SPECIFIC" ou "VAGUE"}
 
-GENERAL = présentation globale, question sociale, demande de résumé complet.
-Exemples : "présente-toi", "tu fais quoi", "c'est quoi ton parcours", "bonjour".
+VAGUE = question purement sociale sans sujet, salutation seule, ou continuité sans référence.
+Exemples : "bonjour", "salut", "et après ?", "tu as fait quoi ?", "c'est quoi tes compétences ?", "et ensuite ?".
+NB : "qui est Iandry", "c'est quoi ton parcours", "présente-toi" → GENERAL, pas VAGUE.
 
-SPECIFIC = toute autre question : expérience, technologie, date, entreprise,
-période temporelle, continuité d'un sujet précédent.
-Exemples : "et avant ça ?", "tu as utilisé Python ?", "c'était quand ?", "tu y es resté combien de temps ?".""",
+GENERAL = présentation globale ou demande de résumé complet.
+Exemples : "présente-toi", "tu fais quoi", "c'est quoi ton parcours".
+
+SPECIFIC = toute question avec un sujet précis : expérience, technologie, date, entreprise,
+période temporelle, continuité explicite.
+Exemples : "tu as utilisé Python ?", "c'était quand ?", "parle-moi de GE Healthcare".""",
         # user_prompt=f"{context_block}\n\nQuestion : {question}",
         user_prompt=question,
         models=["groq"],
@@ -311,14 +340,19 @@ Exemples : "et avant ça ?", "tu as utilisé Python ?", "c'était quand ?", "tu 
     )
 
     try:
-        parsed = json.loads(result["response"])
+        raw = result["response"].strip()
+        # Nettoyer les backticks markdown si présents
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        parsed = json.loads(raw.strip())
         q_type = parsed.get("type", "SPECIFIC").upper()
-        if q_type not in ["GENERAL", "SPECIFIC"]:
+        if q_type not in ["GENERAL", "SPECIFIC", "VAGUE"]:
             q_type = "SPECIFIC"
     except Exception:
         logger.warning("⚠️ analyze_question parse failed, fallback SPECIFIC")
         q_type = "SPECIFIC"
-
     logger.info(f"🔀 Question analyzed: type={q_type}")
     return {"type": q_type}
 
@@ -388,9 +422,21 @@ async def rag_pipeline(
 
     analysis = await analyze_question(question)
 
+    if analysis["type"] == "VAGUE":
+        return {
+            "query_id": query_id,
+            "response": "Bonjour ! Je suis l'assistant de Yan'ch RAKOTONIAINA, Data Scientist et ML Engineer. Pour mieux vous orienter, vous souhaitez en savoir plus sur une période précise, un domaine technique, ou un type de mission ?",
+            "context_chunks": [],
+            "tokens_used": 0,
+            "cost": 0.0,
+            "provider_used": "none"
+        }
+
     if analysis["type"] == "GENERAL":
+        # async with AsyncSessionLocal() as db:
+        #     profile_text = await build_profile_text(db)
         async with AsyncSessionLocal() as db:
-            profile_text = await build_profile_text(db)
+            profile_text = await build_profile_text_chat(db)
         filtered_chunks = [{
             "type": "profile",
             "id": 0,
@@ -401,12 +447,35 @@ async def rag_pipeline(
         logger.info("🗺️ GENERAL → résumé profil direct")
     else:
         # Approche 1 — enrichissement systématique avant embedding
-        search_question = f"{question} {history_summary}".strip() if history_summary else question
-        logger.info(f"🔍 Search question enrichie: '{search_question[:100]}...'")
+        # search_question = f"{question} {history_summary}".strip() if history_summary else question
+        # logger.info(f"🔍 Search question enrichie: '{search_question[:100]}...'")
+        hint = history_summary if history_summary else "CV et parcours professionnel d'Iandry RAKOTONIAINA : expériences, formations, compétences."
+        search_question = await reformulate_question(question, hint)
+        logger.info(f"🔍 Search question reformulée: '{search_question[:100]}'")
 
         embedding = await vectorize_query(search_question, modelEmbeddings)
         context_chunks = await search_context(search_question, embedding, top_k)
-        filtered_chunks = await rerank_chunks(search_question, context_chunks, top_k=5)
+        logger.info(f"🧩 RRF chunks: {[(c['title'], c['score']) for c in context_chunks]}")
+        # filtered_chunks = await rerank_chunks(search_question, context_chunks, top_k=5)
+        # Isoler par type
+        # Isoler par type et is_stage
+        chunks_exp = [c for c in context_chunks if c["type"] == "experience" and not c.get("is_stage")]
+        chunks_stage = [c for c in context_chunks if c["type"] == "experience" and c.get("is_stage")]
+        chunks_formation = [c for c in context_chunks if c["type"] == "formation"]
+        chunks_info = [c for c in context_chunks if c["type"] == "information"]
+
+        # Reranker uniquement les expériences professionnelles
+        reranked_exp = await rerank_chunks(search_question, chunks_exp, top_k=5) if chunks_exp else []
+
+        # Réinjecter stages, formations et informations en queue (max 1 de chaque)
+        filtered_chunks = reranked_exp
+        if len(filtered_chunks) < 5 and chunks_stage:
+            filtered_chunks += chunks_stage[:1]
+        if len(filtered_chunks) < 6 and chunks_formation:
+            filtered_chunks += chunks_formation[:1]
+        if len(filtered_chunks) < 7 and chunks_info:
+            filtered_chunks += chunks_info[:1]
+        logger.info(f"✅ Reranked chunks: {[(c['title'], c['score']) for c in filtered_chunks]}")
 
     embedding_tokens = len(question.split())
     latency_retrieval_ms = int((time.perf_counter() - start_retrieval) * 1000)
@@ -426,12 +495,23 @@ async def rag_pipeline(
     logger.info(f"✍️ RAG Pipeline [{query_id}]: generating with {len(filtered_chunks)} chunks...")
     start_generation = time.perf_counter()
 
+    # Tri chronologique : NULL (informations) en premier, puis du plus ancien au plus récent
+    # filtered_chunks = sorted(
+    #     filtered_chunks,
+    #     key=lambda c: (c["start_date"] is None, c["start_date"])
+    # )
+    filtered_chunks = sorted(
+        filtered_chunks,
+        key=lambda c: (c.get("start_date") is not None, c.get("start_date")),
+        reverse=True
+    )
+
     # Récupérer historique conversationnel
     # history = await fetch_conversation_history(session_id)
     # llm_result = await generate_response(question, filtered_chunks, history)
     # history = await fetch_conversation_history(session_id)
     # history_summary = await summarize_history(history)
-    llm_result = await generate_response(question, filtered_chunks, history_summary)
+    llm_result = await generate_response(question, filtered_chunks, history)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     
     # 4. Update session
