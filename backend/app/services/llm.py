@@ -7,7 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 # async def generate_response(question: str, context_chunks: List[Dict]) -> Dict:
-async def generate_response(question: str, context_chunks: List[Dict], history_summary: str = "") -> Dict:
+# async def generate_response(question: str, context_chunks: List[Dict], history_summary: str = "") -> Dict:
+async def generate_response(question: str, context_chunks: List[Dict], history: List[Dict] = []) -> Dict:
     """
     Génère réponse via LLM (Mistral → Groq fallback) avec contexte RAG.
     
@@ -22,10 +23,19 @@ async def generate_response(question: str, context_chunks: List[Dict], history_s
     """
     # Construction du contexte
     context = "\n\n".join([
-        f"[{chunk['type'].upper()}] {chunk['title']}\n{chunk['description'][:500]}"
+        f"[{chunk['type'].upper()}] {chunk['title']}\n{chunk['description']}"
         for chunk in context_chunks
     ])
     current_date = datetime.now().strftime("%d %B %Y")
+
+    # Bloc conversationnel depuis les messages bruts
+    history_block = ""
+    if history:
+        exchanges = "\n".join([
+            f"{'Utilisateur' if m['role'] == 'user' else 'Assistant'} : {m['content']}"
+            for m in history
+        ])
+        history_block = f"\nHistorique de la conversation :\n{exchanges}\n"
     
     # Prompts
 #     system_prompt = """Tu es un assistant qui répond aux questions sur le parcours professionnel d'Yan'ch RAKOTONIAINA.
@@ -45,7 +55,7 @@ Nous sommes le {current_date}. Utilise cette date comme référence pour situer 
     
     user_prompt = f"""Contexte (CV d'Yan'ch) :
 {context}
-
+{history_block}
 {f"Contexte conversation précédente : {history_summary}" if history_summary else ""}
 
 Question : {question}

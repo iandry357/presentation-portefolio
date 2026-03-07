@@ -29,7 +29,7 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
         rows_all = await db.execute(text("""
             SELECT 'experience' as type, experiences.id,
                 role as title,
-                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || ' ' || stack || ' ' || collaborators as description
+                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || '. Avec les technologies : ' || stack || ' et travaillé avec ' || collaborators as description
             FROM experiences
             LEFT JOIN projects ON experiences.id = projects.experience_id
             WHERE experiences.embedding IS NOT NULL
@@ -39,7 +39,7 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
             FROM formations WHERE embedding IS NOT NULL
             UNION ALL
             SELECT 'information', id,
-                'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé ' || prononciation || ' né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
+                'je suis ' || prenom || ' ' || nom || ' avec le prenom prononcé Yan''ch né à ' || pays_naissance || ' le ' || TO_CHAR(date_naissance, 'YYYY-MM-DD'),
                 'Passioné depuis par les sciences dures et les nouvelles technologies, aussi je suis ' || passion
             FROM informations WHERE embedding IS NOT NULL
         """))
@@ -401,8 +401,11 @@ async def rag_pipeline(
         logger.info("🗺️ GENERAL → résumé profil direct")
     else:
         # Approche 1 — enrichissement systématique avant embedding
-        search_question = f"{question} {history_summary}".strip() if history_summary else question
-        logger.info(f"🔍 Search question enrichie: '{search_question[:100]}...'")
+        # search_question = f"{question} {history_summary}".strip() if history_summary else question
+        # logger.info(f"🔍 Search question enrichie: '{search_question[:100]}...'")
+        hint = history_summary if history_summary else "CV et parcours professionnel d'Iandry RAKOTONIAINA : expériences, formations, compétences."
+        search_question = await reformulate_question(question, hint)
+        logger.info(f"🔍 Search question reformulée: '{search_question[:100]}'")
 
         embedding = await vectorize_query(search_question, modelEmbeddings)
         context_chunks = await search_context(search_question, embedding, top_k)
@@ -431,7 +434,7 @@ async def rag_pipeline(
     # llm_result = await generate_response(question, filtered_chunks, history)
     # history = await fetch_conversation_history(session_id)
     # history_summary = await summarize_history(history)
-    llm_result = await generate_response(question, filtered_chunks, history_summary)
+    llm_result = await generate_response(question, filtered_chunks, history)
     latency_generation_ms = int((time.perf_counter() - start_generation) * 1000)
     
     # 4. Update session
