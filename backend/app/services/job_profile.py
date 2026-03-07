@@ -73,6 +73,29 @@ async def build_profile_text(db: AsyncSession) -> str:
     logger.info(f"Profil texte construit : {len(_profile_text)} caractères")
     return _profile_text
 
+async def build_profile_text_chat(db: AsyncSession) -> str:
+    """
+    Construit le texte profil structuré avec dates pour le chatbot RAG (cas GENERAL).
+    Distinct de build_profile_text utilisé pour le scoring jobs.
+    """
+    result = await db.execute(text("""
+        SELECT role, start_date, end_date, context, technologies
+        FROM experiences
+        ORDER BY start_date ASC
+    """))
+    rows = result.fetchall()
+
+    parts = []
+    for row in rows:
+        start = str(row.start_date) if row.start_date else "?"
+        end = str(row.end_date) if row.end_date else "aujourd'hui"
+        parts.append(
+            f"[EXPERIENCE] {row.role}\n"
+            f"Période : {start} à {end}\n"
+            f"{row.context or ''} {' '.join(row.technologies) if row.technologies else ''}"
+        )
+
+    return "\n\n".join(parts)
 
 # ============================================================================
 # Intitulés métier par expérience (pour ROMEO)
