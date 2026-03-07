@@ -29,13 +29,13 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
         rows_all = await db.execute(text("""
             SELECT 'experience' as type, experiences.id,
                 role as title,
-                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description as description
+                TO_CHAR(experiences.start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(experiences.end_date, 'YYYY-MM-DD') || ' description : ' || context || ' ' || objective || ' ' || problem || ' ' || solution || ' ' || results || ' ' || impact || ' ' || description || ' ' || stack || ' ' || collaborators as description
             FROM experiences
             LEFT JOIN projects ON experiences.id = projects.experience_id
             WHERE experiences.embedding IS NOT NULL
             UNION ALL
             SELECT 'formation', id, degree,
-                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description
+                TO_CHAR(start_date, 'YYYY-MM-DD') || ' à ' || TO_CHAR(end_date, 'YYYY-MM-DD') || ' description ' || description || ' ' || fields || ' ' || key_learnings
             FROM formations WHERE embedding IS NOT NULL
             UNION ALL
             SELECT 'information', id,
