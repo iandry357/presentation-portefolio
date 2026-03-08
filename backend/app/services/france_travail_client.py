@@ -148,6 +148,46 @@ async def search_offers(
     )
     return offers
 
+async def search_offers_by_keywords(
+    keywords: str,
+    region: Optional[str] = None,
+    range_start: int = 0,
+    range_end: int = 99,
+    min_creation_date: Optional[str] = None,
+    max_creation_date: Optional[str] = None,
+) -> list[dict]:
+    region = region or ft.DEFAULT_REGION
+
+    params = {
+        "motsCles": keywords,
+        "region":   region,
+        "range":    f"{range_start}-{range_end}",
+    }
+    if min_creation_date:
+        params["minCreationDate"] = min_creation_date
+    if max_creation_date:
+        params["maxCreationDate"] = max_creation_date
+
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.get(
+            ft.OFFRES_URL,
+            params=params,
+            headers=await _headers(),
+        )
+        if resp.status_code == 204:
+            logger.info(f"Aucune offre pour motsCles='{keywords}'")
+            return []
+        resp.raise_for_status()
+        data = resp.json()
+
+    offers = data.get("resultats", [])
+    logger.info(
+        f"France Travail (motsCles='{keywords}') : {len(offers)} offre(s) "
+        f"[{min_creation_date} → {max_creation_date}] "
+        f"range {range_start}-{range_end}"
+    )
+    return offers
+
 
 # ============================================================================
 # Offres - Détail par ft_id
@@ -166,6 +206,7 @@ async def get_offer_detail(ft_id: str) -> Optional[dict]:
         print(f"---- {ft.OFFRE_URL}/{ft_id}")
 
         if resp.status_code == 404:
+
             logger.warning(f"Offre {ft_id} introuvable sur France Travail. Le partenaire n'a probablement pas déposé explicitement l'offre")
             return None
 

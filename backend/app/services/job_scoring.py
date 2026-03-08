@@ -140,7 +140,7 @@ async def score_and_filter_offers(offers: list[dict], db: AsyncSession) -> list[
         reverse=True,
     )[:ft.SCORING_TOP_K]
 
-    logger.info(f"Top 50 retenu pour labellisation")
+    logger.info(f"Top {ft.SCORING_TOP_K} retenu pour labellisation")
 
     # 6. Séparation basique / candidats au reranking
     below_threshold = [(o, s) for o, s in scored if s < ft.SCORING_THRESHOLD]
