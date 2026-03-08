@@ -28,7 +28,9 @@ class JobOffer(Base):
 
     # ROME
     rome_code            = Column(String(10), index=True)
+    rome_libelle         = Column(String(255), nullable=True)
     rome_source_intitule = Column(String(255), nullable=True, index=True)
+    source_branch        = Column(String(10), nullable=True)
 
     # Localisation
     location_label       = Column(String(255))

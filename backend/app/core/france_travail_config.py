@@ -30,7 +30,7 @@ ROMEO_URL     = f"{BASE_URL}/romeo/v2/predictionMetiers"
 
 ROMEO_NOM_APPELANT  = "portfolio-iandry"
 ROMEO_NB_RESULTATS  = 5
-ROMEO_SEUIL_SCORE   = 0.7
+ROMEO_SEUIL_SCORE   = 0.6
 
 # ============================================================================
 # Collecte - Zone géographique
@@ -52,10 +52,12 @@ OFFRES_RANGE_START  = 0
 # ============================================================================
 
 # Seuil minimum de score pgvector pour passer à l'enrichissement Crew
-SCORING_THRESHOLD   = 0.8
+SCORING_THRESHOLD   = 0.66
 
 # Nombre d'offres max retenues après scoring pour enrichissement
-SCORING_TOP_K       = 5
+SCORING_TOP_K       = 25
+# Nombre d'offres retourné à l'utilisateur
+TOP_OFFER_K = 5
 
 # ============================================================================
 # Enrichissement Crew

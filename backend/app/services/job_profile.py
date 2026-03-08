@@ -119,19 +119,26 @@ async def _get_intitule_from_llm(role: str, context: str, technologies: list[str
     tech_str = ", ".join(technologies) if technologies else "non précisées"
 
     system_prompt = (
-        "Tu es un expert en métiers du numérique et en référentiel ROME France Travail. "
-        "Tu produis uniquement un intitulé métier court (3 à 6 mots maximum), "
-        "précis et orienté ROME, sans phrase ni ponctuation superflue."
+        "Tu es un expert en métiers de la Data et de l'Intelligence Artificielle, "
+        "spécialisé dans le référentiel ROME France Travail. "
+        "Tu produis uniquement un intitulé métier court (2 à 6 mots maximum), "
+        "précis et ancré dans les domaines suivants : ingénierie de données, "
+        "machine learning, MLOps, IA générative, orchestration de pipelines, "
+        "analyse de données, data science. "
+        "Tu n'utilises jamais d'intitulé généraliste comme 'Développeur logiciel' ou 'Ingénieur informatique'. "
+        "Tu réponds uniquement par l'intitulé, sans phrase ni ponctuation superflue."
     )
     user_prompt = (
-        f"Voici une expérience professionnelle :\n"
+        f"Voici une expérience professionnelle dans le domaine Data / IA :\n"
         f"- Rôle : {role}\n"
         f"- Contexte : {context}\n"
         f"- Technologies : {tech_str}\n\n"
-        f"Génère un intitulé métier court et précis pour cette expérience, "
-        f"compatible avec le référentiel ROME France Travail."
+        f"Choisis UN SEUL intitulé métier parmi cette liste stricte, celui qui correspond le mieux à l'expérience :\n"
+        f"Data Scientist, Data Engineer, Ingénieur Intelligence Artificielle, "
+        f"Machine Learning Engineer, Deep Learning Engineer, NLP Engineer, "
+        f"MLOps Engineer, LLM Engineer.\n"
+        f"Réponds uniquement par l'intitulé choisi, sans modification, sans combinaison, sans ponctuation."
     )
-
     result = await generate_with_fallback(
         system_prompt=system_prompt,
         user_prompt=user_prompt,
@@ -193,7 +200,12 @@ async def build_rome_codes(db: AsyncSession) -> dict[str, str]:
             for p in predictions:
                 code = p["codeRome"]
                 if code not in rome_map:
-                    rome_map[code] = intitule
+                    rome_map[code] = {
+                        "intitule": intitule,
+                        "libelle": p.get("libelleRome", ""),
+                    }
+                # if code not in rome_map:
+                #     rome_map[code] = intitule
             logger.info(f"ROMEO pour '{intitule}' : {[p['codeRome'] for p in predictions]}")
         except Exception as e:
             logger.error(f"ROMEO échoué pour '{intitule}' : {e}")
