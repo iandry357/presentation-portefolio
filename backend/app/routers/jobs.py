@@ -23,6 +23,7 @@ from app.schemas.jobs import (
     TriggerPipelineRequest,
     PipelineTriggerResponse,
     ManualJobRequest, 
+    JobNotesUpdate,
 )
 from app.services.job_crew.crew import run_enrichment_crew
 from app.services.job_scoring import build_profile_text
@@ -214,6 +215,24 @@ async def update_status(
 
     await db.commit()
     return {"message": f"Statut mis à jour : {body.status}"}
+
+# ============================================================================
+# PATCH /jobs/{id}/notes — Sauvegarde des notes personnelles
+# ============================================================================
+
+@router.patch("/{job_id}/notes")
+async def update_notes(
+    job_id: int,
+    body: JobNotesUpdate,
+    db: AsyncSession = Depends(get_db),
+):
+    offer = await db.get(JobOffer, job_id)
+    if not offer:
+        raise HTTPException(status_code=404, detail="Offre introuvable")
+
+    offer.notes = body.notes
+    await db.commit()
+    return {"ok": True}
 
 
 # ============================================================================
