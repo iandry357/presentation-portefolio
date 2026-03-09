@@ -27,6 +27,7 @@ class JobOfferSummary(BaseModel):
     applied_at: Optional[datetime]
     # has_enriched: bool  # indique si la fiche enrichie existe déjà
     has_enriched: bool = False
+    notes: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -111,3 +112,7 @@ class PipelineTriggerResponse(BaseModel):
     offers_collected: int
     offers_scored: int
     offers_enriched: int
+
+class JobNotesUpdate(BaseModel):
+    """Mise à jour des notes personnelles sur une offre."""
+    notes: str

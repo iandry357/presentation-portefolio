@@ -54,6 +54,7 @@ export interface JobOfferSummary {
   status: JobStatus;
   applied_at: string | null;
   has_enriched: boolean;
+  notes: string | null;
 }
 
 export interface JobOfferDetail extends JobOfferSummary {
