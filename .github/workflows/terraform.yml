@@ -11,6 +11,7 @@ on:
       - infra-scaleway-v1.1
     paths:
       - 'infra/**'
+  workflow_dispatch:
 
 jobs:
   terraform:
@@ -58,5 +59,7 @@ jobs:
         run: terraform plan -var-file="terraform.tfvars" -out=tfplan
 
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/infra-scaleway-v1.1'
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/infra-scaleway-v1.1') ||
+          github.event_name == 'workflow_dispatch'
         run: terraform apply tfplan
