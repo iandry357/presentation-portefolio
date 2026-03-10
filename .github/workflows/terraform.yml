@@ -30,10 +30,14 @@ jobs:
           terraform_version: 1.14.6
 
       - name: Write terraform.tfvars
-        run: printf '%s\n' "${{ secrets.TF_VARS_FILE }}" > terraform.tfvars
+        env:
+          CONTENT: ${{ secrets.TF_VARS_FILE }}
+        run: echo "$CONTENT" > terraform.tfvars
 
       - name: Write backend.hcl
-        run: printf '%s\n' "${{ secrets.TF_BACKEND_CONFIG }}" > backend.hcl
+        env:
+          CONTENT: ${{ secrets.TF_BACKEND_CONFIG }}
+        run: echo "$CONTENT" > backend.hcl
 
       - name: Terraform Init
         run: terraform init -backend-config="backend.hcl"
