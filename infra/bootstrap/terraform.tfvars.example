@@ -1,0 +1,4 @@
+project_id          = ""
+tfstate_bucket_name = "portfolio-tfstate"
+region              = "fr-par"
+zone                = "fr-par-1"
