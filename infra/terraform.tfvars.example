@@ -1,0 +1,18 @@
+# Infra
+project_id   = ""
+region       = "fr-par"
+zone         = "fr-par-1"
+cors_origins = ""
+
+# Secrets
+gemini_api_key               = ""
+secret_key                   = ""
+mistral_api_key              = ""
+groq_api_key                 = ""
+langsmith_api_key            = ""
+voyage_api_key               = ""
+france_travail_client_id     = ""
+france_travail_client_secret = ""
+database_url                 = ""
+openai_api_key               = ""
+postgres_password            = ""
