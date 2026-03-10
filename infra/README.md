@@ -1,4 +1,4 @@
-# Infrastructure as Code — Scaleway / Terraform
+# Infrastructure as Code — Scaleway / Terraform *
 
 Gestion de l'infrastructure Scaleway du portfolio via Terraform.
 Toute modification d'infrastructure passe par ce répertoire — jamais via la console Scaleway manuellement.
