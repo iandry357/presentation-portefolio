@@ -16,3 +16,5 @@ france_travail_client_secret = ""
 database_url                 = ""
 openai_api_key               = ""
 postgres_password            = ""
+
+postgres_host = ""

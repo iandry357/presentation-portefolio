@@ -32,7 +32,7 @@ resource "scaleway_container" "backend" {
     LANGSMITH_PROJECT         = "portfolio-rag"
     LOG_LEVEL                 = "INFO"
     POSTGRES_DB               = "rdb"
-    POSTGRES_HOST             = "51.159.112.249"
+    POSTGRES_HOST             = var.postgres_host
     POSTGRES_PORT             = "7312"
     POSTGRES_USER             = var.db_user
     RETRIEVAL_SCORE_THRESHOLD = "0.1"
