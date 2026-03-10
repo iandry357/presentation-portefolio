@@ -9,34 +9,34 @@ resource "scaleway_container" "backend" {
   namespace_id = scaleway_container_namespace.main.id
   region       = var.region
 
-  registry_image  = var.backend_image
-  port            = 8080
-  protocol        = "http1"
-  privacy         = "public"
-  min_scale       = 1
-  max_scale       = 2
-  memory_limit    = 1024
-  cpu_limit       = 500
-  timeout         = 300
+  registry_image = var.backend_image
+  port           = 8080
+  protocol       = "http1"
+  privacy        = "public"
+  min_scale      = 1
+  max_scale      = 2
+  memory_limit   = 1024
+  cpu_limit      = 500
+  timeout        = 300
   scaling_option {
     concurrent_requests_threshold = 80
   }
 
   environment_variables = {
-    API_HOST                 = "0.0.0.0"
-    API_PORT                 = "8000"
-    CORS_ORIGINS             = var.cors_origins
-    EMBEDDING_DIMENSIONS     = "1024"
-    EMBEDDING_MODEL          = "voyage-3"
-    ENVIRONMENT              = "production"
-    LANGSMITH_PROJECT        = "portfolio-rag"
-    LOG_LEVEL                = "INFO"
-    POSTGRES_DB              = "rdb"
-    POSTGRES_HOST            = "51.159.112.249"
-    POSTGRES_PORT            = "7312"
-    POSTGRES_USER            = var.db_user
+    API_HOST                  = "0.0.0.0"
+    API_PORT                  = "8000"
+    CORS_ORIGINS              = var.cors_origins
+    EMBEDDING_DIMENSIONS      = "1024"
+    EMBEDDING_MODEL           = "voyage-3"
+    ENVIRONMENT               = "production"
+    LANGSMITH_PROJECT         = "portfolio-rag"
+    LOG_LEVEL                 = "INFO"
+    POSTGRES_DB               = "rdb"
+    POSTGRES_HOST             = "51.159.112.249"
+    POSTGRES_PORT             = "7312"
+    POSTGRES_USER             = var.db_user
     RETRIEVAL_SCORE_THRESHOLD = "0.1"
-    RETRIEVAL_TOP_K          = "5"
+    RETRIEVAL_TOP_K           = "5"
   }
 
   secret_environment_variables = {
@@ -63,14 +63,14 @@ resource "scaleway_container" "frontend" {
   namespace_id = scaleway_container_namespace.main.id
   region       = var.region
 
-  port            = 8080
-  protocol        = "http1"
-  privacy         = "public"
-  min_scale       = 0
-  max_scale       = 2
-  memory_limit    = 256
-  cpu_limit       = 250
-  timeout         = 300
+  port         = 8080
+  protocol     = "http1"
+  privacy      = "public"
+  min_scale    = 0
+  max_scale    = 2
+  memory_limit = 256
+  cpu_limit    = 250
+  timeout      = 300
   scaling_option {
     concurrent_requests_threshold = 80
   }

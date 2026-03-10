@@ -15,6 +15,6 @@ output "registry_endpoint" {
 
 output "db_endpoint" {
   description = "Endpoint PostgreSQL"
-  value = scaleway_rdb_instance.main.load_balancer[0].ip
+  value       = scaleway_rdb_instance.main.load_balancer[0].ip
   sensitive   = true
 }
