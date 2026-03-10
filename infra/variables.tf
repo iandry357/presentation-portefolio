@@ -50,6 +50,12 @@ variable "db_name" {
   default     = "portefolio-cv-db"
 }
 
+variable "postgres_host" {
+  description = "IP hôte PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
 variable "db_user" {
   description = "Utilisateur PostgreSQL"
   type        = string
