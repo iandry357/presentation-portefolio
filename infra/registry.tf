@@ -3,4 +3,8 @@ resource "scaleway_registry_namespace" "main" {
   region     = var.region
   project_id = var.project_id
   is_public  = false
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
