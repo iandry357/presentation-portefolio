@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches:
-      - infra-scaleway-v1
+      - infra-scaleway-v1.1
     paths:
       - 'backend/**'
 

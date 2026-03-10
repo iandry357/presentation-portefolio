@@ -3,7 +3,7 @@ name: Deploy Frontend
 on:
   push:
     branches:
-      - infra-scaleway-v1
+      - infra-scaleway-v1.1
     paths:
       - 'frontend/**'
 
