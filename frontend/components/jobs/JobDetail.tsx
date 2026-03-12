@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { ExternalLink, MapPin, Briefcase, Clock, Euro, Building2, CheckCircle, FileText, Sparkles, NotebookPen } from 'lucide-react';
+import { ExternalLink, MapPin, Briefcase, Clock, Euro, Building2, CheckCircle, FileText, Sparkles, NotebookPen, Factory } from 'lucide-react';
 import { JobOfferDetail, JobEnriched } from '@/types';
 import RecalculButton from '@/components/jobs/RecalculButton';
 import CollapsibleSection from '@/components/jobs/CollapsibleSection';
@@ -9,6 +9,8 @@ import JobNotes from '@/components/jobs/JobNotes';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { updateJobStatus, enrichJob, FT_BASE_URL } from '@/lib/api';
+// import CompanySection from '@/components/jobs/CompanyDetail';
+import CompanySection from '@/components/jobs/CompanySection';
 
 // ============================================================================
 // Section helper
@@ -51,6 +53,11 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
   const [enrichError, setEnrichError] = useState<string | null>(null);
   const [enregistre, setEnregistre] = useState(offer.status === 'enregistre');
   const [notes, setNotes] = useState<string | null>(offer.notes);
+  const [companyOpen, setCompanyOpen] = useState(false);
+  const companyRef = useRef<HTMLDivElement>(null);
+  const [companyProfileId, setCompanyProfileId] = useState<number | null>(
+    offer.company_profile_id
+  );
 
   // États des accordéons
   const [ficheOpen, setFicheOpen] = useState(false);
@@ -226,6 +233,18 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
           <NotebookPen className="w-3.5 h-3.5" />
           Mes notes
         </button>
+
+        <button
+          onClick={() => scrollTo(companyRef, () => setCompanyOpen(true))}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            companyOpen
+              ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300'
+              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+          }`}
+        >
+          <Factory className="w-3.5 h-3.5" />
+          Fiche entreprise
+        </button>
       </div>
 
       {/* ── Fiche enrichie (accordéon) ───────────────────────────────────── */}
@@ -385,6 +404,32 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
         </CollapsibleSection>
       </div>
 
+      <div ref={companyRef}>
+        <CollapsibleSection
+          title="Fiche entreprise"
+          icon={<Factory className="w-4 h-4" />}
+          isOpen={companyOpen}
+          onToggle={() => setCompanyOpen(prev => !prev)}
+          keepMounted
+        >
+          {/* <CompanySection
+            jobId={offer.id}
+            companyName={offer.company_name}
+            companyProfileId={companyProfileId}
+            onProfileCreated={setCompanyProfileId}
+          /> */}
+          <CompanySection
+            jobId={offer.id}
+            companyName={offer.company_name}
+            companyProfileId={companyProfileId}
+            companyDescription={offer.company_description}
+            onProfileCreated={setCompanyProfileId}
+          />
+        </CollapsibleSection>
+      </div>
+
     </div>
+
+    
   );
 }

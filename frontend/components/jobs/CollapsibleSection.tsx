@@ -12,6 +12,7 @@ interface CollapsibleSectionProps {
   badge?: React.ReactNode;
   isOpen?: boolean;
   onToggle?: () => void;
+  keepMounted?: boolean;
 }
 
 export default function CollapsibleSection({
@@ -22,6 +23,7 @@ export default function CollapsibleSection({
   badge,
   isOpen,
   onToggle,
+  keepMounted = false,
 }: CollapsibleSectionProps) {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const controlled = isOpen !== undefined && onToggle !== undefined;
@@ -49,10 +51,16 @@ export default function CollapsibleSection({
       </button>
 
       {/* Contenu */}
-      {open && (
-        <div className="px-5 pb-5 border-t border-gray-100 dark:border-gray-700">
+      {keepMounted ? (
+        <div className={`px-5 pb-5 border-t border-gray-100 dark:border-gray-700 ${open ? '' : 'hidden'}`}>
           {children}
         </div>
+      ) : (
+        open && (
+          <div className="px-5 pb-5 border-t border-gray-100 dark:border-gray-700">
+            {children}
+          </div>
+        )
       )}
     </div>
   );

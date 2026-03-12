@@ -1,5 +1,5 @@
 
-import { ChatResponse } from '@/types';
+import { ChatResponse, CompanyProfile, CompanyProfileSummary } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
@@ -226,6 +226,104 @@ export async function saveJobNotes(id: number, notes: string): Promise<void> {
   });
 
   if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+}
+
+// ============================================================================
+// Company Profiles — API calls
+// ============================================================================
+
+export async function getCompanies(): Promise<CompanyProfileSummary[]> {
+  const response = await fetch(`${API_URL}/companies`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getCompany(id: number): Promise<CompanyProfile> {
+  const response = await fetch(`${API_URL}/companies/${id}`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getCompanyByJob(jobId: number): Promise<CompanyProfile | null> {
+  const response = await fetch(`${API_URL}/companies/by-job/${jobId}`);
+  if (response.status === 404) return null;
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+// export async function generateCompany(
+//   jobId: number,
+//   companyName?: string
+// ): Promise<CompanyProfile> {
+export async function generateCompany(
+  jobId: number,
+  companyName?: string
+): Promise<{ company_profile_id: number; message: string }> {
+  const response = await fetch(`${API_URL}/companies/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    // body: JSON.stringify({ job_id: jobId, company_name: companyName ?? null }),
+    body: JSON.stringify({ job_offer_id: jobId, name_input: companyName ?? '' }),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function refreshCompany(id: number): Promise<void> {
+  const response = await fetch(`${API_URL}/companies/${id}/refresh`, {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+}
+
+export async function recalculCompany(
+  id: number,
+  instruction?: string
+): Promise<void> {
+  const response = await fetch(`${API_URL}/companies/${id}/recalcul`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ instruction: instruction ?? null }),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+}
+
+export async function relaunchCompany(id: number): Promise<void> {
+  const response = await fetch(`${API_URL}/companies/${id}/relaunch`, {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+}
+
+export async function deleteCompany(id: number): Promise<void> {
+  const response = await fetch(`${API_URL}/companies/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok && response.status !== 204) {
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
     throw new Error(error.detail || `HTTP ${response.status}`);
   }

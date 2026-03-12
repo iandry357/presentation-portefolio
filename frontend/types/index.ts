@@ -65,6 +65,7 @@ export interface JobOfferDetail extends JobOfferSummary {
   location_lng: number | null;
   company_description: string | null;
   company_url: string | null;
+  company_profile_id: number | null;
   naf_code: string | null;
   raw_data: Record<string, unknown>;
   created_at: string;
@@ -97,4 +98,32 @@ export interface JobFilters {
   max_days_old?: number;
   page: number;
   page_size: number;
+}
+
+// ============================================================================
+// Company Profiles
+// ============================================================================
+
+export type CompanyLayerStatus = 'pending' | 'done' | 'failed';
+
+export interface CompanyProfileSummary {
+  id: number;
+  name: string;
+  memo: string | null;
+  discovery_status: CompanyLayerStatus;
+  legal_status: CompanyLayerStatus;
+  actualites_status: CompanyLayerStatus;
+  memo_status: CompanyLayerStatus;
+  recalcul_count: number;
+  actualites_updated_at: string | null;
+  created_at: string;
+}
+
+export interface CompanyProfile extends CompanyProfileSummary {
+  name_input: string;
+  discovery: Record<string, unknown> | null;
+  legal_data: Record<string, unknown> | null;
+  actualites: Record<string, unknown> | null;
+  recalcul_history: Array<{ instruction: string; recalcul_at: string }> | null;
+  updated_at: string;
 }
