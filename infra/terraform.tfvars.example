@@ -18,5 +18,4 @@ openai_api_key               = ""
 postgres_password            = ""
 
 postgres_host = ""
-
 serper_api_key = ""
