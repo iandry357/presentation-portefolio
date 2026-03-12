@@ -1,6 +1,6 @@
 from sqlalchemy import (
     Column, Integer, String, Text, Float,
-    DateTime, JSON, CheckConstraint
+    DateTime, JSON, CheckConstraint, ForeignKey
 )
 from sqlalchemy.sql import func
 from app.core.database import Base
@@ -41,6 +41,7 @@ class JobOffer(Base):
     # Entreprise
     company_name         = Column(String(255))
     company_description  = Column(Text)
+    company_profile_id   = Column(Integer, ForeignKey("company_profiles.id"), nullable=True, index=True)
     company_url          = Column(Text)
 
     # Salaire (libellé brut - parsing par le Crew)
@@ -72,6 +73,8 @@ class JobOffer(Base):
 
     notes                = Column(Text, nullable=True)
 
+    
+
     # Timestamps
     created_at           = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at           = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
@@ -91,6 +94,8 @@ class JobOffer(Base):
     score = Column(Float, nullable=False)
 
     enriched = relationship("JobEnriched", back_populates="job_offer", uselist=False, lazy="selectin")
+
+    company_profile = relationship("CompanyProfile", back_populates="jobs", lazy="selectin")
 
     def __repr__(self):
         return f"<JobOffer ft_id={self.ft_id} title={self.title} status={self.status}>"

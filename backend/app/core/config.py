@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     LANGSMITH_API_KEY: Optional[str] = None
     LANGSMITH_PROJECT: str = "portfolio-rag"
+    SERPER_API_KEY: str = ""
+
+    COMPANY_BROWSE_MAX_CHARS: int = 4000
 
     # App Config
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
@@ -42,6 +45,13 @@ class Settings(BaseSettings):
 
     FRANCE_TRAVAIL_CLIENT_ID: str = ""
     FRANCE_TRAVAIL_CLIENT_SECRET: str = ""
+    
+    USER_AGENT: str = "portfolio-cv-bot/1.0"
+
+
+    @property
+    def is_dev(self) -> bool:
+        return self.ENVIRONMENT == "development"
 
     class Config:
         # env_file = ".env"
