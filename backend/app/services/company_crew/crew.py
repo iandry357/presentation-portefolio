@@ -18,6 +18,7 @@ from sqlalchemy import select
 from app.models.job_offer import JobOffer
 from app.models.job_enriched import JobEnriched
 from app.services.job_profile import build_profile_text_chat
+import json
 
 def normalize_company_name(name: str) -> str:
     """
