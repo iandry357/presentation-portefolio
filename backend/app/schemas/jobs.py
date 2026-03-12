@@ -42,6 +42,7 @@ class JobOfferDetail(JobOfferSummary):
     location_lng: Optional[float]
     company_description: Optional[str]
     company_url: Optional[str]
+    company_profile_id: Optional[int] = None
     naf_code: Optional[str]
     raw_data: Dict[str, Any]
     created_at: datetime
