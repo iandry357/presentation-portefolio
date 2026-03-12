@@ -44,7 +44,7 @@ def build_parser_agent() -> Agent:
         role="Parseur d'offres d'emploi",
         goal=(
             "Extraire de manière structurée et précise toutes les informations "
-            "clés d'une offre d'emploi : salaire, niveau d'expérience requis, "
+            "clés d'une offre d'emploi : niveau de langues, salaire, niveau d'expérience requis, "
             "stack technique, type de contrat, avantages et contexte du poste."
         ),
         backstory=(

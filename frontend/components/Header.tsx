@@ -56,6 +56,17 @@ export default function Header() {
               >
                 Jobs
               </Link>
+              <Link
+                href="/companies"
+                className={cn(
+                  'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                  pathname === '/companies' || pathname.startsWith('/companies/')
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                )}
+              >
+                Companies
+              </Link>
             </nav>
           </div>
         </div>
