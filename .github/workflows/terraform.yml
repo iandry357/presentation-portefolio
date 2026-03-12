@@ -35,6 +35,9 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.14.6
+      
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
 
       - name: Write terraform.tfvars
         env:
@@ -48,9 +51,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -backend-config="backend.hcl"
-
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
 
       - name: Terraform Validate
         run: terraform validate
