@@ -128,3 +128,9 @@ variable "postgres_password" {
   type        = string
   sensitive   = true
 }
+
+variable "serper_api_key" {
+  description = "Clé API Serper pour la recherche web"
+  type        = string
+  sensitive   = true
+}

@@ -51,6 +51,7 @@ resource "scaleway_container" "backend" {
     DATABASE_URL                 = var.database_url
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
+    SERPER_API_KEY               = var.serper_api_key
   }
 
   lifecycle {
