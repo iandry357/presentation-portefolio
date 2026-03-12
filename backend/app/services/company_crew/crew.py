@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime, timezone
 
 from sqlalchemy import select
@@ -17,6 +18,55 @@ from sqlalchemy import select
 from app.models.job_offer import JobOffer
 from app.models.job_enriched import JobEnriched
 from app.services.job_profile import build_profile_text_chat
+
+def normalize_company_name(name: str) -> str:
+    """
+    Normalise le nom d'entreprise pour éviter les erreurs JSON lors des appels LLM.
+    
+    Transformations appliquées :
+    - Apostrophes typographiques ' ' → '
+    - Guillemets typographiques " " « » → "
+    - Tirets longs – — → -
+    - Espaces multiples/insécables → espace simple
+    - Trim whitespace début/fin
+    
+    Args:
+        name: Nom brut de l'entreprise
+        
+    Returns:
+        Nom normalisé, safe pour JSON
+        
+    Exemples:
+        >>> normalize_company_name("Dassault Systèmes, l'entreprise")
+        "Dassault Systèmes, l'entreprise"
+        >>> normalize_company_name("L'Oréal  –  Paris")
+        "L'Oréal - Paris"
+    """
+    if not name:
+        return name
+    
+    # Apostrophes typographiques → apostrophe droite
+    name = name.replace("'", "'").replace("'", "'")
+    
+    # Guillemets typographiques → guillemets droits
+    name = name.replace(""", '"').replace(""", '"')
+    name = name.replace("«", '"').replace("»", '"')
+    
+    # Tirets longs → tiret simple
+    name = name.replace("–", "-").replace("—", "-")
+    
+    # Espaces insécables et multiples → espace simple
+    name = name.replace("\u00A0", " ")  # Espace insécable
+    name = name.replace("\u202F", " ")  # Espace fine insécable
+    
+    # Réduire espaces multiples
+    import re
+    name = re.sub(r'\s+', ' ', name)
+    
+    # Trim
+    name = name.strip()
+    
+    return name
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +141,8 @@ async def run_company_full_pipeline(company_id: int, job_offer_id: int | None = 
             logger.error(f"[company_crew] Entreprise introuvable — id={company_id}")
             return
 
-        company_name = company.name_input
+        # company_name = company.name_input
+        company_name = normalize_company_name(company.name_input)
         logger.info(f"[company_crew] Pipeline complet démarré — {company_name}")
 
         # ── Couche 1 : Discovery ──────────────────────────────
@@ -190,7 +241,8 @@ async def run_company_refresh(company_id: int) -> None:
             logger.error(f"[company_crew] Refresh impossible — discovery manquant id={company_id}")
             return
 
-        company_name = company.name_input
+        # company_name = company.name_input
+        company_name = normalize_company_name(company.name_input)
         discovery = company.discovery
         logger.info(f"[company_crew] Refresh démarré — {company_name}")
 
@@ -267,7 +319,8 @@ async def run_company_recalcul(company_id: int, instruction: str | None = None) 
             logger.error(f"[company_crew] Recalcul impossible — id={company_id} introuvable")
             return
 
-        company_name = company.name_input
+        # company_name = company.name_input
+        company_name = normalize_company_name(company.name_input)
         logger.info(f"[company_crew] Recalcul mémo démarré — {company_name} instruction={bool(instruction)}")
 
         try:
