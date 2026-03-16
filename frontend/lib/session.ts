@@ -108,3 +108,8 @@ export function formatRemainingTime(ms: number): string {
   const remainingMinutes = minutes % 60;
   return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}min` : `${hours}h`;
 }
+
+export function getSessionId(): string {
+  const session = getOrCreateSession();
+  return session.sessionId;
+}
