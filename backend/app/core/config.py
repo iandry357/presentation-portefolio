@@ -48,6 +48,8 @@ class Settings(BaseSettings):
     
     USER_AGENT: str = "portfolio-cv-bot/1.0"
 
+    cv_edit_secret_code: str = Field(default="dev123")
+
 
     @property
     def is_dev(self) -> bool:

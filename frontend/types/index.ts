@@ -127,3 +127,104 @@ export interface CompanyProfile extends CompanyProfileSummary {
   recalcul_history: Array<{ instruction: string; recalcul_at: string }> | null;
   updated_at: string;
 }
+
+// ============================================================================
+// CV CRUD - Skills
+// ============================================================================
+
+export interface Skill {
+  id: number;
+  name: string;
+  category: string | null;
+  proficiency_level: string | null;
+}
+
+// ============================================================================
+// CV CRUD - Projects
+// ============================================================================
+
+export interface Project {
+  id: number;
+  experience_id: number;
+  name: string;
+  project_type: string;
+  description: string;
+  objective: string;
+  problem: string;
+  solution: string;
+  results: string;
+  impact: string;
+  stack: string;
+  collaborators: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  duration_months: number | null;
+  embedding_status: 'done' | 'pending' | 'failed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectFormData {
+  id?: number;
+  name: string;
+  project_type: string;
+  description: string;
+  objective: string;
+  problem: string;
+  solution: string;
+  results: string;
+  impact: string;
+  stack: string;
+  collaborators?: string;
+  start_date?: string;
+  end_date?: string;
+  duration_months?: number;
+}
+
+// ============================================================================
+// CV CRUD - Experiences
+// ============================================================================
+
+export interface Experience {
+  id: number;
+  company: string;
+  role: string;
+  mission_type: string;
+  location: string;
+  start_date: string;
+  end_date: string | null;
+  duration_months: number | null;
+  context: string;
+  is_stage: boolean;
+  embedding_status: 'done' | 'pending' | 'failed';
+  projects: Project[];
+  skills: Skill[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ExperienceListItem {
+  id: number;
+  company: string;
+  role: string;
+  start_date: string;
+  end_date: string | null;
+  location: string;
+  is_stage: boolean;
+  embedding_status: 'done' | 'pending' | 'failed';
+  project_count: number;
+}
+
+export interface ExperienceFormData {
+  company: string;
+  role: string;
+  mission_type: string;
+  location: string;
+  start_date: string;
+  end_date?: string;
+  duration_months?: number;
+  context: string;
+  is_stage: boolean;
+  projects: ProjectFormData[];
+  skill_ids: number[];
+}
