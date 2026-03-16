@@ -27,3 +27,19 @@ resource "scaleway_secret_version" "main" {
   secret_id = scaleway_secret.main[each.key].id
   data      = each.value
 }
+
+# ============================================================================
+# CV Edit Secret Code
+# ============================================================================
+
+resource "scaleway_secret" "cv_edit_secret_code" {
+  name        = "cv-edit-secret-code"
+  description = "Code de sécurité pour édition du CV via l'interface"
+  project_id  = var.project_id
+  region      = var.region
+}
+
+resource "scaleway_secret_version" "cv_edit_secret_code" {
+  secret_id = scaleway_secret.cv_edit_secret_code.id
+  data      = var.cv_edit_secret_code
+}

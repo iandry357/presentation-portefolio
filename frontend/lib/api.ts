@@ -1,5 +1,10 @@
 
-import { ChatResponse, CompanyProfile, CompanyProfileSummary } from '@/types';
+import { 
+  ChatResponse, CompanyProfile, CompanyProfileSummary, 
+  ExperienceListItem, 
+  Experience, 
+  ExperienceFormData,
+  Skill  } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
@@ -327,4 +332,124 @@ export async function deleteCompany(id: number): Promise<void> {
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
+}
+
+// ============================================================================
+// CV CRUD - Experiences
+// ============================================================================
+
+export async function getExperiences(): Promise<ExperienceListItem[]> {
+  const response = await fetch(`${API_URL}/api/cv/experiences`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la récupération des expériences');
+  }
+  return response.json();
+}
+
+export async function getExperience(id: number): Promise<Experience> {
+  const response = await fetch(`${API_URL}/api/cv/experiences/${id}`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la récupération de l\'expérience');
+  }
+  return response.json();
+}
+
+export async function createExperience(
+  data: ExperienceFormData,
+  code: string
+): Promise<Experience> {
+  const response = await fetch(`${API_URL}/api/cv/experiences`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CV-Edit-Code': code,
+    },
+    body: JSON.stringify(data),
+  });
+  
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error('Code de sécurité invalide');
+    }
+    throw new Error('Erreur lors de la création de l\'expérience');
+  }
+  
+  return response.json();
+}
+
+export async function updateExperience(
+  id: number,
+  data: Partial<ExperienceFormData>,
+  code: string
+): Promise<Experience> {
+  const response = await fetch(`${API_URL}/api/cv/experiences/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CV-Edit-Code': code,
+    },
+    body: JSON.stringify(data),
+  });
+  
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error('Code de sécurité invalide');
+    }
+    throw new Error('Erreur lors de la modification de l\'expérience');
+  }
+  
+  return response.json();
+}
+
+export async function deleteExperience(
+  id: number,
+  code: string
+): Promise<void> {
+  const response = await fetch(`${API_URL}/api/cv/experiences/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'X-CV-Edit-Code': code,
+    },
+  });
+  
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error('Code de sécurité invalide');
+    }
+    throw new Error('Erreur lors de la suppression de l\'expérience');
+  }
+}
+
+export async function retryExperienceEmbeddings(
+  id: number,
+  code: string
+): Promise<void> {
+  const response = await fetch(
+    `${API_URL}/api/cv/experiences/${id}/retry-embeddings`,
+    {
+      method: 'POST',
+      headers: {
+        'X-CV-Edit-Code': code,
+      },
+    }
+  );
+  
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error('Code de sécurité invalide');
+    }
+    throw new Error('Erreur lors du redémarrage de la génération des embeddings');
+  }
+}
+
+// ============================================================================
+// CV CRUD - Skills (liste pour sélection)
+// ============================================================================
+
+export async function getSkills(): Promise<Skill[]> {
+  const response = await fetch(`${API_URL}/api/cv/skills`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la récupération des compétences');
+  }
+  return response.json();
 }

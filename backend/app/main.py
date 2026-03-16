@@ -57,6 +57,7 @@ app = FastAPI(
     description="AI-powered portfolio cv with RAG capabilities",
     version="0.1.0",
     lifespan=lifespan,
+    debug=True,
 )
 
 # Setup CORS
