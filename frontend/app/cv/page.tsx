@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { getPdfUrl } from '@/lib/api';
-import { Download, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
+import Link from "next/link";
+import { Download, Edit, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import Image from 'next/image';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -20,6 +21,13 @@ export default function CVPage() {
         <h1 className="text-2xl font-bold text-gray-900">
           Curriculum Vitae
         </h1>
+        <Link
+          href="/cv/edit"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+        >
+          <Edit className="w-4 h-4" />
+          Modifier
+        </Link>
         <a
           href={pdfUrl.replace('/view', '/download')}
           download
@@ -28,7 +36,10 @@ export default function CVPage() {
           <Download className="w-4 h-4" />
           Télécharger PDF
         </a>
+   
       </div>
+
+      
 
       {/* Controls */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
