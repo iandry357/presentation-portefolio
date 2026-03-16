@@ -134,3 +134,9 @@ variable "serper_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "cv_edit_secret_code" {
+  description = "Code de sécurité pour édition du CV"
+  type        = string
+  sensitive   = true
+}

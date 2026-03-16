@@ -58,6 +58,12 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
             for r in rows_all.fetchall()
         ]
 
+        # Filtrer les chunks sans description AVANT tout traitement
+        all_chunks = [
+            c for c in all_chunks 
+            if c.get("description") and c["description"].strip()
+        ]
+
         # --- Score vectoriel pgvector ---
         embedding_str = "[" + ",".join(map(str, embedding)) + "]"
         rows_vec = await db.execute(text("""
@@ -80,6 +86,7 @@ async def search_context(query: str, embedding: List[float], top_k: int = 15) ->
 
     # --- Score BM25 ---
     corpus = [c["description"].lower().split() for c in all_chunks]
+    
     bm25 = BM25Okapi(corpus)
     bm25_scores = bm25.get_scores(query.lower().split())
     bm25_ranked = sorted(range(len(all_chunks)), key=lambda i: bm25_scores[i], reverse=True)
