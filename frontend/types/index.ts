@@ -228,3 +228,27 @@ export interface ExperienceFormData {
   projects: ProjectFormData[];
   skill_ids: number[];
 }
+
+// ============================================================================
+// Feedback Types
+// ============================================================================
+
+export interface FeedbackAnswer {
+  question_key: string;
+  comment?: string;
+}
+
+export interface FeedbackCreate {
+  session_id: string;
+  page_route: string;
+  page_type: string;
+  rating: number;
+  job_offer_id?: number;
+  company_profile_id?: number;
+  answers: FeedbackAnswer[];
+}
+
+export interface FeedbackCreateResponse {
+  id: number;
+  message: string;
+}
