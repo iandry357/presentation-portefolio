@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FileText, MessageSquare } from 'lucide-react';
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 export const metadata: Metadata = {
   title: 'Iandry RAKOTONIAINA — Data Scientist & AI-ML Engineer',
@@ -71,6 +72,10 @@ export default function HomePage() {
           </a>
         </div>
       </div>
+      <FeedbackWidget 
+        pageType="home" 
+        pageRoute="/" 
+      />
     </div>
   );
 }
