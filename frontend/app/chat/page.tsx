@@ -20,6 +20,8 @@ import ChatInput from '@/components/chat/ChatInput';
 import SessionLimitBanner from '@/components/chat/SessionLimitBanner';
 import { Loader2 } from 'lucide-react';
 
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -182,6 +184,10 @@ export default function ChatPage() {
         disabled={isLimitReached || isLoading}
         questionsCount={session.questionsCount}
         questionsRemaining={5 - session.questionsCount}
+      />
+      <FeedbackWidget 
+        pageType="chat" 
+        pageRoute="/chat" 
       />
     </div>
   );
