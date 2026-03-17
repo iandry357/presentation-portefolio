@@ -9,6 +9,7 @@ import CompanyDetail, { hasPending } from '@/components/jobs/CompanyDetail';
 import { useRouter } from 'next/navigation';
 import { getCompany, deleteCompany } from '@/lib/api';
 import { Trash2 } from 'lucide-react';
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 // ============================================================================
 // Page
@@ -124,6 +125,14 @@ export default function CompanyDetailPage() {
             )}
         </div>
       )}
+
+      <FeedbackWidget 
+        pageType="company_detail" 
+        pageRoute={`/companies/${id}`}
+        contextIds={{
+          companyProfileId: Number(id)
+        }}
+      />
 
     </main>
   );
