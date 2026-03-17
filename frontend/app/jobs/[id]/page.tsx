@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { JobOfferDetail, JobEnriched } from '@/types';
 import { getJob, getJobEnriched } from '@/lib/api';
 import JobDetail from '@/components/jobs/JobDetail';
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -77,6 +78,14 @@ export default function JobDetailPage() {
           />
         )}
       </div>
+      <FeedbackWidget 
+        pageType="job_detail" 
+        pageRoute={`/jobs/${jobId}`}
+        contextIds={{
+          jobOfferId: jobId,
+          companyProfileId: offer?.company_profile_id || undefined
+        }}
+      />
     </div>
   );
 }
