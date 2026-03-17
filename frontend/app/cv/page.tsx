@@ -5,6 +5,7 @@ import { getPdfUrl } from '@/lib/api';
 import Link from "next/link";
 import { Download, Edit, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import Image from 'next/image';
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const TOTAL_PAGES = 1;
@@ -105,6 +106,10 @@ export default function CVPage() {
           pointent vers les sections correspondantes du CV.
         </p>
       </div> */}
+      <FeedbackWidget 
+        pageType="cv" 
+        pageRoute="/cv" 
+      />
     </div>
   );
 }

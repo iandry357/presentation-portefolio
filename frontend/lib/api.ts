@@ -4,7 +4,8 @@ import {
   ExperienceListItem, 
   Experience, 
   ExperienceFormData,
-  Skill  } from '@/types';
+  Skill,
+  FeedbackCreate, FeedbackCreateResponse  } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
@@ -452,4 +453,54 @@ export async function getSkills(): Promise<Skill[]> {
     throw new Error('Erreur lors de la récupération des compétences');
   }
   return response.json();
+}
+
+/**
+ * Soumettre un feedback
+ */
+export async function submitFeedback(
+  feedback: FeedbackCreate
+): Promise<FeedbackCreateResponse> {
+  const response = await fetch(`${API_URL}/feedback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(feedback),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Erreur lors de l'envoi du feedback");
+  }
+
+  return response.json();
+}
+
+/**
+ * Initialiser la session en base de données
+ */
+export async function initializeSession(sessionId: string): Promise<void> {
+  console.log('📡 Calling /session/init with:', sessionId);
+  try {
+    const response = await fetch(`${API_URL}/session/init`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+
+    console.log('📡 Response status:', response.status);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("❌ Failed to initialize session:", error);
+    } else {
+      const data = await response.json();
+      console.log("✅ Session init response:", data);
+    }
+  } catch (error) {
+    console.error("❌ Error initializing session:", error);
+  }
 }

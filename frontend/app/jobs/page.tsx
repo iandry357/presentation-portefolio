@@ -6,6 +6,7 @@ import { JobFilters, JobOfferSummary } from '@/types';
 import { getJobs, triggerPipeline, resetJobs, addManualJob  } from '@/lib/api';
 import JobCard from '@/components/jobs/JobCard';
 import JobFiltersPanel from '@/components/jobs/JobFilters';
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 // ============================================================================
 // Filtres par défaut
@@ -367,6 +368,10 @@ export default function JobsPage() {
           </div>
         </div>
       </div>
+      <FeedbackWidget 
+        pageType="jobs_list" 
+        pageRoute="/jobs" 
+      />
     </div>
   );
 }
