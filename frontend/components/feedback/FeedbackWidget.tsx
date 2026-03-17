@@ -30,10 +30,13 @@ export default function FeedbackWidget({
         aria-label="Donner votre avis"
       >
         <div className="flex flex-col items-center gap-2">
-          <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
-          <span className="text-xs font-medium" style={{ writingMode: 'vertical-rl' }}>
-            Feedback
-          </span>
+            <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
+            <span 
+                className="hidden md:block text-xs font-medium" 
+                style={{ writingMode: 'vertical-rl' }}
+            >
+                Feedback
+            </span>
         </div>
       </button>
 
