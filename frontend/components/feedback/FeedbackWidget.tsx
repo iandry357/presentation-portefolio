@@ -31,7 +31,7 @@ export default function FeedbackWidget({
       >
         <div className="flex flex-col items-center gap-2">
           <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
-          <span className="text-xs font-medium writing-mode-vertical transform rotate-180">
+          <span className="text-xs font-medium" style={{ writingMode: 'vertical-rl' }}>
             Feedback
           </span>
         </div>

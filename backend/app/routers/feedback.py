@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from app.core.database import get_db
 from app.schemas.feedback import FeedbackCreate, FeedbackCreateResponse
 from app.models.feedback import PageFeedback, FeedbackAnswer
-from app.models.cv import ChatSession
 import logging
+from sqlalchemy import select, text
 
 router = APIRouter(prefix="/feedback", tags=["feedback"])
 logger = logging.getLogger(__name__)
@@ -27,11 +26,13 @@ async def create_feedback(
     try:
         # 1. Vérifier que la session existe
         result = await db.execute(
-            select(ChatSession).where(ChatSession.session_id == feedback_data.session_id)
+            select(1).select_from(text("chat_sessions")).where(
+                text("session_id = :session_id")
+            ).params(session_id=str(feedback_data.session_id))
         )
-        session = result.scalar_one_or_none()
-        
-        if not session:
+        session_exists = result.scalar_one_or_none()
+
+        if not session_exists:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Session {feedback_data.session_id} not found"

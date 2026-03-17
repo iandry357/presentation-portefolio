@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
+import SessionInitializer from "@/components/SessionInitializer";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <html lang="fr">
       <body className={inter.className}>
@@ -51,6 +53,7 @@ export default function RootLayout({
         )}
         <div className="min-h-screen flex flex-col bg-gray-50">
           <Header />
+          <SessionInitializer />
           <main className="flex-1">{children}</main>
         </div>
       </body>
