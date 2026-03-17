@@ -12,6 +12,7 @@ import ExperienceEditModal from "@/components/cv/ExperienceEditModal";
 import { Button } from "@/components/ui/button";
 import { Plus, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 export default function CVEditPage() {
   const [experiences, setExperiences] = useState<ExperienceListItem[]>([]);
@@ -157,6 +158,11 @@ export default function CVEditPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleSuccess}
+      />
+
+      <FeedbackWidget 
+        pageType="cv_edit" 
+        pageRoute="/cv/edit" 
       />
     </div>
   );
