@@ -10,7 +10,8 @@ class PageFeedback(Base):
     __tablename__ = "page_feedbacks"
 
     id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.session_id", ondelete="CASCADE"), nullable=False, index=True)
+    # session_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.session_id", ondelete="CASCADE"), nullable=False, index=True)
+    session_id = Column(UUID(as_uuid=True), nullable=False, index=True)
     user_id = Column(Integer, nullable=True)  # FK future vers users
     page_route = Column(String(255), nullable=False)
     page_type = Column(String(50), nullable=False, index=True)

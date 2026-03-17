@@ -53,7 +53,7 @@ export default function FeedbackModal({
     setError(null);
 
     try {
-      const sessionId = getSessionId();
+      const sessionId = await getSessionId();
 
       // Construire les réponses (une par question, même si comment vide)
       const feedbackAnswers: FeedbackAnswer[] = questions.map((q) => ({

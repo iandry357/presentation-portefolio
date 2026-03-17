@@ -12,7 +12,8 @@ import {
   formatRemainingTime,
   saveMessages,
   loadMessages,
-  clearMessages
+  clearMessages,
+  getSessionSync
 } from '@/lib/session';
 import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
@@ -23,9 +24,11 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [streamingMessage, setStreamingMessage] = useState<Message | null>(null); // ← nouveau
-  const [session, setSession] = useState(getOrCreateSession());
+  const [session, setSession] = useState(getSessionSync());
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  
 
   // Auto-scroll vers le bas
   const scrollToBottom = () => {
@@ -38,14 +41,15 @@ export default function ChatPage() {
 
   // Vérifier cooldown toutes les 10s
   useEffect(() => {
-    const interval = setInterval(() => {
-      const remaining = getRemainingTime();
+    const interval = setInterval(async () => {
+      const remaining = await getRemainingTime();
       setRemainingTime(remaining);
       
       if (remaining === null) {
         clearMessages();
         // Cooldown terminé, rafraîchir session
-        setSession(getOrCreateSession());
+        const newSession = await getOrCreateSession();
+        setSession(newSession);
       }
     }, 10000);
 
@@ -101,8 +105,9 @@ export default function ChatPage() {
       const response = await sendMessage(messageText, session.sessionId);
 
       // Incrémenter compteur
-      incrementQuestionCount();
-      setSession(getOrCreateSession());
+      await incrementQuestionCount();
+      const newSession = await getOrCreateSession();
+      setSession(newSession);
 
       // Ajouter réponse assistant
       const assistantMessage: Message = {
@@ -119,8 +124,9 @@ export default function ChatPage() {
       });
 
       // Vérifier cooldown
-      const remaining = getRemainingTime();
+      const remaining = await getRemainingTime();
       setRemainingTime(remaining);
+
     } catch (error) {
       console.error('Erreur chat:', error);
       const errorMessage: Message = {
@@ -135,7 +141,7 @@ export default function ChatPage() {
     }
   };
 
-  const isLimitReached = !canAskQuestion();
+  const isLimitReached = session ? session.questionsCount >= 5 : false;
 
   return (
     <div className="flex flex-col h-[calc(100vh-64px)]">

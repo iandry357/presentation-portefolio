@@ -476,3 +476,31 @@ export async function submitFeedback(
 
   return response.json();
 }
+
+/**
+ * Initialiser la session en base de données
+ */
+export async function initializeSession(sessionId: string): Promise<void> {
+  console.log('📡 Calling /session/init with:', sessionId);
+  try {
+    const response = await fetch(`${API_URL}/session/init`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+
+    console.log('📡 Response status:', response.status);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("❌ Failed to initialize session:", error);
+    } else {
+      const data = await response.json();
+      console.log("✅ Session init response:", data);
+    }
+  } catch (error) {
+    console.error("❌ Error initializing session:", error);
+  }
+}

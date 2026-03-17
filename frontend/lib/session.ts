@@ -1,13 +1,14 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { Session, Message } from '@/types';
+import { initializeSession } from '@/lib/api';
 
 const SESSION_KEY = 'cv_rag_session';
 const MAX_QUESTIONS = 5;
 // const COOLDOWN_MS = 60 * 60 * 1000; // 1 heure
 const COOLDOWN_MS = 30;
 
-export function getOrCreateSession(): Session {
+export async function getOrCreateSession(): Promise<Session> {
   if (typeof window === 'undefined') {
     return createNewSession();
   }
@@ -17,6 +18,12 @@ export function getOrCreateSession(): Session {
   if (!stored) {
     const session = createNewSession();
     saveSession(session);
+    
+    // Initialiser en base
+    console.log('🔄 Initializing session:', session.sessionId);
+    await initializeSession(session.sessionId);
+    console.log('✅ Session initialized');
+    
     return session;
   }
 
@@ -34,6 +41,11 @@ export function getOrCreateSession(): Session {
   if (session.questionsCount >= MAX_QUESTIONS && timeSinceLastQuestion >= COOLDOWN_MS) {
     const newSession = createNewSession();
     saveSession(newSession);
+    
+    // Initialiser la nouvelle session en base
+    const { initializeSession } = await import('@/lib/api');
+    await initializeSession(newSession.sessionId);
+    
     return newSession;
   }
   
@@ -73,20 +85,20 @@ export function clearMessages() {
   localStorage.removeItem('chat_messages');
 }
 
-export function incrementQuestionCount(): void {
-  const session = getOrCreateSession();
+export async function incrementQuestionCount(): Promise<void> {
+  const session = getSessionSync();
   session.questionsCount += 1;
   session.lastQuestionAt = Date.now();
   saveSession(session);
 }
 
-export function canAskQuestion(): boolean {
-  const session = getOrCreateSession();
+export async function canAskQuestion(): Promise<boolean> {
+  const session = getSessionSync();
   return session.questionsCount < MAX_QUESTIONS;
 }
 
-export function getRemainingTime(): number | null {
-  const session = getOrCreateSession();
+export async function getRemainingTime(): Promise<number | null> {
+  const session = await getOrCreateSession();
   
   if (session.questionsCount < MAX_QUESTIONS) {
     return null;
@@ -109,7 +121,43 @@ export function formatRemainingTime(ms: number): string {
   return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}min` : `${hours}h`;
 }
 
-export function getSessionId(): string {
-  const session = getOrCreateSession();
+export async function getSessionId(): Promise<string> {
+  const session = getSessionSync();
   return session.sessionId;
+}
+
+/**
+ * Récupère la session sans initialiser en base (synchrone)
+ */
+export function getSessionSync(): Session {
+  if (typeof window === 'undefined') {
+    return createNewSession();
+  }
+
+  const stored = localStorage.getItem(SESSION_KEY);
+  
+  if (!stored) {
+    const session = createNewSession();
+    saveSession(session);
+    return session;
+  }
+
+  const session: Session = JSON.parse(stored);
+  
+  // Vérifier cooldown
+  const now = Date.now();
+  const timeSinceLastQuestion = now - session.lastQuestionAt;
+  
+  if (session.questionsCount >= MAX_QUESTIONS && timeSinceLastQuestion < COOLDOWN_MS) {
+    return session;
+  }
+  
+  // Reset si cooldown passé
+  if (session.questionsCount >= MAX_QUESTIONS && timeSinceLastQuestion >= COOLDOWN_MS) {
+    const newSession = createNewSession();
+    saveSession(newSession);
+    return newSession;
+  }
+  
+  return session;
 }
