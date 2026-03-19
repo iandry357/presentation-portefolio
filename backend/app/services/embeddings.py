@@ -90,7 +90,7 @@ async def voyage_rerank(query: str, documents: List[str], top_k: int) -> List[Di
     payload = {
         "query":     query,
         "documents": documents,
-        "model":     "rerank-2",
+        "model":     "rerank-2.5",
         "top_k":     top_k,
     }
 

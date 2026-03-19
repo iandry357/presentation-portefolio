@@ -27,7 +27,7 @@ resource "scaleway_container" "backend" {
     API_PORT                  = "8000"
     CORS_ORIGINS              = var.cors_origins
     EMBEDDING_DIMENSIONS      = "1024"
-    EMBEDDING_MODEL           = "voyage-3"
+    EMBEDDING_MODEL           = "voyage-4"
     ENVIRONMENT               = "production"
     LANGSMITH_PROJECT         = "portfolio-rag"
     LOG_LEVEL                 = "INFO"
