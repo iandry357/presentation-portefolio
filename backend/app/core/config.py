@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = Field(default="", env="CORS_ORIGINS")
 
     # RAG Config
-    EMBEDDING_MODEL: str = "voyage-3"
+    EMBEDDING_MODEL: str = "voyage-4"
     EMBEDDING_DIMENSIONS: int = 1024
     RETRIEVAL_TOP_K: int = 10
     RETRIEVAL_SCORE_THRESHOLD: float = 0.13
