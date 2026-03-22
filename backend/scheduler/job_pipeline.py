@@ -219,7 +219,7 @@ async def run_pipeline(
                 break
 
             for offer in batch:
-                if 'alternance' in offer.get("intitule").lower() or ' apprentissage' in offer.get("intitule").lower():
+                if 'alternan' in offer.get("intitule").lower() or 'apprentissage' in offer.get("intitule").lower():
                     continue
                 if offer.get("romeCode") in rome_map:
                     offer["_rome_source_intitule"] = rome_map[offer["romeCode"]]["intitule"]
@@ -271,7 +271,7 @@ async def run_pipeline(
                 max_creation_date=max_date,
             )
             for offer in kw_batch:
-                if 'alternance' in offer.get("intitule").lower() or 'apprentissage' in offer.get("intitule").lower():
+                if 'alternan' in offer.get("intitule").lower() or 'apprentissage' in offer.get("intitule").lower():
                     continue
                 if offer["id"] not in existing_ft_ids:
                     offer["_rome_source_intitule"] = intitule
