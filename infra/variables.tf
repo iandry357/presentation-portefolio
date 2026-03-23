@@ -93,6 +93,38 @@ variable "langsmith_api_key" {
   sensitive   = true
 }
 
+variable "langsmith_project" {
+  description = "LangSmith project name"
+  type        = string
+  default     = "portfolio-rag"
+}
+
+variable "langchain_tracing_v2" {
+  description = "Enable LangChain tracing"
+  type        = string
+  default     = "true"
+}
+
+variable "langfuse_public_key" {
+  description = "Langfuse public key"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "langfuse_secret_key" {
+  description = "Langfuse secret key"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "langfuse_host" {
+  description = "Langfuse host URL"
+  type        = string
+  default     = "https://cloud.langfuse.com"
+}
+
 variable "voyage_api_key" {
   description = "VoyageAI API Key"
   type        = string
