@@ -14,6 +14,13 @@ from app.services.job_crew.tasks import (
     build_redacteur_task,
 )
 
+from langsmith import traceable
+from langsmith import get_current_run_tree
+
+# from langfuse.callback import CallbackHandler as LangfuseCallbackHandler
+from langfuse.langchain import CallbackHandler as LangfuseCallbackHandler
+from app.core.config import settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -59,6 +66,16 @@ def _safe_parse_json(text: str) -> dict:
 # Orchestrateur principal
 # ============================================================================
 
+# async def run_enrichment_crew(
+#     offer_raw: dict,
+#     profile_text: str,
+#     initial_prompt: str,
+#     instruction: str = None,
+# ) -> dict:
+@traceable(
+    name="job_crew:enrichment",
+    metadata={"pipeline": "job_crew"},
+)
 async def run_enrichment_crew(
     offer_raw: dict,
     profile_text: str,
@@ -81,7 +98,31 @@ async def run_enrichment_crew(
             "summary": str,
         }
     """
+    
+    run = get_current_run_tree()
+    if run:
+        run.name = f"job_crew:enrichment:{offer_raw.get('intitule', 'N/A')}"
+
     offer_text = _offer_to_text(offer_raw)
+
+    # Langfuse handler
+    # _lf_handler = None
+    # if settings.LANGFUSE_PUBLIC_KEY and settings.LANGFUSE_SECRET_KEY:
+    #     _lf_handler = LangfuseCallbackHandler(
+    #         public_key=settings.LANGFUSE_PUBLIC_KEY,
+    #         secret_key=settings.LANGFUSE_SECRET_KEY,
+    #         host=settings.LANGFUSE_HOST,
+    #         trace_name=f"job_crew:enrichment:{offer_raw.get('intitule', 'N/A')}",
+    #     )
+    _lf_handler = None
+    if settings.LANGFUSE_PUBLIC_KEY and settings.LANGFUSE_SECRET_KEY:
+        logger.info(f"[langfuse] PUBLIC_KEY présente : {bool(settings.LANGFUSE_PUBLIC_KEY)}")
+        logger.info(f"[langfuse] SECRET_KEY présente : {bool(settings.LANGFUSE_SECRET_KEY)}")
+        _lf_handler = LangfuseCallbackHandler()
+        if _lf_handler:
+            logger.info(f"[langfuse] Handler créé : {type(_lf_handler)}")
+        else:
+            logger.info("[langfuse] Handler NON créé")
 
     # Construction des agents
     parser_agent   = build_parser_agent()
@@ -106,11 +147,18 @@ async def run_enrichment_crew(
     )
 
     # Assemblage du Crew
+    # crew = Crew(
+    #     agents=[parser_agent, analyste_agent, redacteur_agent],
+    #     tasks=[parser_task, analyste_task, redacteur_task],
+    #     process=Process.sequential,
+    #     verbose=False,
+    # )
     crew = Crew(
         agents=[parser_agent, analyste_agent, redacteur_agent],
         tasks=[parser_task, analyste_task, redacteur_task],
         process=Process.sequential,
         verbose=False,
+        callbacks=[_lf_handler] if _lf_handler else [],
     )
 
     logger.info(f"Lancement du Crew pour l'offre : {offer_raw.get('intitule', 'N/A')}")

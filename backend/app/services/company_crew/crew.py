@@ -148,7 +148,9 @@ async def run_company_full_pipeline(company_id: int, job_offer_id: int | None = 
 
         # ── Couche 1 : Discovery ──────────────────────────────
         try:
-            discovery = run_discovery_chain(company_name)
+            # discovery = run_discovery_chain(company_name)
+            discovery = run_discovery_chain(company_name, run_name=f"company_crew:discovery:{company_name}")
+
             company.discovery = discovery
             company.discovery_status = "done"
             logger.info(f"[company_crew] Discovery OK — {company_name}")
@@ -170,7 +172,9 @@ async def run_company_full_pipeline(company_id: int, job_offer_id: int | None = 
 
         # ── Couche 2 : Legal data ─────────────────────────────
         try:
-            legal = run_extractor_chain(discovery)
+            # legal = run_extractor_chain(discovery)
+            legal = run_extractor_chain(discovery, run_name=f"company_crew:legal:{company_name}")
+
             company.legal_data = legal
             company.legal_status = "done"
             logger.info(f"[company_crew] Legal OK — {company_name}")
@@ -183,7 +187,9 @@ async def run_company_full_pipeline(company_id: int, job_offer_id: int | None = 
 
         # ── Couche 3 : Actualités ─────────────────────────────
         try:
-            actualites = run_actualites_chain(discovery)
+            # actualites = run_actualites_chain(discovery)
+            actualites = run_actualites_chain(discovery, run_name=f"company_crew:actualites:{company_name}")
+
             company.actualites = actualites
             company.actualites_status = "done"
             company.actualites_updated_at = datetime.now(timezone.utc)
@@ -206,7 +212,9 @@ async def run_company_full_pipeline(company_id: int, job_offer_id: int | None = 
                 actualites=actualites,
                 offer_context=offer_context,
                 profile_context=profile_context,
+                run_name=f"company_crew:synthesizer:{company_name}",
             )
+
             
             # memo = run_synthesizer_chain(
             #     discovery=discovery,
@@ -249,7 +257,7 @@ async def run_company_refresh(company_id: int) -> None:
 
         # ── Couche 2 : Legal data ─────────────────────────────
         try:
-            legal = run_extractor_chain(discovery)
+            legal = run_extractor_chain(discovery, run_name=f"company_crew:legal:{company_name}")
             company.legal_data = legal
             company.legal_status = "done"
             logger.info(f"[company_crew] Refresh legal OK — {company_name}")
@@ -262,7 +270,7 @@ async def run_company_refresh(company_id: int) -> None:
 
         # ── Couche 3 : Actualités ─────────────────────────────
         try:
-            actualites = run_actualites_chain(discovery)
+            actualites = run_actualites_chain(discovery, run_name=f"company_crew:actualites:{company_name}")
             company.actualites = actualites
             company.actualites_status = "done"
             company.actualites_updated_at = datetime.now(timezone.utc)
@@ -291,6 +299,7 @@ async def run_company_refresh(company_id: int) -> None:
                 actualites=actualites,
                 offer_context=offer_context,
                 profile_context=profile_context,
+                run_name=f"company_crew:synthesizer:{company_name}",
             )
             company.memo = memo
             company.memo_status = "done"
@@ -342,6 +351,7 @@ async def run_company_recalcul(company_id: int, instruction: str | None = None) 
                 instruction=instruction,
                 offer_context=offer_context,
                 profile_context=profile_context,
+                run_name=f"company_crew:synthesizer:{company_name}",
             )
             company.memo = memo
             company.memo_status = "done"

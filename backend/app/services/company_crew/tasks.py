@@ -12,6 +12,25 @@ from app.services.company_crew.agents import (
 )
 from app.core.config import settings
 
+# from langfuse.callback import CallbackHandler as LangfuseCallbackHandler
+from langfuse.langchain import CallbackHandler as LangfuseCallbackHandler
+from app.core.config import settings
+
+# def _make_langfuse_handler(run_name: str) -> LangfuseCallbackHandler | None:
+#     """Crée un handler Langfuse si les clés sont configurées."""
+#     if not settings.LANGFUSE_PUBLIC_KEY or not settings.LANGFUSE_SECRET_KEY:
+#         return None
+#     return LangfuseCallbackHandler(
+#         public_key=settings.LANGFUSE_PUBLIC_KEY,
+#         secret_key=settings.LANGFUSE_SECRET_KEY,
+#         host=settings.LANGFUSE_HOST,
+#         trace_name=run_name,
+#     )
+def _make_langfuse_handler(run_name: str) -> LangfuseCallbackHandler | None:
+    if not settings.LANGFUSE_PUBLIC_KEY or not settings.LANGFUSE_SECRET_KEY:
+        return None
+    return LangfuseCallbackHandler()
+
 logger = logging.getLogger(__name__)
 
 # ------------------------------------------------------------
@@ -116,7 +135,8 @@ ACTUALITES_SCHEMA = {
 # Chain 1 — Discovery
 # ------------------------------------------------------------
 
-def run_discovery_chain(company_name: str) -> dict:
+# def run_discovery_chain(company_name: str) -> dict:
+def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
     """
     Recherche Serper × 2 + browse annuaire-entreprises.
     Retourne le JSON discovery ou lève une exception.
@@ -169,22 +189,41 @@ def run_discovery_chain(company_name: str) -> dict:
 
     chain = prompt | llm | JsonOutputParser()
 
-    return chain.invoke({
-        "company_name": company_name,
-        "results1": results1,
-        "results2": results2,
-        "results3": results3,
-        "results4": results4,
-        "annuaire_text": annuaire_text,
-        "schema": json.dumps(DISCOVERY_SCHEMA, ensure_ascii=False, indent=2),
-    })
+    # return chain.invoke({
+    #     "company_name": company_name,
+    #     "results1": results1,
+    #     "results2": results2,
+    #     "results3": results3,
+    #     "results4": results4,
+    #     "annuaire_text": annuaire_text,
+    #     "schema": json.dumps(DISCOVERY_SCHEMA, ensure_ascii=False, indent=2),
+    #     },
+    #     config={"run_name": run_name or "company_crew:discovery"},
+    # )
+    _lf = _make_langfuse_handler(run_name or "company_crew:discovery")
+    return chain.invoke(
+        {
+            "company_name": company_name,
+            "results1": results1,
+            "results2": results2,
+            "results3": results3,
+            "results4": results4,
+            "annuaire_text": annuaire_text,
+            "schema": json.dumps(DISCOVERY_SCHEMA, ensure_ascii=False, indent=2),
+        },
+        config={
+            "run_name": run_name or "company_crew:discovery",
+            "callbacks": [_lf] if _lf else [],
+        },
+    )
 
 
 # ------------------------------------------------------------
 # Chain 2 — Extraction légale
 # ------------------------------------------------------------
 
-def run_extractor_chain(discovery: dict) -> dict:
+# def run_extractor_chain(discovery: dict) -> dict:
+def run_extractor_chain(discovery: dict, run_name: str | None = None) -> dict:
     """
     Browse societe.com + site officiel + Glassdoor/HelloWork.
     Retourne le JSON legal_data. Dégradation gracieuse si page inaccessible.
@@ -221,20 +260,37 @@ def run_extractor_chain(discovery: dict) -> dict:
 
     chain = prompt | llm | JsonOutputParser()
 
-    return chain.invoke({
-        "societe_text":   societe_text   or "Non disponible",
-        "site_text":      site_text      or "Non disponible",
-        "glassdoor_text": glassdoor_text or "Non disponible",
-        "hellowork_text": hellowork_text or "Non disponible",
-        "schema": json.dumps(LEGAL_SCHEMA, ensure_ascii=False, indent=2),
-    })
+    # return chain.invoke({
+    #         "societe_text":   societe_text   or "Non disponible",
+    #         "site_text":      site_text      or "Non disponible",
+    #         "glassdoor_text": glassdoor_text or "Non disponible",
+    #         "hellowork_text": hellowork_text or "Non disponible",
+    #         "schema": json.dumps(LEGAL_SCHEMA, ensure_ascii=False, indent=2),
+    #     },
+    #     config={"run_name": run_name or "company_crew:legal"},
+    # )
+    _lf = _make_langfuse_handler(run_name or "company_crew:legal")
+    return chain.invoke(
+        {
+            "societe_text":   societe_text   or "Non disponible",
+            "site_text":      site_text      or "Non disponible",
+            "glassdoor_text": glassdoor_text or "Non disponible",
+            "hellowork_text": hellowork_text or "Non disponible",
+            "schema": json.dumps(LEGAL_SCHEMA, ensure_ascii=False, indent=2),
+        },
+        config={
+            "run_name": run_name or "company_crew:legal",
+            "callbacks": [_lf] if _lf else [],
+        },
+    )
 
 
 # ------------------------------------------------------------
 # Chain 3 — Actualités
 # ------------------------------------------------------------
 
-def run_actualites_chain(discovery: dict) -> dict:
+# def run_actualites_chain(discovery: dict) -> dict:
+def run_actualites_chain(discovery: dict, run_name: str | None = None) -> dict:
     """
     Extrait les actualités depuis les snippets Serper déjà en discovery.
     Tente un browse du site officiel en complément si disponible.
@@ -263,17 +319,39 @@ def run_actualites_chain(discovery: dict) -> dict:
 
     chain = prompt | llm | JsonOutputParser()
 
-    return chain.invoke({
-        "serper_actualites": serper_actualites or "Non disponible",
-        "site_text":         site_text         or "Non disponible",
-        "schema": json.dumps(ACTUALITES_SCHEMA, ensure_ascii=False, indent=2),
-    })
+    # return chain.invoke({
+    #     "serper_actualites": serper_actualites or "Non disponible",
+    #     "site_text":         site_text         or "Non disponible",
+    #     "schema": json.dumps(ACTUALITES_SCHEMA, ensure_ascii=False, indent=2),
+    # },
+    # config={"run_name": run_name or "company_crew:legal"},)
+
+    _lf = _make_langfuse_handler(run_name or "company_crew:actualites")
+    return chain.invoke(
+        {
+            "serper_actualites": serper_actualites or "Non disponible",
+            "site_text":         site_text         or "Non disponible",
+            "schema": json.dumps(ACTUALITES_SCHEMA, ensure_ascii=False, indent=2),
+        },
+        config={
+            "run_name": run_name or "company_crew:actualites",
+            "callbacks": [_lf] if _lf else [],
+        },
+    )
 
 
 # ------------------------------------------------------------
 # Chain 4 — Synthèse mémo
 # ------------------------------------------------------------
 
+# def run_synthesizer_chain(
+#     discovery: dict,
+#     legal: dict,
+#     actualites: dict,
+#     instruction: str | None = None,
+#     offer_context: str | None = None,
+#     profile_context: str | None = None,
+# ) -> str:
 def run_synthesizer_chain(
     discovery: dict,
     legal: dict,
@@ -281,6 +359,7 @@ def run_synthesizer_chain(
     instruction: str | None = None,
     offer_context: str | None = None,
     profile_context: str | None = None,
+    run_name: str | None = None,
 ) -> str:
     """
     Rédige le mémo Markdown final.
@@ -330,7 +409,7 @@ def run_synthesizer_chain(
         "## 5. Questions intelligentes à poser\n"
         "   (basées sur l'offre et les valeurs/activité de l'entreprise si disponibles)\n"
         "## 6. Points à mettre en avant\n"
-        "   (basés sur le profil candidat et les attentes de l'entreprise si disponibles)\n\n"
+        "   (se focaliser sur les points que peut apporter le profil candidat aux attentes de l'entreprise si disponibles)\n\n"
         "RÈGLES STRICTES :\n"
         "- Si une donnée est absente, écrire 'Information non disponible' — ne jamais inventer\n"
         "- Les sections 5 et 6 doivent utiliser le contexte offre et profil si fournis\n"
@@ -340,11 +419,27 @@ def run_synthesizer_chain(
 
     chain = prompt | llm | StrOutputParser()
 
-    return chain.invoke({
-        "discovery":          json.dumps(discovery,  ensure_ascii=False, indent=2),
-        "legal":              json.dumps(legal,       ensure_ascii=False, indent=2),
-        "actualites":         json.dumps(actualites,  ensure_ascii=False, indent=2),
-        "instruction_block":  instruction_block,
-        "offer_block":       offer_block,
-        "profile_block":     profile_block,
-    })
+    # return chain.invoke({
+    #     "discovery":          json.dumps(discovery,  ensure_ascii=False, indent=2),
+    #     "legal":              json.dumps(legal,       ensure_ascii=False, indent=2),
+    #     "actualites":         json.dumps(actualites,  ensure_ascii=False, indent=2),
+    #     "instruction_block":  instruction_block,
+    #     "offer_block":       offer_block,
+    #     "profile_block":     profile_block,
+    # },
+    # config={"run_name": run_name or "company_crew:legal"},)
+    _lf = _make_langfuse_handler(run_name or "company_crew:synthesizer")
+    return chain.invoke(
+        {
+            "discovery":         json.dumps(discovery,  ensure_ascii=False, indent=2),
+            "legal":             json.dumps(legal,       ensure_ascii=False, indent=2),
+            "actualites":        json.dumps(actualites,  ensure_ascii=False, indent=2),
+            "instruction_block": instruction_block,
+            "offer_block":       offer_block,
+            "profile_block":     profile_block,
+        },
+        config={
+            "run_name": run_name or "company_crew:synthesizer",
+            "callbacks": [_lf] if _lf else [],
+        },
+    )

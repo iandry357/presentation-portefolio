@@ -5,6 +5,8 @@ locals {
     MISTRAL_API_KEY              = var.mistral_api_key
     GROQ_API_KEY                 = var.groq_api_key
     LANGSMITH_API_KEY            = var.langsmith_api_key
+    LANGSMITH_PROJECT            = var.langsmith_project
+    LANGCHAIN_TRACING_V2         = var.langchain_tracing_v2
     VOYAGE_API_KEY               = var.voyage_api_key
     FRANCE_TRAVAIL_CLIENT_ID     = var.france_travail_client_id
     FRANCE_TRAVAIL_CLIENT_SECRET = var.france_travail_client_secret
@@ -12,6 +14,9 @@ locals {
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
+    LANGFUSE_PUBLIC_KEY          = var.langfuse_public_key
+    LANGFUSE_SECRET_KEY          = var.langfuse_secret_key
+    LANGFUSE_HOST                = var.langfuse_host
   }
 }
 
@@ -34,7 +39,7 @@ resource "scaleway_secret_version" "main" {
 
 resource "scaleway_secret" "cv_edit_secret_code" {
   name        = "cv-edit-secret-code"
-  description = "Code de sécurité pour enriichir le CV via l'interface"
+  description = "Code de sécurité pour enrichir le CV via l'interface"
   project_id  = var.project_id
   region      = var.region
 }
