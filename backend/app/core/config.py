@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     LANGSMITH_PROJECT: str = "portfolio-rag"
     SERPER_API_KEY: str = ""
 
+    LANGFUSE_PUBLIC_KEY: Optional[str] = None
+    LANGFUSE_SECRET_KEY: Optional[str] = None
+    LANGFUSE_HOST: str = "https://cloud.langfuse.com"
+
     COMPANY_BROWSE_MAX_CHARS: int = 4000
 
     # App Config
