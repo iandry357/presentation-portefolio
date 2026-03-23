@@ -30,6 +30,8 @@ resource "scaleway_container" "backend" {
     EMBEDDING_MODEL           = "voyage-4"
     ENVIRONMENT               = "production"
     LANGSMITH_PROJECT         = "portfolio-rag"
+    LANGCHAIN_TRACING_V2      = "true"
+    LANGFUSE_HOST             = "https://cloud.langfuse.com"
     LOG_LEVEL                 = "INFO"
     POSTGRES_DB               = "rdb"
     POSTGRES_HOST             = var.postgres_host
@@ -45,6 +47,8 @@ resource "scaleway_container" "backend" {
     MISTRAL_API_KEY              = var.mistral_api_key
     GROQ_API_KEY                 = var.groq_api_key
     LANGSMITH_API_KEY            = var.langsmith_api_key
+    LANGFUSE_PUBLIC_KEY          = var.langfuse_public_key
+    LANGFUSE_SECRET_KEY          = var.langfuse_secret_key
     VOYAGE_API_KEY               = var.voyage_api_key
     FRANCE_TRAVAIL_CLIENT_ID     = var.france_travail_client_id
     FRANCE_TRAVAIL_CLIENT_SECRET = var.france_travail_client_secret
