@@ -22,7 +22,7 @@ import json
 
 def normalize_company_name(name: str) -> str:
     """
-    Normalise le nom d'entreprise pour éviter les erreurs JSON lors des appels LLM.
+    Normalise le nom d'entreprise pour éviter les erreurs JSON lors des appels LLM
     
     Transformations appliquées :
     - Apostrophes typographiques ' ' → '
