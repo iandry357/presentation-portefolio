@@ -5,8 +5,6 @@ locals {
     MISTRAL_API_KEY              = var.mistral_api_key
     GROQ_API_KEY                 = var.groq_api_key
     LANGSMITH_API_KEY            = var.langsmith_api_key
-    LANGSMITH_PROJECT            = var.langsmith_project
-    LANGCHAIN_TRACING_V2         = var.langchain_tracing_v2
     VOYAGE_API_KEY               = var.voyage_api_key
     FRANCE_TRAVAIL_CLIENT_ID     = var.france_travail_client_id
     FRANCE_TRAVAIL_CLIENT_SECRET = var.france_travail_client_secret
@@ -14,9 +12,6 @@ locals {
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
-    LANGFUSE_PUBLIC_KEY          = var.langfuse_public_key
-    LANGFUSE_SECRET_KEY          = var.langfuse_secret_key
-    LANGFUSE_HOST                = var.langfuse_host
   }
 }
 
@@ -47,4 +42,29 @@ resource "scaleway_secret" "cv_edit_secret_code" {
 resource "scaleway_secret_version" "cv_edit_secret_code" {
   secret_id = scaleway_secret.cv_edit_secret_code.id
   data      = var.cv_edit_secret_code
+}
+
+
+# ============================================================================
+# Monitoring — Langfuse
+# ============================================================================
+
+resource "scaleway_secret" "langfuse_public_key" {
+  name       = "langfuse-public-key"
+  project_id = var.project_id
+  region     = var.region
+}
+resource "scaleway_secret_version" "langfuse_public_key" {
+  secret_id = scaleway_secret.langfuse_public_key.id
+  data      = var.langfuse_public_key
+}
+
+resource "scaleway_secret" "langfuse_secret_key" {
+  name       = "langfuse-secret-key"
+  project_id = var.project_id
+  region     = var.region
+}
+resource "scaleway_secret_version" "langfuse_secret_key" {
+  secret_id = scaleway_secret.langfuse_secret_key.id
+  data      = var.langfuse_secret_key
 }
