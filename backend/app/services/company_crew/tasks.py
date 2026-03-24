@@ -200,7 +200,7 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
     #     },
     #     config={"run_name": run_name or "company_crew:discovery"},
     # )
-    _lf = _make_langfuse_handler(run_name or "company_crew:discovery")
+    # _lf = _make_langfuse_handler(run_name or "company_crew:discovery")
     return chain.invoke(
         {
             "company_name": company_name,
@@ -213,7 +213,7 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
         },
         config={
             "run_name": run_name or "company_crew:discovery",
-            "callbacks": [_lf] if _lf else [],
+            # "callbacks": [_lf] if _lf else [],
         },
     )
 
@@ -269,7 +269,7 @@ def run_extractor_chain(discovery: dict, run_name: str | None = None) -> dict:
     #     },
     #     config={"run_name": run_name or "company_crew:legal"},
     # )
-    _lf = _make_langfuse_handler(run_name or "company_crew:legal")
+    # _lf = _make_langfuse_handler(run_name or "company_crew:legal")
     return chain.invoke(
         {
             "societe_text":   societe_text   or "Non disponible",
@@ -280,7 +280,7 @@ def run_extractor_chain(discovery: dict, run_name: str | None = None) -> dict:
         },
         config={
             "run_name": run_name or "company_crew:legal",
-            "callbacks": [_lf] if _lf else [],
+            # "callbacks": [_lf] if _lf else [],
         },
     )
 
@@ -326,7 +326,7 @@ def run_actualites_chain(discovery: dict, run_name: str | None = None) -> dict:
     # },
     # config={"run_name": run_name or "company_crew:legal"},)
 
-    _lf = _make_langfuse_handler(run_name or "company_crew:actualites")
+    # _lf = _make_langfuse_handler(run_name or "company_crew:actualites")
     return chain.invoke(
         {
             "serper_actualites": serper_actualites or "Non disponible",
@@ -335,7 +335,7 @@ def run_actualites_chain(discovery: dict, run_name: str | None = None) -> dict:
         },
         config={
             "run_name": run_name or "company_crew:actualites",
-            "callbacks": [_lf] if _lf else [],
+            # "callbacks": [_lf] if _lf else [],
         },
     )
 
@@ -428,7 +428,7 @@ def run_synthesizer_chain(
     #     "profile_block":     profile_block,
     # },
     # config={"run_name": run_name or "company_crew:legal"},)
-    _lf = _make_langfuse_handler(run_name or "company_crew:synthesizer")
+    # _lf = _make_langfuse_handler(run_name or "company_crew:synthesizer")
     return chain.invoke(
         {
             "discovery":         json.dumps(discovery,  ensure_ascii=False, indent=2),
@@ -440,6 +440,6 @@ def run_synthesizer_chain(
         },
         config={
             "run_name": run_name or "company_crew:synthesizer",
-            "callbacks": [_lf] if _lf else [],
+            # "callbacks": [_lf] if _lf else [],
         },
     )
