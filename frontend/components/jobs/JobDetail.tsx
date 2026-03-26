@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ExternalLink, MapPin, Briefcase, Clock, Euro, Building2, CheckCircle, FileText, Sparkles, NotebookPen, Factory } from 'lucide-react';
 import { JobOfferDetail, JobEnriched } from '@/types';
 import RecalculButton from '@/components/jobs/RecalculButton';
@@ -41,13 +41,21 @@ function AnimatedDots() {
 // JobDetail
 // ============================================================================
 
+// interface JobDetailProps {
+//   offer: JobOfferDetail;
+//   enriched: JobEnriched | null;
+//   onEnrichedUpdate: (enriched: JobEnriched) => void;
+// }
+
 interface JobDetailProps {
   offer: JobOfferDetail;
   enriched: JobEnriched | null;
   onEnrichedUpdate: (enriched: JobEnriched) => void;
+  isEnriching?: boolean;
 }
 
-export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDetailProps) {
+// export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDetailProps) {
+export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnriching = false }: JobDetailProps) {
   const [status, setStatus] = useState(offer.status);
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState<string | null>(null);
@@ -61,6 +69,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
 
   // États des accordéons
   const [ficheOpen, setFicheOpen] = useState(false);
+  // const [ficheOpen, setFicheOpen] = useState(isEnriching ?? false);
   const [descOpen, setDescOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
 
@@ -107,6 +116,10 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (isEnriching) setFicheOpen(true);
+  }, [isEnriching]);
 
   return (
     <div className="space-y-4">
@@ -268,21 +281,23 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDeta
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   La fiche synthétique n'a pas encore été générée.
                 </p>
-                {enriching && (
+                {(enriching || isEnriching) && (
                   <p className="text-sm text-blue-500 dark:text-blue-400">
                     Génération en cours — profitez-en pour lire la description ou prendre vos notes.
                   </p>
                 )}
+                {!isEnriching && (
+                  <button
+                    onClick={handleEnrich}
+                    disabled={enriching}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  >
+                    {enriching ? <>Génération en cours<AnimatedDots /></> : 'Générer la fiche'}
+                  </button>
+                )}
                 {enrichError && (
                   <p className="text-sm text-red-500 dark:text-red-400">{enrichError}</p>
                 )}
-                <button
-                  onClick={handleEnrich}
-                  disabled={enriching}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
-                >
-                  {enriching ? <>Génération en cours<AnimatedDots /></> : 'Générer la fiche'}
-                </button>
               </div>
             )}
 

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { JobOfferDetail, JobEnriched } from '@/types';
-import { getJob, getJobEnriched } from '@/lib/api';
+import { getJob, getJobEnriched, enrichJob } from '@/lib/api';
 import JobDetail from '@/components/jobs/JobDetail';
 import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
@@ -17,6 +17,9 @@ export default function JobDetailPage() {
   const [enriched, setEnriched] = useState<JobEnriched | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  const searchParams = useSearchParams();
+  const triggerEnrich = searchParams.get('enrich') === 'true';
 
   useEffect(() => {
     const load = async () => {
@@ -29,7 +32,12 @@ export default function JobDetailPage() {
         if (offerData.has_enriched) {
           const enrichedData = await getJobEnriched(jobId);
           setEnriched(enrichedData);
-        }
+        } 
+        // else if (triggerEnrich) {
+        // // Déclenchement immédiat après chargement, enriched est forcément null ici
+        // const enrichedData = await enrichJob(offerData.id);
+        // setEnriched(enrichedData);
+        // }
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Erreur de chargement');
       } finally {
@@ -39,6 +47,17 @@ export default function JobDetailPage() {
 
     if (jobId) load();
   }, [jobId]);
+
+  const enrichTriggered = useRef(false);
+  // Déclenchement enrichissement si query param présent
+  useEffect(() => {
+    if (!triggerEnrich || !offer || enriched || enrichTriggered.current) return;
+    
+    enrichTriggered.current = true;
+    enrichJob(offer.id)
+      .then(setEnriched)
+      .catch(e => console.error('Enrichissement auto échoué :', e));
+  }, [offer]);
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 px-4 py-8">

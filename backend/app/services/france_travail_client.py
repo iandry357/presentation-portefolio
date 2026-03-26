@@ -59,7 +59,8 @@ async def _headers() -> dict:
 # ROMEO - Prédiction codes ROME depuis texte profil
 # ============================================================================
 
-async def predict_rome_codes(profile_text: str) -> list[dict]:
+# async def predict_rome_codes(profile_text: str) -> list[dict]:
+async def predict_rome_codes(profile_text: str, identifiant: str = "profil-iandry") -> list[dict]:
     """
     Envoie le texte du profil à ROMEO et retourne les codes ROME prédits.
 
@@ -70,7 +71,7 @@ async def predict_rome_codes(profile_text: str) -> list[dict]:
         "appellations": [
             {
                 "intitule":    profile_text,
-                "identifiant": "profil-iandry",
+                "identifiant": identifiant,
             }
         ],
         "options": {

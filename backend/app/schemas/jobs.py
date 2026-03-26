@@ -10,7 +10,8 @@ from datetime import datetime
 class JobOfferSummary(BaseModel):
     """Vue résumée pour la liste des cards frontend."""
     id: int
-    ft_id: str
+    ft_id: Optional[str] = None
+    source_offer: Optional[str] = None
     title: str
     description: Optional[str]
     company_name: Optional[str]
@@ -43,6 +44,7 @@ class JobOfferDetail(JobOfferSummary):
     company_description: Optional[str]
     company_url: Optional[str]
     company_profile_id: Optional[int] = None
+    source_offer: Optional[str] = None
     naf_code: Optional[str]
     raw_data: Dict[str, Any]
     created_at: datetime
@@ -95,6 +97,29 @@ class StatusUpdateRequest(BaseModel):
 class TriggerPipelineRequest(BaseModel):
     """Déclenchement manuel du pipeline (dev uniquement)."""
     region: Optional[str] = None    # override zone géo si besoin
+
+class ExternalJobOfferCreate(BaseModel):
+    """Ajout manuel d'une offre externe (hors France Travail)."""
+    # Champs obligatoires
+    title: str = Field(..., min_length=2, max_length=255)
+    description: str = Field(..., min_length=10)
+    company_name: str = Field(..., min_length=2, max_length=255)
+    company_description: str = Field(..., min_length=10)
+    location_label: str = Field(..., min_length=2, max_length=255)
+
+    # Champs optionnels
+    source_offer: Optional[str] = None
+    offer_url: Optional[str] = None
+    contract_type: Optional[str] = None
+    experience_label: Optional[str] = None
+    work_time: Optional[str] = None
+    salary_label: Optional[str] = None
+    sector_label: Optional[str] = None
+
+    # Comportement pipeline
+    trigger_enrichment: bool = False
+
+    published_at: datetime
 
 
 # ============================================================================
