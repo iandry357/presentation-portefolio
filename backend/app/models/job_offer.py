@@ -13,7 +13,8 @@ class JobOffer(Base):
     id                   = Column(Integer, primary_key=True)
 
     # Identifiant France Travail
-    ft_id                = Column(String(50), nullable=False, unique=True, index=True)
+    ft_id        = Column(String(50), nullable=True, index=True)
+    source_offer = Column(String(100), nullable=False, default="france_travail")
 
     # Infos principales
     title                = Column(String(255), nullable=False)
@@ -85,13 +86,15 @@ class JobOffer(Base):
             name="job_offers_status_check"
         ),
         CheckConstraint(
-            "label IN ('basique', 'medium', 'priorité')",
+            "label IS NULL OR label IN ('basique', 'medium', 'priorité')",
             name="job_offers_label_check"
         ),
     )
 
-    label = Column(String(20), nullable=False, index=True)
-    score = Column(Float, nullable=False)
+    # label = Column(String(20), nullable=False, index=True)
+    # score = Column(Float, nullable=False)
+    label = Column(String(20), nullable=True, default="basique", index=True)
+    score = Column(Float, nullable=True)
 
     enriched = relationship("JobEnriched", back_populates="job_offer", uselist=False, lazy="selectin")
 

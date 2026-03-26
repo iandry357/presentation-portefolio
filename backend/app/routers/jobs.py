@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, delete
 from typing import Optional
@@ -24,9 +24,12 @@ from app.schemas.jobs import (
     PipelineTriggerResponse,
     ManualJobRequest, 
     JobNotesUpdate,
+    ExternalJobOfferCreate,
 )
 from app.services.job_crew.crew import run_enrichment_crew
 from app.services.job_scoring import build_profile_text
+
+from app.core.database import get_db_session
 
 logger = logging.getLogger(__name__)
 
@@ -433,3 +436,73 @@ async def reset_jobs(db: AsyncSession = Depends(get_db)):
         logger.error(f"Erreur lors du reset : {e}")
         raise HTTPException(status_code=500, detail=f"Erreur interne : {str(e)}")
 
+
+# ============================================================================
+# POST /jobs/external — Ajout manuel d'une offre externe
+# ============================================================================
+
+@router.post("/external", response_model=JobOfferDetail)
+async def add_external_job(
+    body: ExternalJobOfferCreate,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+):
+    # Création de l'offre
+    job = JobOffer(
+        ft_id=None,
+        source_offer=body.source_offer or "manuel",
+        title=body.title,
+        description=body.description,
+        company_name=body.company_name,
+        company_description=body.company_description,
+        location_label=body.location_label,
+        contract_type=body.contract_type,
+        experience_label=body.experience_label,
+        work_time=body.work_time,
+        salary_label=body.salary_label,
+        sector_label=body.sector_label,
+        offer_url=body.offer_url,
+        raw_data={},
+        status="manuel",
+        label="basique",
+        ft_published_at=body.published_at,
+    )
+    db.add(job)
+    await db.commit()
+    await db.refresh(job)
+
+    # Background task séquentielle : ROMEO puis CrewAI si demandé
+    background_tasks.add_task(
+        _background_external_job,
+        job.id,
+        job.title,
+        # body.trigger_enrichment,
+    )
+
+    detail = JobOfferDetail.model_validate(job)
+    detail.has_enriched = False
+    return detail
+
+
+async def _background_external_job(
+    job_id: int,
+    title: str,
+    # trigger_enrichment: bool,
+):
+    """Tâche séquentielle : ROMEO → CrewAI (si demandé)."""
+    from app.services.rome_service import deduce_rome
+
+    async with get_db_session() as db:
+        try:
+            # Étape 1 — ROMEO
+            rome_code, rome_libelle = await deduce_rome(title)
+            if rome_code:
+                offer = await db.get(JobOffer, job_id)
+                if offer:
+                    offer.rome_code = rome_code
+                    offer.rome_libelle = rome_libelle
+                    await db.commit()
+                    logger.info(f"ROME mis à jour pour job {job_id} : {rome_code}")
+
+        except Exception as e:
+            logger.error(f"Background task job {job_id} : {e}")

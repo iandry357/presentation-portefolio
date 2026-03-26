@@ -5,6 +5,7 @@ import {
   Experience, 
   ExperienceFormData,
   Skill,
+  ExternalJobOfferCreate,
   FeedbackCreate, FeedbackCreateResponse  } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -81,6 +82,23 @@ export async function getJobs(filters: JobFilters): Promise<JobListResponse> {
 
 export async function getJob(id: number): Promise<JobOfferDetail> {
   const response = await fetch(`${API_URL}/jobs/${id}`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function createExternalJob(
+  data: ExternalJobOfferCreate
+): Promise<JobOfferDetail> {
+  const response = await fetch(`${API_URL}/jobs/external`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
