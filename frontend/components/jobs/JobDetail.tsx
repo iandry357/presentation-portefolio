@@ -192,9 +192,24 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           {offer.salary_label && (
             <span className="flex items-center gap-1.5"><Euro className="w-4 h-4" />{offer.salary_label}</span>
           )}
+          {offer.source_offer && (
+            <span className="flex items-center gap-1.5"><ExternalLink className="w-4 h-4" />{offer.source_offer}</span>
+          )}
         </div>
 
-        <a
+        {(offer.ft_id || offer.offer_url) && (
+          <a
+            href={offer.ft_id ? `${FT_BASE_URL}${offer.ft_id}` : offer.offer_url!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            <ExternalLink className="w-4 h-4" />
+            {offer.ft_id ? "Voir l'offre sur France Travail" : "Voir l'offre originale"}
+          </a>
+        )}
+
+        {/* <a
           href={`${FT_BASE_URL}${offer.ft_id}`}
           target="_blank"
           rel="noopener noreferrer"
@@ -202,7 +217,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
         >
           <ExternalLink className="w-4 h-4" />
           Voir l'offre sur France Travail
-        </a>
+        </a> */}
       </div>
 
       {/* ── Barre sticky de navigation ───────────────────────────────────── */}

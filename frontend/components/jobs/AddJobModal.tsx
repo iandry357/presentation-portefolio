@@ -18,7 +18,8 @@ export default function AddJobModal({ onSuccess, onClose }: AddJobModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-lg shadow-xl flex flex-col max-h-[90vh]">
+      {/* <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-lg shadow-xl flex flex-col max-h-[90vh]"> */}
+      <div className={`bg-white dark:bg-gray-800 rounded-lg w-full shadow-xl flex flex-col max-h-[90vh] ${mode === 'externe' ? 'max-w-2xl' : 'max-w-lg'}`}>
 
         {/* Header */}
         <div className="p-6 pb-4 shrink-0">
