@@ -107,6 +107,12 @@ export default function JobCard({ offer }: JobCardProps) {
             {offer.salary_label}
           </span>
         )}
+        {offer.source_offer && (
+          <span className="flex items-center gap-1">
+            <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+            {offer.source_offer}
+          </span>
+        )}
       </div>
 
       {/* Expérience + secteur */}
@@ -137,8 +143,21 @@ export default function JobCard({ offer }: JobCardProps) {
           {formatDate(offer.ft_published_at)}
         </span>
         <div className="flex items-center gap-3">
+
+            {(offer.ft_id || offer.offer_url) && (
+              <a
+                href={offer.ft_id ? `${FT_BASE_URL}${offer.ft_id}` : offer.offer_url!}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Voir l'offre
+              </a>
+            )}
           
-            <a
+            {/* <a
               href={`${FT_BASE_URL}${offer.ft_id}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -147,7 +166,7 @@ export default function JobCard({ offer }: JobCardProps) {
             >
               <ExternalLink className="w-3.5 h-3.5" />
               Voir l'offre
-            </a>
+            </a> */}
           
           <Link
             href={`/jobs/${offer.id}`}

@@ -38,7 +38,8 @@ export type JobStatus = 'nouveau' | 'existant' | 'ferme' | 'consulte' | 'postule
 
 export interface JobOfferSummary {
   id: number;
-  ft_id: string;
+  ft_id: string | null;
+  source_offer: string | null;
   title: string;
   description: string | null;
   company_name: string | null;
@@ -66,6 +67,7 @@ export interface JobOfferDetail extends JobOfferSummary {
   company_description: string | null;
   company_url: string | null;
   company_profile_id: number | null;
+  source_offer: string | null;
   naf_code: string | null;
   raw_data: Record<string, unknown>;
   created_at: string;
@@ -98,6 +100,23 @@ export interface JobFilters {
   max_days_old?: number;
   page: number;
   page_size: number;
+}
+
+export interface ExternalJobOfferCreate {
+  title: string;
+  description: string;
+  company_name: string;
+  company_description: string;
+  location_label: string;
+  source_offer?: string;
+  offer_url?: string;
+  contract_type?: string;
+  experience_label?: string;
+  work_time?: string;
+  salary_label?: string;
+  sector_label?: string;
+  trigger_enrichment: boolean;
+  published_at: string;
 }
 
 // ============================================================================

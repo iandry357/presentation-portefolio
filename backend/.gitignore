@@ -56,4 +56,4 @@ logs/
 # Generated files
 scripts/data/*
 scripts/init.sql
-scripts/embeddings_cache.json
+scripts/*
