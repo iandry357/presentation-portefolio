@@ -447,6 +447,22 @@ async def add_external_job(
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
+    raw_data = {
+        "intitule": body.title,
+        "description": body.description,
+        "typeContratLibelle": body.contract_type or "",
+        "experienceLibelle": body.experience_label or "",
+        "salaire": {"libelle": body.salary_label or ""},
+        "dureeTravailLibelleConverti": body.work_time or "",
+        "secteurActiviteLibelle": body.sector_label or "",
+        "entreprise": {
+            "nom": body.company_name,
+            "description": body.company_description,
+        },
+        "competences": [],
+        "qualitesProfessionnelles": [],
+        "contexteTravail": {"horaires": ""},
+    }
     # Création de l'offre
     job = JobOffer(
         ft_id=None,
@@ -462,7 +478,7 @@ async def add_external_job(
         salary_label=body.salary_label,
         sector_label=body.sector_label,
         offer_url=body.offer_url,
-        raw_data={},
+        raw_data=raw_data,
         status="manuel",
         label="basique",
         ft_published_at=body.published_at,
