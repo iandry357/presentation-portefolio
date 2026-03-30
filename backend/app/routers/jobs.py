@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, delete
+from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import datetime, timedelta
 
@@ -25,11 +26,14 @@ from app.schemas.jobs import (
     ManualJobRequest, 
     JobNotesUpdate,
     ExternalJobOfferCreate,
+    JobOfferUpdate,
 )
 # from app.services.job_crew.crew import run_enrichment_crew
 from app.services.job_scoring import build_profile_text
 
 from app.core.database import get_db_session
+
+from app.services.gmail_alerts import GmailAlertsService
 
 logger = logging.getLogger(__name__)
 
@@ -524,3 +528,77 @@ async def _background_external_job(
 
         except Exception as e:
             logger.error(f"Background task job {job_id} : {e}")
+
+@router.patch("/{job_id}", response_model=JobOfferDetail)
+async def update_job_offer(
+    job_id: int,
+    payload: JobOfferUpdate,
+    db: AsyncSession = Depends(get_db),
+    # TODO multi-user : vérifier session_id ici
+):
+    result = await db.execute(select(JobOffer).where(JobOffer.id == job_id))
+    job = result.scalar_one_or_none()
+    if not job:
+        raise HTTPException(status_code=404, detail="Offre introuvable")
+
+    direct_fields = [
+        "title", "company_name", "location_label", "contract_type",
+        "salary_label", "experience_label", "work_time", "sector_label",
+        "offer_url", "source_offer", "description",
+    ]
+    for field in direct_fields:
+        value = getattr(payload, field, None)
+        if value is not None:
+            setattr(job, field, value)
+
+    if payload.published_at:
+        try:
+            job.ft_published_at = datetime.strptime(payload.published_at, "%Y-%m-%d")
+        except ValueError:
+            pass
+
+    new_raw: dict = dict(job.raw_data) if job.raw_data else {}
+
+    mapping = {
+        "intitule":           payload.title,
+        "description":        payload.description,
+        "typeContratLibelle": payload.contract_type,
+        "lieuTravail":        {"libelle": payload.location_label} if payload.location_label else None,
+        "entreprise":         {"nom": payload.company_name, "description": payload.company_description}
+                              if (payload.company_name or payload.company_description) else None,
+        "salaire":            {"libelle": payload.salary_label} if payload.salary_label else None,
+    }
+
+    for key, value in mapping.items():
+        if value is not None:
+            new_raw[key] = value
+
+    if new_raw != job.raw_data:
+        job.raw_data = new_raw
+
+    await db.commit()
+    await db.refresh(job)
+
+    detail = JobOfferDetail.model_validate(job)
+
+    enriched_result = await db.execute(
+        select(JobEnriched).where(JobEnriched.job_offer_id == job_id)
+    )
+    enriched = enriched_result.scalar_one_or_none()
+    detail.has_enriched = enriched is not None
+    
+    return detail
+    # return _build_detail_response(job, enriched)
+
+@router.post("/gmail/fetch")
+# async def fetch_gmail_alerts(db: Session = Depends(get_db)):
+async def fetch_gmail_alerts(db: AsyncSession = Depends(get_db)):
+    """
+    Déclenche la récupération des alertes Gmail et insère les nouvelles offres.
+    Retourne un résumé {inserted, skipped, errors}.
+    # TODO multi-user : restreindre par session
+    """
+    service = GmailAlertsService()
+    summary = await service.run(db)
+    
+    return summary

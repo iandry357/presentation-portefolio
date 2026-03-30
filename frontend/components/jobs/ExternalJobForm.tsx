@@ -2,12 +2,23 @@
 'use client';
 
 import { useState } from 'react';
-import { createExternalJob } from '@/lib/api';
+import { createExternalJob, updateJob  } from '@/lib/api';
 import { ExternalJobOfferCreate, JobOfferDetail } from '@/types';
 
+// interface ExternalJobFormProps {
+//   onSuccess: (job: JobOfferDetail, triggerEnrichment: boolean) => void;
+//   onCancel: () => void;
+// }
+// interface ExternalJobFormProps {
+//   onSuccess: (job: JobOfferDetail, triggerEnrichment: boolean) => void;
+//   onCancel: () => void;
+//   initialValues?: Partial<ExternalJobOfferCreate>;
+// }
 interface ExternalJobFormProps {
   onSuccess: (job: JobOfferDetail, triggerEnrichment: boolean) => void;
   onCancel: () => void;
+  initialValues?: Partial<ExternalJobOfferCreate>;
+  jobId?: number;
 }
 
 const EMPTY_FORM: ExternalJobOfferCreate = {
@@ -27,8 +38,11 @@ const EMPTY_FORM: ExternalJobOfferCreate = {
   published_at: '',
 };
 
-export default function ExternalJobForm({ onSuccess, onCancel }: ExternalJobFormProps) {
-  const [form, setForm] = useState<ExternalJobOfferCreate>(EMPTY_FORM);
+// export default function ExternalJobForm({ onSuccess, onCancel }: ExternalJobFormProps) {
+//   const [form, setForm] = useState<ExternalJobOfferCreate>(EMPTY_FORM);
+// export default function ExternalJobForm({ onSuccess, onCancel, initialValues }: ExternalJobFormProps) {
+export default function ExternalJobForm({ onSuccess, onCancel, initialValues, jobId }: ExternalJobFormProps) {
+  const [form, setForm] = useState<ExternalJobOfferCreate>({ ...EMPTY_FORM, ...initialValues });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,21 +57,37 @@ export default function ExternalJobForm({ onSuccess, onCancel }: ExternalJobForm
     form.location_label.trim().length >= 2 && 
     form.published_at.trim().length > 0;
 
+//   const handleSubmit = async () => {
+//     if (!isValid) return;
+//     setLoading(true);
+//     setError(null);
+//     try {
+//       const job = await createExternalJob(form);
+//       console.log('trigger_enrichment au submit:', form.trigger_enrichment);
+//       console.log('job reçu:', job);
+//       onSuccess(job, form.trigger_enrichment);
+//     } catch (e) {
+//       setError(e instanceof Error ? e.message : 'Erreur lors de l\'ajout');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
   const handleSubmit = async () => {
     if (!isValid) return;
     setLoading(true);
     setError(null);
     try {
-      const job = await createExternalJob(form);
-      console.log('trigger_enrichment au submit:', form.trigger_enrichment);
-      console.log('job reçu:', job);
-      onSuccess(job, form.trigger_enrichment);
+        const job = jobId
+        ? await updateJob(jobId, form)
+        : await createExternalJob(form);
+        onSuccess(job, form.trigger_enrichment);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erreur lors de l\'ajout');
+        setError(e instanceof Error ? e.message : "Erreur lors de l'enregistrement");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+    };
 
   return (
     <div className="space-y-4">
@@ -237,7 +267,8 @@ export default function ExternalJobForm({ onSuccess, onCancel }: ExternalJobForm
           disabled={loading || !isValid}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium disabled:opacity-50"
         >
-          {loading ? 'Ajout en cours...' : 'Ajouter l\'offre'}
+          {/* {loading ? 'Ajout en cours...' : 'Ajouter l\'offre'} */}
+          {loading ? 'Enregistrement...' : jobId ? 'Enregistrer les modifications' : "Ajouter l'offre"}
         </button>
       </div>
     </div>

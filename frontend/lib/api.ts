@@ -522,3 +522,22 @@ export async function initializeSession(sessionId: string): Promise<void> {
     console.error("❌ Error initializing session:", error);
   }
 }
+
+export async function updateJob(
+  jobId: number,
+  data: Partial<ExternalJobOfferCreate>
+): Promise<JobOfferDetail> {
+  const res = await fetch(`${API_URL}/jobs/${jobId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Erreur lors de la mise à jour');
+  return res.json();
+}
+
+export async function fetchGmailAlerts(): Promise<{ inserted: number; skipped: number; errors: number }> {
+  const res = await fetch(`${API_URL}/jobs/gmail/fetch`, { method: 'POST' });
+  if (!res.ok) throw new Error('Erreur lors de la récupération Gmail');
+  return res.json();
+}
