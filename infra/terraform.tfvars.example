@@ -3,6 +3,8 @@ project_id   = ""
 region       = "fr-par"
 zone         = "fr-par-1"
 cors_origins = ""
+scw_access_key = "SCWxxxxxxxxxxxxxxxx"
+scw_secret_key = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 # Secrets
 gemini_api_key               = ""
