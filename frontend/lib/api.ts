@@ -65,6 +65,9 @@ export async function getJobs(filters: JobFilters): Promise<JobListResponse> {
   if (filters.status)        params.set('status', filters.status);
   if (filters.postal_code)   params.set('postal_code', filters.postal_code);
   if (filters.max_days_old)  params.set('max_days_old', String(filters.max_days_old));
+  if (filters.email_sources?.length) {
+    filters.email_sources.forEach(s => params.append('email_sources', s));
+  }
 
   const response = await fetch(`${API_URL}/jobs?${params.toString()}`);
 
