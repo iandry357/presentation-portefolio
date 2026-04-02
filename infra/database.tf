@@ -9,6 +9,9 @@ resource "scaleway_rdb_instance" "main" {
   volume_type        = "sbs_5k"
   encryption_at_rest = true
 
+  backup_schedule_frequency = 72
+  backup_schedule_retention = 3
+
   lifecycle {
     prevent_destroy = true
   }
