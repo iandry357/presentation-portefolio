@@ -56,6 +56,7 @@ async def list_jobs(
     hide_consulted: bool = Query(default=False),
     postal_code: Optional[str] = Query(default=None),
     max_days_old: Optional[int] = Query(default=None),
+    email_sources: Optional[list[str]] = Query(default=None),
 ):
     filters = []
 
@@ -74,6 +75,9 @@ async def list_jobs(
     if max_days_old:
         cutoff = datetime.utcnow() - timedelta(days=max_days_old)
         filters.append(JobOffer.ft_published_at >= cutoff)
+
+    if email_sources:
+        filters.append(JobOffer.source_offer.in_(email_sources))
 
     # Compter le total
     count_query = select(func.count()).select_from(JobOffer)

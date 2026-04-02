@@ -100,6 +100,7 @@ export interface JobFilters {
   max_days_old?: number;
   page: number;
   page_size: number;
+  email_sources?: string[];
 }
 
 export interface ExternalJobOfferCreate {
