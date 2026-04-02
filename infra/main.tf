@@ -21,4 +21,6 @@ provider "scaleway" {
   region     = var.region
   zone       = var.zone
   project_id = var.project_id
+  access_key = var.scw_access_key
+  secret_key = var.scw_secret_key
 }
