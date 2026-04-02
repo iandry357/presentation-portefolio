@@ -12,10 +12,9 @@ from app.routers import feedback
 from app.routers import session
 
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
-# from app.scheduler.job_pipeline import schedule_pipeline
-from scheduler.job_pipeline import schedule_pipeline
+# from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# from apscheduler.triggers.cron import CronTrigger
+# from scheduler.job_pipeline import schedule_pipeline
 
 from app.core.logging_config import setup_logging
 setup_logging()
@@ -38,17 +37,17 @@ async def lifespan(app: FastAPI):
         raise Exception("Database connection failed")
 
     # Scheduler pipeline jobs (prod uniquement)
-    scheduler = AsyncIOScheduler()
-    if settings.ENVIRONMENT == "production":
-        scheduler.add_job(schedule_pipeline, CronTrigger(hour="8,13,18"))
-        scheduler.start()
-        logger.info("✅ Scheduler démarré : pipeline jobs 3x/jour (8h, 13h, 18h)")
+    # scheduler = AsyncIOScheduler()
+    # if settings.ENVIRONMENT == "production":
+    #     scheduler.add_job(schedule_pipeline, CronTrigger(hour="8,13,18"))
+    #     scheduler.start()
+    #     logger.info("✅ Scheduler démarré : pipeline jobs 3x/jour (8h, 13h, 18h)")
     
     yield
     
     # Shutdown
-    if settings.ENVIRONMENT == "production":
-        scheduler.shutdown()
+    # if settings.ENVIRONMENT == "production":
+    #     scheduler.shutdown()
     # Shutdown
     logger.info("Shutting down Portfolio RAG API...")
     await close_db()
