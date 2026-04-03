@@ -2,17 +2,30 @@ from app.core.config import settings
 import os
 os.environ.setdefault("USER_AGENT", settings.USER_AGENT)
 
-from langchain_openai import ChatOpenAI
-from langchain_mistralai import ChatMistralAI
-from langchain_community.utilities import GoogleSerperAPIWrapper
-from langchain_community.document_loaders import WebBaseLoader
+# from langchain_openai import ChatOpenAI
+# from langchain_mistralai import ChatMistralAI
+# from langchain_community.utilities import GoogleSerperAPIWrapper
+# from langchain_community.document_loaders import WebBaseLoader
 
+def _get_langchain():
+    from langchain_openai import ChatOpenAI
+    from langchain_mistralai import ChatMistralAI
+    return ChatOpenAI, ChatMistralAI
+
+def _get_serper():
+    from langchain_community.utilities import GoogleSerperAPIWrapper
+    return GoogleSerperAPIWrapper
+
+def _get_web_loader():
+    from langchain_community.document_loaders import WebBaseLoader
+    return WebBaseLoader
 
 # ------------------------------------------------------------
 # Modèles
 # ------------------------------------------------------------
 
-def make_discovery_llm() -> ChatOpenAI:
+def make_discovery_llm():
+    ChatOpenAI, _ = _get_langchain()
     """Agent 1 — extraction factuelle identité officielle."""
     return ChatOpenAI(
         model="gpt-4o-mini",
@@ -21,7 +34,8 @@ def make_discovery_llm() -> ChatOpenAI:
     )
 
 
-def make_extractor_llm() -> ChatMistralAI:
+def make_extractor_llm():
+    _, ChatMistralAI = _get_langchain()
     """Agent 2 — extraction légale, activité, image employeur."""
     return ChatMistralAI(
         model="mistral-small-latest",
@@ -30,7 +44,8 @@ def make_extractor_llm() -> ChatMistralAI:
     )
 
 
-def make_synthesizer_llm() -> ChatMistralAI:
+def make_synthesizer_llm():
+    _, ChatMistralAI = _get_langchain()
     """Agent 3 — rédaction mémo Markdown.
     magistral-small en prod, mistral-small en dev."""
     model = (
@@ -49,7 +64,8 @@ def make_synthesizer_llm() -> ChatMistralAI:
 # Outils
 # ------------------------------------------------------------
 
-def make_serper_tool() -> GoogleSerperAPIWrapper:
+def make_serper_tool():
+    GoogleSerperAPIWrapper = _get_serper()
     """Recherche web Serper — 5 résultats max pour contrôler les tokens."""
     return GoogleSerperAPIWrapper(
         serper_api_key=settings.SERPER_API_KEY,
@@ -58,6 +74,7 @@ def make_serper_tool() -> GoogleSerperAPIWrapper:
 
 
 def scrape_url(url: str, max_chars: int = None) -> str:
+    WebBaseLoader = _get_web_loader()
     """
     Browse une URL et retourne le texte brut tronqué.
     Retourne une chaîne vide si la page est inaccessible.

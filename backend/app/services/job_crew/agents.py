@@ -1,11 +1,15 @@
-from crewai import Agent, LLM
 from app.core.config import settings
+
+def _get_crewai():
+    from crewai import Agent, LLM
+    return Agent, LLM
 
 # ============================================================================
 # LLMs par environnement
 # ============================================================================
 
-def _llm_parser() -> LLM:
+def _llm_parser():
+    _, LLM = _get_crewai()
     """GPT-5-nano en dev, GPT-5-mini en prod."""
     model = (
         "openai/gpt-5-mini"    # prod
@@ -16,7 +20,8 @@ def _llm_parser() -> LLM:
     return LLM(model=model, api_key=settings.OPENAI_API_KEY)
 
 
-def _llm_analyste() -> LLM:
+def _llm_analyste():
+    _, LLM = _get_crewai()
     """Magistral-small pour les deux environnements."""
     return LLM(
         model="mistral/magistral-small-latest",
@@ -25,7 +30,8 @@ def _llm_analyste() -> LLM:
     )
 
 
-def _llm_redacteur() -> LLM:
+def _llm_redacteur():
+    _, LLM = _get_crewai()
     """Mistral-small en dev, Mistral-large en prod."""
     model = (
         "mistral/mistral-large-latest"
@@ -39,7 +45,8 @@ def _llm_redacteur() -> LLM:
 # Agents
 # ============================================================================
 
-def build_parser_agent() -> Agent:
+def build_parser_agent():
+    Agent, _ = _get_crewai()
     return Agent(
         role="Parseur d'offres d'emploi",
         goal=(
@@ -57,7 +64,8 @@ def build_parser_agent() -> Agent:
     )
 
 
-def build_analyste_agent(profile_text: str) -> Agent:
+def build_analyste_agent(profile_text: str):
+    Agent, _ = _get_crewai()
     return Agent(
         role="Analyste de compatibilité profil/offre",
         goal=(
@@ -74,7 +82,8 @@ def build_analyste_agent(profile_text: str) -> Agent:
     )
 
 
-def build_redacteur_agent() -> Agent:
+def build_redacteur_agent():
+    Agent, _ = _get_crewai()
     return Agent(
         role="Rédacteur de fiches synthétiques",
         goal=(

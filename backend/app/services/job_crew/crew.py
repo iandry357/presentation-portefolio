@@ -1,6 +1,10 @@
 import json
 import logging
-from crewai import Crew, Process
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+# from crewai import Crew, Process
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services.job_crew.agents import (
@@ -15,13 +19,24 @@ from app.services.job_crew.tasks import (
 )
 
 from langsmith import traceable
-from langsmith import get_current_run_tree
+# from langsmith import get_current_run_tree
 
 # from langfuse.callback import CallbackHandler as LangfuseCallbackHandler
-from langfuse.langchain import CallbackHandler as LangfuseCallbackHandler
-from app.core.config import settings
+# from langfuse.langchain import CallbackHandler as LangfuseCallbackHandler
 
-logger = logging.getLogger(__name__)
+def _get_crewai():
+    from crewai import Crew, Process
+    return Crew, Process
+
+def _get_langsmith():
+    from langsmith import traceable, get_current_run_tree
+    return traceable, get_current_run_tree
+
+def _get_langfuse():
+    from langfuse.langchain import CallbackHandler as LangfuseCallbackHandler
+    return LangfuseCallbackHandler
+
+
 
 
 # ============================================================================
@@ -82,6 +97,9 @@ async def run_enrichment_crew(
     initial_prompt: str,
     instruction: str = None,
 ) -> dict:
+    Crew, Process = _get_crewai()
+    LangfuseCallbackHandler = _get_langfuse()
+    _, get_current_run_tree = _get_langsmith()
     """
     Lance le Crew d'enrichissement pour une offre.
 
