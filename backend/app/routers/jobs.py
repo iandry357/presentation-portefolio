@@ -26,7 +26,7 @@ from app.schemas.jobs import (
     JobNotesUpdate,
     ExternalJobOfferCreate,
 )
-from app.services.job_crew.crew import run_enrichment_crew
+# from app.services.job_crew.crew import run_enrichment_crew
 from app.services.job_scoring import build_profile_text
 
 from app.core.database import get_db_session
@@ -247,6 +247,7 @@ async def enrich_job(
     job_id: int,
     db: AsyncSession = Depends(get_db),
 ):
+    from app.services.job_crew.crew import run_enrichment_crew
     offer = await db.get(JobOffer, job_id)
     if not offer:
         raise HTTPException(status_code=404, detail="Offre introuvable")
@@ -313,6 +314,7 @@ async def recalcul_job(
     body: RecalculRequest,
     db: AsyncSession = Depends(get_db),
 ):
+    from app.services.job_crew.crew import run_enrichment_crew
     result = await db.execute(
         select(JobEnriched).where(JobEnriched.job_offer_id == job_id)
     )

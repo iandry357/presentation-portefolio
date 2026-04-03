@@ -1,12 +1,18 @@
-from crewai import Task
-from crewai.agents.agent_builder.base_agent import BaseAgent
+# from crewai import Task
+# from crewai.agents.agent_builder.base_agent import BaseAgent
+
+def _get_crewai_task():
+    from crewai import Task
+    from crewai.agents.agent_builder.base_agent import BaseAgent
+    return Task, BaseAgent
 
 
 # ============================================================================
 # Task 1 - Parser
 # ============================================================================
 
-def build_parser_task(agent: BaseAgent, offer_text: str) -> Task:
+def build_parser_task(agent, offer_text: str):
+    Task, _ = _get_crewai_task()
     return Task(
         description=(
             f"Analyse cette offre d'emploi et extrais les informations suivantes "
@@ -39,7 +45,8 @@ def build_parser_task(agent: BaseAgent, offer_text: str) -> Task:
 # Task 2 - Analyste
 # ============================================================================
 
-def build_analyste_task(agent: BaseAgent, context_tasks: list) -> Task:
+def build_analyste_task(agent, context_tasks: list):
+    Task, _ = _get_crewai_task()
     return Task(
         description=(
             "À partir du résultat du parsing de l'offre (fourni en contexte), analyse la compatibilité "
@@ -66,10 +73,11 @@ def build_analyste_task(agent: BaseAgent, context_tasks: list) -> Task:
 # ============================================================================
 
 def build_redacteur_task(
-    agent: BaseAgent,
+    agent,
     context_tasks: list,
     instruction: str = None,
-) -> Task:
+):
+    Task, _ = _get_crewai_task()
     base_description = (
         "À partir du parsing et de l'analyse de compatibilité, "
         "rédige une fiche synthétique de l'offre en français. "
