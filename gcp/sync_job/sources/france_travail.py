@@ -114,6 +114,46 @@ def fetch_offers(
     logger.info(f"{len(offers)} offre(s) récupérée(s) pour ROME={rome_codes}")
     return offers
 
+def fetch_offers_by_keywords(
+    client_id: str,
+    client_secret: str,
+    keywords: str,
+    region: str,
+    date_min: str,
+    date_max: str,
+    range_start: int = 0,
+    range_end: int = 99,
+) -> list[dict]:
+    """
+    Récupère les offres par mots-clés (bras 2).
+    Retourne la liste brute des résultats France Travail.
+    """
+    token = _get_token(client_id, client_secret)
+
+    params = {
+        "motsCles": keywords,
+        "region":   region,
+        "range":    f"{range_start}-{range_end}",
+        "minCreationDate": date_min,
+        "maxCreationDate": date_max,
+    }
+
+    resp = httpx.get(
+        OFFRES_URL,
+        params=params,
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+        timeout=30,
+    )
+
+    if resp.status_code == 204:
+        logger.info(f"Aucune offre pour motsCles='{keywords}' [{date_min} → {date_max}]")
+        return []
+
+    resp.raise_for_status()
+    data = resp.json()
+    offers = data.get("resultats", [])
+    logger.info(f"{len(offers)} offre(s) récupérée(s) pour motsCles='{keywords}'")
+    return offers
 
 # ============================================================================
 # Parsing salaire
