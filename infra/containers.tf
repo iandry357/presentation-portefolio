@@ -13,7 +13,7 @@ resource "scaleway_container" "backend" {
   port           = 8080
   protocol       = "http1"
   privacy        = "public"
-  min_scale      = 0
+  min_scale      = 1
   max_scale      = 2
   memory_limit   = 1024
   cpu_limit      = 500
