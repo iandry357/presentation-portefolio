@@ -48,6 +48,8 @@ import {
   JobOfferDetail,
   JobEnriched,
   JobFilters,
+  ExploreResponse,
+  FilterOptions,
 } from '@/types';
 
 // ============================================================================
@@ -543,4 +545,43 @@ export async function fetchGmailAlerts(): Promise<{ inserted: number; skipped: n
   const res = await fetch(`${API_URL}/jobs/gmail/fetch`, { method: 'POST' });
   if (!res.ok) throw new Error('Erreur lors de la récupération Gmail');
   return res.json();
+}
+
+// ============================================================================
+// Explore — Marché BigQuery
+// ============================================================================
+
+export async function getExploreOffers(params: {
+  page?: number;
+  page_size?: number;
+  source?: string;
+  type_contrat?: string;
+  localisation_libelle?: string;
+  periode_jours?: number;
+  titre?: string;
+}): Promise<ExploreResponse> {
+  const p = new URLSearchParams();
+  if (params.page)               p.set('page', String(params.page));
+  if (params.page_size)          p.set('page_size', String(params.page_size));
+  if (params.source)             p.set('source', params.source);
+  if (params.type_contrat)       p.set('type_contrat', params.type_contrat);
+  if (params.localisation_libelle) p.set('localisation_libelle', params.localisation_libelle);
+  if (params.periode_jours)      p.set('periode_jours', String(params.periode_jours));
+  if (params.titre)              p.set('titre', params.titre);
+
+  const response = await fetch(`${API_URL}/explore?${p.toString()}`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getExploreFilters(): Promise<FilterOptions> {
+  const response = await fetch(`${API_URL}/explore/filters`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
 }

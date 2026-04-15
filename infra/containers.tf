@@ -56,6 +56,7 @@ resource "scaleway_container" "backend" {
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
+    GCP_SERVICE_ACCOUNT_JSON     = var.gcp_service_account_json
   }
 
   lifecycle {

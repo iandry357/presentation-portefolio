@@ -272,3 +272,42 @@ export interface FeedbackCreateResponse {
   id: number;
   message: string;
 }
+
+
+// ============================================================================
+// Explore — Marché BigQuery
+// ============================================================================
+
+export interface ExploreOffer {
+  id_unique: string;
+  source: string;
+  titre: string;
+  entreprise_nom: string | null;
+  localisation_libelle: string | null;
+  type_contrat: string | null;
+  type_contrat_libelle: string | null;
+  experience_libelle: string | null;
+  salaire_libelle: string | null;
+  salaire_min: number | null;
+  salaire_max: number | null;
+  salaire_present: boolean;
+  code_rome: string | null;
+  libelle_rome: string | null;
+  url_offre: string | null;
+  date_publication: string | null;
+  date_collecte: string | null;
+}
+
+export interface ExploreResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  offers: ExploreOffer[];
+}
+
+export interface FilterOptions {
+  sources: string[];
+  types_contrat: string[];
+  regions: string[];
+}

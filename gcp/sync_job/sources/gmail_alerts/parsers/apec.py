@@ -47,8 +47,18 @@ class ApecParser(BaseParser):
             if not title:
                 continue
 
-            company_tag = div.find("a", style=lambda s: s and "#f38237" in s)
-            company = company_tag.get_text(strip=True) if company_tag else None
+            # company_tag = div.find("a", style=lambda s: s and "#f38237" in s)
+            # company = company_tag.get_text(strip=True) if company_tag else None
+            # Récupération entreprise depuis l'URL du logo
+            company = None
+            logo_img = div.find("img", src=lambda s: s and "/logo_" in s)
+            if logo_img:
+                src = logo_img.get("src", "")
+                # Extrait le nom depuis logo_NOM_ENTREPRISE_id1_id2.ext
+                import re
+                match = re.search(r"/logo_(.+?)_\d+_\d+\.", src)
+                if match:
+                    company = match.group(1).replace("_", " ").title()
 
             grey_links = div.find_all("a", style=lambda s: s and "#444444" in s)
             contract = grey_links[0].get("title", "").strip() if len(grey_links) >= 1 else None
