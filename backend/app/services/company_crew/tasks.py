@@ -153,7 +153,7 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
     logger.info(f"[discovery] Serper recherche 2 OK — {company_name}")
 
     # query3 = f"{company_name} actualités 2025 2026"
-    query3 = f"{company_name} data intelligence artificielle transformation digitale 2025 2026"
+    query3 = f"{company_name} actualités réflétant la data, l'intelligence artificielle, la transformation digitale 2025 2026"
     results3 = serper.run(query3)
     logger.info(f"[discovery] Serper recherche 3 OK — {company_name}")
 
