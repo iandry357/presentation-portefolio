@@ -10,6 +10,7 @@ interface ExploreFiltersProps {
     type_contrat: string;
     localisation_libelle: string;
     periode_jours: string;
+    entreprise_nom: string;
   };
   onChange: (key: string, value: string) => void;
   onReset: () => void;
@@ -92,6 +93,25 @@ export default function ExploreFilters({
           ))}
         </select>
       </div>
+
+      {/* Entreprise */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Entreprise
+        </label>
+        <select
+          value={values.entreprise_nom}
+          onChange={e => onChange("entreprise_nom", e.target.value)}
+          className="w-full border border-gray-200 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-gray-400"
+        >
+          <option value="">Toutes les entreprises</option>
+          
+          {filters.entreprise_nom.map(r => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
+      </div>
+
 
       {/* Région */}
       <div>

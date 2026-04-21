@@ -316,6 +316,8 @@ export async function generateCompany(
 export async function refreshCompany(id: number): Promise<void> {
   const response = await fetch(`${API_URL}/companies/${id}/refresh`, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
   });
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
@@ -559,6 +561,7 @@ export async function getExploreOffers(params: {
   localisation_libelle?: string;
   periode_jours?: number;
   titre?: string;
+  entreprise_nom?: string;
 }): Promise<ExploreResponse> {
   const p = new URLSearchParams();
   if (params.page)               p.set('page', String(params.page));
@@ -568,6 +571,7 @@ export async function getExploreOffers(params: {
   if (params.localisation_libelle) p.set('localisation_libelle', params.localisation_libelle);
   if (params.periode_jours)      p.set('periode_jours', String(params.periode_jours));
   if (params.titre)              p.set('titre', params.titre);
+  if (params.entreprise_nom)              p.set('entreprise_nom', params.entreprise_nom);
 
   const response = await fetch(`${API_URL}/explore?${p.toString()}`);
   if (!response.ok) {

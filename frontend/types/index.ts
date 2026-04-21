@@ -310,4 +310,5 @@ export interface FilterOptions {
   sources: string[];
   types_contrat: string[];
   regions: string[];
+  entreprise_nom: string[];
 }

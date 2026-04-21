@@ -56,6 +56,7 @@ def fetch_offers(
     localisation_libelle: Optional[str] = None,
     periode_jours: Optional[int] = None,
     titre: Optional[str] = None,
+    entreprise_nom: Optional[str] = None,
 ) -> dict:
     """
     Lecture paginée des offres depuis BigQuery avec filtres optionnels.
@@ -89,6 +90,10 @@ def fetch_offers(
     if titre:
         conditions.append("LOWER(titre) LIKE LOWER(@titre)")
         params.append(bigquery.ScalarQueryParameter("titre", "STRING", f"%{titre}%"))
+
+    if entreprise_nom:
+        conditions.append("entreprise_nom = @entreprise_nom")
+        params.append(bigquery.ScalarQueryParameter("entreprise_nom", "STRING", entreprise_nom))
 
     where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
 
@@ -166,7 +171,19 @@ def fetch_filter_options() -> dict:
         SELECT
             ARRAY_AGG(DISTINCT source IGNORE NULLS ORDER BY source) as sources,
             ARRAY_AGG(DISTINCT type_contrat IGNORE NULLS ORDER BY type_contrat) as types_contrat,
-            ARRAY_AGG(DISTINCT localisation_libelle IGNORE NULLS ORDER BY localisation_libelle) as regions
+            ARRAY_AGG(DISTINCT localisation_libelle IGNORE NULLS ORDER BY localisation_libelle) as regions,
+            # ARRAY_AGG(DISTINCT entreprise_nom IGNORE NULLS ORDER BY entreprise_nom) as entreprise_nom
+            ARRAY(
+                SELECT entreprise_nom
+                FROM (
+                    SELECT entreprise_nom, COUNT(*) as nb
+                    FROM {table}
+                    WHERE entreprise_nom IS NOT NULL
+                    GROUP BY entreprise_nom
+                    HAVING nb > 5
+                    ORDER BY nb DESC
+                )
+            ) as entreprise_nom
         FROM {table}
     """
 
@@ -175,4 +192,5 @@ def fetch_filter_options() -> dict:
         "sources": list(result.sources or []),
         "types_contrat": list(result.types_contrat or []),
         "regions": list(result.regions or []),
+        "entreprise_nom": list(result.entreprise_nom or []),
     }

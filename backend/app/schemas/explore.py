@@ -38,3 +38,4 @@ class FilterOptions(BaseModel):
     sources: list[str]
     types_contrat: list[str]
     regions: list[str]
+    entreprise_nom: list[str]

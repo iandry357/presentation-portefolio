@@ -152,7 +152,8 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
     results2 = serper.run(query2)
     logger.info(f"[discovery] Serper recherche 2 OK — {company_name}")
 
-    query3 = f"{company_name} actualités 2025 2026"
+    # query3 = f"{company_name} actualités 2025 2026"
+    query3 = f"{company_name} data intelligence artificielle transformation digitale 2025 2026"
     results3 = serper.run(query3)
     logger.info(f"[discovery] Serper recherche 3 OK — {company_name}")
 
@@ -179,12 +180,15 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
         "Entreprise : {company_name}\n\n"
         "Résultats recherche identité :\n{results1}\n\n"
         "Résultats recherche données financières :\n{results2}\n\n"
-        "Résultats recherche actualités :\n{results3}\n\n"
+        # "Résultats recherche actualités :\n{results3}\n\n"
+        "Résultats recherche actualités data & IA :\n{results3}\n\n"
         "Résultats recherche image employeur :\n{results4}\n\n"
         "Données annuaire officiel :\n{annuaire_text}\n\n"
         "Retourne un JSON correspondant exactement à ce schéma :\n{schema}\n\n"
         "IMPORTANT : copie le contenu brut de 'Résultats recherche actualités' "
-        "dans le champ 'serper_actualites' sans le modifier."),
+        # "dans le champ 'serper_actualites' sans le modifier."),
+        "dans le champ 'serper_actualites' sans le modifier. "
+        "Priorise les informations liées à la data, l'IA et la transformation digitale."),
     ])
 
     chain = prompt | llm | JsonOutputParser()
