@@ -144,20 +144,20 @@ def run_discovery_chain(company_name: str, run_name: str | None = None) -> dict:
     serper = make_serper_tool()
     llm = make_discovery_llm()
 
-    query1 = f"{company_name} SIREN site officiel LinkedIn"
+    query1 = f'"{company_name}" SIREN site officiel LinkedIn'
     results1 = serper.run(query1)
     logger.info(f"[discovery] Serper recherche 1 OK — {company_name}")
 
-    query2 = f"{company_name} chiffre affaires effectif secteur activité"
+    query2 = f'"{company_name}" chiffre affaires effectif secteur activité'
     results2 = serper.run(query2)
     logger.info(f"[discovery] Serper recherche 2 OK — {company_name}")
 
     # query3 = f"{company_name} actualités 2025 2026"
-    query3 = f"{company_name} actualités innovation data intelligence artificielle transformation digitale 2025 2026"
+    query3 = f'"{company_name}" actualités innovation data intelligence artificielle transformation digitale 2025 2026'
     results3 = serper.run(query3)
     logger.info(f"[discovery] Serper recherche 3 OK — {company_name}")
 
-    query4 = f"{company_name} avis employés culture entreprise valeurs"
+    query4 = f'"{company_name}" avis employés culture entreprise valeurs'
     results4 = serper.run(query4)
     logger.info(f"[discovery] Serper recherche 4 OK — {company_name}")
 
