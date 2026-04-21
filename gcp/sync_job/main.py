@@ -68,13 +68,15 @@ if __name__ == "__main__":
         logger.info("=" * 60)
 
         # DEBUG — dump HTML nouvelles sources
-        # from sources.gmail_alerts.reader import GmailReader
-        # debug_reader = GmailReader()
+        from sources.gmail_alerts.reader import GmailReader
+        debug_reader = GmailReader()
         # debug_reader.dump_html("contact@jobijoba.com", "/app/debug")
         # debug_reader.dump_html("jobs@free-work.com", "/app/debug")
         # debug_reader.dump_html("alerts@welcometothejungle.com", "/app/debug")
         # debug_reader.dump_html("donotreply@jobalert.indeed.com", "/app/debug")
         # debug_reader.dump_html("offres@diffusion.apec.fr", "/app/debug")
+        # debug_reader.dump_html("ne-pas-repondre@meteojob.com", "/app/debug")
+        # debug_reader.dump_html("mailer@jobleads.com", "/app/debug")
 
         gmail_service = GmailSyncService()
         gmail_result  = gmail_service.run(bq_client, BQ_TABLE_REF)

@@ -17,6 +17,8 @@ from .parsers.jobijoba import JobijobaParser
 from .parsers.freework import FreeworkParser
 from .parsers.wttj import WTTJParser
 from .parsers.indeed import IndeedParser
+from .parsers.jobleads import JobleadsParser
+from .parsers.meteojob import MeteojobParser
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +26,7 @@ logger = logging.getLogger(__name__)
 SENDER_MAP: dict[str, BaseParser] = {
     "nepasrepondre@offre.francetravail.fr": FranceTravailParser(),
     "jobalerts-noreply@linkedin.com":       LinkedInParser(),
+    "jobs-listings@linkedin.com":       LinkedInParser(),
     "offres@diffusion.apec.fr":             ApecParser(),
     "notification@emails.hellowork.com":    HelloworkParser(),
     "no-reply@alerts.talent.com":           TalentParser(),
@@ -31,6 +34,8 @@ SENDER_MAP: dict[str, BaseParser] = {
     "jobs@free-work.com":   FreeworkParser(),
     "alerts@welcometothejungle.com":    WTTJParser(),
     "donotreply@jobalert.indeed.com":   IndeedParser(),
+    "mailer@jobleads.com": JobleadsParser(),
+    "ne-pas-repondre@meteojob.com": MeteojobParser(),
 }
 
 

@@ -89,7 +89,7 @@ class FranceTravailParser(BaseParser):
 
             offers.append(OffreNormalisee(
                 ft_id=ft_id,
-                offer_url=None,
+                offer_url=raw_url,
                 title=title,
                 company=company,
                 location=location,
