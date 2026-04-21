@@ -121,6 +121,21 @@ class ExternalJobOfferCreate(BaseModel):
 
     published_at: datetime
 
+class JobOfferUpdate(BaseModel):
+    title:               Optional[str] = None
+    company_name:        Optional[str] = None
+    company_description: Optional[str] = None
+    location_label:      Optional[str] = None
+    description:         Optional[str] = None
+    source_offer:        Optional[str] = None
+    offer_url:           Optional[str] = None
+    contract_type:       Optional[str] = None
+    experience_label:    Optional[str] = None
+    work_time:           Optional[str] = None
+    salary_label:        Optional[str] = None
+    sector_label:        Optional[str] = None
+    published_at:        Optional[str] = None
+
 
 # ============================================================================
 # Réponses

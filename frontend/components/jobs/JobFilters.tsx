@@ -31,6 +31,14 @@ const MAX_DAYS_OPTIONS = [
   { value: '30', label: 'Moins de 30 jours' },
 ];
 
+const EMAIL_SOURCES = [
+  { value: 'email_france_travail', label: 'France Travail' },
+  { value: 'email_linkedin',       label: 'LinkedIn' },
+  { value: 'email_apec',           label: 'APEC' },
+  { value: 'email_hellowork',      label: 'Hellowork' },
+  { value: 'email_talent',         label: 'Talent.com' },
+];
+
 // ============================================================================
 // JobFilters component
 // ============================================================================
@@ -117,6 +125,58 @@ export default function JobFiltersPanel({ filters, onChange, onClose  }: JobFilt
         <label htmlFor="hide_consulted" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
           Masquer les consultées
         </label>
+      </div>
+      
+      {/* Alertes email */}
+      <div className="space-y-2 pt-1">
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="filter_email"
+            checked={(filters.email_sources?.length ?? 0) > 0}
+            onChange={e => {
+              if (!e.target.checked) {
+                update({ email_sources: undefined });
+              } else {
+                // Cocher = sélectionner toutes les sources par défaut
+                update({ email_sources: EMAIL_SOURCES.map(s => s.value) });
+              }
+            }}
+            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
+          />
+          <label htmlFor="filter_email" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+            Alertes email
+          </label>
+        </div>
+
+        {(filters.email_sources?.length ?? 0) > 0 && (
+          <div className="pl-6 space-y-1.5">
+            {EMAIL_SOURCES.map(source => (
+              <div key={source.value} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id={`source_${source.value}`}
+                  checked={filters.email_sources?.includes(source.value) ?? false}
+                  onChange={e => {
+                    const current = filters.email_sources ?? [];
+                    const updated = e.target.checked
+                      ? [...current, source.value]
+                      : current.filter(s => s !== source.value);
+                    // Si on décoche tout, on désactive le filtre email entièrement
+                    update({ email_sources: updated.length > 0 ? updated : undefined });
+                  }}
+                  className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
+                />
+                <label
+                  htmlFor={`source_${source.value}`}
+                  className="text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
+                >
+                  {source.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Reset */}
