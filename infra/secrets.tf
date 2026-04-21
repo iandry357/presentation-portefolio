@@ -68,3 +68,18 @@ resource "scaleway_secret_version" "langfuse_secret_key" {
   secret_id = scaleway_secret.langfuse_secret_key.id
   data      = var.langfuse_secret_key
 }
+
+# ============================================================================
+# GCP Service Account (créé manuellement en console)
+# ============================================================================
+
+data "scaleway_secret" "gcp_service_account" {
+  name       = "gcp-service-account-json"
+  project_id = var.project_id
+  region     = var.region
+}
+
+data "scaleway_secret_version" "gcp_service_account" {
+  secret_id = data.scaleway_secret.gcp_service_account.id
+  revision  = "latest"
+}

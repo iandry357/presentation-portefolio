@@ -54,6 +54,15 @@ class Settings(BaseSettings):
 
     cv_edit_secret_code: str = Field(default="dev123")
 
+    gmail_client_id: Optional[str] = None
+    gmail_client_secret: Optional[str] = None
+    gmail_refresh_token: Optional[str] = None
+
+    GCP_SERVICE_ACCOUNT_JSON: Optional[str] = None
+    BQ_PROJECT_ID: str = "gen-lang-client-0989575872"
+    BQ_DATASET: str = "emploi_marche"
+    BQ_TABLE: str = "offres_brutes"
+
 
     @property
     def is_dev(self) -> bool:

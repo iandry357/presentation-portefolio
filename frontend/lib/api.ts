@@ -48,6 +48,8 @@ import {
   JobOfferDetail,
   JobEnriched,
   JobFilters,
+  ExploreResponse,
+  FilterOptions,
 } from '@/types';
 
 // ============================================================================
@@ -65,6 +67,9 @@ export async function getJobs(filters: JobFilters): Promise<JobListResponse> {
   if (filters.status)        params.set('status', filters.status);
   if (filters.postal_code)   params.set('postal_code', filters.postal_code);
   if (filters.max_days_old)  params.set('max_days_old', String(filters.max_days_old));
+  if (filters.email_sources?.length) {
+    filters.email_sources.forEach(s => params.append('email_sources', s));
+  }
 
   const response = await fetch(`${API_URL}/jobs?${params.toString()}`);
 
@@ -311,6 +316,8 @@ export async function generateCompany(
 export async function refreshCompany(id: number): Promise<void> {
   const response = await fetch(`${API_URL}/companies/${id}/refresh`, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
   });
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
@@ -521,4 +528,64 @@ export async function initializeSession(sessionId: string): Promise<void> {
   } catch (error) {
     console.error("❌ Error initializing session:", error);
   }
+}
+
+export async function updateJob(
+  jobId: number,
+  data: Partial<ExternalJobOfferCreate>
+): Promise<JobOfferDetail> {
+  const res = await fetch(`${API_URL}/jobs/${jobId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Erreur lors de la mise à jour');
+  return res.json();
+}
+
+export async function fetchGmailAlerts(): Promise<{ inserted: number; skipped: number; errors: number }> {
+  const res = await fetch(`${API_URL}/jobs/gmail/fetch`, { method: 'POST' });
+  if (!res.ok) throw new Error('Erreur lors de la récupération Gmail');
+  return res.json();
+}
+
+// ============================================================================
+// Explore — Marché BigQuery
+// ============================================================================
+
+export async function getExploreOffers(params: {
+  page?: number;
+  page_size?: number;
+  source?: string;
+  type_contrat?: string;
+  localisation_libelle?: string;
+  periode_jours?: number;
+  titre?: string;
+  entreprise_nom?: string;
+}): Promise<ExploreResponse> {
+  const p = new URLSearchParams();
+  if (params.page)               p.set('page', String(params.page));
+  if (params.page_size)          p.set('page_size', String(params.page_size));
+  if (params.source)             p.set('source', params.source);
+  if (params.type_contrat)       p.set('type_contrat', params.type_contrat);
+  if (params.localisation_libelle) p.set('localisation_libelle', params.localisation_libelle);
+  if (params.periode_jours)      p.set('periode_jours', String(params.periode_jours));
+  if (params.titre)              p.set('titre', params.titre);
+  if (params.entreprise_nom)              p.set('entreprise_nom', params.entreprise_nom);
+
+  const response = await fetch(`${API_URL}/explore?${p.toString()}`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getExploreFilters(): Promise<FilterOptions> {
+  const response = await fetch(`${API_URL}/explore/filters`);
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+  return response.json();
 }

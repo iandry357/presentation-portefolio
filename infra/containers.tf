@@ -13,7 +13,7 @@ resource "scaleway_container" "backend" {
   port           = 8080
   protocol       = "http1"
   privacy        = "public"
-  min_scale      = 0
+  min_scale      = 1
   max_scale      = 2
   memory_limit   = 1024
   cpu_limit      = 500
@@ -56,6 +56,7 @@ resource "scaleway_container" "backend" {
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
+    GCP_SERVICE_ACCOUNT_JSON     = var.gcp_service_account_json
   }
 
   lifecycle {

@@ -184,3 +184,9 @@ variable "scw_secret_key" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_service_account_json" {
+  description = "GCP Service Account JSON pour BigQuery"
+  type        = string
+  sensitive   = true
+}

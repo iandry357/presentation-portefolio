@@ -12,6 +12,10 @@ import { updateJobStatus, enrichJob, FT_BASE_URL } from '@/lib/api';
 // import CompanySection from '@/components/jobs/CompanyDetail';
 import CompanySection from '@/components/jobs/CompanySection';
 
+import { useRouter } from 'next/navigation';
+import ExternalJobForm from '@/components/jobs/ExternalJobForm';
+import { ExternalJobOfferCreate } from '@/types';
+
 // ============================================================================
 // Section helper
 // ============================================================================
@@ -66,6 +70,8 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
   const [companyProfileId, setCompanyProfileId] = useState<number | null>(
     offer.company_profile_id
   );
+  const router = useRouter();
+  const [editOpen, setEditOpen] = useState(false);
 
   // États des accordéons
   const [ficheOpen, setFicheOpen] = useState(false);
@@ -121,6 +127,28 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
     if (isEnriching) setFicheOpen(true);
   }, [isEnriching]);
 
+  const editInitialValues: Partial<ExternalJobOfferCreate> = {
+    title:               offer.title ?? '',
+    company_name:        offer.company_name ?? '',
+    company_description: offer.company_description ?? '',
+    location_label:      offer.location_label ?? '',
+    description:         offer.description ?? '',
+    source_offer:        offer.source_offer ?? '',
+    // offer_url:           offer.offer_url ?? offer.ft_id
+    //                       ? `${FT_BASE_URL}${offer.ft_id}`
+    //                       : '',
+    offer_url:           offer.offer_url ?? (offer.ft_id ? `${FT_BASE_URL}${offer.ft_id}` : ''),
+    contract_type:       offer.contract_label ?? '',
+    experience_label:    offer.experience_label ?? '',
+    work_time:           offer.work_time ?? '',
+    salary_label:        offer.salary_label ?? '',
+    sector_label:        offer.sector_label ?? '',
+    published_at:        offer.ft_published_at
+                          ? offer.ft_published_at.split('T')[0]
+                          : '',
+    trigger_enrichment:  false,
+  };
+
   return (
     <div className="space-y-4">
 
@@ -175,6 +203,12 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
                 Enregistré
               </span>
             )}
+            <button
+              onClick={() => setEditOpen(true)}
+              className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
+            >
+              Modifier
+            </button>
           </div>
         </div>
 
@@ -457,6 +491,43 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           />
         </CollapsibleSection>
       </div>
+
+      {editOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-8 px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-2xl">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                Modifier les informations
+              </h2>
+              <button
+                onClick={() => setEditOpen(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            <div className="px-6 py-4">
+              {/* <ExternalJobForm
+                initialValues={editInitialValues}
+                onSuccess={() => {
+                  setEditOpen(false);
+                  router.refresh();
+                }}
+                onCancel={() => setEditOpen(false)}
+              /> */}
+              <ExternalJobForm
+                jobId={offer.id}
+                initialValues={editInitialValues}
+                onSuccess={() => {
+                  setEditOpen(false);
+                  router.refresh();
+                }}
+                onCancel={() => setEditOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
 

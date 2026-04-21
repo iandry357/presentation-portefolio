@@ -11,6 +11,8 @@ from app.routers.jobs import router as jobs_router
 from app.routers import feedback
 from app.routers import session
 
+from app.routers.explore import router as explore_router
+
 
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
 # from apscheduler.triggers.cron import CronTrigger
@@ -73,6 +75,7 @@ app.include_router(jobs_router)
 app.include_router(company_router)
 app.include_router(feedback.router)
 app.include_router(session.router)
+app.include_router(explore_router)
 
 @app.get("/")
 async def root():
