@@ -95,7 +95,7 @@ export default function ExploreFilters({
       </div>
 
       {/* Entreprise */}
-      <div>
+      {/* <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">
           Entreprise
         </label>
@@ -110,6 +110,18 @@ export default function ExploreFilters({
             <option key={r} value={r}>{r}</option>
           ))}
         </select>
+      </div> */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Entreprise
+        </label>
+        <input
+          type="text"
+          value={values.entreprise_nom}
+          onChange={e => onChange("entreprise_nom", e.target.value)}
+          placeholder="Rechercher une entreprise..."
+          className="w-full border border-gray-200 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-gray-400"
+        />
       </div>
 
 
