@@ -92,8 +92,10 @@ def fetch_offers(
         params.append(bigquery.ScalarQueryParameter("titre", "STRING", f"%{titre}%"))
 
     if entreprise_nom:
-        conditions.append("entreprise_nom = @entreprise_nom")
-        params.append(bigquery.ScalarQueryParameter("entreprise_nom", "STRING", entreprise_nom))
+        # conditions.append("entreprise_nom = @entreprise_nom")
+        # params.append(bigquery.ScalarQueryParameter("entreprise_nom", "STRING", entreprise_nom))
+        conditions.append("LOWER(entreprise_nom) LIKE LOWER(@entreprise_nom)")
+        params.append(bigquery.ScalarQueryParameter("entreprise_nom", "STRING", f"%{entreprise_nom}%"))
 
     where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
 
