@@ -15,6 +15,8 @@ from google.cloud import bigquery
 
 from .excluded_companies import get_excluded
 
+from .bigquery_client import _get_bq_client
+
 logger = logging.getLogger(__name__)
 
 PROJECT  = os.environ.get("BQ_PROJECT_ID", "gen-lang-client-0989575872")
@@ -36,7 +38,8 @@ def _source_filter(source: str) -> str:
 
 
 def _run(sql: str) -> list[dict[str, Any]]:
-    client = bigquery.Client(project=PROJECT)
+    # client = bigquery.Client(project=PROJECT)
+    client = _get_bq_client()
     job_config = bigquery.QueryJobConfig(
         maximum_bytes_billed=1024 * 1024 * 1024,  # 1 GB
     )
@@ -116,7 +119,7 @@ CATALOGUE: dict[str, dict] = {
     "Q11": {
         "titre":       "Entreprises finales en recrutement actif data/IA",
         "description": "Entreprises non-ESN avec plusieurs postes data/IA ouverts sur la période",
-        "colonnes":    ["entreprise_nom", "nb_titres_distincts", "nb_sources", "premiere_offre", "derniere_offre", "duree_jours"],
+        "colonnes":    ["entreprise_nom", "nb_titres_distincts", "nb_sources", "premiere_offre", "derniere_offre", "duree_jours", "score_signal"],
         "rendu":       "tableau",
     },
 }
@@ -300,7 +303,12 @@ def _q11(days: int, src: str) -> str:
       COUNT(DISTINCT source) AS nb_sources,
       MIN(date_publication) AS premiere_offre,
       MAX(date_publication) AS derniere_offre,
-      DATE_DIFF(MAX(date_publication), MIN(date_publication), DAY) AS duree_jours
+      DATE_DIFF(MAX(date_publication), MIN(date_publication), DAY) AS duree_jours,
+      ROUND(
+        (COUNT(DISTINCT LOWER(TRIM(titre))) * 2)
+        + (COUNT(DISTINCT source) * 3)
+        + (DATE_DIFF(MAX(date_publication), MIN(date_publication), DAY) / 5)
+      , 1) AS score_signal
     FROM {TABLE}
     WHERE
       date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)

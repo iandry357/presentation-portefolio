@@ -132,7 +132,7 @@ export const QUERIES: QueryMeta[] = [
     id: "Q11",
     titre: "Entreprises finales actives data/IA",
     description: "Entreprises non-ESN avec plusieurs postes data/IA ouverts",
-    colonnes: ["entreprise_nom", "nb_titres_distincts", "nb_sources", "premiere_offre", "derniere_offre", "duree_jours"],
+    colonnes: ["entreprise_nom", "nb_titres_distincts", "nb_sources", "premiere_offre", "derniere_offre", "duree_jours", "score_signal"],
     rendu: "tableau",
   },
 ]
@@ -191,5 +191,15 @@ export async function toggleExcludedCompany(
     }
   )
   if (!res.ok) throw new Error(`Erreur API : ${res.status}`)
+  return res.json()
+}
+
+export async function batchExcludeCompanies(noms: string[]): Promise<ExcludedCompaniesResponse> {
+  const res = await fetch(`${API}/market/excluded-companies/batch`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ noms }),
+  })
+  if (!res.ok) throw new Error("Erreur batch exclusion")
   return res.json()
 }

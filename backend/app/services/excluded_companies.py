@@ -10,6 +10,8 @@ import os
 import time
 
 from google.cloud import storage
+from google.oauth2 import service_account
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +23,21 @@ _cache: list[str] = []
 _cache_ts: float  = 0.0
 
 
+# def _client() -> storage.Client:
+#     return storage.Client()
+
 def _client() -> storage.Client:
-    return storage.Client()
+    if not settings.GCP_SERVICE_ACCOUNT_JSON:
+        raise RuntimeError("GCP_SERVICE_ACCOUNT_JSON non configuré")
+    sa_info = json.loads(settings.GCP_SERVICE_ACCOUNT_JSON)
+    credentials = service_account.Credentials.from_service_account_info(
+        sa_info,
+        scopes=["https://www.googleapis.com/auth/devstorage.read_write"],
+    )
+    return storage.Client(
+        project=settings.BQ_PROJECT_ID,
+        credentials=credentials,
+    )
 
 
 def _load_from_gcs() -> list[str]:
@@ -92,3 +107,13 @@ def _invalidate_cache(updated: list[str]) -> None:
     global _cache, _cache_ts
     _cache    = updated
     _cache_ts = time.monotonic()
+
+def add_excluded_batch(noms: list[str]) -> list[str]:
+    """Ajoute plusieurs entreprises en une seule écriture GCS. Idempotent."""
+    entreprises = get_excluded(force_refresh=True)
+    nouveaux    = [n.strip() for n in noms if n.strip() and n.strip() not in entreprises]
+    if nouveaux:
+        entreprises = sorted([*entreprises, *nouveaux])
+        _save_to_gcs(entreprises)
+        _invalidate_cache(entreprises)
+    return entreprises

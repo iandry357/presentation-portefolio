@@ -75,3 +75,6 @@ class ExcludedCompanyAdd(BaseModel):
 class ExcludedCompaniesResponse(BaseModel):
     entreprises: list[str]
     total: int
+
+class ExcludedCompanyBatchAdd(BaseModel):
+    noms: list[str]

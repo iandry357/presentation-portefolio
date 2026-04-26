@@ -9,6 +9,7 @@ from ..schemas.market import (
     MarketQueryResult,
     PERIODES,
     SOURCES,
+    ExcludedCompanyBatchAdd,
 )
 from ..services import excluded_companies as excl_svc
 from ..services.market_queries import CATALOGUE, execute_query
@@ -24,6 +25,40 @@ def get_catalogue():
     """Retourne la liste des requêtes disponibles avec leurs métadonnées."""
     return {"queries": CATALOGUE}
 
+# ── Entreprises exclues ───────────────────────────────────────────────────────
+
+@router.get("/excluded-companies", response_model=ExcludedCompaniesResponse)
+def get_excluded():
+    entreprises = excl_svc.get_excluded()
+    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
+
+
+@router.post("/excluded-companies", response_model=ExcludedCompaniesResponse)
+def add_excluded(body: ExcludedCompanyAdd):
+    try:
+        entreprises = excl_svc.add_excluded(body.nom)
+    except Exception as e:
+        logger.error(f"[market] Erreur ajout entreprise exclue : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
+    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
+
+@router.post("/excluded-companies/batch", response_model=ExcludedCompaniesResponse)
+def add_excluded_batch(body: ExcludedCompanyBatchAdd):
+    try:
+        entreprises = excl_svc.add_excluded_batch(body.noms)
+    except Exception as e:
+        logger.error(f"[market] Erreur ajout batch entreprises exclues : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
+    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
+
+@router.delete("/excluded-companies/{nom}", response_model=ExcludedCompaniesResponse)
+def remove_excluded(nom: str):
+    try:
+        entreprises = excl_svc.remove_excluded(nom)
+    except Exception as e:
+        logger.error(f"[market] Erreur suppression entreprise exclue : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
+    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
 
 # ── Exécution requête ─────────────────────────────────────────────────────────
 
@@ -64,30 +99,3 @@ def run_query(
         params=params,
     )
 
-
-# ── Entreprises exclues ───────────────────────────────────────────────────────
-
-@router.get("/excluded-companies", response_model=ExcludedCompaniesResponse)
-def get_excluded():
-    entreprises = excl_svc.get_excluded()
-    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
-
-
-@router.post("/excluded-companies", response_model=ExcludedCompaniesResponse)
-def add_excluded(body: ExcludedCompanyAdd):
-    try:
-        entreprises = excl_svc.add_excluded(body.nom)
-    except Exception as e:
-        logger.error(f"[market] Erreur ajout entreprise exclue : {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
-    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
-
-
-@router.delete("/excluded-companies/{nom}", response_model=ExcludedCompaniesResponse)
-def remove_excluded(nom: str):
-    try:
-        entreprises = excl_svc.remove_excluded(nom)
-    except Exception as e:
-        logger.error(f"[market] Erreur suppression entreprise exclue : {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
-    return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
