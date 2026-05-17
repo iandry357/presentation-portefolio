@@ -19,7 +19,7 @@ from googleapiclient.discovery import build
 logger = logging.getLogger(__name__)
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
-GMAIL_NEWER_THAN = "2d"
+GMAIL_NEWER_THAN = "3d"
 
 GCP_PROJECT_ID = os.environ.get("BQ_PROJECT_ID", "")
 GMAIL_TOKEN_SECRET_NAME = "gmail-token"
