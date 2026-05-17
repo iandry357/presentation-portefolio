@@ -40,9 +40,9 @@ if __name__ == "__main__":
     logger.info(f"Cloud Run Job démarré — MODE={MODE}")
 
     if MODE == "sync":
-        # logger.info("Lancement sync France Travail → BigQuery")
-        # from sync import main
-        # main()
+        logger.info("Lancement sync France Travail → BigQuery")
+        from sync import main
+        main()
 
         # Construction bq_client pour Gmail
         from google.cloud import bigquery
