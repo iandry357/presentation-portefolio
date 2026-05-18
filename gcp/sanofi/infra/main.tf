@@ -95,6 +95,12 @@ resource "google_service_account_key" "terraform_sanofi_key" {
   service_account_id = google_service_account.terraform_sanofi.name
 }
 
+resource "google_project_iam_member" "terraform_sanofi_key_admin" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountKeyAdmin"
+  member  = "serviceAccount:${google_service_account.terraform_sanofi.email}"
+}
+
 # ─────────────────────────────────────────
 # BigQuery Datasets
 # ─────────────────────────────────────────
