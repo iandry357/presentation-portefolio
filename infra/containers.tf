@@ -39,6 +39,15 @@ resource "scaleway_container" "backend" {
     POSTGRES_USER             = var.db_user
     RETRIEVAL_SCORE_THRESHOLD = "0.1"
     RETRIEVAL_TOP_K           = "5"
+    CHROMA_HOST                              = "51.68.130.23"
+    CHROMA_PORT                              = "8000"
+    CHROMA_USER                              = "portefolio"
+    CHROMA_COLLECTION_SANOFI_CLINICAL_TRIALS = "sanofi_clinical_trials"
+    CHROMA_COLLECTION_SANOFI_PUBMED          = "sanofi_pubmed"
+    CHROMA_COLLECTION_SANOFI_NEWS            = "sanofi_news"
+    BQ_DATASET_SANOFI_CLINICAL_TRIALS        = "sanofi_clinical_trials"
+    BQ_DATASET_SANOFI_PUBMED                 = "sanofi_pubmed"
+    BQ_DATASET_SANOFI_NEWS                   = "sanofi_news"
   }
 
   secret_environment_variables = {
@@ -57,6 +66,8 @@ resource "scaleway_container" "backend" {
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
     GCP_SERVICE_ACCOUNT_JSON     = var.gcp_service_account_json
+    GCP_SERVICE_ACCOUNT_JSON_SANOFI = data.scaleway_secret_version.gcp_sa_sanofi.data
+    CHROMA_PASSWORD                 = var.chroma_password
   }
 
   lifecycle {

@@ -71,7 +71,7 @@ services:
       - GMAIL_REFRESH_TOKEN=${GMAIL_REFRESH_TOKEN}
       - GCP_SERVICE_ACCOUNT_JSON=${GCP_SERVICE_ACCOUNT_JSON}
 
-      - CHROMA_HOST=portefolio-chromadb
+      - CHROMA_HOST=51.68.130.23
       - CHROMA_PORT=8000
       - CHROMA_USER=portefolio
       - CHROMA_PASSWORD=${CHROMA_PASSWORD}
@@ -82,6 +82,7 @@ services:
       - BQ_DATASET_SANOFI_PUBMED=sanofi_pubmed
       - BQ_DATASET_SANOFI_NEWS=sanofi_news
       - GCP_SA_KEY_PATH_SANOFI=gcp_sa_sanofi.json
+      - GCP_SERVICE_ACCOUNT_JSON_SANOFI=${GCP_SERVICE_ACCOUNT_JSON_SANOFI}
     ports:
       - "8000:8000"
     volumes:

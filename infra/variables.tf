@@ -190,3 +190,9 @@ variable "gcp_service_account_json" {
   type        = string
   sensitive   = true
 }
+
+variable "chroma_password" {
+  description = "ChromaDB auth password"
+  type        = string
+  sensitive   = true
+}
