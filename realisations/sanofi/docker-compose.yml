@@ -1,0 +1,31 @@
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sanofi-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ./gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
+    networks:
+      - portefolio-network
+    restart: "no"
+
+  # scheduler:                          # À activer post-POC
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: sanofi-scheduler
+  #   command: python pipeline/scheduler.py
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ./gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
+  #   networks:
+  #     - portefolio-network
+  #   restart: unless-stopped
+
+networks:
+  portefolio-network:
+    external: true
