@@ -1,0 +1,129 @@
+name: portfolio-rag
+
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: portfolio_rag_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"  # Port externe 5433 par défaut pour éviter conflit
+    volumes:
+      - portfolio_rag_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - portfolio_rag_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio_rag_backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - PYTHONPATH=/app 
+
+      # Database
+      - DATABASE_URL=postgresql+asyncpg://cvuser:cvpwd@postgres:5432/portfolio_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      
+      # AI Services
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - FRANCE_TRAVAIL_CLIENT_ID=${FRANCE_TRAVAIL_CLIENT_ID}
+      - FRANCE_TRAVAIL_CLIENT_SECRET=${FRANCE_TRAVAIL_CLIENT_SECRET}
+      - SERPER_API_KEY=${SERPER_API_KEY}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
+      - LANGSMITH_PROJECT=${LANGSMITH_PROJECT}
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
+      - LANGFUSE_HOST=${LANGFUSE_HOST}
+      
+      # App Config
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - SECRET_KEY=${SECRET_KEY}
+      
+      # RAG Config
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-voyage-4}
+      - EMBEDDING_DIMENSIONS=${EMBEDDING_DIMENSIONS:-1024}
+      - RETRIEVAL_TOP_K=${RETRIEVAL_TOP_K:-6}
+      - RETRIEVAL_SCORE_THRESHOLD=${RETRIEVAL_SCORE_THRESHOLD:-0.7}
+
+      - GMAIL_CLIENT_ID=${GMAIL_CLIENT_ID}
+      - GMAIL_CLIENT_SECRET=${GMAIL_CLIENT_SECRET}
+      - GMAIL_REFRESH_TOKEN=${GMAIL_REFRESH_TOKEN}
+      - GCP_SERVICE_ACCOUNT_JSON=${GCP_SERVICE_ACCOUNT_JSON}
+
+      - CHROMA_HOST=portefolio-chromadb
+      - CHROMA_PORT=8000
+      - CHROMA_USER=portefolio
+      - CHROMA_PASSWORD=${CHROMA_PASSWORD}
+      - CHROMA_COLLECTION_SANOFI_CLINICAL_TRIALS=sanofi_clinical_trials
+      - CHROMA_COLLECTION_SANOFI_PUBMED=sanofi_pubmed
+      - CHROMA_COLLECTION_SANOFI_NEWS=sanofi_news
+      - BQ_DATASET_SANOFI_CLINICAL_TRIALS=sanofi_clinical_trials
+      - BQ_DATASET_SANOFI_PUBMED=sanofi_pubmed
+      - BQ_DATASET_SANOFI_NEWS=sanofi_news
+      - GCP_SA_KEY_PATH_SANOFI=gcp_sa_sanofi.json
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+      - ./migrate.py:/app/migrate.py
+      - ./scheduler:/app/scheduler
+      - ./gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
+      - ./routers:/app/routers
+    networks:
+      - portfolio_rag_network
+      - portefolio-network
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  seeder:                       # ← service jetable pour le seed
+    build:
+      context: .
+      dockerfile: Dockerfile    # ← le même que ton app, ou un minimal
+    image: portfolio-rag-app      # réutilise l'image de ton app si possible
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cvuser:cvpwd@postgres:5432/portfolio_db
+      - POSTGRES_HOST=postgres          # ✅ nom du service
+      - POSTGRES_PORT=5432 
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+    volumes:
+      - .:/app                    # monte ton code local
+    networks:
+      - portfolio_rag_network
+    command: ["sleep", "infinity"]
+
+volumes:
+  portfolio_rag_postgres_data:
+    name: portfolio_rag_postgres_data
+
+networks:
+  portfolio_rag_network:
+    name: portfolio_rag_network
+    driver: bridge
+  portefolio-network:
+    external: true
