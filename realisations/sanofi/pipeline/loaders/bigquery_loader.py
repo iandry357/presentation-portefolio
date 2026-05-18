@@ -82,6 +82,41 @@ def _prepare_rows(docs: List[Dict]) -> List[Dict]:
         })
     return rows
 
+# def _get_existing_ids(client: bigquery.Client, dataset_id: str, table_id: str) -> set:
+#     """Récupère les IDs déjà présents dans la table BigQuery."""
+#     table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
+#     try:
+#         client.get_table(table_ref)
+#     except Exception:
+#         return set()
+    
+#     query = f"SELECT id FROM `{table_ref}`"
+#     rows = client.query(query).result()
+#     return {row.id for row in rows}
+
+def _get_existing_ids(client: bigquery.Client, dataset_id: str, table_id: str) -> set:
+    """Récupère les IDs déjà présents dans la table BigQuery."""
+    table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
+    try:
+        client.get_table(table_ref)
+    except Exception:
+        return set()
+    query = f"SELECT id FROM `{table_ref}`"
+    rows = client.query(query).result()
+    return {row.id for row in rows}
+
+
+def _get_existing_titles(client: bigquery.Client, dataset_id: str, table_id: str) -> set:
+    """Récupère les titres déjà présents dans la table BigQuery."""
+    table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
+    try:
+        client.get_table(table_ref)
+    except Exception:
+        return set()
+    query = f"SELECT title FROM `{table_ref}`"
+    rows = client.query(query).result()
+    return {row.title for row in rows}
+
 
 def load(docs: List[Dict]) -> Dict[str, int]:
     """
@@ -111,8 +146,31 @@ def load(docs: List[Dict]) -> Dict[str, int]:
 
         dataset_id, table_id = SOURCE_MAP[source]
         _ensure_table(client, dataset_id, table_id)
+        import time
+        time.sleep(2)
 
-        rows = _prepare_rows(source_docs)
+        # Déduplication
+        # existing_ids = _get_existing_ids(client, dataset_id, table_id)
+        # new_docs = [d for d in source_docs if d["id"] not in existing_ids]
+
+        # Déduplication — par titre pour google_news, par ID pour les autres
+        if source == "google_news":
+            existing = _get_existing_titles(client, dataset_id, table_id)
+            new_docs = [d for d in source_docs if d["title"] not in existing]
+        else:
+            existing = _get_existing_ids(client, dataset_id, table_id)
+            new_docs = [d for d in source_docs if d["id"] not in existing]
+
+        skipped = len(source_docs) - len(new_docs)
+
+        if skipped:
+            logger.info(f"⏭️ BigQuery [{source}]: {skipped} docs déjà présents, ignorés")
+
+        if not new_docs:
+            summary[source] = 0
+            continue
+
+        rows = _prepare_rows(new_docs)
         table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
 
         errors = client.insert_rows_json(table_ref, rows)

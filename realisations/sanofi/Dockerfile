@@ -16,6 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Code source
 COPY pipeline/ ./pipeline/
 COPY ml/ ./ml/
+COPY scripts/ ./scripts/
 
 # Le .env et gcp_sa_sanofi.json sont montés via volumes — jamais copiés dans l'image
 
