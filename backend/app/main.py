@@ -14,6 +14,8 @@ from app.routers import session
 from app.routers.explore import router as explore_router
 from app.routers.market import router as market_router
 
+from routers.sanofi.router import router as sanofi_router
+
 
 
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -79,6 +81,8 @@ app.include_router(feedback.router)
 app.include_router(session.router)
 app.include_router(explore_router)
 app.include_router(market_router)
+
+app.include_router(sanofi_router)
 
 @app.get("/")
 async def root():

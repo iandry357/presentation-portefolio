@@ -13,3 +13,5 @@ gcp/sanofi/infra/.terraform.lock.hcl
 gcp/sanofi/infra/terraform.tfstate 
 gcp/sanofi/infra/terraform.tfstate.backup 
 realisations/sanofi/.env 
+
+backend/gcp_sa_sanofi.json 

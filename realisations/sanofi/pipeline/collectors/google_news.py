@@ -67,7 +67,11 @@ def collect(max_results: int = GOOGLE_NEWS_MAX_RESULTS) -> List[Dict]:
             continue
 
         # Identifiant stable basé sur l'URL
-        doc_id = f"google_news_{abs(hash(entry_id))}"
+        # doc_id = f"google_news_{abs(hash(entry_id))}"
+        title = entry.get("title", "")
+        # doc_id = f"google_news_{abs(hash(title))}"
+        import hashlib
+        doc_id = f"google_news_{hashlib.md5(title.encode()).hexdigest()[:16]}"
 
         doc = {
             "id": doc_id,

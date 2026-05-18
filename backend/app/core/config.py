@@ -63,6 +63,25 @@ class Settings(BaseSettings):
     BQ_DATASET: str = "emploi_marche"
     BQ_TABLE: str = "offres_brutes"
 
+    # ─── Sanofi ───────────────────────────────────────────────
+    GCP_SA_KEY_PATH_SANOFI: str = "realisations/sanofi/gcp_sa_sanofi.json"
+
+    BQ_DATASET_SANOFI_CLINICAL_TRIALS: str = "sanofi_clinical_trials"
+    BQ_DATASET_SANOFI_PUBMED: str = "sanofi_pubmed"
+    BQ_DATASET_SANOFI_NEWS: str = "sanofi_news"
+
+    CHROMA_HOST: str = "portefolio-chromadb"
+    CHROMA_PORT: int = 8000
+    CHROMA_USER: str = "portefolio"
+    CHROMA_PASSWORD: str = ""
+
+    CHROMA_COLLECTION_SANOFI_CLINICAL_TRIALS: str = "sanofi_clinical_trials"
+    CHROMA_COLLECTION_SANOFI_PUBMED: str = "sanofi_pubmed"
+    CHROMA_COLLECTION_SANOFI_NEWS: str = "sanofi_news"
+
+    VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
+    VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
+
 
     @property
     def is_dev(self) -> bool:
