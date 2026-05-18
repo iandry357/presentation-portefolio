@@ -11,6 +11,8 @@ services:
       - CHROMA_SERVER_AUTH_PROVIDER=${CHROMA_AUTH_PROVIDER}
     networks:
       - portefolio-network
+    ports:
+      - "8000:8000"
 
 volumes:
   chroma_data:
