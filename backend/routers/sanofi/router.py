@@ -21,6 +21,9 @@ from routers.sanofi.schemas import (
 )
 from routers.sanofi import rag as rag_service
 
+from google.oauth2 import service_account
+import json
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sanofi", tags=["Sanofi Intelligence"])
 
@@ -29,9 +32,22 @@ router = APIRouter(prefix="/sanofi", tags=["Sanofi Intelligence"])
 # BigQuery client
 # ─────────────────────────────────────────
 
+# def _get_bq_client() -> bigquery.Client:
+#     credentials = service_account.Credentials.from_service_account_file(
+#         settings.GCP_SA_KEY_PATH_SANOFI,
+#         scopes=["https://www.googleapis.com/auth/cloud-platform"],
+#     )
+#     return bigquery.Client(
+#         project=settings.BQ_PROJECT_ID,
+#         credentials=credentials,
+#     )
+
 def _get_bq_client() -> bigquery.Client:
-    credentials = service_account.Credentials.from_service_account_file(
-        settings.GCP_SA_KEY_PATH_SANOFI,
+    if not settings.GCP_SERVICE_ACCOUNT_JSON_SANOFI:
+        raise RuntimeError("GCP_SERVICE_ACCOUNT_JSON_SANOFI non configuré")
+    sa_info = json.loads(settings.GCP_SERVICE_ACCOUNT_JSON_SANOFI)
+    credentials = service_account.Credentials.from_service_account_info(
+        sa_info,
         scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
     return bigquery.Client(

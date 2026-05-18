@@ -65,6 +65,7 @@ class Settings(BaseSettings):
 
     # ─── Sanofi ───────────────────────────────────────────────
     GCP_SA_KEY_PATH_SANOFI: str = "realisations/sanofi/gcp_sa_sanofi.json"
+    GCP_SERVICE_ACCOUNT_JSON_SANOFI: Optional[str] = None
 
     BQ_DATASET_SANOFI_CLINICAL_TRIALS: str = "sanofi_clinical_trials"
     BQ_DATASET_SANOFI_PUBMED: str = "sanofi_pubmed"
