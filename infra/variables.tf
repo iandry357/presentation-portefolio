@@ -190,3 +190,15 @@ variable "gcp_service_account_json" {
   type        = string
   sensitive   = true
 }
+
+variable "chroma_password" {
+  description = "ChromaDB auth password"
+  type        = string
+  sensitive   = true
+}
+
+variable "frontend_image" {
+  description = "Image Docker frontend"
+  type        = string
+  default     = "rg.fr-par.scw.cloud/portfolio-sv-registry/frontend:latest"
+}

@@ -29,3 +29,5 @@ postgres_host  = ""
 serper_api_key = ""
 
 cv_edit_secret_code = "your-secret-code-here"
+gcp_service_account_json = ""
+chroma_password = ""
