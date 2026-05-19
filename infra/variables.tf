@@ -196,3 +196,9 @@ variable "chroma_password" {
   type        = string
   sensitive   = true
 }
+
+variable "frontend_image" {
+  description = "Image Docker frontend"
+  type        = string
+  default     = "rg.fr-par.scw.cloud/portfolio-sv-registry/frontend:latest"
+}
