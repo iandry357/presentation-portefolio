@@ -27,7 +27,6 @@ import json
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sanofi", tags=["Sanofi Intelligence"])
 
-
 # ─────────────────────────────────────────
 # BigQuery client
 # ─────────────────────────────────────────
