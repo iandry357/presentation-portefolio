@@ -259,3 +259,23 @@ async def search(
     except Exception as e:
         logger.error(f"❌ /sanofi/search error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/debug-secret")
+def debug_secret():
+    val = settings.GCP_SERVICE_ACCOUNT_JSON_SANOFI
+    if not val:
+        return {"status": "empty"}
+    return {
+        "status": "present",
+        "length": len(val),
+        "first_10": val[:10],
+        "is_valid_json": _is_json(val)
+    }
+
+def _is_json(s: str) -> bool:
+    try:
+        json.loads(s)
+        return True
+    except:
+        return False
