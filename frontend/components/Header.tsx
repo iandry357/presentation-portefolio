@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/companies', label: 'Companies', match: (p: string) => p === '/companies' || p.startsWith('/companies/') },
   { href: '/explore',   label: 'Explorer',  match: (p: string) => p === '/explore' },
   { href: '/market',   label: 'Market',  match: (p: string) => p === '/market' },
+  { href: '/realisations', label: 'Réalisations', match: (p: string) => p === '/realisations' || p.startsWith('/realisations/') },
 ];
 
 export default function Header() {

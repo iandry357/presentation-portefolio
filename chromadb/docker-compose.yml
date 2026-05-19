@@ -1,0 +1,23 @@
+services:
+  chromadb:
+    image: chromadb/chroma:0.5.20
+    container_name: portefolio-chromadb
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_AUTH_CREDENTIALS_FILE=${CHROMA_AUTH_CREDENTIALS_FILE}
+      - CHROMA_SERVER_AUTH_CREDENTIALS_PROVIDER=${CHROMA_AUTH_CREDENTIALS_PROVIDER}
+      - CHROMA_SERVER_AUTH_PROVIDER=${CHROMA_AUTH_PROVIDER}
+    networks:
+      - portefolio-network
+    ports:
+      - "8000:8000"
+
+volumes:
+  chroma_data:
+    driver: local
+
+networks:
+  portefolio-network:
+    external: true
