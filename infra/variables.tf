@@ -202,3 +202,9 @@ variable "frontend_image" {
   type        = string
   default     = "rg.fr-par.scw.cloud/portfolio-sv-registry/frontend:latest"
 }
+
+variable "gcp_service_account_json_sanofi" {
+  description = "GCP Service Account JSON Sanofi pipeline"
+  type        = string
+  sensitive   = true
+}

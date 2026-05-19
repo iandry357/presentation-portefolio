@@ -84,13 +84,3 @@ data "scaleway_secret_version" "gcp_service_account" {
   revision  = "latest"
 }
 
-data "scaleway_secret" "gcp_sa_sanofi" {
-  name       = "gcp-sa-sanofi-json"
-  project_id = var.project_id
-  region     = var.region
-}
-
-data "scaleway_secret_version" "gcp_sa_sanofi" {
-  secret_id = data.scaleway_secret.gcp_sa_sanofi.id
-  revision  = "latest"
-}

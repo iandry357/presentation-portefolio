@@ -66,7 +66,7 @@ resource "scaleway_container" "backend" {
     POSTGRES_PASSWORD               = var.postgres_password
     SERPER_API_KEY                  = var.serper_api_key
     GCP_SERVICE_ACCOUNT_JSON        = var.gcp_service_account_json
-    GCP_SERVICE_ACCOUNT_JSON_SANOFI = data.scaleway_secret_version.gcp_sa_sanofi.data
+    GCP_SERVICE_ACCOUNT_JSON_SANOFI = var.gcp_service_account_json_sanofi
     CHROMA_PASSWORD                 = var.chroma_password
   }
 
