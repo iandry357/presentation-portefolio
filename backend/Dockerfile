@@ -23,6 +23,7 @@ COPY ./scripts /app/scripts/
 COPY ./migrations /app/migrations
 # COPY migrate.py /app/
 COPY ./scheduler /app/scheduler/
+COPY ./routers /app/routers/
 
 # Expose port
 EXPOSE 8000
