@@ -80,14 +80,16 @@ resource "scaleway_container" "frontend" {
   namespace_id = scaleway_container_namespace.main.id
   region       = var.region
 
-  port         = 8080
-  protocol     = "http1"
-  privacy      = "public"
-  min_scale    = 0
-  max_scale    = 2
-  memory_limit = 256
-  cpu_limit    = 250
-  timeout      = 300
+  port           = 8080
+  protocol       = "http1"
+  privacy        = "public"
+  min_scale      = 0
+  max_scale      = 2
+  memory_limit   = 256
+  cpu_limit      = 250
+  timeout        = 300
+  registry_image = var.frontend_image
+
   scaling_option {
     concurrent_requests_threshold = 80
   }
