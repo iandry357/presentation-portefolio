@@ -1,0 +1,10 @@
+services:
+  ml-service:
+    build: .
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    volumes:
+      - ./results:/app/results
+      - ../gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
