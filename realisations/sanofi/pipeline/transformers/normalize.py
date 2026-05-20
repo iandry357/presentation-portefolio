@@ -9,7 +9,8 @@ from typing import List, Dict
 
 logger = logging.getLogger(__name__)
 
-VALID_SOURCES = {"clinicaltrials", "pubmed", "google_news"}
+# VALID_SOURCES = {"clinicaltrials", "pubmed", "google_news"}
+VALID_SOURCES = {"clinicaltrials", "pubmed", "google_news", "press_releases"}
 
 
 def _clean_text(text: str) -> str:

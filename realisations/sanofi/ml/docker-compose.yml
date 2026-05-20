@@ -8,4 +8,5 @@ services:
     volumes:
       - ./results:/app/results
       - ../gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
+      - ../scripts:/app/scripts
     restart: unless-stopped

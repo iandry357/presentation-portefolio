@@ -20,10 +20,13 @@ GCP_SA_KEY_PATH = BASE_DIR / os.environ["GCP_SA_KEY_PATH"]
 BQ_DATASET_CLINICAL_TRIALS = os.environ["BQ_DATASET_CLINICAL_TRIALS"]
 BQ_DATASET_PUBMED = os.environ["BQ_DATASET_PUBMED"]
 BQ_DATASET_NEWS = os.environ["BQ_DATASET_NEWS"]
+BQ_DATASET_PRESS_RELEASES = os.environ["BQ_DATASET_PRESS_RELEASES"]
 
 BQ_TABLE_CLINICAL_TRIALS = "raw_studies"
 BQ_TABLE_PUBMED = "raw_articles"
 BQ_TABLE_NEWS = "raw_news"
+BQ_TABLE_PRESS_RELEASES = "raw_press_releases"
+
 
 # ─────────────────────────────────────────
 # ChromaDB
@@ -65,6 +68,13 @@ PUBMED_DATE_FROM = "2024/01/01"
 
 GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search?q=Sanofi+IA+Data&hl=fr&gl=FR&ceid=FR:fr"
 GOOGLE_NEWS_MAX_RESULTS = 50
+
+PRESS_RELEASES_RSS_URL = "https://www.news.sanofi.us/press-releases?pagetemplate=rss"
+PRESS_RELEASES_MAX_RESULTS = 50
+
+
+
+CHROMA_COLLECTION_PRESS_RELEASES = os.environ["CHROMA_COLLECTION_PRESS_RELEASES"]
 
 # ─────────────────────────────────────────
 # Pipeline

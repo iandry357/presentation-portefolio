@@ -33,3 +33,7 @@ async def get_clustering():
 @router.get("/sanofi/ml/forecasting")
 async def get_forecasting():
     return await _get("/ml/forecasting")
+
+@router.get("/sanofi/ml/topic-modeling")
+async def get_topic_modeling():
+    return await _get("/ml/topic-modeling")
