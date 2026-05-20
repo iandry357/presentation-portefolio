@@ -15,3 +15,5 @@ gcp/sanofi/infra/terraform.tfstate.backup
 realisations/sanofi/.env 
 
 backend/gcp_sa_sanofi.json 
+realisations/sanofi/ml/.env
+realisations/sanofi/ml/results/

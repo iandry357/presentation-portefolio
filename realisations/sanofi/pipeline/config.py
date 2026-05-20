@@ -56,7 +56,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 # ─────────────────────────────────────────
 CLINICAL_TRIALS_BASE_URL = "https://clinicaltrials.gov/api/v2/studies"
 CLINICAL_TRIALS_QUERY = "Sanofi"
-CLINICAL_TRIALS_MAX_RESULTS = 100
+CLINICAL_TRIALS_MAX_RESULTS = 200
 
 PUBMED_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 PUBMED_QUERY = "Sanofi"
