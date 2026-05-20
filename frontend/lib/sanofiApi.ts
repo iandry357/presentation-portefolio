@@ -179,6 +179,13 @@ export interface ClusterItem {
   keywords: string[];
 }
 
+export interface DurationClusterItem {
+  cluster_id: number;
+  label: string;
+  avg_duration_months: number;
+  trial_count: number;
+}
+
 export interface ClusteringResponse {
   total_trials: number;
   n_clusters: number;
@@ -190,7 +197,8 @@ export interface ForecastingResponse {
   total_trials: number;
   volume_by_year: { year: number; count: number }[];
   phases_by_year: { year: number; phases: Record<string, number> }[];
-  duration_by_cluster: ClusterItem[];
+  // duration_by_cluster: ClusterItem[];
+  duration_by_cluster: DurationClusterItem[];
 }
 
 export interface TopicItem {
