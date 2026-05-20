@@ -1,0 +1,88 @@
+'use client';
+
+import { TopicModelingResponse } from '@/lib/sanofiApi';
+
+const COLORS = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981'];
+const SOURCE_LABEL: Record<string, string> = {
+  press_releases: 'Press Release',
+  google_news: 'Google News',
+};
+const SOURCE_COLOR: Record<string, string> = {
+  press_releases: 'bg-blue-100 text-blue-700',
+  google_news: 'bg-gray-100 text-gray-600',
+};
+
+interface Props {
+  data: TopicModelingResponse;
+}
+
+export default function TopicView({ data }: Props) {
+  const byTopic = data.topics.map(t => ({
+    ...t,
+    docs: data.docs.filter(d => d.dominant_topic === t.topic_id)
+      .sort((a, b) => b.confidence - a.confidence),
+  }));
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white border rounded-lg p-4">
+        <h3 className="font-semibold text-gray-900 mb-1">Topic Modeling — Actualités & Press Releases</h3>
+        <p className="text-sm text-gray-500">
+          {data.total_docs} documents analysés ({data.sources.press_releases} press releases · {data.sources.google_news} actualités) → {data.n_topics} topics LDA
+        </p>
+      </div>
+
+      {/* Topics */}
+      {byTopic.map((topic, i) => (
+        <div key={topic.topic_id} className="bg-white border rounded-lg overflow-hidden">
+          {/* Topic header */}
+          <div
+            className="flex items-center gap-3 px-4 py-3 border-b"
+            style={{ borderLeftColor: COLORS[i % COLORS.length], borderLeftWidth: 4 }}
+          >
+            <span className="text-lg font-bold" style={{ color: COLORS[i % COLORS.length] }}>
+              #{topic.topic_id}
+            </span>
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">{topic.label}</p>
+              <p className="text-xs text-gray-400">{topic.docs.length} documents</p>
+            </div>
+          </div>
+
+          {/* Keywords */}
+          <div className="px-4 py-2 border-b bg-gray-50 flex flex-wrap gap-1">
+            {topic.keywords.slice(0, 8).map(kw => (
+              <span key={kw} className="text-xs bg-white border rounded px-2 py-0.5 text-gray-600">
+                {kw}
+              </span>
+            ))}
+          </div>
+
+          {/* Docs */}
+          <div className="divide-y">
+            {topic.docs.slice(0, 5).map(doc => (
+              <div key={doc.id} className="px-4 py-2 flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-gray-800 truncate">{doc.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{doc.date}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className={`text-xs px-2 py-0.5 rounded font-medium ${SOURCE_COLOR[doc.source] ?? 'bg-gray-100 text-gray-600'}`}>
+                    {SOURCE_LABEL[doc.source] ?? doc.source}
+                  </span>
+                  <span className="text-xs text-gray-400">{Math.round(doc.confidence * 100)}%</span>
+                </div>
+              </div>
+            ))}
+            {topic.docs.length > 5 && (
+              <p className="px-4 py-2 text-xs text-gray-400">
+                +{topic.docs.length - 5} autres documents
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
