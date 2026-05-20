@@ -49,6 +49,5 @@ jobs:
           SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_ORG_ID }}
           SCW_DEFAULT_REGION: fr-par
         run: |
-          scw container container update \
-            container-id=${{ secrets.SCW_CONTAINER_ID }} \
-            redeploy=true
+          scw container container deploy \
+            container-id=${{ secrets.SCW_CONTAINER_ID }}
