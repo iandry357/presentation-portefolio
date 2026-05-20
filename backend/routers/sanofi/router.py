@@ -292,3 +292,7 @@ async def get_clustering():
 @router.get("/ml/forecasting")
 async def get_forecasting():
     return await ml_service.get_forecasting()
+
+@router.get("/ml/topic-modeling")
+async def get_topic_modeling():
+    return await ml_service.get_topic_modeling()

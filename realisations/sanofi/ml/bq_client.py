@@ -9,6 +9,7 @@ TABLES = {
     "clinical_trials": "sanofi_clinical_trials.raw_studies",
     "pubmed": "sanofi_pubmed.raw_articles",
     "news": "sanofi_news.raw_news",
+    "press_releases": "sanofi_press_releases.raw_press_releases",
 }
 
 COLUMNS = "id, source, date, title, content, metadata"
@@ -48,3 +49,6 @@ def get_pubmed_articles() -> list[dict]:
 
 def get_news() -> list[dict]:
     return _fetch("news")
+
+def get_press_releases() -> list[dict]:
+    return _fetch("press_releases")
