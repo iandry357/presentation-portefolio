@@ -50,6 +50,20 @@ def _top_keywords(lda_model, feature_names: list, topic_id: int, n=10) -> list:
     return [feature_names[i] for i in top_indices]
 
 
+# def _generate_label(keywords: list, source_hint: str) -> str:
+#     prompt = (
+#         f"You are analyzing Sanofi {source_hint} topics. "
+#         f"Given these top keywords from a topic: {', '.join(keywords[:10])}. "
+#         f"Generate a short narrative theme label (3-4 words max) in English that best describes "
+#         f"the communication theme. Reply with only the label, nothing else."
+#     )
+#     response = litellm.completion(
+#         model="mistral/mistral-small-latest",
+#         messages=[{"role": "user", "content": prompt}],
+#         api_key=MISTRAL_API_KEY,
+#         max_tokens=20,
+#     )
+#     return response.choices[0].message.content.strip()
 def _generate_label(keywords: list, source_hint: str) -> str:
     prompt = (
         f"You are analyzing Sanofi {source_hint} topics. "
@@ -57,13 +71,24 @@ def _generate_label(keywords: list, source_hint: str) -> str:
         f"Generate a short narrative theme label (3-4 words max) in English that best describes "
         f"the communication theme. Reply with only the label, nothing else."
     )
-    response = litellm.completion(
-        model="mistral/mistral-small-latest",
-        messages=[{"role": "user", "content": prompt}],
-        api_key=MISTRAL_API_KEY,
-        max_tokens=20,
-    )
-    return response.choices[0].message.content.strip()
+    for model, key_env in [
+        ("mistral/mistral-small-latest", "MISTRAL_API_KEY"),
+        ("gemini/gemini-1.5-flash", "GEMINI_API_KEY"),
+    ]:
+        api_key = os.getenv(key_env, "")
+        if not api_key:
+            continue
+        try:
+            response = litellm.completion(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                api_key=api_key,
+                max_tokens=20,
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            logger.warning(f"⚠️  {model} failed: {e} — trying next")
+    return "Unknown Topic"
 
 
 def run() -> dict:
