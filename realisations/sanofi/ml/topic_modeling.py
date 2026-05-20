@@ -6,6 +6,9 @@ import litellm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 from bq_client import get_news, get_press_releases
+import logging
+
+logger = logging.getLogger(__name__)
 
 N_TOPICS = 5
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "results", "topic_modeling.json")
