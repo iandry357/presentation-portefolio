@@ -20,6 +20,7 @@ from pipeline.config import (
     VOYAGE_API_KEY,
     VOYAGE_EMBEDDING_MODEL,
     VOYAGE_EMBEDDING_DIMENSIONS,
+    CHROMA_COLLECTION_PRESS_RELEASES,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,7 @@ COLLECTION_MAP = {
     "clinicaltrials": CHROMA_COLLECTION_CLINICAL_TRIALS,
     "pubmed": CHROMA_COLLECTION_PUBMED,
     "google_news": CHROMA_COLLECTION_NEWS,
+    "press_releases": CHROMA_COLLECTION_PRESS_RELEASES,
 }
 
 # Batch size VoyageAI (limite API)

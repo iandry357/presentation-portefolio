@@ -106,6 +106,7 @@ def collect(max_results: int = CLINICAL_TRIALS_MAX_RESULTS) -> List[Dict]:
         "query.term": CLINICAL_TRIALS_QUERY,
         "pageSize": min(max_results, 100),
         "format": "json",
+        "sort": "LastUpdatePostDate:desc",
         "fields": ",".join([
             "protocolSection.identificationModule",
             "protocolSection.statusModule",

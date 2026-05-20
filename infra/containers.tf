@@ -48,6 +48,8 @@ resource "scaleway_container" "backend" {
     BQ_DATASET_SANOFI_CLINICAL_TRIALS        = "sanofi_clinical_trials"
     BQ_DATASET_SANOFI_PUBMED                 = "sanofi_pubmed"
     BQ_DATASET_SANOFI_NEWS                   = "sanofi_news"
+    OVH_ML_HOST                              = "51.68.130.23"
+    OVH_ML_PORT                              = "8001"
   }
 
   secret_environment_variables = {

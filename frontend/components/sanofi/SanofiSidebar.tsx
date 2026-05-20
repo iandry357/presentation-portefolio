@@ -2,7 +2,8 @@
 
 import { cn } from '@/lib/utils';
 
-export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag';
+// export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag';
+export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag' | 'ml';
 
 interface FiltersClinical {
   phase: string;
@@ -30,6 +31,7 @@ const VIEWS: { id: SanofiView; label: string; icon: string }[] = [
   { id: 'pubmed',          label: 'Publications R&D', icon: '📄' },
   { id: 'news',            label: 'Actualités',       icon: '📰' },
   { id: 'rag',             label: 'Ask AI',           icon: '🤖' },
+  { id: 'ml',              label: 'ML Insights',      icon: '🧠' },
 ];
 
 const PHASES = ['', 'PHASE1', 'PHASE2', 'PHASE3', 'PHASE4'];

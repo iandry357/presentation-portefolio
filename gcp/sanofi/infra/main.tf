@@ -134,3 +134,33 @@ resource "google_bigquery_dataset" "sanofi_news" {
     prevent_destroy = true
   }
 }
+
+resource "google_bigquery_dataset" "sanofi_press_releases" {
+  dataset_id  = "sanofi_press_releases"
+  location    = var.bq_location
+  description = "Press releases Sanofi — sanofi.com RSS"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "google_bigquery_table" "raw_press_releases" {
+  dataset_id          = google_bigquery_dataset.sanofi_press_releases.dataset_id
+  table_id            = "raw_press_releases"
+  deletion_protection = true
+
+  schema = jsonencode([
+    { name = "id", type = "STRING", mode = "REQUIRED" },
+    { name = "source", type = "STRING", mode = "REQUIRED" },
+    { name = "date", type = "DATE", mode = "NULLABLE" },
+    { name = "title", type = "STRING", mode = "NULLABLE" },
+    { name = "content", type = "STRING", mode = "NULLABLE" },
+    { name = "metadata", type = "JSON", mode = "NULLABLE" },
+    { name = "ingested_at", type = "TIMESTAMP", mode = "REQUIRED" }
+  ])
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
