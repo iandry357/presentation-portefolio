@@ -20,6 +20,7 @@ from routers.sanofi.schemas import (
     SearchRequest, SearchResponse, SearchResult,
 )
 from routers.sanofi import rag as rag_service
+from routers.sanofi import ml as ml_service
 
 from google.oauth2 import service_account
 import json
@@ -279,3 +280,15 @@ def _is_json(s: str) -> bool:
         return True
     except:
         return False
+    
+# ─────────────────────────────────────────
+# ML
+# ─────────────────────────────────────────
+
+@router.get("/ml/clustering")
+async def get_clustering():
+    return await ml_service.get_clustering()
+
+@router.get("/ml/forecasting")
+async def get_forecasting():
+    return await ml_service.get_forecasting()
