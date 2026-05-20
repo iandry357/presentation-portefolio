@@ -19,6 +19,8 @@ from pipeline.config import (
     BQ_TABLE_CLINICAL_TRIALS,
     BQ_TABLE_PUBMED,
     BQ_TABLE_NEWS,
+    BQ_DATASET_PRESS_RELEASES,
+    BQ_TABLE_PRESS_RELEASES,
 )
 
 logger = logging.getLogger(__name__)
@@ -28,6 +30,7 @@ SOURCE_MAP = {
     "clinicaltrials": (BQ_DATASET_CLINICAL_TRIALS, BQ_TABLE_CLINICAL_TRIALS),
     "pubmed": (BQ_DATASET_PUBMED, BQ_TABLE_PUBMED),
     "google_news": (BQ_DATASET_NEWS, BQ_TABLE_NEWS),
+    "press_releases": (BQ_DATASET_PRESS_RELEASES, BQ_TABLE_PRESS_RELEASES),
 }
 
 # Schéma BigQuery commun à toutes les tables
@@ -117,6 +120,22 @@ def _get_existing_titles(client: bigquery.Client, dataset_id: str, table_id: str
     rows = client.query(query).result()
     return {row.title for row in rows}
 
+def _update_content(client: bigquery.Client, dataset_id: str, table_id: str, title: str, content: str) -> None:
+    """UPDATE content pour un article existant dont le content est HTML brut."""
+    table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
+    escaped = content.replace("'", "\\'")
+    escaped_title = title.replace("'", "\\'")
+    query = f"""
+        UPDATE `{table_ref}`
+        SET content = '{escaped}'
+        WHERE title = '{escaped_title}'
+        AND content LIKE '%<a href=%'
+    """
+    try:
+        client.query(query).result()
+    except Exception as e:
+        logger.error(f"❌ BQ UPDATE content failed for title '{title[:50]}': {e}")
+
 
 def load(docs: List[Dict]) -> Dict[str, int]:
     """
@@ -154,9 +173,15 @@ def load(docs: List[Dict]) -> Dict[str, int]:
         # new_docs = [d for d in source_docs if d["id"] not in existing_ids]
 
         # Déduplication — par titre pour google_news, par ID pour les autres
-        if source == "google_news":
+        # if source == "google_news":
+        if source in ("google_news", "press_releases"):
             existing = _get_existing_titles(client, dataset_id, table_id)
             new_docs = [d for d in source_docs if d["title"] not in existing]
+            # UPDATE content HTML brut pour articles existants
+            if source == "google_news":
+                for d in source_docs:
+                    if d["title"] in existing and d["content"] and "<a href=" not in d["content"]:
+                        _update_content(client, dataset_id, table_id, d["title"], d["content"])
         else:
             existing = _get_existing_ids(client, dataset_id, table_id)
             new_docs = [d for d in source_docs if d["id"] not in existing]

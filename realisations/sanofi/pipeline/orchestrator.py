@@ -11,6 +11,8 @@ from pipeline.transformers.normalize import normalize_batch
 from pipeline.validators.quality import validate_batch
 from pipeline.loaders import bigquery_loader, chroma_loader
 
+from pipeline.collectors import press_releases
+
 # Configuration logging
 logging.basicConfig(
     level=logging.INFO,
@@ -34,10 +36,12 @@ def run():
     ct_docs = clinical_trials.collect()
     pm_docs = pubmed.collect()
     gn_docs = google_news.collect()
+    pr_docs = press_releases.collect()
+    
+    raw_docs = ct_docs + pm_docs + gn_docs + pr_docs
 
-    raw_docs = ct_docs + pm_docs + gn_docs
     logger.info(f"📊 Total collecté: {len(raw_docs)} documents "
-                f"(ClinicalTrials: {len(ct_docs)}, PubMed: {len(pm_docs)}, News: {len(gn_docs)})")
+                f"(ClinicalTrials: {len(ct_docs)}, PubMed: {len(pm_docs)}, News: {len(gn_docs)}, PressReleases: {len(pr_docs)})")
 
     if not raw_docs:
         logger.error("❌ Aucun document collecté — pipeline arrêté")

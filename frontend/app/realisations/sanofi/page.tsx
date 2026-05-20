@@ -9,6 +9,7 @@ import PubMedView from '@/components/sanofi/PubMedView';
 import NewsView from '@/components/sanofi/NewsView';
 import RagView from '@/components/sanofi/RagView';
 import { fetchSanofiStats, SanofiStats as StatsType } from '@/lib/sanofiApi';
+import MlView from '@/components/sanofi/ml/MlView';
 
 const DEFAULT_FILTERS: SanofiFilters = {
   clinical: { phase: '', status: '' },
@@ -69,6 +70,7 @@ export default function SanofiPage() {
           {activeView === 'pubmed' && <PubMedView />}
           {activeView === 'news' && <NewsView />}
           {activeView === 'rag' && <RagView sources={filters.rag.sources} />}
+          {activeView === 'ml' && <MlView />}
         </div>
       </div>
     </div>

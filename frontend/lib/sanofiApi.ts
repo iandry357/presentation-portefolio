@@ -164,3 +164,57 @@ export async function fetchSearch(
   if (sources?.length) sources.forEach(s => q.append('sources', s));
   return apiFetch<SearchResponse>(`/sanofi/search?${q}`);
 }
+
+// ML
+// export interface ClusterItem {
+//   cluster_id: number;
+//   label: string;
+//   avg_duration_months: number;
+//   trial_count: number;
+// }
+export interface ClusterItem {
+  cluster_id: number;
+  label: string;
+  count: number;
+  keywords: string[];
+}
+
+export interface ClusteringResponse {
+  total_trials: number;
+  n_clusters: number;
+  clusters: ClusterItem[];
+  trials: { id: string; title: string; cluster_id: number; dominant_label: string }[];
+}
+
+export interface ForecastingResponse {
+  total_trials: number;
+  volume_by_year: { year: number; count: number }[];
+  phases_by_year: { year: number; phases: Record<string, number> }[];
+  duration_by_cluster: ClusterItem[];
+}
+
+export interface TopicItem {
+  topic_id: number;
+  label: string;
+  keywords: string[];
+}
+
+export interface TopicModelingResponse {
+  n_topics: number;
+  total_docs: number;
+  sources: { press_releases: number; google_news: number };
+  topics: TopicItem[];
+  docs: { id: string; source: string; title: string; date: string; dominant_topic: number; dominant_label: string; confidence: number }[];
+}
+
+export async function fetchClustering(): Promise<ClusteringResponse> {
+  return apiFetch<ClusteringResponse>('/sanofi/ml/clustering');
+}
+
+export async function fetchForecasting(): Promise<ForecastingResponse> {
+  return apiFetch<ForecastingResponse>('/sanofi/ml/forecasting');
+}
+
+export async function fetchTopicModeling(): Promise<TopicModelingResponse> {
+  return apiFetch<TopicModelingResponse>('/sanofi/ml/topic-modeling');
+}

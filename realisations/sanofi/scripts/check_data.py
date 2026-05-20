@@ -23,6 +23,9 @@ from pipeline.config import (
     CHROMA_COLLECTION_CLINICAL_TRIALS,
     CHROMA_COLLECTION_PUBMED,
     CHROMA_COLLECTION_NEWS,
+    BQ_DATASET_PRESS_RELEASES,
+    BQ_TABLE_PRESS_RELEASES,
+    CHROMA_COLLECTION_PRESS_RELEASES,
 )
 
 # ─────────────────────────────────────────
@@ -40,6 +43,7 @@ for dataset, table, label in [
     (BQ_DATASET_CLINICAL_TRIALS, BQ_TABLE_CLINICAL_TRIALS, "clinicaltrials"),
     (BQ_DATASET_PUBMED, BQ_TABLE_PUBMED, "pubmed"),
     (BQ_DATASET_NEWS, BQ_TABLE_NEWS, "google_news"),
+    (BQ_DATASET_PRESS_RELEASES, BQ_TABLE_PRESS_RELEASES, "press_releases"),
 ]:
     try:
         query = f"SELECT COUNT(*) as cnt FROM `{GCP_PROJECT_ID}.{dataset}.{table}`"
@@ -67,6 +71,7 @@ for collection_name, label in [
     (CHROMA_COLLECTION_CLINICAL_TRIALS, "clinicaltrials"),
     (CHROMA_COLLECTION_PUBMED, "pubmed"),
     (CHROMA_COLLECTION_NEWS, "google_news"),
+    (CHROMA_COLLECTION_PRESS_RELEASES, "press_releases"),
 ]:
     try:
         col = chroma_client.get_collection(collection_name)
@@ -83,7 +88,7 @@ print(f"{'Source':<20} {'BigQuery':>10} {'ChromaDB':>10} {'OK?':>8}")
 print("=" * 55)
 
 all_ok = True
-for label in ["clinicaltrials", "pubmed", "google_news"]:
+for label in ["clinicaltrials", "pubmed", "google_news", "press_releases"]:
     bq = bq_counts.get(label, "?")
     ch = chroma_counts.get(label, "?")
     ok = "✅" if bq == ch else "❌"
