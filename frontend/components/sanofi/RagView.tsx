@@ -12,6 +12,7 @@ const SOURCE_LABELS: Record<string, string> = {
   clinicaltrials: '🔬 Essai clinique',
   pubmed: '📄 Publication',
   google_news: '📰 Actualité',
+  press_releases: '📢 Press Release',
 };
 
 const SUGGESTED_QUESTIONS = [

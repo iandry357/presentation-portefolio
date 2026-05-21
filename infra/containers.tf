@@ -45,6 +45,7 @@ resource "scaleway_container" "backend" {
     CHROMA_COLLECTION_SANOFI_CLINICAL_TRIALS = "sanofi_clinical_trials"
     CHROMA_COLLECTION_SANOFI_PUBMED          = "sanofi_pubmed"
     CHROMA_COLLECTION_SANOFI_NEWS            = "sanofi_news"
+    CHROMA_COLLECTION_SANOFI_PRESS_RELEASES  = "sanofi_press_releases"
     BQ_DATASET_SANOFI_CLINICAL_TRIALS        = "sanofi_clinical_trials"
     BQ_DATASET_SANOFI_PUBMED                 = "sanofi_pubmed"
     BQ_DATASET_SANOFI_NEWS                   = "sanofi_news"
