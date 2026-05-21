@@ -3,6 +3,7 @@
 Script pour uploader le CV PDF dans PostgreSQL + générer images PNG.
 Usage:
   python scripts/upload_cv_pdf.py --database-url="postgresql://user:pwd@host:port/db" [--pdf-path="path/to/cv.pdf"]
+  docker exec -it <nom_du_container_backend> python /app/scripts/upload_cv_pdf.py --database-url="postgresql://portefolio-credential:PWD@IP:PORT/rdb?sslmode=require" --pdf-path="/app/scripts/IandryRakotoniaina_IngenieurRD_DataIA_2026.pdf"
 """
 
 import argparse
