@@ -220,7 +220,17 @@ export interface TopicModelingResponse {
   total_docs: number;
   sources: { press_releases: number; google_news: number };
   topics: TopicItem[];
-  docs: { id: string; source: string; title: string; date: string; url?: string; dominant_topic: number; dominant_label: string; confidence: number }[];
+  // docs: { id: string; source: string; title: string; date: string; url?: string; dominant_topic: number; dominant_label: string; confidence: number }[];
+  docs: { 
+    id: string; 
+    source: string; 
+    title: string; 
+    date: string; 
+    url?: string;
+    dominant_topic: number; 
+    dominant_label: string; 
+    confidence: number 
+  }[];
 }
 
 export async function fetchClustering(): Promise<ClusteringResponse> {
