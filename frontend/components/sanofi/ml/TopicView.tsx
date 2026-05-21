@@ -2,6 +2,9 @@
 
 import { TopicModelingResponse } from '@/lib/sanofiApi';
 
+import { useState } from 'react';
+
+
 const COLORS = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981'];
 const SOURCE_LABEL: Record<string, string> = {
   press_releases: 'Press Release',
@@ -22,6 +25,9 @@ export default function TopicView({ data }: Props) {
     docs: data.docs.filter(d => d.dominant_topic === t.topic_id)
       .sort((a, b) => b.confidence - a.confidence),
   }));
+
+  // Dans le composant, avant le return :
+  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
 
   return (
     // <div className="space-y-6">
@@ -68,7 +74,8 @@ export default function TopicView({ data }: Props) {
 
           {/* Docs */}
           <div className="divide-y">
-            {topic.docs.slice(0, 5).map(doc => (
+            {/* {topic.docs.slice(0, 5).map(doc => (  */}
+            {topic.docs.slice(0, expanded[topic.topic_id] ? topic.docs.length : 5).map(doc => (
               <div key={doc.id} className="px-4 py-2 flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0 w-0">
                   {/* <p className="text-sm text-gray-800 truncate">{doc.title}</p> */}
@@ -94,10 +101,18 @@ export default function TopicView({ data }: Props) {
                 </div>
               </div>
             ))}
-            {topic.docs.length > 5 && (
+            {/* {topic.docs.length > 5 && (
               <p className="px-4 py-2 text-xs text-gray-400">
                 +{topic.docs.length - 5} autres documents
               </p>
+            )} */}
+            {topic.docs.length > 5 && (
+            <button
+                onClick={() => setExpanded(e => ({ ...e, [topic.topic_id]: !e[topic.topic_id] }))}
+                className="px-4 py-2 text-xs text-blue-600 hover:underline text-left w-full"
+            >
+                {expanded[topic.topic_id] ? '− Réduire' : `+ ${topic.docs.length - 5} autres documents`}
+            </button>
             )}
           </div>
         </div>
