@@ -153,7 +153,7 @@ def main():
         
         if check_existing(conn):
             response = input("⚠️  Un CV existe déjà. Écraser ? (y/N) : ")
-            if response.lower() != 'y':
+            if response.strip().lower() != 'y':
                 print("❌ Annulé")
                 conn.close()
                 sys.exit(0)
