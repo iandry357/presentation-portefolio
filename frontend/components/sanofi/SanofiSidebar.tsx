@@ -3,7 +3,8 @@
 import { cn } from '@/lib/utils';
 
 // export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag';
-export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag' | 'ml';
+// export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'rag' | 'ml';
+export type SanofiView = 'clinical-trials' | 'pubmed' | 'news' | 'press-releases' | 'rag' | 'ml';
 
 interface FiltersClinical {
   phase: string;
@@ -30,6 +31,7 @@ const VIEWS: { id: SanofiView; label: string; icon: string }[] = [
   { id: 'clinical-trials', label: 'Essais Cliniques', icon: '🔬' },
   { id: 'pubmed',          label: 'Publications R&D', icon: '📄' },
   { id: 'news',            label: 'Actualités',       icon: '📰' },
+  { id: 'press-releases',  label: 'Press Releases',   icon: '📢' },
   { id: 'rag',             label: 'Ask AI',           icon: '🤖' },
   { id: 'ml',              label: 'ML Insights',      icon: '🧠' },
 ];
@@ -53,7 +55,8 @@ export default function SanofiSidebar({ activeView, onViewChange, filters, onFil
   };
 
   return (
-    <aside className="w-64 shrink-0">
+    // <aside className="w-64 shrink-0">
+    <aside className="w-full md:w-64 shrink-0">
       {/* Sélecteur de vue */}
       <div className="border rounded-lg bg-white mb-4 overflow-hidden">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-3 border-b">

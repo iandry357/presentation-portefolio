@@ -47,7 +47,7 @@ export default function RagView({ sources }: Props) {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">Ask AI — Sanofi Intelligence</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-1">Ask AI — Sanofi Investigation</h2>
         <p className="text-sm text-gray-500">
           Posez une question sur les données Sanofi. Le modèle interroge les essais cliniques, publications et actualités.
         </p>

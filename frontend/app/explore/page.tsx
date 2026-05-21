@@ -26,6 +26,7 @@ export default function ExplorePage() {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Chargement des options de filtres (une seule fois)
   useEffect(() => {
@@ -82,16 +83,29 @@ export default function ExplorePage() {
         </p>
       </div>
 
-      <div className="flex gap-6">
-        {/* Filtres */}
-        <aside className="w-64 shrink-0">
-          <ExploreFilters
-            filters={filterOptions}
-            values={filters}
-            onChange={handleFilterChange}
-            onReset={handleReset}
-          />
-        </aside>
+      {/* <div className="flex gap-6"> */}
+      <div className="flex flex-col gap-4">
+        {/* Toggle filtres */}
+        <button
+          onClick={() => setShowFilters(f => !f)}
+          className="md:hidden flex items-center gap-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg px-4 py-2 w-fit hover:bg-gray-50"
+        >
+          <span>⚙️</span>
+          <span>{showFilters ? 'Masquer les filtres' : 'Filtres'}</span>
+        </button>
+
+        {/* Layout desktop : sidebar + liste côte à côte */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Filtres */}
+          <aside className={`w-full md:w-64 md:shrink-0 ${showFilters ? 'block' : 'hidden'} md:block`}>
+            <ExploreFilters
+              filters={filterOptions}
+              values={filters}
+              onChange={handleFilterChange}
+              onReset={handleReset}
+            />
+          </aside>
+        
 
         {/* Liste */}
         <div className="flex-1 min-w-0">
@@ -139,6 +153,7 @@ export default function ExplorePage() {
               </button>
             </div>
           )}
+        </div>
         </div>
       </div>
     </div>

@@ -160,6 +160,7 @@ def run() -> dict:
             "source": doc.get("source"),
             "title": doc.get("title"),
             "date": doc.get("date"),
+            "url": doc.get("metadata", {}).get("url", "") if isinstance(doc.get("metadata"), dict) else "",
             "dominant_topic": dominant_topic,
             "dominant_label": topics_out[dominant_topic]["label"],
             "confidence": confidence,
