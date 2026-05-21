@@ -71,7 +71,19 @@ export default function TopicView({ data }: Props) {
             {topic.docs.slice(0, 5).map(doc => (
               <div key={doc.id} className="px-4 py-2 flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0 w-0">
-                  <p className="text-sm text-gray-800 truncate">{doc.title}</p>
+                  {/* <p className="text-sm text-gray-800 truncate">{doc.title}</p> */}
+                  {doc.url ? (
+                    <a
+                        href={doc.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-700 hover:underline truncate block"
+                    >
+                        {doc.title}
+                    </a>
+                    ) : (
+                    <p className="text-sm text-gray-800 truncate">{doc.title}</p>
+                    )}
                   <p className="text-xs text-gray-400 mt-0.5">{doc.date}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
