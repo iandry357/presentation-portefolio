@@ -16,7 +16,8 @@ export default function ForecastingView({ data }: Props) {
   const volumeData = data.volume_by_year.filter(d => d.year >= 2010);
 
   const durationData = data.duration_by_cluster.map((c, i) => ({
-    name: c.label.length > 25 ? c.label.slice(0, 25) + '…' : c.label,
+    // name: c.label.length > 25 ? c.label.slice(0, 25) + '…' : c.label,
+    name: c.label,
     duration: Math.round(c.avg_duration_months),
     color: COLORS[i % COLORS.length],
   })).sort((a, b) => b.duration - a.duration);
@@ -61,7 +62,7 @@ export default function ForecastingView({ data }: Props) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={durationData} layout="vertical" margin={{ left: 8, right: 24 }}>
             <XAxis type="number" tick={{ fontSize: 11 }} unit=" mois" />
-            <YAxis type="category" dataKey="name" width={180} tick={{ fontSize: 11 }} />
+            <YAxis type="category" dataKey="name" width={220} tick={{ fontSize: 11 }} />
             <Tooltip
             //   formatter={(val: number) => [`${val} mois`, 'Durée moyenne']}
               formatter={(val) => [`${val} mois`, 'Durée moyenne']}

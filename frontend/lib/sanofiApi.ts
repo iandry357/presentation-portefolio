@@ -190,7 +190,15 @@ export interface ClusteringResponse {
   total_trials: number;
   n_clusters: number;
   clusters: ClusterItem[];
-  trials: { id: string; title: string; cluster_id: number; dominant_label: string }[];
+  // trials: { id: string; title: string; cluster_id: number; dominant_label: string }[];
+  trials: {
+    id: string;
+    title: string;
+    cluster_id: number;
+    phase: string;
+    status: string;
+    conditions: string[];
+  }[];
 }
 
 export interface ForecastingResponse {
@@ -212,7 +220,7 @@ export interface TopicModelingResponse {
   total_docs: number;
   sources: { press_releases: number; google_news: number };
   topics: TopicItem[];
-  docs: { id: string; source: string; title: string; date: string; dominant_topic: number; dominant_label: string; confidence: number }[];
+  docs: { id: string; source: string; title: string; date: string; url?: string; dominant_topic: number; dominant_label: string; confidence: number }[];
 }
 
 export async function fetchClustering(): Promise<ClusteringResponse> {
@@ -225,4 +233,25 @@ export async function fetchForecasting(): Promise<ForecastingResponse> {
 
 export async function fetchTopicModeling(): Promise<TopicModelingResponse> {
   return apiFetch<TopicModelingResponse>('/sanofi/ml/topic-modeling');
+}
+
+export interface PressReleaseItem {
+  id: string;
+  title: string;
+  date: string | null;
+  source_name: string | null;
+  url: string | null;
+}
+
+export interface PressReleasesResponse {
+  total: number;
+  items: PressReleaseItem[];
+}
+
+export async function fetchPressReleases(params?: {
+  limit?: number;
+}): Promise<PressReleasesResponse> {
+  const q = new URLSearchParams();
+  if (params?.limit) q.set('limit', String(params.limit));
+  return apiFetch<PressReleasesResponse>(`/sanofi/press-releases?${q}`);
 }
