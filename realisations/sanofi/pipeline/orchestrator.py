@@ -26,7 +26,7 @@ def run():
     """Lance le pipeline complet."""
     start = datetime.utcnow()
     logger.info("=" * 60)
-    logger.info("🚀 Pipeline Sanofi Intelligence — Démarrage")
+    logger.info("🚀 Pipeline Sanofi Investigation — Démarrage")
     logger.info(f"⏰ {start.isoformat()}")
     logger.info("=" * 60)
 

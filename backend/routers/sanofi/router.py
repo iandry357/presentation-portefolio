@@ -26,7 +26,7 @@ from google.oauth2 import service_account
 import json
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/sanofi", tags=["Sanofi Intelligence"])
+router = APIRouter(prefix="/sanofi", tags=["Sanofi Investigation"])
 
 # ─────────────────────────────────────────
 # BigQuery client
@@ -202,6 +202,35 @@ def get_news(
         logger.error(f"❌ /sanofi/news error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/press-releases", response_model=NewsResponse)
+def get_press_releases(
+    limit: int = Query(50, ge=1, le=200),
+):
+    """Liste des press releases Sanofi depuis BigQuery."""
+    client = _get_bq_client()
+    try:
+        query = f"""
+            SELECT id, title, date, metadata
+            FROM `{settings.BQ_PROJECT_ID}.sanofi_press_releases.raw_press_releases`
+            ORDER BY date DESC
+            LIMIT {limit}
+        """
+        rows = list(client.query(query).result())
+        items = []
+        for row in rows:
+            # meta = json.loads(row.metadata or "{}")
+            meta = row.metadata if isinstance(row.metadata, dict) else json.loads(row.metadata or "{}")
+            items.append(NewsItem(
+                id=row.id,
+                title=row.title,
+                date=str(row.date) if row.date else None,
+                source_name=meta.get("source_name"),
+                url=meta.get("url"),
+            ))
+        return NewsResponse(total=len(items), items=items)
+    except Exception as e:
+        logger.error(f"❌ /sanofi/press-releases error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ─────────────────────────────────────────
 # RAG

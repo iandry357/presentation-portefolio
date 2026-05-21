@@ -45,9 +45,11 @@ export default function MlView() {
   }, [tab]);
 
   return (
-    <div className="space-y-4">
+    // <div className="space-y-4">
+    <div className="space-y-4 overflow-x-hidden">
       {/* Sous-onglets */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+      {/* <div className="flex gap-1 bg-gray-100 rounded-lg p-1"> */}
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 overflow-x-auto">
         {TABS.map(({ id, label, icon }) => (
           <button
             key={id}
