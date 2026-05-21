@@ -15,7 +15,7 @@ interface PocCard {
 const POCS: PocCard[] = [
   {
     href: '/realisations/sanofi',
-    title: 'Sanofi Intelligence',
+    title: 'Sanofi Investigation',
     company: 'Sanofi',
     description:
       "Pipeline RAG multi-source sur les données publiques Sanofi — essais cliniques (ClinicalTrials.gov), publications R&D (PubMed) et actualités (Google News). Embeddings VoyageAI, ChromaDB, LLM Gemini/Mistral.",

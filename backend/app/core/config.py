@@ -80,6 +80,8 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION_SANOFI_PUBMED: str = "sanofi_pubmed"
     CHROMA_COLLECTION_SANOFI_NEWS: str = "sanofi_news"
 
+    CHROMA_COLLECTION_SANOFI_PRESS_RELEASES: str = os.getenv("CHROMA_COLLECTION_SANOFI_PRESS_RELEASES", "sanofi_press_releases")
+
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 

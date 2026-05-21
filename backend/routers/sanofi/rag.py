@@ -11,16 +11,67 @@ from chromadb.config import Settings
 
 from app.core.config import settings
 
+import json
+from google.cloud import bigquery
+from google.oauth2 import service_account
+
 logger = logging.getLogger(__name__)
+
+SOURCE_BQ_MAP = {
+    "google_news": ("sanofi_news", "raw_news"),
+    "press_releases": ("sanofi_press_releases", "raw_press_releases"),
+    "clinicaltrials": ("sanofi_clinical_trials", "raw_studies"),
+    "pubmed": ("sanofi_pubmed", "raw_articles"),
+}
 
 # Mapping collection ChromaDB par source
 COLLECTION_MAP = {
     "clinicaltrials": settings.CHROMA_COLLECTION_SANOFI_CLINICAL_TRIALS,
     "pubmed": settings.CHROMA_COLLECTION_SANOFI_PUBMED,
     "google_news": settings.CHROMA_COLLECTION_SANOFI_NEWS,
+    "press_releases": settings.CHROMA_COLLECTION_SANOFI_PRESS_RELEASES,
 }
 
 VALID_SOURCES = list(COLLECTION_MAP.keys())
+
+def _get_bq_client() -> bigquery.Client:
+    sa_info = json.loads(settings.GCP_SERVICE_ACCOUNT_JSON_SANOFI)
+    credentials = service_account.Credentials.from_service_account_info(
+        sa_info,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    return bigquery.Client(project=settings.BQ_PROJECT_ID, credentials=credentials)
+
+
+def _is_valid_url(url: str) -> bool:
+    from urllib.parse import urlparse
+    if not url:
+        return False
+    parsed = urlparse(url)
+    return bool(parsed.path and parsed.path != "/")
+
+
+def _lookup_url_from_bq(title: str, source: str) -> str:
+    if source not in SOURCE_BQ_MAP:
+        return ""
+    dataset, table = SOURCE_BQ_MAP[source]
+    try:
+        client = _get_bq_client()
+        escaped = title.replace("'", "\\'")
+        query = f"""
+            SELECT metadata FROM `{settings.BQ_PROJECT_ID}.{dataset}.{table}`
+            WHERE title = '{escaped}' LIMIT 1
+        """
+        rows = list(client.query(query).result())
+        if not rows:
+            return ""
+        meta = rows[0].metadata
+        if isinstance(meta, dict):
+            return meta.get("url", "")
+        return json.loads(meta).get("url", "") if meta else ""
+    except Exception as e:
+        logger.warning(f"⚠️ BQ URL lookup failed for '{title[:50]}': {e}")
+        return ""
 
 
 def _get_chroma_client() -> chromadb.HttpClient:
@@ -77,15 +128,29 @@ def retrieve(
 
             for i, doc_id in enumerate(results["ids"][0]):
                 meta = results["metadatas"][0][i]
+                logger.info(f"DEBUG meta keys: {list(meta.keys())} — url: {meta.get('url', 'MISSING')}")
                 distance = results["distances"][0][i]
                 score = round(1 - distance, 4)  # cosine similarity
+
+                # all_results.append({
+                #     "id": doc_id,
+                #     "source": source,
+                #     "title": meta.get("title", ""),
+                #     "content": results["documents"][0][i],
+                #     "url": meta.get("url", ""),
+                #     "score": score,
+                # })
+
+                url = meta.get("url", "")
+                if not _is_valid_url(url):
+                    url = _lookup_url_from_bq(meta.get("title", ""), source)
 
                 all_results.append({
                     "id": doc_id,
                     "source": source,
                     "title": meta.get("title", ""),
                     "content": results["documents"][0][i],
-                    "url": meta.get("url", ""),
+                    "url": url,
                     "score": score,
                 })
         except Exception as e:
@@ -105,6 +170,7 @@ def build_context(docs: List[Dict]) -> str:
             "clinicaltrials": "Essai clinique",
             "pubmed": "Publication scientifique",
             "google_news": "Actualité",
+            "press_releases": "Press Release",
         }.get(doc["source"], doc["source"])
 
         parts.append(

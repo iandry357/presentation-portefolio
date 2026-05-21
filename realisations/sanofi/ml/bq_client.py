@@ -22,14 +22,25 @@ def _get_client() -> bigquery.Client:
         return bigquery.Client(project=PROJECT_ID, credentials=creds)
     return bigquery.Client(project=PROJECT_ID)
 
+# def _parse_metadata(row: dict) -> dict:
+#     try:
+#         row["metadata"] = json.loads(row["metadata"]) if row.get("metadata") else {}
+#     except (json.JSONDecodeError, TypeError):
+#         row["metadata"] = {}
+#     return row
 
 def _parse_metadata(row: dict) -> dict:
     try:
-        row["metadata"] = json.loads(row["metadata"]) if row.get("metadata") else {}
+        meta = row.get("metadata")
+        if isinstance(meta, dict):
+            row["metadata"] = meta
+        elif isinstance(meta, str):
+            row["metadata"] = json.loads(meta)
+        else:
+            row["metadata"] = {}
     except (json.JSONDecodeError, TypeError):
         row["metadata"] = {}
     return row
-
 
 def _fetch(table_key: str) -> list[dict]:
     client = _get_client()
