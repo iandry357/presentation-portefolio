@@ -22,7 +22,18 @@ const POCS: PocCard[] = [
     tags: ['RAG', 'ChromaDB', 'VoyageAI', 'BigQuery', 'ETL', 'LLM'],
     status: 'live',
   },
+  {
+    href: '/realisations/savencia',
+    title: 'Savencia Intelligence',
+    company: 'Savencia / Soredab',
+    description:
+      "Veille stratégique agroalimentaire avec topic modeling LDA et détection de maturité fromagère par Computer Vision (ViT fine-tuné + Grad-CAM) sur le dataset CR-IDB.",
+    tags: ['RAG', 'Topic Modeling', 'ViT', 'Grad-CAM', 'ChromaDB', 'BigQuery'],
+    status: 'wip',
+  },
 ];
+
+
 
 export default function RealisationsPage() {
   return (
