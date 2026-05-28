@@ -204,7 +204,13 @@ variable "frontend_image" {
 }
 
 variable "gcp_service_account_json_sanofi" {
-  description = "GCP Service Account JSON Sanofi pipeline"
+  description = "GCP Service Account JSON Sanofi"
+  type        = string
+  sensitive   = true
+}
+
+variable "gcp_service_account_json_savencia" {
+  description = "GCP Service Account JSON Savencia"
   type        = string
   sensitive   = true
 }

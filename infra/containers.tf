@@ -51,26 +51,30 @@ resource "scaleway_container" "backend" {
     BQ_DATASET_SANOFI_NEWS                   = "sanofi_news"
     OVH_ML_HOST                              = "51.68.130.23"
     OVH_ML_PORT                              = "8001"
+    CHROMA_COLLECTION_SAVENCIA               = "savencia_veille"
+    BQ_DATASET_SAVENCIA                      = "savencia_veille"
+    OVH_ML_PORT_SAVENCIA                     = "8002"
   }
 
   secret_environment_variables = {
-    GEMINI_API_KEY                  = var.gemini_api_key
-    SECRET_KEY                      = var.secret_key
-    MISTRAL_API_KEY                 = var.mistral_api_key
-    GROQ_API_KEY                    = var.groq_api_key
-    LANGSMITH_API_KEY               = var.langsmith_api_key
-    LANGFUSE_PUBLIC_KEY             = var.langfuse_public_key
-    LANGFUSE_SECRET_KEY             = var.langfuse_secret_key
-    VOYAGE_API_KEY                  = var.voyage_api_key
-    FRANCE_TRAVAIL_CLIENT_ID        = var.france_travail_client_id
-    FRANCE_TRAVAIL_CLIENT_SECRET    = var.france_travail_client_secret
-    DATABASE_URL                    = var.database_url
-    OPENAI_API_KEY                  = var.openai_api_key
-    POSTGRES_PASSWORD               = var.postgres_password
-    SERPER_API_KEY                  = var.serper_api_key
-    GCP_SERVICE_ACCOUNT_JSON        = var.gcp_service_account_json
-    GCP_SERVICE_ACCOUNT_JSON_SANOFI = var.gcp_service_account_json_sanofi
-    CHROMA_PASSWORD                 = var.chroma_password
+    GEMINI_API_KEY                    = var.gemini_api_key
+    SECRET_KEY                        = var.secret_key
+    MISTRAL_API_KEY                   = var.mistral_api_key
+    GROQ_API_KEY                      = var.groq_api_key
+    LANGSMITH_API_KEY                 = var.langsmith_api_key
+    LANGFUSE_PUBLIC_KEY               = var.langfuse_public_key
+    LANGFUSE_SECRET_KEY               = var.langfuse_secret_key
+    VOYAGE_API_KEY                    = var.voyage_api_key
+    FRANCE_TRAVAIL_CLIENT_ID          = var.france_travail_client_id
+    FRANCE_TRAVAIL_CLIENT_SECRET      = var.france_travail_client_secret
+    DATABASE_URL                      = var.database_url
+    OPENAI_API_KEY                    = var.openai_api_key
+    POSTGRES_PASSWORD                 = var.postgres_password
+    SERPER_API_KEY                    = var.serper_api_key
+    GCP_SERVICE_ACCOUNT_JSON          = var.gcp_service_account_json
+    GCP_SERVICE_ACCOUNT_JSON_SANOFI   = var.gcp_service_account_json_sanofi
+    CHROMA_PASSWORD                   = var.chroma_password
+    GCP_SERVICE_ACCOUNT_JSON_SAVENCIA = var.gcp_service_account_json_savencia
   }
 
   lifecycle {
