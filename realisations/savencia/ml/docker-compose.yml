@@ -5,7 +5,14 @@ services:
       - "8002:8002"
     env_file:
       - .env
+    networks:
+      - savencia-ml-network
     volumes:
       - ./results:/app/results
       - ../gcp_sa_savencia.json:/app/gcp_sa_savencia.json:ro
     restart: unless-stopped
+
+networks:
+  savencia-ml-network:
+    name: savencia-ml-network
+    driver: bridge
