@@ -1,0 +1,11 @@
+services:
+  ml-service:
+    build: .
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    volumes:
+      - ./results:/app/results
+      - ../gcp_sa_savencia.json:/app/gcp_sa_savencia.json:ro
+    restart: unless-stopped
