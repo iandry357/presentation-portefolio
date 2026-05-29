@@ -30,6 +30,7 @@ export default function VitView() {
   const [error, setError]     = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [selectedSample, setSelectedSample] = useState<string | null>(null);
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -61,6 +62,7 @@ export default function VitView() {
     setResult(null);
     setPreview(null);
     setError(null);
+    setSelectedSample(null);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -88,11 +90,15 @@ export default function VitView() {
             <button
               key={file}
               onClick={async () => {
+                setSelectedSample(file);
                 const res  = await fetch(`/savencia/samples/${file}`);
                 const blob = await res.blob();
                 handleFile(new File([blob], file, { type: 'image/jpeg' }));
               }}
-              className="border rounded-lg overflow-hidden hover:border-blue-400 transition-colors text-left"
+              // className="border rounded-lg overflow-hidden hover:border-blue-400 transition-colors text-left"
+              className={`border-2 rounded-lg overflow-hidden transition-colors text-left ${
+                selectedSample === file ? 'border-blue-500' : 'border-transparent hover:border-blue-300'
+              }`}
             >
               <img
                 src={`/savencia/samples/${file}`}
