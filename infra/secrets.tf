@@ -34,7 +34,7 @@ resource "scaleway_secret_version" "main" {
 
 resource "scaleway_secret" "cv_edit_secret_code" {
   name        = "cv-edit-secret-code"
-  description = "Code de sécurité pour enrichir le CV via l'interface"
+  description = "Code de sécurité pour enrichir le CV via l'interface."
   project_id  = var.project_id
   region      = var.region
 }
