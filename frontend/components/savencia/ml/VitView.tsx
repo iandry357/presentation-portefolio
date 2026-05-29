@@ -4,8 +4,8 @@ import { useState, useRef } from 'react';
 import { fetchVitInference, VitInferenceResponse } from '@/lib/savenciaApi';
 
 const RIPENESS_COLORS: Record<string, string> = {
-  'Target':     'bg-green-100 text-green-700 border-green-200',
-  'Not Target': 'bg-red-100 text-red-700 border-red-200',
+  'Target':    'bg-green-100 text-green-700 border-green-200',
+  'NotTarget': 'bg-red-100 text-red-700 border-red-200',
 };
 
 const TYPE_COLORS: Record<string, string> = {
@@ -14,11 +14,20 @@ const TYPE_COLORS: Record<string, string> = {
   'Extra-Hard': 'bg-orange-100 text-orange-700',
 };
 
+const SAMPLE_IMAGES = [
+  { file: 'Extra-Hard_Target.jpg',    label: 'Extra-Hard — Target' },
+  { file: 'Extra-Hard_NotTarget.jpg', label: 'Extra-Hard — NotTarget' },
+  { file: 'Hard_Target.jpg',          label: 'Hard — Target' },
+  { file: 'Hard_NotTarget.jpg',       label: 'Hard — NotTarget' },
+  { file: 'Semi-Hard_Target.jpg',     label: 'Semi-Hard — Target' },
+  { file: 'Semi-Hard_NotTarget.jpg',  label: 'Semi-Hard — NotTarget' },
+];
+
 export default function VitView() {
-  const [result, setResult] = useState<VitInferenceResponse | null>(null);
+  const [result, setResult]   = useState<VitInferenceResponse | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,14 +66,43 @@ export default function VitView() {
 
   return (
     <div className="space-y-4">
+
+      {/* Header */}
       <div className="bg-white border rounded-lg p-4">
         <h3 className="font-semibold text-gray-900 mb-1">Détection de maturité fromagère</h3>
         <p className="text-sm text-gray-500">
-          Uploadez une photo de meule de fromage — le modèle ViT prédit le type et la maturité (Target / Not Target) avec une heatmap Grad-CAM.
+          Uploadez une photo de meule de fromage — le modèle ViT prédit le type et la maturité (Target / NotTarget) avec une heatmap Grad-CAM.
         </p>
         <p className="text-xs text-gray-400 mt-1">
           Modèle entraîné sur le dataset CR-IDB — Semi-Hard, Hard, Extra-Hard.
         </p>
+      </div>
+
+      {/* Exemples pré-chargés — toujours visibles */}
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          Exemples — cliquez pour analyser
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          {SAMPLE_IMAGES.map(({ file, label }) => (
+            <button
+              key={file}
+              onClick={async () => {
+                const res  = await fetch(`/savencia/samples/${file}`);
+                const blob = await res.blob();
+                handleFile(new File([blob], file, { type: 'image/jpeg' }));
+              }}
+              className="border rounded-lg overflow-hidden hover:border-blue-400 transition-colors text-left"
+            >
+              <img
+                src={`/savencia/samples/${file}`}
+                alt={label}
+                className="w-full h-20 object-cover"
+              />
+              <p className="text-xs text-gray-500 px-2 py-1 truncate">{label}</p>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Zone upload */}
@@ -94,6 +132,7 @@ export default function VitView() {
       {/* Preview + résultat */}
       {preview && (
         <div className="space-y-4">
+
           {/* Images côte à côte */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="border rounded-lg overflow-hidden bg-white">
@@ -134,6 +173,7 @@ export default function VitView() {
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Résultat</p>
               </div>
               <div className="p-4 space-y-4">
+
                 {/* Type + Maturité */}
                 <div className="flex flex-wrap gap-3 items-center">
                   <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${TYPE_COLORS[result.cheese_type] ?? 'bg-gray-100 text-gray-700'}`}>
