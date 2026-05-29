@@ -34,5 +34,6 @@ realisations/savencia/ml/models/*.pt
 realisations/savencia/ml/models/*.pth
 realisations/savencia/ml/sample_images/
 realisations/savencia/venv-savencia
+realisations/savencia/ml/__pycache__
 
 
