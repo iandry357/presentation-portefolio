@@ -20,7 +20,9 @@ import torchvision.transforms as T
 from google.cloud import storage
 from google.oauth2 import service_account
 from PIL import Image
-from pytorch_grad_cam import GradCAM
+# from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam import GradCAMPlusPlus
+from pytorch_grad_cam.utils.reshape_transforms import vit_reshape_transform
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from transformers import ViTForImageClassification
@@ -67,8 +69,13 @@ class ViTGradCAMWrapper(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(pixel_values=x).logits
 
+    # def get_target_layer(self):
+        # return self.model.vit.encoder.layer[-1].layernorm_before
+        # return self.model.vit.encoder.layer[-1].layernorm_after
+        # return self.model.vit.encoder.layer[-1]
+    
     def get_target_layer(self):
-        return self.model.vit.encoder.layer[-1].layernorm_before
+        return self.model.vit.layers[-1].layernorm_before
 
 
 # ── GCS ────────────────────────────────────────────────────────────────────────
@@ -140,7 +147,8 @@ def _generate_gradcam(
     """Génère la heatmap Grad-CAM et retourne l'image en base64 PNG."""
     target_layer = model.get_target_layer()
 
-    with GradCAM(model=model, target_layers=[target_layer]) as cam:
+    # with GradCAM(model=model, target_layers=[target_layer]) as cam:
+    with GradCAMPlusPlus(model=model, target_layers=[target_layer], reshape_transform=vit_reshape_transform) as cam:
         targets      = [ClassifierOutputTarget(class_idx)]
         grayscale    = cam(input_tensor=tensor.unsqueeze(0), targets=targets)[0]
 
