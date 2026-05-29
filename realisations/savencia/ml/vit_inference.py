@@ -74,8 +74,11 @@ class ViTGradCAMWrapper(nn.Module):
         # return self.model.vit.encoder.layer[-1].layernorm_after
         # return self.model.vit.encoder.layer[-1]
     
+    # def get_target_layer(self):
+        # return self.model.vit.layers[-1].layernorm_before
+    
     def get_target_layer(self):
-        return self.model.vit.layers[-1].layernorm_before
+        return self.model.vit.encoder.layer[-1].layernorm_before
 
 
 # ── GCS ────────────────────────────────────────────────────────────────────────
