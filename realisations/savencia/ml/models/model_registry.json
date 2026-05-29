@@ -1,0 +1,22 @@
+[
+  {
+    "timestamp": "2026-05-29T15:39:36.455486",
+    "best_epoch": 5,
+    "best_val_acc": 0.6933,
+    "model_path": "..\\models\\best_model.pt",
+    "config": {
+      "dataset_root": "../sample_images/CHEESE-HIDB-224",
+      "model_dir": "../models",
+      "registry_path": "../models/model_registry.json",
+      "pretrained_name": "google/vit-base-patch16-224",
+      "num_classes": 6,
+      "val_ratio": 0.2,
+      "epochs": 10,
+      "early_stop": 5,
+      "batch_size": 16,
+      "lr": 0.0001,
+      "num_workers": 8,
+      "seed": 42
+    }
+  }
+]

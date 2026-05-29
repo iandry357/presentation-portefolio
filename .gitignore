@@ -30,6 +30,9 @@ realisations/savencia/.env
 backend/gcp_sa_savencia.json 
 realisations/savencia/ml/.env
 realisations/savencia/ml/results/
-realisations/savencia/ml/models/
+realisations/savencia/ml/models/*.pt
+realisations/savencia/ml/models/*.pth
+realisations/savencia/ml/sample_images/
+realisations/savencia/venv-savencia
 
 
