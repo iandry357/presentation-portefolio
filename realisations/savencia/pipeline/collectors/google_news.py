@@ -101,6 +101,7 @@ def _collect_feed(feed_cfg: Dict) -> List[Dict]:
         title = entry.get("title", "")
         doc_id = f"savencia_{name}_{hashlib.md5(title.encode()).hexdigest()[:16]}"
         article_url = entry.get("source", {}).get("href", "")
+        
 
         doc = {
             "id": doc_id,
@@ -109,7 +110,7 @@ def _collect_feed(feed_cfg: Dict) -> List[Dict]:
             "title": title,
             "content": _fetch_content(article_url) or _build_content(entry),
             "metadata": {
-                "url": article_url or entry.get("link", ""),
+                "url": entry.get("link", "") or article_url,
                 "source_name": entry.get("source", {}).get("title", ""),
                 "feed_name": name,
                 "rss_id": entry_id,
