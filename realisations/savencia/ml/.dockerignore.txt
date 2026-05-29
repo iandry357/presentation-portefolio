@@ -1,0 +1,7 @@
+sample_images/
+models/
+venv-savencia/
+__pycache__/
+*.pyc
+*.pt
+*.pth
