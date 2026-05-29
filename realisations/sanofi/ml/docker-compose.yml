@@ -5,8 +5,15 @@ services:
       - "8001:8001"
     env_file:
       - .env
+    networks:
+      - sanofi-ml-network
     volumes:
       - ./results:/app/results
       - ../gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
       - ../scripts:/app/scripts
     restart: unless-stopped
+
+networks:
+  sanofi-ml-network:
+    name: sanofi-ml-network
+    driver: bridge

@@ -6,6 +6,8 @@ backend/scripts/token.json
 chromadb/server.htpasswd
 chromadb/.env
 chromadb/chromadb_password.txt
+
+# Sanofi
 gcp/sanofi/infra/terraform.tfvars 
 realisations/sanofi/gcp_sa_sanofi.json 
 gcp/sanofi/infra/.terraform/ 
@@ -13,7 +15,26 @@ gcp/sanofi/infra/.terraform.lock.hcl
 gcp/sanofi/infra/terraform.tfstate 
 gcp/sanofi/infra/terraform.tfstate.backup 
 realisations/sanofi/.env 
-
 backend/gcp_sa_sanofi.json 
 realisations/sanofi/ml/.env
 realisations/sanofi/ml/results/
+
+# Savencia
+gcp/savencia/infra/terraform.tfvars 
+realisations/savencia/gcp_sa_savencia.json 
+gcp/savencia/infra/.terraform/ 
+gcp/savencia/infra/.terraform.lock.hcl 
+gcp/savencia/infra/terraform.tfstate 
+gcp/savencia/infra/terraform.tfstate.backup 
+realisations/savencia/.env 
+backend/gcp_sa_savencia.json 
+realisations/savencia/ml/.env
+realisations/savencia/ml/results/
+realisations/savencia/ml/models/*.pt
+realisations/savencia/ml/models/*.pth
+realisations/savencia/ml/sample_images/
+realisations/savencia/venv-savencia
+realisations/savencia/ml/__pycache__
+realisations/savencia/ml/training/__pycache__/
+
+

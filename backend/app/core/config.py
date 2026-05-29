@@ -82,6 +82,10 @@ class Settings(BaseSettings):
 
     CHROMA_COLLECTION_SANOFI_PRESS_RELEASES: str = os.getenv("CHROMA_COLLECTION_SANOFI_PRESS_RELEASES", "sanofi_press_releases")
 
+    GCP_SERVICE_ACCOUNT_JSON_SAVENCIA: str = ""
+    CHROMA_COLLECTION_SAVENCIA: str = "savencia_veille"
+    OVH_ML_PORT_SAVENCIA: str = "8002"
+
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 

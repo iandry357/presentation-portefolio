@@ -1,13 +1,13 @@
-name: GCP Sanofi Infra — Terraform
+name: GCP Savencia Infra — Terraform
 
 on:
   push:
     branches:
       - main
       - infra-scaleway-v1.1
-      - feature/realisations-sanofi
+      - feature/realisations-savencia
     paths:
-      - 'gcp/sanofi/infra/**'
+      - 'gcp/savencia/infra/**'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: gcp/sanofi/infra
+        working-directory: gcp/savencia/infra
 
     steps:
       - name: Checkout
@@ -31,10 +31,10 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY_SANOFI }}
+          credentials_json: ${{ secrets.GCP_SA_KEY_SAVENCIA }}
 
       - name: Write terraform.tfvars
-        run: echo '${{ secrets.TF_VARS_FILE_SANOFI }}' > terraform.tfvars
+        run: echo '${{ secrets.TF_VARS_FILE_SAVENCIA }}' > terraform.tfvars
 
       - name: Terraform Init
         run: terraform init
