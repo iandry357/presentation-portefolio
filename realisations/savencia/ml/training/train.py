@@ -27,8 +27,8 @@ class TrainConfig:
     pretrained_name: str   = "google/vit-base-patch16-224"
     num_classes:     int   = 6
     val_ratio:       float = 0.2
-    epochs:          int   = 10
-    early_stop:      int   = 5
+    epochs:          int   = 20
+    early_stop:      int   = 7
     batch_size:      int   = 16
     lr:              float = 1e-4
     num_workers:     int   = 8
@@ -54,8 +54,11 @@ def build_model(cfg: TrainConfig) -> nn.Module:
         ignore_mismatched_sizes=True,
     )
     # Gel du backbone — seule la tête classifier est entraînable
+    # for name, param in model.named_parameters():
+    #     if "classifier" not in name:
+    #         param.requires_grad = False
     for name, param in model.named_parameters():
-        if "classifier" not in name:
+        if "classifier" not in name and "encoder.layer.10" not in name and "encoder.layer.11" not in name:
             param.requires_grad = False
 
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -140,6 +143,9 @@ def main() -> None:
         filter(lambda p: p.requires_grad, model.parameters()),
         lr=cfg.lr,
     )
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=0.5, patience=2
+    )
     scaler = GradScaler('cuda')
 
     # Entraînement
@@ -155,6 +161,7 @@ def main() -> None:
 
         train_loss, train_acc = run_epoch(model, train_loader, criterion, optimizer, scaler, device, train=True)
         val_loss,   val_acc   = run_epoch(model, val_loader,   criterion, None,      scaler, device, train=False)
+        scheduler.step(val_loss)
 
         elapsed = time.time() - t0
         print(
