@@ -25,7 +25,9 @@ realisations/savencia/gcp_sa_savencia.json
 gcp/savencia/infra/.terraform/ 
 gcp/savencia/infra/.terraform.lock.hcl 
 gcp/savencia/infra/terraform.tfstate 
-gcp/savencia/infra/terraform.tfstate.backup 
+gcp/savencia/infra/terraform.tfstate.backup
+gcp/savencia/infra/gen-lang-client-0989575872-bcdbf94ee857.json
+gcp/savencia/infra/sa_terraform_savencia_minified.txt
 realisations/savencia/.env 
 backend/gcp_sa_savencia.json 
 realisations/savencia/ml/.env
