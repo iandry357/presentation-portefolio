@@ -24,7 +24,7 @@ const POCS: PocCard[] = [
   },
   {
     href: '/realisations/savencia',
-    title: 'Savencia Intelligence',
+    title: 'Savencia Investigation',
     company: 'Savencia / Soredab',
     description:
       "Veille stratégique agroalimentaire avec topic modeling LDA et détection de maturité fromagère par Computer Vision (ViT fine-tuné + Grad-CAM) sur le dataset CR-IDB.",

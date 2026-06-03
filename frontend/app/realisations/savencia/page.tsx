@@ -33,12 +33,12 @@ export default function SavenciaPage() {
           Réalisations
         </Link>
         <span>/</span>
-        <span className="text-gray-900 font-medium">Savencia Intelligence</span>
+        <span className="text-gray-900 font-medium">Savencia Investigation</span>
       </div>
 
       {/* Titre */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Savencia Intelligence</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Savencia Investigation</h1>
         <p className="text-sm text-gray-500">
           Data source — Google News · Agroalimentaire IA · Détection maturité fromagère (CR-IDB)
         </p>
