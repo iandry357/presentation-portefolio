@@ -101,6 +101,12 @@ resource "google_project_iam_member" "terraform_savencia_key_admin" {
   member  = "serviceAccount:${google_service_account.terraform_savencia.email}"
 }
 
+resource "google_project_iam_member" "terraform_savencia_storage_bucket_admin" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.terraform_savencia.email}"
+}
+
 # ─────────────────────────────────────────
 # BigQuery Dataset
 # ─────────────────────────────────────────
