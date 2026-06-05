@@ -97,6 +97,9 @@ async def run_enrichment_crew(
     initial_prompt: str,
     instruction: str = None,
 ) -> dict:
+    import crewai.llms.cache as _crewai_cache
+    _crewai_cache.mark_cache_breakpoint = lambda msg: msg
+
     Crew, Process = _get_crewai()
     LangfuseCallbackHandler = _get_langfuse()
     _, get_current_run_tree = _get_langsmith()
@@ -181,7 +184,7 @@ async def run_enrichment_crew(
 
     logger.info(f"Lancement du Crew pour l'offre : {offer_raw.get('intitule', 'N/A')}")
 
-    result = crew.kickoff()
+    result = await crew.kickoff_async()
 
     # Récupération des outputs par task
     parsed_data = _safe_parse_json(parser_task.output.raw)
