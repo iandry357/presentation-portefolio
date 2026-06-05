@@ -50,4 +50,5 @@ jobs:
           SCW_DEFAULT_REGION: fr-par
         run: |
           scw container container redeploy \
-            ${{ secrets.SCW_CONTAINER_ID }}
+            $(echo ${{ secrets.SCW_CONTAINER_ID }} | cut -d'/' -f2) \
+            region=fr-par
