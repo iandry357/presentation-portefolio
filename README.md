@@ -17,7 +17,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, servant simultanéme
 | **Explorer** | Parcours paginé de toutes les offres collectées avec filtres avancés |
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
-| **Réalisations** | MVPs sectoriels — pipeline ETL données publiques → ChromaDB (OVH) → RAG LLM ; premier MVP en production |
+| **Réalisations** | MVPs sectoriels — pipeline ETL données publiques → ChromaDB (OVH) → RAG LLM ; MVP en production |
 
 ---
 

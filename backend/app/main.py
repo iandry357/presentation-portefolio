@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    logger.info(f"🚀 Starting Portfolio RAG API - Environment: {settings.ENVIRONMENT}")
+    logger.info(f"🚀 Starting AI Portfolio - Environment: {settings.ENVIRONMENT}")
     db_connected = await init_db()
     if not db_connected:
         logger.error("Failed to connect to database. Exiting...")
