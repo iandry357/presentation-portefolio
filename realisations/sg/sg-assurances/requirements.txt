@@ -19,7 +19,9 @@ chromadb-client==0.5.20
 # ─────────────────────────────────────────
 # Embeddings — sentence-transformers (local, no API key)
 # ─────────────────────────────────────────
-sentence-transformers==2.6.1
+sentence-transformers==2.2.2
+transformers==4.40.2
+huggingface-hub==0.23.4
 
 # ─────────────────────────────────────────
 # PDF extraction

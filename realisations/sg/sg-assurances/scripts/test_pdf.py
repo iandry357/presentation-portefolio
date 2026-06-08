@@ -19,6 +19,7 @@ def test_collect():
     logger.info("=" * 60)
 
     from pipeline.collectors.pdf_collector import collect
+    
     docs = collect()
 
     logger.info(f"\n📊 Résultat : {len(docs)} documents collectés\n")
@@ -38,7 +39,7 @@ def test_chunk(docs):
     logger.info("TEST 2 — Chunking")
     logger.info("=" * 60)
 
-    from pipeline.transformers.chunker import chunk_documents
+    from pipeline.transformation.chunker import chunk_documents
     chunks = chunk_documents(docs)
 
     logger.info(f"\n📊 Résultat : {len(docs)} docs → {len(chunks)} chunks\n")
@@ -61,7 +62,8 @@ def test_normalize(docs):
     logger.info("TEST 3 — Normalisation")
     logger.info("=" * 60)
 
-    from pipeline.transformers.normalize import normalize_batch
+    from pipeline.transformation.normalize import normalize_batch
+
     normalized = normalize_batch(docs)
 
     logger.info(f"\n📊 Résultat : {len(normalized)} docs normalisés\n")
