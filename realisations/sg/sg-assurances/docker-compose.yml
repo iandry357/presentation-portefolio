@@ -1,0 +1,17 @@
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sg-assurances-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ./gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true

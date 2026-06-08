@@ -40,3 +40,11 @@ realisations/savencia/ml/__pycache__
 realisations/savencia/ml/training/__pycache__/
 
 
+ 
+# SG 
+realisations/sg/sg-assurances/training/models/ 
+realisations/sg/sg-assurances/ml/results/ 
+realisations/sg/sg-assurances/gcp/infra/terraform.tfvars 
+realisations/sg/sg-assurances/ingestion/*.pdf 
+realisations/sg/sg-assurances/.env 
+realisations/sg/sg-assurances/gcp_sa_sg.json 
