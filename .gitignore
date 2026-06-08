@@ -46,5 +46,9 @@ realisations/sg/sg-assurances/training/models/
 realisations/sg/sg-assurances/ml/results/ 
 realisations/sg/sg-assurances/gcp/infra/terraform.tfvars 
 realisations/sg/sg-assurances/ingestion/*.pdf 
-realisations/sg/sg-assurances/.env 
-realisations/sg/sg-assurances/gcp_sa_sg.json 
+realisations/sg/sg-assurances/.env
+realisations/sg/sg-assurances/gcp_sa_sg.json
+gcp/sg/infra/terraform.tfvars
+gcp/sg/sg-assurances/infra/terraform.tfvars 
+gcp/sg/sg-assurances/infra/.terraform/
+gcp/sg/sg-assurances/infra/.terraform.lock.hcl
