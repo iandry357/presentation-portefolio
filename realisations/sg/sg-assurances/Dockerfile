@@ -11,8 +11,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Dépendances Python
 COPY requirements.txt .
-RUN pip install --no-cache-dir torch==2.2.2 --extra-index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir -r requirements.txt
+COPY constraints.txt .
+RUN pip install --no-cache-dir torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir -c constraints.txt -r requirements.txt
+
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')"
 
 # Code source
 COPY pipeline/ ./pipeline/

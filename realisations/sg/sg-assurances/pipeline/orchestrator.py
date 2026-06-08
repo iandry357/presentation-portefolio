@@ -7,8 +7,8 @@ import sys
 from datetime import datetime
 
 from pipeline.collectors import google_news, pdf_collector
-from pipeline.transformers.normalize import normalize_batch
-from pipeline.transformers.chunker import chunk_documents
+from pipeline.transformation.normalize import normalize_batch
+from pipeline.transformation.chunker import chunk_documents
 from pipeline.validators.quality import validate_batch
 from pipeline.loaders import bigquery_loader, chroma_loader
 
