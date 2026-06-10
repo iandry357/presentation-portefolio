@@ -65,3 +65,4 @@ realisations/sg/sg-assurances/training/models/*.pth
 realisations/sg/sg-assurances/training/.env
 
 realisations/sg/sg-assurances/training/venv-sg-training/
+realisations/sg/sg-assurances/training/synthetic/__pycache__/
