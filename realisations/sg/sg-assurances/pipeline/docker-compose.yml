@@ -1,13 +1,13 @@
 services:
   pipeline:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: pipeline/Dockerfile
     container_name: sg-assurances-pipeline
     env_file:
       - .env
     volumes:
-      - ./gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+      - ../gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
       - huggingface_cache:/root/.cache/huggingface
     networks:
       - portefolio-network

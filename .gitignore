@@ -52,3 +52,16 @@ gcp/sg/infra/terraform.tfvars
 gcp/sg/sg-assurances/infra/terraform.tfvars 
 gcp/sg/sg-assurances/infra/.terraform/
 gcp/sg/sg-assurances/infra/.terraform.lock.hcl
+
+realisations/sg/sg-assurances/pipeline/.env
+ 
+# SG Assurances training data 
+realisations/sg/sg-assurances/training/data/ 
+# SG Assurances training models artifacts 
+realisations/sg/sg-assurances/training/models/*.pt 
+realisations/sg/sg-assurances/training/models/*.bin 
+realisations/sg/sg-assurances/training/models/*.safetensors 
+realisations/sg/sg-assurances/training/models/*.pth 
+realisations/sg/sg-assurances/training/.env
+
+realisations/sg/sg-assurances/training/venv-sg-training/
