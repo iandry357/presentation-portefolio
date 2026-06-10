@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Dépendances Python
-COPY requirements.txt .
-COPY constraints.txt .
+COPY pipeline/requirements.txt .
+COPY pipeline/constraints.txt .
 RUN pip install --no-cache-dir torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -c constraints.txt -r requirements.txt
 
