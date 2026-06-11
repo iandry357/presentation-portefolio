@@ -13,6 +13,10 @@ Output structure:
 """
 
 import fitz  # pymupdf
+import random
+import numpy as np
+import cv2
+from PIL import Image as PILImage
 from pathlib import Path
 from dataclasses import dataclass
 import sys
@@ -109,12 +113,6 @@ def _map_tables_to_zones(
     heuristic_zones: list[ZoneCoords],
     page_idx: int,
 ) -> list[ZoneCoords]:
-    """
-    Map detected tables to zone types using heuristic zones as reference.
-    Strategy: assign zone types by vertical order of tables on the page
-    (top → bottom mirrors the generation order in pdf_generator.py).
-    Heuristic zones provide the expected zone_type sequence for this page.
-    """
     page_zones = [z for z in heuristic_zones if z.page == page_idx]
     if not tables or not page_zones:
         return []
@@ -155,6 +153,67 @@ def _write_label(label_path: Path, zones: list[ZoneCoords],
     with open(label_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
+def _deskew(img_np: np.ndarray) -> np.ndarray:
+    """
+    Détecte et corrige l'inclinaison d'une image via Hough transform.
+    Retourne l'image redressée.
+    """
+    gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=100,
+                             minLineLength=100, maxLineGap=10)
+    if lines is None:
+        return img_np
+
+    angles = []
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        if x2 - x1 != 0:
+            angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+            if -10 < angle < 10:
+                angles.append(angle)
+
+    if not angles:
+        return img_np
+
+    median_angle = float(np.median(angles))
+    h, w = img_np.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, median_angle, 1.0)
+    corrected = cv2.warpAffine(img_np, M, (w, h),
+                                flags=cv2.INTER_LINEAR,
+                                borderMode=cv2.BORDER_REPLICATE)
+    return corrected
+
+
+def _augment(img_np: np.ndarray) -> np.ndarray:
+    """
+    Augmentation aléatoire de l'image :
+    - 30% : rotation simulée ±5° puis deskewing
+    - 70% : bruit gaussien + variation luminosité ±15%
+    Les deux peuvent se cumuler.
+    """
+    # Rotation simulée + deskewing — 30% des images
+    # if random.random() < 0.30:
+    #     angle = random.uniform(-5.0, 5.0)
+    #     h, w = img_np.shape[:2]
+    #     center = (w // 2, h // 2)
+    #     M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    #     img_np = cv2.warpAffine(img_np, M, (w, h),
+    #                              flags=cv2.INTER_LINEAR,
+    #                              borderMode=cv2.BORDER_REPLICATE)
+    #     img_np = _deskew(img_np)
+
+    # Bruit gaussien + luminosité — 70% des images
+    if random.random() < 0.70:
+        # Bruit gaussien
+        noise = np.random.normal(0, random.uniform(3, 10), img_np.shape).astype(np.float32)
+        img_np = np.clip(img_np.astype(np.float32) + noise, 0, 255).astype(np.uint8)
+        # Variation luminosité
+        factor = random.uniform(0.85, 1.15)
+        img_np = np.clip(img_np.astype(np.float32) * factor, 0, 255).astype(np.uint8)
+
+    return img_np
 
 # ─────────────────────────────────────────
 # Page processor
@@ -177,6 +236,11 @@ def _process_page(
         img_name = f"{stem}_p{page_idx:02d}.png"
         img_path = IMAGES_DIR / img_name
         pix.save(str(img_path))
+
+        # Augmentation image
+        img_np = np.array(PILImage.open(str(img_path)).convert("RGB"))
+        # img_np = _augment(img_np)
+        PILImage.fromarray(img_np).save(str(img_path))
 
         # 2. Extract real table coords
         tables = _extract_tables(page)
