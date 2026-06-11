@@ -45,7 +45,7 @@ LOCATION     = "europe-west9"
 GCS_BUCKET   = "sg-assurances-models"
 GCS_PREFIX   = "sg-assurances"
 
-MAR_DIR = MODELS_DIR / "mar"
+MAR_DIR = MODELS_DIR / "yolo" / "mar"
 MAR_DIR.mkdir(parents=True, exist_ok=True)
 
 # ─────────────────────────────────────────
@@ -53,28 +53,28 @@ MAR_DIR.mkdir(parents=True, exist_ok=True)
 # ─────────────────────────────────────────
 MODEL_CONFIG = {
     "yolo": {
-        "artifact":    "yolo_sg_assurances.pt",
-        "metrics":     "yolo_metrics.json",
+        "artifact":     "yolo/yolo_sg_assurances.pt",
+        "metrics":      "yolo/yolo_metrics.json",
         "display_name": "sg-assurances-yolo",
-        "description": "YOLOv8s fine-tuné sur documents SG Assurances — détection zones (contract, identity, amount, signature)",
-        "framework":   "ultralytics-yolov8",
-        "gcs_dir":     "yolo",
+        "description":  "YOLOv8s fine-tuné sur documents SG Assurances — détection zones (contract, identity, amount, signature)",
+        "framework":    "ultralytics-yolov8",
+        "gcs_dir":      "yolo",
     },
     "ner": {
-        "artifact":    "ner_sg_assurances",
-        "metrics":     "ner_metrics.json",
+        "artifact":     "ner/ner_sg_assurances",
+        "metrics":      "ner/ner_sg_assurances/eval_results.json",
         "display_name": "sg-assurances-ner",
-        "description": "CamemBERT fine-tuné sur documents SG Assurances — extraction entités nommées assurance",
-        "framework":   "huggingface-transformers",
-        "gcs_dir":     "ner",
+        "description":  "CamemBERT fine-tuné sur documents SG Assurances — extraction entités nommées assurance",
+        "framework":    "huggingface-transformers",
+        "gcs_dir":      "ner",
     },
     "qlora": {
-        "artifact":    "qlora_sg_assurances",
-        "metrics":     "qlora_metrics.json",
+        "artifact":     "qlora/qlora_sg_assurances",
+        "metrics":      "qlora/qlora_sg_assurances/eval_results.json",
         "display_name": "sg-assurances-qlora",
-        "description": "Qwen2.5-1.5B QLoRA fine-tuné sur paires QA SG Assurances",
-        "framework":   "huggingface-peft",
-        "gcs_dir":     "qlora",
+        "description":  "Qwen2.5-1.5B QLoRA fine-tuné sur paires QA SG Assurances",
+        "framework":    "huggingface-peft",
+        "gcs_dir":      "qlora",
     },
 }
 
@@ -164,6 +164,14 @@ def _upload_to_gcs(
 
     return f"gs://{GCS_BUCKET}/{gcs_base}/"
 
+def _get_serving_container(framework: str) -> str:
+    """Retourne l'image container Vertex adaptée au framework."""
+    if framework == "ultralytics-yolov8":
+        return "europe-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.2-0:latest"
+    elif framework in ("huggingface-transformers", "huggingface-peft"):
+        return "europe-docker.pkg.dev/vertex-ai/prediction/huggingface-cpu.2-3:latest"
+    else:
+        return "europe-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.2-0:latest"
 
 # ─────────────────────────────────────────
 # Vertex AI — enregistrement modèle
@@ -186,10 +194,13 @@ def _register_vertex(
 
     # Labels — métriques globales tronquées pour Vertex AI (max 63 chars, alphanum+tiret)
     g = metrics.get("global", {})
+    ft = metrics.get("finetuned", {})
+    eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached", False)
     labels = {
         "framework":  config["framework"].replace(".", "-").replace("_", "-")[:63],
         "map50":      str(round(g.get("mAP50", 0), 4)).replace(".", "-"),
-        "eligible":   "true" if metrics.get("eligible_vertex_ai") else "false",
+        "f1-macro":   str(round(ft.get("f1_macro", 0), 4)).replace(".", "-"),
+        "eligible":   "true" if eligible else "false",
         "sector":     "sg-assurances",
         "model-type": config["gcs_dir"],
     }
@@ -204,33 +215,24 @@ def _register_vertex(
 
     if models:
         print(f"[registry] Modèle existant trouvé — upload nouvelle version")
-        model = models[0]
-        model = aiplatform.Model.upload(
-            display_name=config["display_name"],
-            description=config["description"],
-            artifact_uri=gcs_uri,
-            serving_container_image_uri="europe-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.2-0:latest",
-            serving_container_predict_route="/predictions/model",
-            serving_container_health_route="/ping",
-            labels=labels,
-            project=PROJECT_ID,
-            location=LOCATION,
-            credentials=credentials,
-        )
+        parent_model = models[0].resource_name
     else:
         print(f"[registry] Création nouveau modèle dans Vertex AI")
-        model = aiplatform.Model.upload(
-            display_name=config["display_name"],
-            description=config["description"],
-            artifact_uri=gcs_uri,
-            serving_container_image_uri="europe-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.2-0:latest",
-            serving_container_predict_route="/predictions/model",
-            serving_container_health_route="/ping",
-            labels=labels,
-            project=PROJECT_ID,
-            location=LOCATION,
-            credentials=credentials,
-        )
+        parent_model = None
+
+    model = aiplatform.Model.upload(
+        display_name=config["display_name"],
+        description=config["description"],
+        artifact_uri=gcs_uri,
+        serving_container_image_uri=_get_serving_container(config["framework"]),
+        serving_container_predict_route="/predictions/model",
+        serving_container_health_route="/ping",
+        labels=labels,
+        project=PROJECT_ID,
+        location=LOCATION,
+        credentials=credentials,
+        parent_model=parent_model,      # ← nouvelle version si existant
+    )
 
     print(f"[registry] Modèle enregistré → {model.resource_name}")
     return model.resource_name
@@ -240,7 +242,7 @@ def _register_vertex(
 # Sauvegarde model ID
 # ─────────────────────────────────────────
 def _save_model_id(model_type: str, resource_name: str) -> None:
-    id_path = MODELS_DIR / f"{model_type}_vertex_model_id.txt"
+    id_path = MODELS_DIR / model_type / f"{model_type}_vertex_model_id.txt"
     with open(id_path, "w", encoding="utf-8") as f:
         f.write(resource_name)
     print(f"[registry] Model ID sauvegardé → {id_path}")
@@ -266,9 +268,14 @@ def register(model_type: str) -> None:
     with open(metrics_path, encoding="utf-8") as f:
         metrics = json.load(f)
 
-    if not metrics.get("eligible_vertex_ai"):
-        print(f"[registry] Modèle non éligible — mAP50 < {metrics.get('threshold', 0.40)}")
+    eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached")
+    if not eligible:
+        print(f"[registry] Modèle non éligible — seuil non atteint")
         sys.exit(1)
+
+    # if not metrics.get("eligible_vertex_ai"):
+    #     print(f"[registry] Modèle non éligible — mAP50 < {metrics.get('threshold', 0.40)}")
+    #     sys.exit(1)
 
     # Vérifier artefact
     artifact_path = MODELS_DIR / config["artifact"]
@@ -280,14 +287,17 @@ def register(model_type: str) -> None:
     # Credentials
     credentials = _get_credentials()
 
-    # Packaging MAR
-    mar_path = _package_mar(model_type, config)
-
-    # Upload GCS — on uploade le .mar + le .pt original
-    print(f"[registry] Upload GCS → gs://{GCS_BUCKET}/{GCS_PREFIX}/{config['gcs_dir']}/")
-    gcs_uri = _upload_to_gcs(mar_path, config["gcs_dir"], credentials)
-    # Upload aussi le .pt pour usage OVH
-    _upload_to_gcs(artifact_path, config["gcs_dir"], credentials)
+    # Packaging MAR uniquement pour YOLO (.pt)
+    if model_type == "yolo":
+        mar_path = _package_mar(model_type, config)
+        # Upload GCS — on uploade le .mar + le .pt original
+        print(f"[registry] Upload GCS → gs://{GCS_BUCKET}/{GCS_PREFIX}/{config['gcs_dir']}/")
+        gcs_uri = _upload_to_gcs(mar_path, config["gcs_dir"], credentials)
+        _upload_to_gcs(artifact_path, config["gcs_dir"], credentials)
+    else:
+        # NER / QLoRA — upload répertoire HuggingFace direct
+        print(f"[registry] Upload GCS → gs://{GCS_BUCKET}/{GCS_PREFIX}/{config['gcs_dir']}/")
+        gcs_uri = _upload_to_gcs(artifact_path, config["gcs_dir"], credentials)
 
     # Vertex AI
     resource_name = _register_vertex(config, metrics, gcs_uri, credentials)
