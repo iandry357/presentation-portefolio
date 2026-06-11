@@ -66,3 +66,5 @@ realisations/sg/sg-assurances/training/.env
 
 realisations/sg/sg-assurances/training/venv-sg-training/
 realisations/sg/sg-assurances/training/synthetic/__pycache__/
+# YOLO training runs
+realisations/sg/sg-assurances/training/runs/

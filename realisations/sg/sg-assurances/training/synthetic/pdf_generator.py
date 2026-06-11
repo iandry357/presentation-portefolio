@@ -34,6 +34,11 @@ PAGES_RANGE = {
     "formulaire": (2, 3),
     "echeance":   (1, 2),
 }
+# Bandes verticales pour placement aléatoire des blocs
+BAND_TOP    = (0.10, 0.35)   # 10% à 35% de la hauteur page
+BAND_MIDDLE = (0.35, 0.62)   # 35% à 62%
+BAND_BOTTOM = (0.62, 0.88)   # 62% à 88%
+BANDS = [BAND_TOP, BAND_MIDDLE, BAND_BOTTOM]
 
 def _clean_dir(path: Path) -> None:
     """Remove all files in a directory without removing the directory."""
@@ -79,6 +84,12 @@ def _rand_x(w: float) -> float:
     lo = MARGIN_MIN
     hi = PAGE_W - MARGIN_MIN - w
     return random.uniform(lo, max(lo, hi))
+
+def _rand_y_in_band(band: tuple, h: float) -> float:
+    """Position verticale aléatoire dans une bande donnée."""
+    y_min = band[0] * PAGE_H
+    y_max = band[1] * PAGE_H - h
+    return random.uniform(y_min, max(y_min, y_max))
 
 def _rand_color() -> colors.Color:
     """Light background color for zone variation."""
@@ -210,16 +221,23 @@ def _page_contrat(fk: Faker, styles: dict, page_idx: int) -> list:
         elems.append(Paragraph(title, styles["title"]))
         elems.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#3b5998")))
         elems.append(Spacer(1, random.uniform(5*mm, 10*mm)))
-        elems += _build_contract_block(fk, styles)
-        elems += _build_identity_block(fk, styles)
+        blocks = [
+            _build_contract_block(fk, styles),
+            _build_identity_block(fk, styles),
+        ]
+        for b in blocks:
+            elems += b
     elif page_idx == 1:
         section = "GARANTIES SOUSCRITES" if fk.locale == "fr_FR" else "SUBSCRIBED COVERAGES"
         elems.append(Paragraph(section, styles["title"]))
         elems.append(Spacer(1, random.uniform(3*mm, 6*mm)))
-        elems += _build_amount_block(fk, styles)
-        body = fk.paragraphs(nb=random.randint(3, 5))
-        for p in body:
-            elems.append(Paragraph(p, styles["normal"]))
+        body = fk.paragraphs(nb=random.randint(3, 5)) or []
+        blocks = [
+            _build_amount_block(fk, styles),
+            [Paragraph(p, styles["normal"]) for p in body],
+        ]
+        for b in blocks:
+            elems += b
     else:
         section = "CONDITIONS PARTICULIÈRES" if fk.locale == "fr_FR" else "PARTICULAR CONDITIONS"
         elems.append(Paragraph(section, styles["title"]))
@@ -229,44 +247,60 @@ def _page_contrat(fk: Faker, styles: dict, page_idx: int) -> list:
             elems.append(Paragraph(p, styles["normal"]))
         if page_idx == PAGES_RANGE["contrat"][1] - 1:
             elems += _build_signature_block(fk, styles)
+
     return elems
 
 def _page_formulaire(fk: Faker, styles: dict, page_idx: int) -> list:
-    """Build flowables for one formulaire sinistre page."""
     elems = []
     if page_idx == 0:
         title = "DÉCLARATION DE SINISTRE" if fk.locale == "fr_FR" else "CLAIM DECLARATION"
         elems.append(Paragraph(title, styles["title"]))
         elems.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#c0392b")))
         elems.append(Spacer(1, random.uniform(5*mm, 8*mm)))
-        elems += _build_contract_block(fk, styles)
-        elems += _build_identity_block(fk, styles)
         lbl = "Nature du sinistre" if fk.locale == "fr_FR" else "Nature of claim"
-        elems.append(Paragraph(f"<b>{lbl}</b>", styles["normal"]))
-        elems.append(Paragraph(fk.sentence(nb_words=12), styles["normal"]))
+        nature_block = [
+            Paragraph(f"<b>{lbl}</b>", styles["normal"]),
+            Paragraph(fk.sentence(nb_words=12), styles["normal"]),
+        ]
+        blocks = [
+            _build_contract_block(fk, styles),
+            _build_identity_block(fk, styles),
+            nature_block,
+        ]
+        for b in blocks:
+            elems += b
     else:
-        elems += _build_amount_block(fk, styles)
-        body = fk.paragraphs(nb=random.randint(2, 4))
-        for p in body:
-            elems.append(Paragraph(p, styles["normal"]))
-        elems += _build_signature_block(fk, styles)
+        body = fk.paragraphs(nb=random.randint(2, 4)) or []
+        blocks = [
+            _build_amount_block(fk, styles),
+            [Paragraph(p, styles["normal"]) for p in body],
+            _build_signature_block(fk, styles),
+        ]
+        for b in blocks:
+            elems += b
     return elems
 
 def _page_echeance(fk: Faker, styles: dict, page_idx: int) -> list:
-    """Build flowables for one avis echeance page."""
     elems = []
     title = "AVIS D'ÉCHÉANCE" if fk.locale == "fr_FR" else "RENEWAL NOTICE"
     elems.append(Paragraph(title, styles["title"]))
     elems.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#27ae60")))
     elems.append(Spacer(1, random.uniform(5*mm, 8*mm)))
     if page_idx == 0:
-        elems += _build_identity_block(fk, styles)
-        elems += _build_amount_block(fk, styles)
+        blocks = [
+            _build_identity_block(fk, styles),
+            _build_amount_block(fk, styles),
+        ]
+        for b in blocks:
+            elems += b
     else:
-        body = fk.paragraphs(nb=random.randint(3, 5))
-        for p in body:
-            elems.append(Paragraph(p, styles["normal"]))
-        elems += _build_signature_block(fk, styles)
+        body = fk.paragraphs(nb=random.randint(3, 5)) or []
+        blocks = [
+            [Paragraph(p, styles["normal"]) for p in body],
+            _build_signature_block(fk, styles),
+        ]
+        for b in blocks:
+            elems += b
     return elems
 
 
@@ -274,12 +308,6 @@ def _page_echeance(fk: Faker, styles: dict, page_idx: int) -> list:
 # Zone coordinate extraction
 # ─────────────────────────────────────────
 def _extract_zones_from_story(story: list, doc_type: str, page_idx: int) -> list[ZoneCoords]:
-    """
-    Heuristic zone extraction based on flowable types present in the story.
-    ReportLab does not expose final y-positions before rendering,
-    so we assign plausible randomized positions within page bounds.
-    annotator.py will use these for YOLO label generation.
-    """
     zones = []
     zone_map = {
         "contract_block":  ("contrat", "formulaire", "echeance"),
@@ -288,43 +316,38 @@ def _extract_zones_from_story(story: list, doc_type: str, page_idx: int) -> list
         "signature_block": ("contrat", "formulaire"),
     }
 
-    # Identify which zone types are present on this page
-    present = set()
     table_count = 0
     for flowable in story:
         if isinstance(flowable, Table):
             if table_count == 0:
                 if page_idx == 0:
-                    present.add("contract_block")
+                    present = {"contract_block"}
                 else:
-                    present.add("amount_block")
+                    present = {"amount_block"}
             elif table_count == 1:
                 if page_idx == 0:
-                    present.add("identity_block")
+                    present = {"identity_block"}
                 else:
-                    present.add("signature_block")
+                    present = {"signature_block"}
+            else:
+                present = set()
             table_count += 1
 
-    # Generate plausible randomized bounding boxes
-    y_cursor = random.uniform(60*mm, 100*mm)
-    for ztype in ["contract_block", "identity_block", "amount_block", "signature_block"]:
-        if ztype not in present:
-            continue
-        w = random.uniform(120*mm, 160*mm)
-        h = random.uniform(20*mm, 35*mm)
-        x = _rand_x(w)
-        y = y_cursor
-        zones.append(ZoneCoords(
-            zone_type=ztype,
-            page=page_idx,
-            x=x,
-            y=y,
-            w=w,
-            h=h,
-        ))
-        y_cursor += h + random.uniform(8*mm, 15*mm)
-        if y_cursor > PAGE_H - 30*mm:
-            break
+            y_cursor = random.uniform(60*mm, 100*mm)
+            for ztype in present:
+                w = random.uniform(120*mm, 160*mm)
+                h = random.uniform(20*mm, 35*mm)
+                x = _rand_x(w)
+                y = y_cursor
+                zones.append(ZoneCoords(
+                    zone_type=ztype,
+                    page=page_idx,
+                    x=x,
+                    y=y,
+                    w=w,
+                    h=h,
+                ))
+                y_cursor += h + random.uniform(8*mm, 15*mm)
 
     return zones
 
