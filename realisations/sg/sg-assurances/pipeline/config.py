@@ -64,6 +64,36 @@ PDF_SOURCES = [
         "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/SFCR_SOGESSUR_2021_VF.pdf",
         "doc_type": "sfcr",
     },
+    {
+        "name": "sfcr_sogessur_2022",
+        "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/SOGESSUR_Entite_RSSF_01.pdf",
+        "doc_type": "sfcr",
+    },
+    {
+        "name": "sfcr_sogessur_2023",
+        "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/VF_Sogessur_entite_rssf_2023_01.pdf",
+        "doc_type": "sfcr",
+    },
+    {
+        "name": "sfcr_sogessur_2024",
+        "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/Rapport_sur_la_solvabilit%C3%A9_et_la_situation_financi%C3%A8re_03.pdf",
+        "doc_type": "sfcr",
+    },
+    {
+        "name": "sfcr_sogecap_groupe_2023",
+        "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/sogecap_groupe_rssf_2023.pdf",
+        "doc_type": "sfcr",
+    },
+    {
+        "name": "cp_resultats_2024",
+        "url": "https://www.assurances.societegenerale.com/uploads/tx_bisgnews/20250213_Communiqu%C3%A9_Societe-Generale-Assurances_Resultats-2024-records_01.pdf",
+        "doc_type": "communique_presse",
+    },
+    {
+        "name": "fa_assurance_habitation_2024",
+        "url": "https://www.franceassureurs.fr/wp-content/uploads/lassurance-habitation-en-2024.pdf",
+        "doc_type": "etude_marche",
+    },
 ]
 
 # RSS Sources
