@@ -70,7 +70,7 @@ MODEL_CONFIG = {
     },
     "qlora": {
         "artifact":     "qlora/qlora_sg_assurances",
-        "metrics":      "qlora/qlora_sg_assurances/eval_results.json",
+        "metrics":      "qlora/qlora_eval_results.json",
         "display_name": "sg-assurances-qlora",
         "description":  "Qwen2.5-1.5B QLoRA fine-tuné sur paires QA SG Assurances",
         "framework":    "huggingface-peft",
@@ -193,18 +193,28 @@ def _register_vertex(
     )
 
     # Labels — métriques globales tronquées pour Vertex AI (max 63 chars, alphanum+tiret)
-    g = metrics.get("global", {})
-    ft = metrics.get("finetuned", {})
-    eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached", False)
+    eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached") or metrics.get("rouge_improved", False)
+
+    if config["gcs_dir"] == "yolo":
+        perf_label = {"map50": str(round(metrics.get("global", {}).get("mAP50", 0), 4)).replace(".", "-")}
+    elif config["gcs_dir"] == "ner":
+        perf_label = {"f1-macro": str(round(metrics.get("finetuned", {}).get("f1_macro", 0), 4)).replace(".", "-")}
+    else:  # qlora
+        rouge_l = metrics.get("rouge_ft", {}).get("rougeL", 0)
+        win_rate = str(round(metrics.get("judge_summary", {}).get("ft_win_rate", 0), 3)).replace(".", "-")
+        perf_label = {
+            "rougel-ft":  str(round(rouge_l, 4)).replace(".", "-"),
+            "ft-win-rate": win_rate,
+        }
+
     labels = {
         "framework":  config["framework"].replace(".", "-").replace("_", "-")[:63],
-        "map50":      str(round(g.get("mAP50", 0), 4)).replace(".", "-"),
-        "f1-macro":   str(round(ft.get("f1_macro", 0), 4)).replace(".", "-"),
-        "eligible":   "true" if eligible else "false",
+        "eligible":   "true" if bool(eligible) else "false",
         "sector":     "sg-assurances",
         "model-type": config["gcs_dir"],
+        **perf_label,
     }
-
+    
     # Vérifier si le modèle existe déjà — update sinon create
     models = aiplatform.Model.list(
         filter=f'display_name="{config["display_name"]}"',
@@ -268,7 +278,12 @@ def register(model_type: str) -> None:
     with open(metrics_path, encoding="utf-8") as f:
         metrics = json.load(f)
 
-    eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached")
+    # eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached")
+    eligible = (
+        metrics.get("eligible_vertex_ai") or
+        metrics.get("threshold_reached") or
+        metrics.get("rouge_improved", False)
+    )
     if not eligible:
         print(f"[registry] Modèle non éligible — seuil non atteint")
         sys.exit(1)
@@ -282,7 +297,11 @@ def register(model_type: str) -> None:
 
     print(f"[registry] Démarrage enregistrement — modèle : {model_type}")
     print(f"[registry] Artefact : {artifact_path}")
-    print(f"[registry] mAP50    : {metrics.get('global', {}).get('mAP50', 'N/A')}")
+    if model_type == "qlora":
+        print(f"[registry] ROUGE-L FT : {metrics.get('rouge_ft', {}).get('rougeL', 'N/A')}")
+        print(f"[registry] Win rate   : {metrics.get('judge_summary', {}).get('ft_win_rate', 'N/A')}")
+    else:
+        print(f"[registry] mAP50    : {metrics.get('global', {}).get('mAP50', 'N/A')}")
 
     # Credentials
     credentials = _get_credentials()

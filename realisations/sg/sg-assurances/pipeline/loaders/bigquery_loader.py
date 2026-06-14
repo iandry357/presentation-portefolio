@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 # Mapping source → (dataset, table)
 SOURCE_MAP = {
     "google_news": (BQ_DATASET, BQ_TABLE_NEWS),
+    "pdf":         (BQ_DATASET, BQ_TABLE_NEWS),
 }
 
 # Schéma BigQuery commun à toutes les tables
