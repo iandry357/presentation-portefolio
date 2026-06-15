@@ -40,25 +40,30 @@ NER_MODEL_PATH  = Path(os.getenv("NER_MODEL_PATH",  "/app/models/ner_sg_assuranc
 GCS_YOLO_URI = os.getenv("GCS_YOLO_URI", "gs://sg-assurances-models/sg-assurances/yolo/yolo_sg_assurances.pt")
 GCS_NER_URI  = os.getenv("GCS_NER_URI",  "gs://sg-assurances-models/sg-assurances/ner/ner_sg_assurances")
 
+GCS_ENDPOINT_INFO = os.getenv("GCS_ENDPOINT_INFO", "gs://sg-assurances-models/sg-assurances/qwen-endpoint/qwen_endpoint_id.json")
+ENDPOINT_INFO_PATH = Path(os.getenv("ENDPOINT_INFO_PATH", "/app/models/qwen_endpoint_id.json"))
+
 def _download_if_missing(gcs_uri: str, local_path: Path) -> None:
     """Télécharge depuis GCS si le fichier/répertoire est absent."""
     if local_path.exists() and (local_path.is_file() or any(local_path.iterdir())):
         logger.info(f"[ml-service] Déjà en cache : {local_path}")
         return
 
-    if gcs_uri.endswith(".pt"):
+    is_file = gcs_uri.endswith(".pt") or gcs_uri.endswith(".json")
+
+    if is_file:
         local_path.parent.mkdir(parents=True, exist_ok=True)
     else:
         local_path.mkdir(parents=True, exist_ok=True)
+
     sa_key = os.getenv("SA_KEY_PATH", "/app/gcp_sa_sg.json")
 
-    # Authentification gsutil via service account
     auth_cmd = ["gcloud", "auth", "activate-service-account", f"--key-file={sa_key}"]
     subprocess.run(auth_cmd, capture_output=True, text=True)
 
     logger.info(f"[ml-service] Téléchargement {gcs_uri} → {local_path}")
 
-    if gcs_uri.endswith(".pt"):
+    if is_file:
         cmd = ["gsutil", "cp", gcs_uri, str(local_path)]
     else:
         cmd = ["gsutil", "-m", "rsync", "-r", gcs_uri, str(local_path)]
@@ -84,6 +89,9 @@ async def lifespan(app: FastAPI):
 
     logger.info("[ml-service] Chargement NER...")
     ner_inference.init(NER_MODEL_PATH)
+
+    logger.info("[ml-service] Téléchargement endpoint info...")
+    _download_if_missing(GCS_ENDPOINT_INFO, ENDPOINT_INFO_PATH)
 
     logger.info("[ml-service] ML Service prêt — port 8003")
     yield
