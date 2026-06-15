@@ -41,12 +41,12 @@ SA_KEY_PATH = TRAINING_DIR.parent / "gcp_sa_sg.json"
 # Config GCP
 # ─────────────────────────────────────────
 PROJECT_ID   = "gen-lang-client-0989575872"
-LOCATION     = "europe-west9"
+# LOCATION     = "europe-west9"
 GCS_BUCKET   = "sg-assurances-models"
 GCS_PREFIX   = "sg-assurances"
 
-MAR_DIR = MODELS_DIR / "yolo" / "mar"
-MAR_DIR.mkdir(parents=True, exist_ok=True)
+# MAR_DIR = MODELS_DIR / "yolo" / "mar"
+# MAR_DIR.mkdir(parents=True, exist_ok=True)
 
 # ─────────────────────────────────────────
 # Config modèles — mappings génériques
@@ -59,6 +59,7 @@ MODEL_CONFIG = {
         "description":  "YOLOv8s fine-tuné sur documents SG Assurances — détection zones (contract, identity, amount, signature)",
         "framework":    "ultralytics-yolov8",
         "gcs_dir":      "yolo",
+        "location":     "europe-west9"
     },
     "ner": {
         "artifact":     "ner/ner_sg_assurances",
@@ -67,14 +68,25 @@ MODEL_CONFIG = {
         "description":  "CamemBERT fine-tuné sur documents SG Assurances — extraction entités nommées assurance",
         "framework":    "huggingface-transformers",
         "gcs_dir":      "ner",
+        "location":     "europe-west9"
     },
     "qlora": {
         "artifact":     "qlora/qlora_sg_assurances",
         "metrics":      "qlora/qlora_eval_results.json",
         "display_name": "sg-assurances-qlora",
         "description":  "Qwen2.5-1.5B QLoRA fine-tuné sur paires QA SG Assurances",
-        "framework":    "huggingface-peft",
+        "framework":    "huggingface-peft-gpu",
         "gcs_dir":      "qlora",
+        "location":     "europe-west4"
+    },
+    "qwen-base": {
+        "artifact":     "qwen-base",
+        "metrics":      None,          # pas de metrics — modèle public
+        "display_name": "sg-assurances-qwen-base",
+        "description":  "Qwen2.5-1.5B-Instruct base model — comparaison vs fine-tuné SG Assurances",
+        "framework":    "huggingface-transformers-gpu",
+        "gcs_dir":      "qwen-base",
+        "location":     "europe-west4"
     },
 }
 
@@ -92,15 +104,18 @@ def _get_credentials() -> service_account.Credentials:
     )
 
 def _package_mar(model_type: str, config: dict) -> Path:
-    """
-    Package le modèle en model.mar via torch-model-archiver.
-    Retourne le chemin vers le .mar généré.
-    """
     artifact_path = MODELS_DIR / config["artifact"]
-    handler_path  = TRAINING_DIR / "registry" / "handlers" / f"{model_type}_handler.py"
-    mar_path      = MAR_DIR / "model.mar"
+    # handler_path  = TRAINING_DIR / "registry" / "handlers" / f"{model_type}_handler.py"
+    HANDLER_MAP = {
+        "yolo":      "yolo_handler.py",
+        "qlora":     "qwen_handler.py",
+        "qwen-base": "qwen_handler.py",
+    }
+    handler_path = TRAINING_DIR / "registry" / "handlers" / HANDLER_MAP[model_type]
+    mar_dir       = MODELS_DIR / config["gcs_dir"] / "mar"
+    mar_dir.mkdir(parents=True, exist_ok=True)
+    mar_path      = mar_dir / "model.mar"
 
-    # Supprimer l'ancien .mar si existe
     if mar_path.exists():
         mar_path.unlink()
         print(f"[registry] Ancien model.mar supprimé")
@@ -109,17 +124,33 @@ def _package_mar(model_type: str, config: dict) -> Path:
         print(f"[registry] Handler introuvable : {handler_path}")
         sys.exit(1)
 
-    cmd = [
-        "torch-model-archiver",
-        "--model-name",    "model",
-        "--version",       "1.0",
-        "--serialized-file", str(artifact_path),
-        "--handler",       str(handler_path),
-        "--export-path",   str(MAR_DIR),
-        "--force",
-    ]
+    if model_type == "yolo":
+        # YOLO — serialized-file = .pt
+        cmd = [
+            "torch-model-archiver",
+            "--model-name",      "model",
+            "--version",         "1.0",
+            "--serialized-file", str(artifact_path),
+            "--handler",         str(handler_path),
+            "--export-path",     str(mar_dir),
+            "--force",
+        ]
+    else:
+        # Qwen base / finetuned — extra-files = répertoire HuggingFace
+        extra_files = ",".join(
+            str(f) for f in artifact_path.rglob("*") if f.is_file()
+        )
+        cmd = [
+            "torch-model-archiver",
+            "--model-name",  "model",
+            "--version",     "1.0",
+            "--handler",     str(handler_path),
+            "--extra-files", extra_files,
+            "--export-path", str(mar_dir),
+            "--force",
+        ]
 
-    print(f"[registry] Packaging model.mar...")
+    print(f"[registry] Packaging model.mar — {model_type}...")
     result = subprocess.run(cmd, capture_output=True, text=True)
 
     if result.returncode != 0:
@@ -165,9 +196,10 @@ def _upload_to_gcs(
     return f"gs://{GCS_BUCKET}/{gcs_base}/"
 
 def _get_serving_container(framework: str) -> str:
-    """Retourne l'image container Vertex adaptée au framework."""
     if framework == "ultralytics-yolov8":
         return "europe-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.2-0:latest"
+    elif framework == "huggingface-transformers-gpu" or framework == "huggingface-peft-gpu":
+        return "europe-docker.pkg.dev/vertex-ai/prediction/pytorch-gpu.2-4:latest"
     elif framework in ("huggingface-transformers", "huggingface-peft"):
         return "europe-docker.pkg.dev/vertex-ai/prediction/huggingface-cpu.2-3:latest"
     else:
@@ -188,7 +220,7 @@ def _register_vertex(
     """
     aiplatform.init(
         project=PROJECT_ID,
-        location=LOCATION,
+        location=config["location"],
         credentials=credentials,
     )
 
@@ -199,13 +231,15 @@ def _register_vertex(
         perf_label = {"map50": str(round(metrics.get("global", {}).get("mAP50", 0), 4)).replace(".", "-")}
     elif config["gcs_dir"] == "ner":
         perf_label = {"f1-macro": str(round(metrics.get("finetuned", {}).get("f1_macro", 0), 4)).replace(".", "-")}
-    else:  # qlora
+    elif config["gcs_dir"] == "qlora":
         rouge_l = metrics.get("rouge_ft", {}).get("rougeL", 0)
         win_rate = str(round(metrics.get("judge_summary", {}).get("ft_win_rate", 0), 3)).replace(".", "-")
         perf_label = {
             "rougel-ft":  str(round(rouge_l, 4)).replace(".", "-"),
             "ft-win-rate": win_rate,
         }
+    else:  # qwen-base — pas de métriques
+        perf_label = {}
 
     labels = {
         "framework":  config["framework"].replace(".", "-").replace("_", "-")[:63],
@@ -219,7 +253,7 @@ def _register_vertex(
     models = aiplatform.Model.list(
         filter=f'display_name="{config["display_name"]}"',
         project=PROJECT_ID,
-        location=LOCATION,
+        location=config["location"],
         credentials=credentials,
     )
 
@@ -239,7 +273,7 @@ def _register_vertex(
         serving_container_health_route="/ping",
         labels=labels,
         project=PROJECT_ID,
-        location=LOCATION,
+        location=config["location"],
         credentials=credentials,
         parent_model=parent_model,      # ← nouvelle version si existant
     )
@@ -269,24 +303,27 @@ def register(model_type: str) -> None:
     config = MODEL_CONFIG[model_type]
 
     # Vérifier métriques
-    metrics_path = MODELS_DIR / config["metrics"]
-    if not metrics_path.exists():
-        print(f"[registry] metrics.json introuvable : {metrics_path}")
-        print(f"[registry] Lance yolo/evaluate.py d'abord")
-        sys.exit(1)
+    if config["metrics"] is None:
+        print(f"[registry] Modèle public — pas de métriques requises")
+        metrics = {}
+    else:
+        metrics_path = MODELS_DIR / config["metrics"]
+        if not metrics_path.exists():
+            print(f"[registry] metrics.json introuvable : {metrics_path}")
+            print(f"[registry] Lance evaluate.py d'abord")
+            sys.exit(1)
 
-    with open(metrics_path, encoding="utf-8") as f:
-        metrics = json.load(f)
+        with open(metrics_path, encoding="utf-8") as f:
+            metrics = json.load(f)
 
-    # eligible = metrics.get("eligible_vertex_ai") or metrics.get("threshold_reached")
-    eligible = (
-        metrics.get("eligible_vertex_ai") or
-        metrics.get("threshold_reached") or
-        metrics.get("rouge_improved", False)
-    )
-    if not eligible:
-        print(f"[registry] Modèle non éligible — seuil non atteint")
-        sys.exit(1)
+        eligible = (
+            metrics.get("eligible_vertex_ai") or
+            metrics.get("threshold_reached") or
+            metrics.get("rouge_improved", False)
+        )
+        if not eligible:
+            print(f"[registry] Modèle non éligible — seuil non atteint")
+            sys.exit(1)
 
     # if not metrics.get("eligible_vertex_ai"):
     #     print(f"[registry] Modèle non éligible — mAP50 < {metrics.get('threshold', 0.40)}")
@@ -307,12 +344,12 @@ def register(model_type: str) -> None:
     credentials = _get_credentials()
 
     # Packaging MAR uniquement pour YOLO (.pt)
-    if model_type == "yolo":
+    if model_type in ("yolo", "qlora", "qwen-base"):
         mar_path = _package_mar(model_type, config)
-        # Upload GCS — on uploade le .mar + le .pt original
         print(f"[registry] Upload GCS → gs://{GCS_BUCKET}/{GCS_PREFIX}/{config['gcs_dir']}/")
         gcs_uri = _upload_to_gcs(mar_path, config["gcs_dir"], credentials)
-        _upload_to_gcs(artifact_path, config["gcs_dir"], credentials)
+        if model_type == "yolo":
+            _upload_to_gcs(artifact_path, config["gcs_dir"], credentials)
     else:
         # NER / QLoRA — upload répertoire HuggingFace direct
         print(f"[registry] Upload GCS → gs://{GCS_BUCKET}/{GCS_PREFIX}/{config['gcs_dir']}/")
@@ -336,7 +373,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model",
         required=True,
-        choices=["yolo", "ner", "qlora"],
+        choices=["yolo", "ner", "qlora", "qwen-base"],
         help="Type de modèle à enregistrer",
     )
     args = parser.parse_args()
