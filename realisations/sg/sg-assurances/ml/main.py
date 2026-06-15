@@ -25,6 +25,9 @@ import qwen_base_client
 import qwen_finetuned_client
 import qwen_dual_client
 
+import subprocess
+from google.oauth2 import service_account
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -34,12 +37,47 @@ logger = logging.getLogger(__name__)
 YOLO_MODEL_PATH = Path(os.getenv("YOLO_MODEL_PATH", "/app/models/yolo_sg_assurances.pt"))
 NER_MODEL_PATH  = Path(os.getenv("NER_MODEL_PATH",  "/app/models/ner_sg_assurances"))
 
+GCS_YOLO_URI = os.getenv("GCS_YOLO_URI", "gs://sg-assurances-models/sg-assurances/yolo/yolo_sg_assurances.pt")
+GCS_NER_URI  = os.getenv("GCS_NER_URI",  "gs://sg-assurances-models/sg-assurances/ner/ner_sg_assurances")
+
+def _download_if_missing(gcs_uri: str, local_path: Path) -> None:
+    """Télécharge depuis GCS si le fichier/répertoire est absent."""
+    if local_path.exists() and (local_path.is_file() or any(local_path.iterdir())):
+        logger.info(f"[ml-service] Déjà en cache : {local_path}")
+        return
+
+    if gcs_uri.endswith(".pt"):
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+    else:
+        local_path.mkdir(parents=True, exist_ok=True)
+    sa_key = os.getenv("SA_KEY_PATH", "/app/gcp_sa_sg.json")
+
+    # Authentification gsutil via service account
+    auth_cmd = ["gcloud", "auth", "activate-service-account", f"--key-file={sa_key}"]
+    subprocess.run(auth_cmd, capture_output=True, text=True)
+
+    logger.info(f"[ml-service] Téléchargement {gcs_uri} → {local_path}")
+
+    if gcs_uri.endswith(".pt"):
+        cmd = ["gsutil", "cp", gcs_uri, str(local_path)]
+    else:
+        cmd = ["gsutil", "-m", "rsync", "-r", gcs_uri, str(local_path)]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"[ml-service] Erreur gsutil : {result.stderr}")
+    logger.info(f"[ml-service] Téléchargement terminé → {local_path}")
+
 # ─────────────────────────────────────────
 # Lifespan — chargement modèles au démarrage
 # ─────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("[ml-service] Démarrage ML Service SG Assurances")
+
+    logger.info("[ml-service] Vérification modèles GCS...")
+    _download_if_missing(GCS_YOLO_URI, YOLO_MODEL_PATH)
+    _download_if_missing(GCS_NER_URI,  Path(str(NER_MODEL_PATH)))
 
     logger.info("[ml-service] Chargement YOLO...")
     yolo_inference.init(YOLO_MODEL_PATH)

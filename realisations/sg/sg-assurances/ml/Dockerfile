@@ -11,11 +11,20 @@ ENV PYTHONUNBUFFERED=1 \
     SA_KEY_PATH=/app/gcp_sa_sg.json \
     ENDPOINT_INFO_PATH=/app/models/qwen_endpoint_id.json
 
-# Dépendances système minimales
+# Dépendances système + gsutil
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libgl1 \
     libglib2.0-0 \
+    curl \
+    gnupg \
+    apt-transport-https \
+    ca-certificates \
+    && curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+    | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
+    > /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && apt-get update && apt-get install -y google-cloud-cli \
     && rm -rf /var/lib/apt/lists/*
 
 # Torch CPU en premier — évite réinstallation GPU par dépendances transitives
