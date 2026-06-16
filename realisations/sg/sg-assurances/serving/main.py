@@ -68,7 +68,7 @@ def _load_model() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"[serving] Device : {device}")
 
-    from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+    from transformers import AutoTokenizer, AutoModelForCausalLM
 
     # Téléchargement base model si absent
     base_path = Path(LOCAL_BASE_CACHE)
@@ -79,12 +79,6 @@ def _load_model() -> None:
     tokenizer = AutoTokenizer.from_pretrained(LOCAL_BASE_CACHE, trust_remote_code=True)
     logger.info(f"[serving] Tokenizer chargé")
 
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-    )
 
     if MODEL_TYPE == "finetuned":
         from peft import PeftModel
@@ -97,20 +91,19 @@ def _load_model() -> None:
         logger.info(f"[serving] Chargement base model + adapters LoRA...")
         base = AutoModelForCausalLM.from_pretrained(
             LOCAL_BASE_CACHE,
-            quantization_config=bnb_config,
-            device_map="auto",
+            torch_dtype=torch.float32,
             trust_remote_code=True,
-        )
+        ).to(device)
         model = PeftModel.from_pretrained(base, LOCAL_FINETUNED_CACHE)
+        model = model.merge_and_unload()
 
     else:
         logger.info(f"[serving] Chargement base model...")
         model = AutoModelForCausalLM.from_pretrained(
             LOCAL_BASE_CACHE,
-            quantization_config=bnb_config,
-            device_map="auto",
+            torch_dtype=torch.float32,
             trust_remote_code=True,
-        )
+        ).to(device)
 
     model.eval()
     logger.info(f"[serving] Modèle prêt — model_type={MODEL_TYPE}")
@@ -173,10 +166,7 @@ def predict(request: PredictRequest):
             generated = model.generate(
                 **inputs,
                 max_new_tokens=max_new_tokens,
-                do_sample=True,
-                temperature=0.7,
-                top_p=0.8,
-                top_k=20,
+                do_sample=False,
                 pad_token_id=tokenizer.eos_token_id,
             )
 
