@@ -43,7 +43,7 @@ def _parse_metadata(row: dict) -> dict:
 def _fetch(table_key: str) -> list[dict]:
     client = _get_client()
     table = TABLES[table_key]
-    query = f"SELECT {COLUMNS} FROM `{PROJECT_ID}.{table}` ORDER BY date DESC"
+    query = f"SELECT {COLUMNS} FROM `{PROJECT_ID}.{table}` WHERE source != 'pdf' ORDER BY date DESC"
     rows = client.query(query).result()
     return [_parse_metadata(dict(row)) for row in rows]
 
