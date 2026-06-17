@@ -8,6 +8,7 @@ services:
       - "8003:8003"
     volumes:
       - ./models:/app/models
+      - ./results:/app/results
       - ../gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
     env_file:
       - .env
