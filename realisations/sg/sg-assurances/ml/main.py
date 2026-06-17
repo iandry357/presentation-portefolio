@@ -15,6 +15,7 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
+import json
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -24,7 +25,6 @@ import yolo_inference
 import qwen_base_client
 import qwen_finetuned_client
 import qwen_dual_client
-import topic_modeling
 
 import subprocess
 from google.oauth2 import service_account
@@ -148,11 +148,14 @@ def predict_ner(request: NERRequest):
     
 @app.get("/predict/topic-modeling")
 def predict_topic_modeling():
+    results_path = Path("/app/results/topic_modeling.json")
+    if not results_path.exists():
+        raise HTTPException(status_code=404, detail="Topic modeling non encore calculé — lancez le script manuellement")
     try:
-        result = topic_modeling.run()
-        return result
+        with open(results_path, "r", encoding="utf-8") as f:
+            return json.load(f)
     except Exception as e:
-        logger.error(f"[ml-service] Erreur topic modeling : {e}")
+        logger.error(f"[ml-service] Erreur lecture topic modeling : {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/predict/qwen/base")
