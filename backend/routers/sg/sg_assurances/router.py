@@ -58,6 +58,7 @@ def get_stats():
                 COUNT(*) AS total_news,
                 MAX(ingested_at) AS last_updated
             FROM `{BQ_PROJECT_ID}.{BQ_DATASET}.{BQ_TABLE}`
+            WHERE source != 'pdf'
         """
         row = list(client.query(query).result())[0]
         return SgStats(
@@ -73,15 +74,24 @@ def get_stats():
 # News
 # ─────────────────────────────────────────
 @router.get("/news", response_model=NewsResponse)
-def get_news(limit: int = Query(50, ge=1, le=200)):
+def get_news(limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0)):
     """Articles de veille SG Assurances depuis BigQuery."""
     client = _get_bq_client()
     try:
+        count_query = f"""
+            SELECT COUNT(*) AS total
+            FROM `{BQ_PROJECT_ID}.{BQ_DATASET}.{BQ_TABLE}`
+            WHERE source != 'pdf'
+        """
+        total_count = list(client.query(count_query).result())[0].total
+
         query = f"""
             SELECT id, source, date, title, metadata
             FROM `{BQ_PROJECT_ID}.{BQ_DATASET}.{BQ_TABLE}`
+            WHERE source != 'pdf'
             ORDER BY date DESC
             LIMIT {limit}
+            OFFSET {offset}
         """
         rows = list(client.query(query).result())
         items = []
@@ -94,7 +104,7 @@ def get_news(limit: int = Query(50, ge=1, le=200)):
                 source=row.source,
                 url=meta.get("url"),
             ))
-        return NewsResponse(total=len(items), items=items)
+        return NewsResponse(total=total_count, items=items)
     except Exception as e:
         logger.error(f"❌ /sg/news error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
