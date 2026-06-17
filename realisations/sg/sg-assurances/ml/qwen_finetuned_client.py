@@ -8,7 +8,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-LLAMA_SERVER_URL = "http://localhost:8005/v1/chat/completions"
+LLAMA_SERVER_URL = "http://172.17.0.1:8005/v1/chat/completions"
 DEFAULT_MAX_TOKENS = 200
 TIMEOUT = 120.0
 
