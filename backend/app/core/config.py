@@ -86,6 +86,12 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION_SAVENCIA: str = "savencia_veille"
     OVH_ML_PORT_SAVENCIA: str = "8002"
 
+    # ─── SG Assurances ────────────────────────────────────────
+    GCP_SERVICE_ACCOUNT_JSON_SG: Optional[str] = None
+    CHROMA_COLLECTION_SG: str = "sg_assurances_news"
+    OVH_ML_PORT_SG: str = "8003"
+    EMBEDDING_SERVICE_PORT: str = "8004"
+
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 
