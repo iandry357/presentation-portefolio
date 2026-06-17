@@ -54,6 +54,9 @@ resource "scaleway_container" "backend" {
     CHROMA_COLLECTION_SAVENCIA               = "savencia_veille"
     BQ_DATASET_SAVENCIA                      = "savencia_veille"
     OVH_ML_PORT_SAVENCIA                     = "8002"
+    CHROMA_COLLECTION_SG                     = "sg_assurances_news"
+    OVH_ML_PORT_SG                           = "8003"
+    EMBEDDING_SERVICE_PORT                   = "8004"
   }
 
   secret_environment_variables = {
@@ -75,6 +78,7 @@ resource "scaleway_container" "backend" {
     GCP_SERVICE_ACCOUNT_JSON_SANOFI   = var.gcp_service_account_json_sanofi
     CHROMA_PASSWORD                   = var.chroma_password
     GCP_SERVICE_ACCOUNT_JSON_SAVENCIA = var.gcp_service_account_json_savencia
+    GCP_SERVICE_ACCOUNT_JSON_SG       = var.gcp_service_account_json_sg
   }
 
   lifecycle {
