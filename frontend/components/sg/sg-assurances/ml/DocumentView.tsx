@@ -21,11 +21,15 @@ const NER_COLORS: Record<string, string> = {
 };
 
 // ─── Exemples pré-chargés (placeholders — PNGs à ajouter) ──────
+// const SAMPLE_DOCS = [
+//   { file: 'mma_auto.png',       label: 'CG Auto — MMA' },
+//   { file: 'mma_habitation.png', label: 'CG Habitation — MMA' },
+//   { file: 'axa_auto.png',       label: 'CG Auto — AXA' },
+//   { file: 'ccf_habitation.png', label: 'CG Habitation — CCF' },
+// ];
 const SAMPLE_DOCS = [
-  { file: 'mma_auto.png',       label: 'CG Auto — MMA' },
-  { file: 'mma_habitation.png', label: 'CG Habitation — MMA' },
-  { file: 'axa_auto.png',       label: 'CG Auto — AXA' },
-  { file: 'ccf_habitation.png', label: 'CG Habitation — CCF' },
+  { file: 'test1.png', label: 'CG Auto — Garanties' },
+  { file: 'test2.png', label: 'CG Auto — Franchises & Incendie' },
 ];
 
 interface YoloOverlayProps {
