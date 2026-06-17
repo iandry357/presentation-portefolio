@@ -29,6 +29,15 @@ const POCS: PocCard[] = [
     description:
       "Veille stratégique agroalimentaire avec topic modeling LDA et détection de maturité fromagère par Computer Vision (ViT fine-tuné + Grad-CAM) sur le dataset CR-IDB.",
     tags: ['RAG', 'Topic Modeling', 'ViT', 'Grad-CAM', 'ChromaDB', 'BigQuery'],
+    status: 'live',
+  },
+  {
+    href: '/realisations/sg/sg-assurances',
+    title: 'SG Assurances',
+    company: 'Société Générale Assurances',
+    description:
+      "Veille assurance et analyse de documents contractuels — détection de zones YOLO, extraction d'entités NER, RAG sur actualités et modèle Qwen2.5 fine-tuné QLoRA sur corpus SG.",
+    tags: ['YOLO', 'NER', 'RAG', 'QLoRA', 'ChromaDB', 'BigQuery', 'Vertex AI'],
     status: 'wip',
   },
 ];
