@@ -74,4 +74,6 @@ realisations/sg/sg-assurances/training/ner/__pycache__/
 realisations/sg/sg-assurances/training/qlora/__pycache__/
 realisations/sg/sg-assurances/ml/.env
 realisations/sg/sg-assurances/ml/models/
+realisations/sg/sg-assurances/llama.cpp/
+realisations/sg/sg-assurances/llamaZip/
 
