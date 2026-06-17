@@ -24,6 +24,7 @@ import yolo_inference
 import qwen_base_client
 import qwen_finetuned_client
 import qwen_dual_client
+import topic_modeling
 
 import subprocess
 from google.oauth2 import service_account
@@ -144,7 +145,15 @@ def predict_ner(request: NERRequest):
     except Exception as e:
         logger.error(f"[ml-service] Erreur NER : {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
+    
+@app.get("/predict/topic-modeling")
+def predict_topic_modeling():
+    try:
+        result = topic_modeling.run()
+        return result
+    except Exception as e:
+        logger.error(f"[ml-service] Erreur topic modeling : {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/predict/qwen/base")
 def predict_qwen_base(request: QwenRequest):
