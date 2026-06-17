@@ -214,3 +214,9 @@ variable "gcp_service_account_json_savencia" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_service_account_json_sg" {
+  description = "GCP Service Account JSON SG Assurances"
+  type        = string
+  sensitive   = true
+}
