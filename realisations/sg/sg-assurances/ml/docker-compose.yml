@@ -1,0 +1,21 @@
+services:
+  sg-ml-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sg-ml-service
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./models:/app/models
+      - ./results:/app/results
+      - ../gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

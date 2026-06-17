@@ -1,0 +1,21 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    container_name: sg-assurances-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ../gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+      - huggingface_cache:/root/.cache/huggingface
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true
+
+volumes:
+  huggingface_cache:

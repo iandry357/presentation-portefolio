@@ -1,0 +1,47 @@
+ 
+# ─────────────────────────────────────────
+# Synthetic — pdf_generator + annotator + qa_generator
+# ─────────────────────────────────────────
+faker
+reportlab
+pymupdf
+pillow
+python-dotenv
+requests
+chromadb-client==0.5.20
+bcrypt
+# ─────────────────────────────────────────
+# YOLO
+# ─────────────────────────────────────────
+ultralytics
+PyYAML
+
+# ─────────────────────────────────────────
+# NER — CamemBERT
+# ─────────────────────────────────────────
+transformers==4.46.0
+datasets
+seqeval
+evaluate
+
+# ─────────────────────────────────────────
+# QLoRA — Qwen2.5-1.5B
+# ─────────────────────────────────────────
+peft
+bitsandbytes
+accelerate
+trl
+
+# ─────────────────────────────────────────
+# GCP — Vertex AI + GCS
+# ─────────────────────────────────────────
+google-cloud-aiplatform
+google-cloud-storage
+
+# ─────────────────────────────────────────
+# PyTorch CUDA
+# ─────────────────────────────────────────
+# pip install torch==2.4.0 torchvision --index-url https://download.pytorch.org/whl/cu124
+# NE PAS inclure torch ici pour éviter la version CPU par défaut
+torch-model-archiver
+# ─────────────────────────────────────────
