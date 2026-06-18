@@ -201,12 +201,20 @@ export interface ClusteringResponse {
   }[];
 }
 
+export interface BayesianForecast {
+  most_likely: number | null;
+  ci_lower_95: number | null;
+  ci_upper_95: number | null;
+  n_years_used: number | null;
+  avg_historical: number | null;
+}
+
 export interface ForecastingResponse {
   total_trials: number;
   volume_by_year: { year: number; count: number }[];
   phases_by_year: { year: number; phases: Record<string, number> }[];
-  // duration_by_cluster: ClusterItem[];
   duration_by_cluster: DurationClusterItem[];
+  bayesian_forecast?: BayesianForecast;
 }
 
 export interface TopicItem {
