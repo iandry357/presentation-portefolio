@@ -36,23 +36,23 @@ export default function ClusteringView({ data }: Props) {
   //   color: COLORS[i % COLORS.length],
   //   }));
 
-    const chartData = [...data.clusters]
-    .sort((a, b) => b.count - a.count)
-    .map((c, i) => ({
+    const sortedClusters = [...data.clusters].sort((a, b) => b.count - a.count);
+
+    const chartData = sortedClusters.map((c, i) => ({
         name: c.label,
         trials: c.count,
         color: COLORS[i % COLORS.length],
     }));
 
-    const phaseByCluster = data.clusters.map(c => {
-    const trials = data.trials.filter(t => t.cluster_id === c.cluster_id);
-    const phases: Record<string, number> = {};
+    const phaseByCluster = sortedClusters.map(c => {
+        const trials = data.trials.filter(t => t.cluster_id === c.cluster_id);
+        const phases: Record<string, number> = {};
         trials.forEach(t => {
             const p = t.phase?.startsWith('PHASE') ? t.phase.split(',')[0].trim() : 'OTHER';
             phases[p] = (phases[p] || 0) + 1;
         });
         return { label: c.label, total: trials.length, phases };
-        });
+    });
 
   return (
     <div className="space-y-6">
