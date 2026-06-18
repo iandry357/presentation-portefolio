@@ -74,23 +74,23 @@ def _duration_by_cluster(trials: list, clustering: dict) -> list:
 
 def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
     """
-    Estimation bayésienne du volume d'essais restants pour target_year.
-    Approche :
-      - Taux mensuel estimé sur l'historique (années complètes)
-      - Modèle conjugué Poisson-Gamma mis à jour sur ce taux
-      - Projection sur les mois restants de l'année cible
-      - Résultat : déjà observés + restants prédits = total fin d'année
+    Estimation bayésienne séquentielle du volume d'essais restants pour target_year.
+    Approche : Bayesian updating séquentiel Poisson-Gamma.
+      - Prior initial faiblement informatif Gamma(1, 1)
+      - Pour chaque année historique, le posterior devient le prior de l'année suivante
+      - Le modèle s'adapte progressivement aux changements de rythme (ex: accélération post-2020)
+      - Projection du posterior final sur les mois restants de l'année cible
     """
     import math
 
     current_year = datetime.now().year
     current_month = datetime.now().month
 
-    # Années complètes uniquement (hors année cible et année courante si différente)
-    historical = [
-        d for d in volume_by_year
-        if d["year"] < current_year and d["year"] >= 2010
-    ]
+    # Années complètes triées chronologiquement
+    historical = sorted(
+        [d for d in volume_by_year if d["year"] < current_year and d["year"] >= 2010],
+        key=lambda d: d["year"]
+    )
 
     # Volume déjà observé dans l'année cible
     current_year_data = next(
@@ -103,36 +103,34 @@ def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
             "already_observed": already_observed,
             "predicted_remaining": None,
             "total_predicted": None,
-            "ci_lower_95": None,
-            "ci_upper_95": None,
+            "total_ci_lower": None,
+            "total_ci_upper": None,
             "months_remaining": None,
             "n_years_used": 0,
             "avg_monthly_rate": None,
         }
 
-    # Taux mensuel historique
-    monthly_counts = [d["count"] / 12.0 for d in historical]
-    n = len(monthly_counts)
-    total_monthly = sum(monthly_counts)
+    # Prior initial faiblement informatif
+    alpha = 1.0
+    beta = 1.0
 
-    # Mois restants dans l'année cible (mois courant non complet exclu)
+    # Mise à jour séquentielle : chaque année affine le posterior
+    for d in historical:
+        monthly_rate = d["count"] / 12.0
+        # Posterior Gamma(alpha + observed_rate, beta + 1)
+        alpha = alpha + monthly_rate
+        beta = beta + 1.0
+
+    # Taux mensuel postérieur final (capte l'accélération récente)
+    monthly_rate_post = alpha / beta
+    monthly_variance_post = alpha * (1 + beta) / (beta ** 2)
+
+    # Mois restants dans l'année cible
     months_remaining = 12 - current_month
 
-    # Prior faiblement informatif Gamma(1, 1)
-    alpha_prior = 1.0
-    beta_prior = 1.0
-
-    # Posterior Gamma mis à jour sur les taux mensuels historiques
-    alpha_post = alpha_prior + total_monthly
-    beta_post = beta_prior + n
-
-    # Taux mensuel postérieur
-    monthly_rate = alpha_post / beta_post
-    monthly_variance = alpha_post * (1 + beta_post) / (beta_post ** 2)
-
     # Projection sur les mois restants
-    predicted_remaining_mean = monthly_rate * months_remaining
-    predicted_remaining_std = math.sqrt(monthly_variance * months_remaining)
+    predicted_remaining_mean = monthly_rate_post * months_remaining
+    predicted_remaining_std = math.sqrt(monthly_variance_post * months_remaining)
 
     predicted_remaining = round(predicted_remaining_mean)
     ci_lower = max(0, round(predicted_remaining_mean - 1.96 * predicted_remaining_std))
@@ -149,8 +147,8 @@ def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
         "total_ci_lower": total_ci_lower,
         "total_ci_upper": total_ci_upper,
         "months_remaining": months_remaining,
-        "n_years_used": n,
-        "avg_monthly_rate": round(monthly_rate, 2),
+        "n_years_used": len(historical),
+        "avg_monthly_rate": round(monthly_rate_post, 2),
     }
 
 
