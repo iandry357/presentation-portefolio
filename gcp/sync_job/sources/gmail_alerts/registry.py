@@ -29,6 +29,7 @@ SENDER_MAP: dict[str, BaseParser] = {
     "jobs-listings@linkedin.com":       LinkedInParser(),
     "offres@diffusion.apec.fr":             ApecParser(),
     "notification@emails.hellowork.com":    HelloworkParser(),
+    "alerte@emails.hellowork.com":          HelloworkParser(),
     "no-reply@alerts.talent.com":           TalentParser(),
     "contact@jobijoba.com": JobijobaParser(),
     "jobs@free-work.com":   FreeworkParser(),

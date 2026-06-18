@@ -136,6 +136,31 @@ def _update_content(client: bigquery.Client, dataset_id: str, table_id: str, tit
     except Exception as e:
         logger.error(f"❌ BQ UPDATE content failed for title '{title[:50]}': {e}")
 
+def _update_url(client: bigquery.Client, dataset_id: str, table_id: str, title: str, new_url: str) -> None:
+    """UPDATE metadata.url pour un article existant dont l'URL a changé."""
+    table_ref = f"{GCP_PROJECT_ID}.{dataset_id}.{table_id}"
+    escaped_title = title.replace("'", "\\'")
+    escaped_url = new_url.replace("'", "\\'")
+    # query = f"""
+    #     UPDATE `{table_ref}`
+    #     SET metadata = JSON_SET(metadata, '$.url', '{escaped_url}')
+    #     WHERE title = '{escaped_title}'
+    #     AND JSON_VALUE(metadata, '$.url') != '{escaped_url}'
+    # """
+    query = f"""
+        UPDATE `{table_ref}`
+        SET metadata = REGEXP_REPLACE(
+            metadata,
+            r'"url":\\s*"[^"]*"',
+            '"url": "{escaped_url}"'
+        )
+        WHERE title = '{escaped_title}'
+        AND JSON_VALUE(metadata, '$.url') != '{escaped_url}'
+    """
+    try:
+        client.query(query).result()
+    except Exception as e:
+        logger.error(f"❌ BQ UPDATE url failed for title '{title[:50]}': {e}")
 
 def load(docs: List[Dict]) -> Dict[str, int]:
     """
@@ -177,11 +202,16 @@ def load(docs: List[Dict]) -> Dict[str, int]:
         if source in ("google_news", "press_releases"):
             existing = _get_existing_titles(client, dataset_id, table_id)
             new_docs = [d for d in source_docs if d["title"] not in existing]
-            # UPDATE content HTML brut pour articles existants
             if source == "google_news":
                 for d in source_docs:
-                    if d["title"] in existing and d["content"] and "<a href=" not in d["content"]:
-                        _update_content(client, dataset_id, table_id, d["title"], d["content"])
+                    if d["title"] in existing:
+                        # UPDATE content si HTML brut
+                        if d["content"] and "<a href=" not in d["content"]:
+                            _update_content(client, dataset_id, table_id, d["title"], d["content"])
+                        # UPDATE url si différente
+                        new_url = d.get("metadata", {}).get("url", "")
+                        if new_url:
+                            _update_url(client, dataset_id, table_id, d["title"], new_url)
         else:
             existing = _get_existing_ids(client, dataset_id, table_id)
             new_docs = [d for d in source_docs if d["id"] not in existing]

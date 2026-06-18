@@ -71,6 +71,57 @@ def _duration_by_cluster(trials: list, clustering: dict) -> list:
         })
     return result
 
+def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
+    """
+    Estimation bayésienne du volume d'essais pour target_year.
+    Modèle conjugué Poisson-Gamma :
+      - Prior Gamma(alpha, beta) non informatif
+      - Mise à jour sur les volumes observés
+      - Posterior predictive : NegativeBinomial
+    """
+    # Exclure l'année cible et les années incomplètes (année courante)
+    current_year = datetime.now().year
+    counts = [
+        d["count"] for d in volume_by_year
+        if d["year"] < current_year and d["year"] >= 2010
+    ]
+
+    if not counts:
+        return {"most_likely": None, "ci_lower_95": None, "ci_upper_95": None}
+
+    n = len(counts)
+    total = sum(counts)
+
+    # Prior faiblement informatif : Gamma(1, 1)
+    alpha_prior = 1.0
+    beta_prior = 1.0
+
+    # Posterior : Gamma(alpha_prior + total, beta_prior + n)
+    alpha_post = alpha_prior + total
+    beta_post = beta_prior + n
+
+    # Posterior predictive : NegativeBinomial(r=alpha_post, p=1/(1+beta_post))
+    # Mean = alpha_post / beta_post
+    # Variance = alpha_post * (1 + beta_post) / beta_post^2
+    mean = alpha_post / beta_post
+    variance = alpha_post * (1 + beta_post) / (beta_post ** 2)
+
+    import math
+    std = math.sqrt(variance)
+
+    # Intervalle de crédibilité 95% via approximation normale sur la predictive
+    ci_lower = max(0, round(mean - 1.96 * std))
+    ci_upper = round(mean + 1.96 * std)
+    most_likely = round(mean)
+
+    return {
+        "most_likely": most_likely,
+        "ci_lower_95": ci_lower,
+        "ci_upper_95": ci_upper,
+        "n_years_used": n,
+        "avg_historical": round(mean, 1),
+    }
+
 
 def run() -> dict:
     trials = get_clinical_trials()
@@ -86,11 +137,14 @@ def run() -> dict:
     phases_by_year = _phases_by_year(trials)
     duration_by_cluster = _duration_by_cluster(trials, clustering)
 
+    bayesian_forecast = _bayesian_forecast(volume_by_year)
+
     result = {
         "total_trials": len(trials),
         "volume_by_year": volume_by_year,
         "phases_by_year": phases_by_year,
         "duration_by_cluster": duration_by_cluster,
+        "bayesian_forecast": bayesian_forecast,
     }
 
     os.makedirs(os.path.dirname(RESULTS_PATH), exist_ok=True)
