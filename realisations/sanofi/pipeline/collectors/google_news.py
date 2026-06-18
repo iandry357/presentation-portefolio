@@ -100,7 +100,8 @@ def collect(max_results: int = GOOGLE_NEWS_MAX_RESULTS) -> List[Dict]:
             "content": _fetch_content(article_url) or _build_content(entry),
             "metadata": {
                 # "url": entry.get("link", ""),
-                "url": article_url or entry.get("link", ""),
+                # "url": article_url or entry.get("link", ""),
+                "url": entry.get("link", "") or article_url,
                 "source_name": entry.get("source", {}).get("title", ""),
                 "rss_id": entry_id,
             },
