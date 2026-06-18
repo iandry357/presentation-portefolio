@@ -202,11 +202,14 @@ export interface ClusteringResponse {
 }
 
 export interface BayesianForecast {
-  most_likely: number | null;
-  ci_lower_95: number | null;
-  ci_upper_95: number | null;
+  already_observed: number | null;
+  predicted_remaining: number | null;
+  total_predicted: number | null;
+  total_ci_lower: number | null;
+  total_ci_upper: number | null;
+  months_remaining: number | null;
   n_years_used: number | null;
-  avg_historical: number | null;
+  avg_monthly_rate: number | null;
 }
 
 export interface ForecastingResponse {
