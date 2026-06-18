@@ -56,45 +56,6 @@ export default function ForecastingView({ data }: Props) {
         </ResponsiveContainer>
       </div>
 
-      {/* Durée par cluster */}
-      <div className="bg-white border rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-gray-700 mb-4">Durée moyenne des essais par thérapeutique (mois)</h4>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={durationData} layout="vertical" margin={{ left: 8, right: 24 }}>
-            <XAxis type="number" tick={{ fontSize: 11 }} unit=" mois" />
-            <YAxis type="category" dataKey="name" width={220} tick={{ fontSize: 11 }} />
-            <Tooltip
-            //   formatter={(val: number) => [`${val} mois`, 'Durée moyenne']}
-              formatter={(val) => [`${val} mois`, 'Durée moyenne']}
-              contentStyle={{ fontSize: 12 }}
-            />
-            <Bar dataKey="duration" radius={[0, 4, 4, 0]}>
-              {durationData.map((entry, i) => (
-                <Cell key={i} fill={entry.color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Insights clés */}
-      <div className="bg-white border rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">Insights clés</h4>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 rounded p-3">
-            <p className="text-xs text-blue-600 font-medium">Thérapeutique la plus longue</p>
-            <p className="text-sm font-semibold text-blue-900 mt-1">
-              {durationData[0]?.name} — {durationData[0]?.duration} mois
-            </p>
-          </div>
-          <div className="bg-green-50 rounded p-3">
-            <p className="text-xs text-green-600 font-medium">Thérapeutique la plus courte</p>
-            <p className="text-sm font-semibold text-green-900 mt-1">
-              {durationData[durationData.length - 1]?.name} — {durationData[durationData.length - 1]?.duration} mois
-            </p>
-          </div>
-        </div>
-      </div>
       {data.bayesian_forecast && (
         <div className="bg-white border rounded-lg p-4">
           <h4 className="text-sm font-semibold text-gray-700 mb-1">
@@ -154,6 +115,45 @@ export default function ForecastingView({ data }: Props) {
           </p>
         </div>
       )}
+    {/* Durée par cluster */}
+      <div className="bg-white border rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-gray-700 mb-4">Durée moyenne des essais par thérapeutique (mois)</h4>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={durationData} layout="vertical" margin={{ left: 8, right: 24 }}>
+            <XAxis type="number" tick={{ fontSize: 11 }} unit=" mois" />
+            <YAxis type="category" dataKey="name" width={220} tick={{ fontSize: 11 }} />
+            <Tooltip
+            //   formatter={(val: number) => [`${val} mois`, 'Durée moyenne']}
+              formatter={(val) => [`${val} mois`, 'Durée moyenne']}
+              contentStyle={{ fontSize: 12 }}
+            />
+            <Bar dataKey="duration" radius={[0, 4, 4, 0]}>
+              {durationData.map((entry, i) => (
+                <Cell key={i} fill={entry.color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Insights clés */}
+      <div className="bg-white border rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">Insights clés</h4>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-blue-50 rounded p-3">
+            <p className="text-xs text-blue-600 font-medium">Thérapeutique la plus longue</p>
+            <p className="text-sm font-semibold text-blue-900 mt-1">
+              {durationData[0]?.name} — {durationData[0]?.duration} mois
+            </p>
+          </div>
+          <div className="bg-green-50 rounded p-3">
+            <p className="text-xs text-green-600 font-medium">Thérapeutique la plus courte</p>
+            <p className="text-sm font-semibold text-green-900 mt-1">
+              {durationData[durationData.length - 1]?.name} — {durationData[durationData.length - 1]?.duration} mois
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
