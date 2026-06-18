@@ -209,8 +209,11 @@ def load(docs: List[Dict]) -> Dict[str, int]:
                         if d["content"] and "<a href=" not in d["content"]:
                             _update_content(client, dataset_id, table_id, d["title"], d["content"])
                         # UPDATE url si différente
+                        # new_url = d.get("metadata", {}).get("url", "")
+                        # if new_url:
+                        #     _update_url(client, dataset_id, table_id, d["title"], new_url)
                         new_url = d.get("metadata", {}).get("url", "")
-                        if new_url:
+                        if new_url and "news.google.com" not in new_url:
                             _update_url(client, dataset_id, table_id, d["title"], new_url)
         else:
             existing = _get_existing_ids(client, dataset_id, table_id)
