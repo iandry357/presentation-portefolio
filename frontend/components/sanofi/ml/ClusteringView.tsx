@@ -29,11 +29,19 @@ export default function ClusteringView({ data }: Props) {
 //     duration: Math.round(c.avg_duration_months),
 //     color: COLORS[i % COLORS.length],
 //   }));
-  const chartData = data.clusters.map((c, i) => ({
-    // name: c.label.length > 20 ? c.label.slice(0, 20) + '…' : c.label,
-    name: c.label,
-    trials: c.count,
-    color: COLORS[i % COLORS.length],
+  // const chartData = data.clusters.map((c, i) => ({
+  //   // name: c.label.length > 20 ? c.label.slice(0, 20) + '…' : c.label,
+  //   name: c.label,
+  //   trials: c.count,
+  //   color: COLORS[i % COLORS.length],
+  //   }));
+
+    const chartData = [...data.clusters]
+    .sort((a, b) => b.count - a.count)
+    .map((c, i) => ({
+        name: c.label,
+        trials: c.count,
+        color: COLORS[i % COLORS.length],
     }));
 
     const phaseByCluster = data.clusters.map(c => {
