@@ -3,6 +3,8 @@ import os
 from collections import defaultdict
 from datetime import datetime
 from bq_client import get_clinical_trials
+import numpy as np
+from scipy.optimize import minimize
 
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "results", "forecasting.json")
 CLUSTERING_PATH = os.path.join(os.path.dirname(__file__), "results", "clustering.json")
@@ -72,69 +74,97 @@ def _duration_by_cluster(trials: list, clustering: dict) -> list:
     return result
 
 
+
 def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
     """
-    Estimation bayésienne séquentielle du volume d'essais restants pour target_year.
-    Approche : Bayesian updating séquentiel Poisson-Gamma.
-      - Prior initial faiblement informatif Gamma(1, 1)
-      - Pour chaque année historique, le posterior devient le prior de l'année suivante
-      - Le modèle s'adapte progressivement aux changements de rythme (ex: accélération post-2020)
-      - Projection du posterior final sur les mois restants de l'année cible
-    """
-    import math
+    GLM Poisson bayésien avec trend temporel + approximation de Laplace.
 
+    Modèle :
+      λ(t) = exp(α + β·t)        — taux annuel, t = année recentrée sur 2010
+      y_t  ~ Poisson(λ(t))       — comptage annuel observé
+      priors gaussiens faibles sur α, β
+
+    Inférence :
+      - MAP (mode du posterior) via minimisation de la log-vraisemblance négative pénalisée
+      - posterior approché par une gaussienne N(MAP, H⁻¹) où H = Hessienne au mode
+      - échantillonnage du posterior → distribution de λ(2026) → projection mois restants
+
+    Le déjà-observé 2026 reste le point de départ ; on ne prédit que le restant.
+    """
     current_year = datetime.now().year
     current_month = datetime.now().month
 
-    # Années complètes triées chronologiquement
     historical = sorted(
         [d for d in volume_by_year if d["year"] < current_year and d["year"] >= 2010],
         key=lambda d: d["year"]
     )
 
-    # Volume déjà observé dans l'année cible
     current_year_data = next(
         (d for d in volume_by_year if d["year"] == target_year), None
     )
     already_observed = current_year_data["count"] if current_year_data else 0
 
-    if not historical:
-        return {
-            "already_observed": already_observed,
-            "predicted_remaining": None,
-            "total_predicted": None,
-            "total_ci_lower": None,
-            "total_ci_upper": None,
-            "months_remaining": None,
-            "n_years_used": 0,
-            "avg_monthly_rate": None,
-        }
+    empty = {
+        "already_observed": already_observed,
+        "predicted_remaining": None,
+        "total_predicted": None,
+        "total_ci_lower": None,
+        "total_ci_upper": None,
+        "months_remaining": None,
+        "n_years_used": 0,
+        "avg_monthly_rate": None,
+    }
+    if len(historical) < 3:
+        return empty
 
-    # Prior initial faiblement informatif
-    alpha = 1.0
-    beta = 1.0
+    # Données : t recentré sur 2010, y = comptage annuel
+    t = np.array([d["year"] - 2010 for d in historical], dtype=float)
+    y = np.array([d["count"] for d in historical], dtype=float)
 
-    # Mise à jour séquentielle : chaque année affine le posterior
-    for d in historical:
-        monthly_rate = d["count"] / 12.0
-        # Posterior Gamma(alpha + observed_rate, beta + 1)
-        alpha = alpha + monthly_rate
-        beta = beta + 1.0
+    # Priors gaussiens faibles : α ~ N(0, 10²), β ~ N(0, 1²)
+    prior_var_alpha = 100.0
+    prior_var_beta = 1.0
 
-    # Taux mensuel postérieur final (capte l'accélération récente)
-    monthly_rate_post = alpha / beta
-    monthly_variance_post = alpha * (1 + beta) / (beta ** 2)
+    def neg_log_posterior(params):
+        alpha, beta = params
+        lam = np.exp(alpha + beta * t)
+        # log-vraisemblance Poisson (sans terme log(y!) constant)
+        log_lik = np.sum(y * (alpha + beta * t) - lam)
+        # log-prior gaussien
+        log_prior = -0.5 * (alpha ** 2 / prior_var_alpha + beta ** 2 / prior_var_beta)
+        return -(log_lik + log_prior)
 
-    # Mois restants dans l'année cible
+    # MAP via optimisation
+    init = np.array([np.log(y.mean() + 1e-6), 0.0])
+    res = minimize(neg_log_posterior, init, method="BFGS")
+    if not res.success:
+        return empty
+
+    map_params = res.x
+    # Hessienne au mode → covariance posterior = H⁻¹
+    cov = res.hess_inv
+
+    # Échantillonnage du posterior gaussien approché
+    rng = np.random.default_rng(42)
+    samples = rng.multivariate_normal(map_params, cov, size=10000)
+
     months_remaining = 12 - current_month
 
-    # Projection sur les mois restants
-    predicted_remaining_mean = monthly_rate_post * months_remaining
-    predicted_remaining_std = math.sqrt(monthly_variance_post * months_remaining)
+    # Pour chaque échantillon (α, β) → λ(2026) annuel → taux mensuel → restant
+    t_2026 = target_year - 2010
+    lam_2026 = np.exp(samples[:, 0] + samples[:, 1] * t_2026)
+    monthly_rate_samples = lam_2026 / 12.0
+    remaining_mean_samples = monthly_rate_samples * months_remaining
 
-    predicted_remaining = round(predicted_remaining_mean)
-    ci_lower = max(0, round(predicted_remaining_mean - 1.96 * predicted_remaining_std))
-    ci_upper = round(predicted_remaining_mean + 1.96 * predicted_remaining_std)
+    # Incertitude Poisson en plus de l'incertitude sur la pente
+    remaining_draws = rng.poisson(np.clip(remaining_mean_samples, 0, None))
+
+    predicted_remaining = int(round(np.median(remaining_draws)))
+    ci_lower = int(max(0, round(np.percentile(remaining_draws, 2.5))))
+    ci_upper = int(round(np.percentile(remaining_draws, 97.5)))
+
+    # Taux mensuel postérieur médian (pour affichage)
+    monthly_rate_post = float(np.median(monthly_rate_samples))
 
     total_predicted = already_observed + predicted_remaining
     total_ci_lower = already_observed + ci_lower
