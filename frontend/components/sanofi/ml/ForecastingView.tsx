@@ -95,45 +95,62 @@ export default function ForecastingView({ data }: Props) {
           </div>
         </div>
       </div>
-      {/* Prédiction Bayésienne */}
       {data.bayesian_forecast && (
         <div className="bg-white border rounded-lg p-4">
           <h4 className="text-sm font-semibold text-gray-700 mb-1">
-            Prédiction Bayésienne — Volume d'essais 2026
+            Prédiction Bayésienne — Volume d'essais fin 2026
           </h4>
           <p className="text-xs text-gray-500 mb-4">
-            Modèle conjugué Poisson-Gamma : le taux d'essais annuel suit une loi de Poisson
-            dont le prior est mis à jour sur {data.bayesian_forecast.n_years_used} années
-            d'historique (depuis 2010). La distribution prédictive fournit une estimation
-            probabiliste plutôt qu'un chiffre unique — utile pour anticiper les ressources
-            R&D nécessaires.
+            Taux mensuel projeté 2026 : {data.bayesian_forecast.avg_monthly_rate} essais/mois —
+            estimé via un GLM Poisson bayésien sur {data.bayesian_forecast.n_years_used} années d'historique.
           </p>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-blue-50 rounded p-3 text-center">
-              <p className="text-xs text-blue-600 font-medium mb-1">Estimation centrale</p>
-              <p className="text-2xl font-bold text-blue-900">
-                {data.bayesian_forecast.most_likely}
+
+          {/* Ligne 1 — Observé + Restant = Total */}
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            <div className="bg-gray-50 rounded p-3 text-center">
+              <p className="text-xs text-gray-600 font-medium mb-1">Déjà enregistrés</p>
+              <p className="text-2xl font-bold text-gray-700">
+                {data.bayesian_forecast.already_observed}
               </p>
-              <p className="text-xs text-blue-500">essais attendus</p>
+              <p className="text-xs text-gray-400">essais en 2026</p>
             </div>
+            <div className="bg-blue-50 rounded p-3 text-center">
+              <p className="text-xs text-blue-600 font-medium mb-1">Attendus ({data.bayesian_forecast.months_remaining} mois)</p>
+              <p className="text-2xl font-bold text-blue-900">
+                +{data.bayesian_forecast.predicted_remaining}
+              </p>
+              <p className="text-xs text-blue-400">essais prédits</p>
+            </div>
+            <div className="bg-indigo-50 rounded p-3 text-center">
+              <p className="text-xs text-indigo-600 font-medium mb-1">Total prédit fin 2026</p>
+              <p className="text-2xl font-bold text-indigo-900">
+                {data.bayesian_forecast.total_predicted}
+              </p>
+              <p className="text-xs text-indigo-400">essais estimés</p>
+            </div>
+          </div>
+
+          {/* Ligne 2 — Intervalle de crédibilité */}
+          <div className="grid grid-cols-2 gap-3">
             <div className="bg-gray-50 rounded p-3 text-center">
               <p className="text-xs text-gray-600 font-medium mb-1">Borne basse 95%</p>
-              <p className="text-2xl font-bold text-gray-700">
-                {data.bayesian_forecast.ci_lower_95}
+              <p className="text-xl font-bold text-gray-700">
+                {data.bayesian_forecast.total_ci_lower}
               </p>
-              <p className="text-xs text-gray-500">intervalle de crédibilité</p>
+              <p className="text-xs text-gray-400">intervalle de crédibilité</p>
             </div>
             <div className="bg-gray-50 rounded p-3 text-center">
               <p className="text-xs text-gray-600 font-medium mb-1">Borne haute 95%</p>
-              <p className="text-2xl font-bold text-gray-700">
-                {data.bayesian_forecast.ci_upper_95}
+              <p className="text-xl font-bold text-gray-700">
+                {data.bayesian_forecast.total_ci_upper}
               </p>
-              <p className="text-xs text-gray-500">intervalle de crédibilité</p>
+              <p className="text-xs text-gray-400">intervalle de crédibilité</p>
             </div>
           </div>
+
           <p className="text-xs text-gray-400 mt-3">
-            Moyenne historique : {data.bayesian_forecast.avg_historical} essais/an —
-            calculée sur {data.bayesian_forecast.n_years_used} années complètes.
+            Taux mensuel historique moyen : {data.bayesian_forecast.avg_monthly_rate} essais/mois —
+            calculé sur {data.bayesian_forecast.n_years_used} années complètes.
           </p>
         </div>
       )}

@@ -3,6 +3,8 @@ import os
 from collections import defaultdict
 from datetime import datetime
 from bq_client import get_clinical_trials
+import numpy as np
+from scipy.optimize import minimize
 
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "results", "forecasting.json")
 CLUSTERING_PATH = os.path.join(os.path.dirname(__file__), "results", "clustering.json")
@@ -71,55 +73,112 @@ def _duration_by_cluster(trials: list, clustering: dict) -> list:
         })
     return result
 
+
+
 def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
     """
-    Estimation bayésienne du volume d'essais pour target_year.
-    Modèle conjugué Poisson-Gamma :
-      - Prior Gamma(alpha, beta) non informatif
-      - Mise à jour sur les volumes observés
-      - Posterior predictive : NegativeBinomial
+    GLM Poisson bayésien avec trend temporel + approximation de Laplace.
+
+    Modèle :
+      λ(t) = exp(α + β·t)        — taux annuel, t = année recentrée sur 2010
+      y_t  ~ Poisson(λ(t))       — comptage annuel observé
+      priors gaussiens faibles sur α, β
+
+    Inférence :
+      - MAP (mode du posterior) via minimisation de la log-vraisemblance négative pénalisée
+      - posterior approché par une gaussienne N(MAP, H⁻¹) où H = Hessienne au mode
+      - échantillonnage du posterior → distribution de λ(2026) → projection mois restants
+
+    Le déjà-observé 2026 reste le point de départ ; on ne prédit que le restant.
     """
-    # Exclure l'année cible et les années incomplètes (année courante)
     current_year = datetime.now().year
-    counts = [
-        d["count"] for d in volume_by_year
-        if d["year"] < current_year and d["year"] >= 2010
-    ]
+    current_month = datetime.now().month
 
-    if not counts:
-        return {"most_likely": None, "ci_lower_95": None, "ci_upper_95": None}
+    historical = sorted(
+        [d for d in volume_by_year if d["year"] < current_year and d["year"] >= 2010],
+        key=lambda d: d["year"]
+    )
 
-    n = len(counts)
-    total = sum(counts)
+    current_year_data = next(
+        (d for d in volume_by_year if d["year"] == target_year), None
+    )
+    already_observed = current_year_data["count"] if current_year_data else 0
 
-    # Prior faiblement informatif : Gamma(1, 1)
-    alpha_prior = 1.0
-    beta_prior = 1.0
+    empty = {
+        "already_observed": already_observed,
+        "predicted_remaining": None,
+        "total_predicted": None,
+        "total_ci_lower": None,
+        "total_ci_upper": None,
+        "months_remaining": None,
+        "n_years_used": 0,
+        "avg_monthly_rate": None,
+    }
+    if len(historical) < 3:
+        return empty
 
-    # Posterior : Gamma(alpha_prior + total, beta_prior + n)
-    alpha_post = alpha_prior + total
-    beta_post = beta_prior + n
+    # Données : t recentré sur 2010, y = comptage annuel
+    t = np.array([d["year"] - 2010 for d in historical], dtype=float)
+    y = np.array([d["count"] for d in historical], dtype=float)
 
-    # Posterior predictive : NegativeBinomial(r=alpha_post, p=1/(1+beta_post))
-    # Mean = alpha_post / beta_post
-    # Variance = alpha_post * (1 + beta_post) / beta_post^2
-    mean = alpha_post / beta_post
-    variance = alpha_post * (1 + beta_post) / (beta_post ** 2)
+    # Priors gaussiens faibles : α ~ N(0, 10²), β ~ N(0, 1²)
+    prior_var_alpha = 100.0
+    prior_var_beta = 1.0
 
-    import math
-    std = math.sqrt(variance)
+    def neg_log_posterior(params):
+        alpha, beta = params
+        lam = np.exp(alpha + beta * t)
+        # log-vraisemblance Poisson (sans terme log(y!) constant)
+        log_lik = np.sum(y * (alpha + beta * t) - lam)
+        # log-prior gaussien
+        log_prior = -0.5 * (alpha ** 2 / prior_var_alpha + beta ** 2 / prior_var_beta)
+        return -(log_lik + log_prior)
 
-    # Intervalle de crédibilité 95% via approximation normale sur la predictive
-    ci_lower = max(0, round(mean - 1.96 * std))
-    ci_upper = round(mean + 1.96 * std)
-    most_likely = round(mean)
+    # MAP via optimisation
+    init = np.array([np.log(y.mean() + 1e-6), 0.0])
+    res = minimize(neg_log_posterior, init, method="BFGS")
+    if not res.success:
+        return empty
+
+    map_params = res.x
+    # Hessienne au mode → covariance posterior = H⁻¹
+    cov = res.hess_inv
+
+    # Échantillonnage du posterior gaussien approché
+    rng = np.random.default_rng(42)
+    samples = rng.multivariate_normal(map_params, cov, size=10000)
+
+    months_remaining = 12 - current_month
+
+    # Pour chaque échantillon (α, β) → λ(2026) annuel → taux mensuel → restant
+    t_2026 = target_year - 2010
+    lam_2026 = np.exp(samples[:, 0] + samples[:, 1] * t_2026)
+    monthly_rate_samples = lam_2026 / 12.0
+    remaining_mean_samples = monthly_rate_samples * months_remaining
+
+    # Incertitude Poisson en plus de l'incertitude sur la pente
+    remaining_draws = rng.poisson(np.clip(remaining_mean_samples, 0, None))
+
+    predicted_remaining = int(round(np.median(remaining_draws)))
+    ci_lower = int(max(0, round(np.percentile(remaining_draws, 2.5))))
+    ci_upper = int(round(np.percentile(remaining_draws, 97.5)))
+
+    # Taux mensuel postérieur médian (pour affichage)
+    monthly_rate_post = float(np.median(monthly_rate_samples))
+
+    total_predicted = already_observed + predicted_remaining
+    total_ci_lower = already_observed + ci_lower
+    total_ci_upper = already_observed + ci_upper
 
     return {
-        "most_likely": most_likely,
-        "ci_lower_95": ci_lower,
-        "ci_upper_95": ci_upper,
-        "n_years_used": n,
-        "avg_historical": round(mean, 1),
+        "already_observed": already_observed,
+        "predicted_remaining": predicted_remaining,
+        "total_predicted": total_predicted,
+        "total_ci_lower": total_ci_lower,
+        "total_ci_upper": total_ci_upper,
+        "months_remaining": months_remaining,
+        "n_years_used": len(historical),
+        "avg_monthly_rate": round(monthly_rate_post, 2),
     }
 
 

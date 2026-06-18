@@ -8,3 +8,4 @@ numpy==1.26.4
 python-dotenv==1.0.1
 chromadb==0.5.20
 litellm>=1.81.16
+scipy==1.14.1
