@@ -57,6 +57,6 @@ jobs:
           scw container container update \
             container-id=${{ secrets.SCW_CONTAINER_FRONTEND_ID }} \
             region=fr-par
-          scw container container deploy \
+          scw container container redeploy \
             container-id=${{ secrets.SCW_CONTAINER_FRONTEND_ID }} \
             region=fr-par
