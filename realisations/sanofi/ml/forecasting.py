@@ -71,55 +71,86 @@ def _duration_by_cluster(trials: list, clustering: dict) -> list:
         })
     return result
 
+
 def _bayesian_forecast(volume_by_year: list, target_year: int = 2026) -> dict:
     """
-    Estimation bayésienne du volume d'essais pour target_year.
-    Modèle conjugué Poisson-Gamma :
-      - Prior Gamma(alpha, beta) non informatif
-      - Mise à jour sur les volumes observés
-      - Posterior predictive : NegativeBinomial
+    Estimation bayésienne du volume d'essais restants pour target_year.
+    Approche :
+      - Taux mensuel estimé sur l'historique (années complètes)
+      - Modèle conjugué Poisson-Gamma mis à jour sur ce taux
+      - Projection sur les mois restants de l'année cible
+      - Résultat : déjà observés + restants prédits = total fin d'année
     """
-    # Exclure l'année cible et les années incomplètes (année courante)
+    import math
+
     current_year = datetime.now().year
-    counts = [
-        d["count"] for d in volume_by_year
+    current_month = datetime.now().month
+
+    # Années complètes uniquement (hors année cible et année courante si différente)
+    historical = [
+        d for d in volume_by_year
         if d["year"] < current_year and d["year"] >= 2010
     ]
 
-    if not counts:
-        return {"most_likely": None, "ci_lower_95": None, "ci_upper_95": None}
+    # Volume déjà observé dans l'année cible
+    current_year_data = next(
+        (d for d in volume_by_year if d["year"] == target_year), None
+    )
+    already_observed = current_year_data["count"] if current_year_data else 0
 
-    n = len(counts)
-    total = sum(counts)
+    if not historical:
+        return {
+            "already_observed": already_observed,
+            "predicted_remaining": None,
+            "total_predicted": None,
+            "ci_lower_95": None,
+            "ci_upper_95": None,
+            "months_remaining": None,
+            "n_years_used": 0,
+            "avg_monthly_rate": None,
+        }
 
-    # Prior faiblement informatif : Gamma(1, 1)
+    # Taux mensuel historique
+    monthly_counts = [d["count"] / 12.0 for d in historical]
+    n = len(monthly_counts)
+    total_monthly = sum(monthly_counts)
+
+    # Mois restants dans l'année cible (mois courant non complet exclu)
+    months_remaining = 12 - current_month
+
+    # Prior faiblement informatif Gamma(1, 1)
     alpha_prior = 1.0
     beta_prior = 1.0
 
-    # Posterior : Gamma(alpha_prior + total, beta_prior + n)
-    alpha_post = alpha_prior + total
+    # Posterior Gamma mis à jour sur les taux mensuels historiques
+    alpha_post = alpha_prior + total_monthly
     beta_post = beta_prior + n
 
-    # Posterior predictive : NegativeBinomial(r=alpha_post, p=1/(1+beta_post))
-    # Mean = alpha_post / beta_post
-    # Variance = alpha_post * (1 + beta_post) / beta_post^2
-    mean = alpha_post / beta_post
-    variance = alpha_post * (1 + beta_post) / (beta_post ** 2)
+    # Taux mensuel postérieur
+    monthly_rate = alpha_post / beta_post
+    monthly_variance = alpha_post * (1 + beta_post) / (beta_post ** 2)
 
-    import math
-    std = math.sqrt(variance)
+    # Projection sur les mois restants
+    predicted_remaining_mean = monthly_rate * months_remaining
+    predicted_remaining_std = math.sqrt(monthly_variance * months_remaining)
 
-    # Intervalle de crédibilité 95% via approximation normale sur la predictive
-    ci_lower = max(0, round(mean - 1.96 * std))
-    ci_upper = round(mean + 1.96 * std)
-    most_likely = round(mean)
+    predicted_remaining = round(predicted_remaining_mean)
+    ci_lower = max(0, round(predicted_remaining_mean - 1.96 * predicted_remaining_std))
+    ci_upper = round(predicted_remaining_mean + 1.96 * predicted_remaining_std)
+
+    total_predicted = already_observed + predicted_remaining
+    total_ci_lower = already_observed + ci_lower
+    total_ci_upper = already_observed + ci_upper
 
     return {
-        "most_likely": most_likely,
-        "ci_lower_95": ci_lower,
-        "ci_upper_95": ci_upper,
+        "already_observed": already_observed,
+        "predicted_remaining": predicted_remaining,
+        "total_predicted": total_predicted,
+        "total_ci_lower": total_ci_lower,
+        "total_ci_upper": total_ci_upper,
+        "months_remaining": months_remaining,
         "n_years_used": n,
-        "avg_historical": round(mean, 1),
+        "avg_monthly_rate": round(monthly_rate, 2),
     }
 
 
