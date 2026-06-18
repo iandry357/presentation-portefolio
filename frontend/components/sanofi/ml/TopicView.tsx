@@ -22,8 +22,10 @@ interface Props {
 export default function TopicView({ data }: Props) {
   const byTopic = data.topics.map(t => ({
     ...t,
+    // docs: data.docs.filter(d => d.dominant_topic === t.topic_id)
+    //   .sort((a, b) => b.confidence - a.confidence),
     docs: data.docs.filter(d => d.dominant_topic === t.topic_id)
-      .sort((a, b) => b.confidence - a.confidence),
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
   }));
 
   // Dans le composant, avant le return :
