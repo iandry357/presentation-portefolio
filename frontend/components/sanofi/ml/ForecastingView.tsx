@@ -101,9 +101,8 @@ export default function ForecastingView({ data }: Props) {
             Prédiction Bayésienne — Volume d'essais fin 2026
           </h4>
           <p className="text-xs text-gray-500 mb-4">
-            À partir de l'historique des {data.bayesian_forecast.n_years_used} dernières années,
-            ce modèle estime le nombre d'essais attendus d'ici fin 2026 — avec une fourchette
-            de confiance plutôt qu'un chiffre unique.
+            Taux mensuel projeté 2026 : {data.bayesian_forecast.avg_monthly_rate} essais/mois —
+            estimé via un GLM Poisson bayésien sur {data.bayesian_forecast.n_years_used} années d'historique.
           </p>
 
           {/* Ligne 1 — Observé + Restant = Total */}
