@@ -21,7 +21,7 @@ from routers.savencia import rag as rag_service
 from routers.savencia import ml as ml_service
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/savencia", tags=["Savencia Investigation"])
+router = APIRouter(prefix="/savencia", tags=["Savencia Dashboard"])
 
 # ─────────────────────────────────────────
 # BigQuery client

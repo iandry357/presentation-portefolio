@@ -26,7 +26,7 @@ from google.oauth2 import service_account
 import json
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/sanofi", tags=["Sanofi Investigation"])
+router = APIRouter(prefix="/sanofi", tags=["Sanofi Dashboard"])
 
 # ─────────────────────────────────────────
 # BigQuery client

@@ -38,12 +38,12 @@ export default function SanofiPage() {
           Réalisations
         </Link>
         <span>/</span>
-        <span className="text-gray-900 font-medium">Sanofi Investigation</span>
+        <span className="text-gray-900 font-medium">Sanofi Dashboard</span>
       </div>
 
       {/* Titre */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Sanofi Investigation</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Sanofi Dashboard</h1>
         <p className="text-sm text-gray-500">
           Data source — ClinicalTrials.gov · PubMed · Google News · Press Release
         </p>

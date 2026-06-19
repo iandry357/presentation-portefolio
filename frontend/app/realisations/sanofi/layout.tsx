@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sanofi Investigation | Réalisations',
+  title: 'Sanofi Dashboard | Réalisations',
   description:
     'POC RAG multi-source sur les données publiques Sanofi — essais cliniques, publications R&D, actualités.',
 };

@@ -1,4 +1,4 @@
-# Pipeline Sanofi Investigation — Guide d'exécution
+# Pipeline Sanofi Dashboard — Guide d'exécution
 
 ## Prérequis
 

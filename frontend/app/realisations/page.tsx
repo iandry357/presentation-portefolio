@@ -15,7 +15,7 @@ interface PocCard {
 const POCS: PocCard[] = [
   {
     href: '/realisations/sanofi',
-    title: 'Sanofi Investigation',
+    title: 'Sanofi Dashboard',
     company: 'Sanofi',
     description:
       "Pipeline RAG multi-source sur les données publiques Sanofi — essais cliniques (ClinicalTrials.gov), publications R&D (PubMed) et actualités (Google News). Embeddings VoyageAI, ChromaDB, LLM Gemini/Mistral.",
@@ -24,7 +24,7 @@ const POCS: PocCard[] = [
   },
   {
     href: '/realisations/savencia',
-    title: 'Savencia Investigation',
+    title: 'Savencia Dashboard',
     company: 'Savencia / Soredab',
     description:
       "Veille stratégique agroalimentaire avec topic modeling LDA et détection de maturité fromagère par Computer Vision (ViT fine-tuné + Grad-CAM) sur le dataset CR-IDB.",
