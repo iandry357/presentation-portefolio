@@ -1,0 +1,61 @@
+services:
+
+  # --- ALWAYS-ON : ne jamais toucher ---
+
+  chromadb:
+    container_name: portefolio-chromadb
+    mvp: global
+    port: 8000
+    priority: always-on
+    ram_mb: 400
+    compose_file: /home/ubuntu/chromadb/docker-compose.yml
+    compose_service: chromadb
+
+  # --- ON-DEMAND : démarrés sur signal, éteints après inactivité ---
+
+  sanofi-ml:
+    container_name: ml_ml_service_1
+    mvp: sanofi
+    port: 8001
+    priority: on-demand
+    ram_mb: 800
+    compose_file: /home/ubuntu/ml-project/realisations/sanofi/ml/docker-compose.yml
+    compose_service: ml-service
+
+  savencia-ml:
+    container_name: ml_savencia-ml-service_1
+    mvp: savencia
+    port: 8002
+    priority: on-demand
+    ram_mb: 600
+    compose_file: /home/ubuntu/ml-project/realisations/savencia/ml/docker-compose.yml
+    compose_service: savencia-ml-service
+
+  sg-ml:
+    container_name: sg-ml-service
+    mvp: sg
+    port: 8003
+    priority: on-demand
+    ram_mb: 700
+    compose_file: /home/ubuntu/ml-project/realisations/sg/sg-assurances/ml/docker-compose.yml
+    compose_service: ml-service
+
+  sg-embedding:
+    container_name: embedding-service
+    mvp: sg
+    port: 8004
+    priority: on-demand
+    ram_mb: 500
+    compose_file: /home/ubuntu/ml-project/realisations/sg/sg-assurances/embedding-service/docker-compose.yml
+    compose_service: embedding-service
+
+  # --- FUTUR : décommenter quand Graph RAG prêt ---
+
+  # neo4j:
+  #   container_name: neo4j
+  #   mvp: sanofi
+  #   port: 7474
+  #   priority: on-demand
+  #   ram_mb: 2500
+  #   compose_file: /home/ubuntu/ml-project/realisations/sanofi/neo4j/docker-compose.yml
+  #   compose_service: neo4j
