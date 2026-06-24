@@ -57,6 +57,7 @@ resource "scaleway_container" "backend" {
     CHROMA_COLLECTION_SG                     = "sg_assurances_news"
     OVH_ML_PORT_SG                           = "8003"
     EMBEDDING_SERVICE_PORT                   = "8004"
+    OVH_ORCHESTRATOR_PORT                    = "8080"
   }
 
   secret_environment_variables = {

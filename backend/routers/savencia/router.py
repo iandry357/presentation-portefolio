@@ -20,6 +20,8 @@ from routers.savencia.schemas import (
 from routers.savencia import rag as rag_service
 from routers.savencia import ml as ml_service
 
+from app.services.orchestrator_client import wake, heartbeat
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/savencia", tags=["Savencia Dashboard"])
 
@@ -137,14 +139,16 @@ async def rag(body: RagRequest):
 
 @router.get("/ml/topic-modeling")
 async def get_topic_modeling():
+    await wake("savencia-ml")
+    await heartbeat("savencia-ml")
     return await ml_service.get_topic_modeling()
-
 
 @router.post("/ml/vit-inference", response_model=VitInferenceResponse)
 async def vit_inference(file: UploadFile = File(...)):
-    """Inférence ViT — détection maturité fromagère + Grad-CAM."""
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Le fichier doit être une image")
+    await wake("savencia-ml")
+    await heartbeat("savencia-ml")
     try:
         image_bytes = await file.read()
         result = await ml_service.vit_inference(image_bytes, file.content_type)

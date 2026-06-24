@@ -25,6 +25,8 @@ from routers.sanofi import ml as ml_service
 from google.oauth2 import service_account
 import json
 
+from app.services.orchestrator_client import wake, heartbeat
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sanofi", tags=["Sanofi Dashboard"])
 
@@ -316,12 +318,18 @@ def _is_json(s: str) -> bool:
 
 @router.get("/ml/clustering")
 async def get_clustering():
+    await wake("sanofi-ml")
+    await heartbeat("sanofi-ml")
     return await ml_service.get_clustering()
 
 @router.get("/ml/forecasting")
 async def get_forecasting():
+    await wake("sanofi-ml")
+    await heartbeat("sanofi-ml")
     return await ml_service.get_forecasting()
 
 @router.get("/ml/topic-modeling")
 async def get_topic_modeling():
+    await wake("sanofi-ml")
+    await heartbeat("sanofi-ml")
     return await ml_service.get_topic_modeling()
