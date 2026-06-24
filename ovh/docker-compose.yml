@@ -9,6 +9,7 @@ services:
     volumes:
       - ./orchestrator/registry.yaml:/app/registry.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/ubuntu/ml-project:/home/ubuntu/ml-project:ro
     networks:
       - portefolio-network
     restart: unless-stopped
