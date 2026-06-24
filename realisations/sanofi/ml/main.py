@@ -26,6 +26,8 @@ async def lifespan(app: FastAPI):
         cache["clustering"] = load_json("clustering")
         cache["forecasting"] = load_json("forecasting")
         cache["topic_modeling"] = load_json("topic_modeling")
+
+        cache["therapeutic_insight"] = load_json("therapeutic_insight")
         print("✅ ML results loaded into cache")
     except FileNotFoundError as e:
         print(f"⚠️  Warning: {e}")
@@ -66,3 +68,9 @@ def get_topic_modeling():
     if "topic_modeling" not in cache:
         raise HTTPException(status_code=503, detail="topic_modeling.json not available")
     return cache["topic_modeling"]
+
+@app.get("/ml/therapeutic-insight")
+def get_therapeutic_insight():
+    if "therapeutic_insight" not in cache:
+        raise HTTPException(status_code=503, detail="therapeutic_insight.json not available")
+    return cache["therapeutic_insight"]
