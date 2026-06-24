@@ -117,6 +117,9 @@ def get_news(limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0))
 # ─────────────────────────────────────────
 @router.post("/rag", response_model=RagResponse)
 async def rag(body: RagRequest):
+
+    await wake("sg-embedding")
+    await heartbeat("sg-embedding")
     """RAG — ChromaDB sg_assurances_news + LLM."""
     try:
         result = await rag_service.rag_pipeline(
