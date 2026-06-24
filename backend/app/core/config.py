@@ -95,6 +95,9 @@ class Settings(BaseSettings):
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 
+    OVH_ML_HOST: str = "51.68.130.23"
+    OVH_ORCHESTRATOR_PORT: str = "8080"
+
 
     @property
     def is_dev(self) -> bool:
