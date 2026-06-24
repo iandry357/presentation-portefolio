@@ -15,12 +15,14 @@ _lock = threading.Lock()
 
 def _on_timeout(service_key: str) -> None:
     """Callback déclenché après 5 min d'inactivité — arrête le service."""
-    from resource_manager import stop_service_safe
+    # from resource_manager import stop_service_safe
+    from docker_client import stop_service
     logger.info(f"Timeout {service_key} — aucune activité depuis {INACTIVITY_TIMEOUT}s")
     with _lock:
         _timers.pop(service_key, None)
         _last_activity.pop(service_key, None)
-    stop_service_safe(service_key)
+    # stop_service_safe(service_key)
+    stop_service(service_key)
 
 
 def start_timer(service_key: str) -> None:
