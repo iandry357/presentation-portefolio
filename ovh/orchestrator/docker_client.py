@@ -25,17 +25,34 @@ def is_running(service_key: str) -> bool:
         return False
 
 
+# def start_service(service_key: str) -> bool:
+#     """Démarre un service via docker compose up -d."""
+#     registry = load_registry()
+#     service = registry[service_key]
+#     compose_file = service["compose_file"]
+#     compose_service = service["compose_service"]
+
+#     result = subprocess.run(
+#         ["docker", "compose", "-f", compose_file, "up", "-d", compose_service],
+#         capture_output=True,
+#         text=True
+#     )
+#     return result.returncode == 0
+
 def start_service(service_key: str) -> bool:
-    """Démarre un service via docker compose up -d."""
     registry = load_registry()
     service = registry[service_key]
+    container_name = service["container_name"]
     compose_file = service["compose_file"]
     compose_service = service["compose_service"]
 
+    import subprocess, os
+    compose_dir = os.path.dirname(compose_file)
     result = subprocess.run(
         ["docker", "compose", "-f", compose_file, "up", "-d", compose_service],
         capture_output=True,
-        text=True
+        text=True,
+        cwd=compose_dir
     )
     return result.returncode == 0
 

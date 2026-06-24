@@ -19,29 +19,30 @@ async def wake(service_key: str) -> None:
     Bloquant — le premier appel ML attend que le service soit prêt.
     Lève une exception si timeout dépassé.
     """
+    # Signal de démarrage — client séparé
     async with httpx.AsyncClient(timeout=10) as client:
-        # Signal de démarrage
         try:
             await client.post(f"{ORCHESTRATOR_BASE_URL}/wake/{service_key}")
         except Exception as e:
             logger.warning(f"Wake signal failed for {service_key}: {e}")
 
-        # Poll jusqu'à running ou timeout
-        elapsed = 0
-        while elapsed < WAKE_TIMEOUT_SECONDS:
-            try:
+    # Poll — client séparé avec timeout plus long
+    elapsed = 0
+    while elapsed < WAKE_TIMEOUT_SECONDS:
+        try:
+            async with httpx.AsyncClient(timeout=10) as client:
                 resp = await client.get(f"{ORCHESTRATOR_BASE_URL}/status")
                 status = resp.json()
                 if status["services"].get(service_key, {}).get("running"):
                     logger.info(f"{service_key} is running")
                     return
-            except Exception as e:
-                logger.warning(f"Status poll failed: {e}")
+        except Exception as e:
+            logger.warning(f"Status poll failed: {e}")
 
-            await asyncio.sleep(POLL_INTERVAL_SECONDS)
-            elapsed += POLL_INTERVAL_SECONDS
+        await asyncio.sleep(POLL_INTERVAL_SECONDS)
+        elapsed += POLL_INTERVAL_SECONDS
 
-        raise TimeoutError(f"Service {service_key} did not start within {WAKE_TIMEOUT_SECONDS}s")
+    raise TimeoutError(f"Service {service_key} did not start within {WAKE_TIMEOUT_SECONDS}s")
 
 
 async def heartbeat(service_key: str) -> None:
