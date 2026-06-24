@@ -23,6 +23,8 @@ from routers.sg.sg_assurances.schemas import (
 from routers.sg.sg_assurances import rag as rag_service
 from routers.sg.sg_assurances import ml as ml_service
 
+from app.services.orchestrator_client import wake, heartbeat
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sg", tags=["SG Assurances"])
 
@@ -137,6 +139,8 @@ async def rag(body: RagRequest):
 # ─────────────────────────────────────────
 @router.get("/ml/topic-modeling", response_model=TopicModelingResponse)
 async def get_topic_modeling():
+    await wake("sg-ml")
+    await heartbeat("sg-ml")
     """Topic modeling LDA depuis ML Service OVH."""
     try:
         result = await ml_service.get_topic_modeling()
@@ -156,6 +160,8 @@ async def get_topic_modeling():
 # ─────────────────────────────────────────
 @router.post("/ml/yolo", response_model=YoloResponse)
 async def predict_yolo(file: UploadFile = File(...)):
+    await wake("sg-ml")
+    await heartbeat("sg-ml")
     """Détection zones document via YOLO — ML Service OVH."""
     try:
         result = await ml_service.predict_yolo(file)
@@ -182,6 +188,8 @@ async def predict_yolo(file: UploadFile = File(...)):
 # ─────────────────────────────────────────
 @router.post("/ml/ner", response_model=NerResponse)
 async def predict_ner(body: NerRequest):
+    await wake("sg-ml")
+    await heartbeat("sg-ml")
     """Extraction entités nommées via NER — ML Service OVH."""
     try:
         result = await ml_service.predict_ner(body.text)
@@ -207,6 +215,8 @@ async def predict_ner(body: NerRequest):
 # ─────────────────────────────────────────
 @router.post("/ml/qwen", response_model=QwenResponse)
 async def predict_qwen(body: QwenRequest):
+    await wake("sg-ml")
+    await heartbeat("sg-ml")
     """Génération Qwen fine-tuné via Vertex Endpoint → ML Service OVH."""
     try:
         result = await ml_service.predict_qwen(
