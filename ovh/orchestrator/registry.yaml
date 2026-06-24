@@ -14,7 +14,7 @@ services:
   # --- ON-DEMAND : démarrés sur signal, éteints après inactivité ---
 
   sanofi-ml:
-    container_name: ml_ml_service_1
+    container_name: ml_ml-service_1
     mvp: sanofi
     port: 8001
     priority: on-demand
