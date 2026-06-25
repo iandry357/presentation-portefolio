@@ -256,6 +256,47 @@ export async function fetchTopicModeling(): Promise<TopicModelingResponse> {
   return apiFetch<TopicModelingResponse>('/sanofi/ml/topic-modeling');
 }
 
+// ─────────────────────────────────────────
+// Therapeutic Insight
+// ─────────────────────────────────────────
+
+export interface TargetSignal {
+  ensembl_id: string;
+  symbol: string;
+  approved_name?: string;
+  score: number;
+  frequency: number;
+  has_approved_drug: boolean;
+  max_clinical_stage: string | null;
+}
+
+export interface ClusterInsight {
+  cluster_id: number;
+  label: string;
+  count: number;
+  diseases_searched: string[];
+  bio_score_avg: number;
+  approved_drug_rate: number;
+  profile: 'Mature' | 'Émergent' | 'Actif' | 'Exploratoire';
+  targets: TargetSignal[];
+}
+
+export interface TherapeuticInsightResponse {
+  generated_at: string;
+  n_clusters: number;
+  parameters: {
+    diseases_per_condition: number;
+    score_threshold_disease: number;
+    targets_per_disease: number;
+    request_delay_sec: number;
+  };
+  clusters: ClusterInsight[];
+}
+
+export async function fetchTherapeuticInsight(): Promise<TherapeuticInsightResponse> {
+  return apiFetch<TherapeuticInsightResponse>('/sanofi/ml/therapeutic-insight');
+}
+
 export interface PressReleaseItem {
   id: string;
   title: string;

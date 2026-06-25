@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchClustering, fetchForecasting, fetchTopicModeling, ClusteringResponse, ForecastingResponse, TopicModelingResponse } from '@/lib/sanofiApi';
+import { fetchClustering, fetchForecasting, fetchTopicModeling, fetchTherapeuticInsight, ClusteringResponse, ForecastingResponse, TopicModelingResponse, TherapeuticInsightResponse } from '@/lib/sanofiApi';
 import ClusteringView from './ClusteringView';
 import ForecastingView from './ForecastingView';
 import TopicView from './TopicView';
@@ -20,6 +20,7 @@ export default function MlView() {
   const [clustering, setClustering] = useState<ClusteringResponse | null>(null);
   const [forecasting, setForecasting] = useState<ForecastingResponse | null>(null);
   const [topics, setTopics] = useState<TopicModelingResponse | null>(null);
+  const [therapeuticInsight, setTherapeuticInsight] = useState<TherapeuticInsightResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,8 +29,13 @@ export default function MlView() {
       setLoading(true);
       setError(null);
       try {
-        if (tab === 'clustering' && !clustering) {
-          setClustering(await fetchClustering());
+        if (tab === 'clustering' && (!clustering || !therapeuticInsight)) {
+          const [clusteringData, insightData] = await Promise.all([
+            clustering ? Promise.resolve(clustering) : fetchClustering(),
+            therapeuticInsight ? Promise.resolve(therapeuticInsight) : fetchTherapeuticInsight(),
+          ]);
+          setClustering(clusteringData);
+          setTherapeuticInsight(insightData);
         } else if (tab === 'forecasting' && !forecasting) {
           setForecasting(await fetchForecasting());
         } else if (tab === 'topics' && !topics) {
@@ -82,7 +88,8 @@ export default function MlView() {
 
       {!loading && !error && (
         <>
-          {tab === 'clustering' && clustering && <ClusteringView data={clustering} />}
+          {/* {tab === 'clustering' && clustering && <ClusteringView data={clustering} />} */}
+          {tab === 'clustering' && clustering && therapeuticInsight && <ClusteringView data={clustering} insight={therapeuticInsight} />}
           {tab === 'forecasting' && forecasting && <ForecastingView data={forecasting} />}
           {tab === 'topics' && topics && <TopicView data={topics} />}
         </>
