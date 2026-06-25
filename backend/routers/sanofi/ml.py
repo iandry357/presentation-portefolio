@@ -37,3 +37,7 @@ async def get_forecasting():
 @router.get("/sanofi/ml/topic-modeling")
 async def get_topic_modeling():
     return await _get("/ml/topic-modeling")
+
+@router.get("/sanofi/ml/therapeutic-insight")
+async def get_therapeutic_insight():
+    return await _get("/ml/therapeutic-insight")
