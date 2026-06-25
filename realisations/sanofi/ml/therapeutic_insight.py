@@ -61,12 +61,23 @@ query DiseaseTargets($efoId: String!) {
         target {
           id
           approvedSymbol
+          approvedName
+          targetClass { label }
+          pathways { pathway pathwayId }
+          interactions(page: {index: 0, size: 5}) {
+            rows {
+              targetB { approvedSymbol }
+              score
+            }
+          }
+          tractability { label modality value }
         }
         score
       }
     }
   }
 }
+
 """ % {"size": TARGETS_PER_DISEASE}
 
 QUERY_TARGET_KNOWN_DRUGS = """
@@ -216,12 +227,47 @@ def _fetch_targets_for_disease(disease_id: str) -> list[dict]:
     targets = []
     for row in rows:
         target = row.get("target", {})
-        if target.get("id"):
-            targets.append({
-                "ensembl_id": target["id"],
-                "symbol": target.get("approvedSymbol", ""),
-                "score": row.get("score", 0.0),
-            })
+        if not target.get("id"):
+            continue
+
+        # Pathways
+        pathways = [
+            {"id": p["pathwayId"], "name": p["pathway"]}
+            for p in target.get("pathways", [])
+            if p.get("pathwayId") and p.get("pathway")
+        ]
+
+        # Interactions — partenaires protéiques score > 0.5
+        interactions = [
+            r["targetB"]["approvedSymbol"]
+            for r in target.get("interactions", {}).get("rows", [])
+            if r.get("targetB") and r.get("score", 0) > 0.5
+        ]
+
+        # Tractability — garder uniquement les true
+        tractability = [
+            f"{t['label']} ({t['modality']})"
+            for t in target.get("tractability", [])
+            if t.get("value") is True
+        ]
+
+        # Target class
+        target_class = [
+            tc["label"]
+            for tc in target.get("targetClass", [])
+            if tc.get("label")
+        ]
+
+        targets.append({
+            "ensembl_id": target["id"],
+            "symbol": target.get("approvedSymbol", ""),
+            "approved_name": target.get("approvedName", ""),
+            "target_class": target_class,
+            "score": row.get("score", 0.0),
+            "pathways": pathways,
+            "interactions": interactions,
+            "tractability": tractability,
+        })
     return targets
 
 
@@ -268,9 +314,16 @@ def _fetch_known_drugs_for_target(ensembl_id: str) -> dict:
     if has_approved:
         max_stage = "APPROVAL"
 
+    drug_names = list({
+        row["drug"]["name"]
+        for row in rows
+        if row.get("drug") and row["drug"].get("name")
+    })
+
     return {
         "has_approved_drug": has_approved,
         "max_clinical_stage": max_stage,
+        "drugs": drug_names,
     }
 
 
@@ -314,13 +367,29 @@ def _aggregate_targets_for_cluster(
                 target_map[tid] = {
                     "ensembl_id": tid,
                     "symbol": t["symbol"],
+                    "approved_name": t.get("approved_name", ""),
+                    "target_class": t.get("target_class", []),
                     "score": t["score"],
                     "frequency": 1,
+                    "pathways": t.get("pathways", []),
+                    "interactions": t.get("interactions", []),
+                    "tractability": t.get("tractability", []),
                 }
             else:
                 target_map[tid]["frequency"] += 1
                 if t["score"] > target_map[tid]["score"]:
                     target_map[tid]["score"] = t["score"]
+                # Enrichir pathways/interactions/tractability si plus complets
+                if not target_map[tid]["approved_name"] and t.get("approved_name"):
+                    target_map[tid]["approved_name"] = t["approved_name"]
+                if not target_map[tid]["target_class"] and t.get("target_class"):
+                    target_map[tid]["target_class"] = t["target_class"]
+                if not target_map[tid]["pathways"] and t.get("pathways"):
+                    target_map[tid]["pathways"] = t["pathways"]
+                if not target_map[tid]["interactions"] and t.get("interactions"):
+                    target_map[tid]["interactions"] = t["interactions"]
+                if not target_map[tid]["tractability"] and t.get("tractability"):
+                    target_map[tid]["tractability"] = t["tractability"]
 
     print(f"    → {len(target_map)} cibles biologiques uniques")
 
@@ -331,10 +400,16 @@ def _aggregate_targets_for_cluster(
         targets_out.append({
             "ensembl_id": target["ensembl_id"],
             "symbol": target["symbol"],
+            "approved_name": target.get("approved_name", ""),
+            "target_class": target.get("target_class", []),
             "score": round(target["score"], 4),
             "frequency": target["frequency"],
             "has_approved_drug": drug_info["has_approved_drug"],
             "max_clinical_stage": drug_info["max_clinical_stage"],
+            "drugs": drug_info.get("drugs", []),
+            "pathways": target.get("pathways", []),
+            "interactions": target.get("interactions", []),
+            "tractability": target.get("tractability", []),
         })
 
     # Tri : signaux forts d'abord (score desc), signaux faibles repérables par frequency
