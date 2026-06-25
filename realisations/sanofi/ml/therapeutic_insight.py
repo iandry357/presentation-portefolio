@@ -241,7 +241,7 @@ def _fetch_targets_for_disease(disease_id: str) -> list[dict]:
         interactions = [
             r["targetB"]["approvedSymbol"]
             for r in target.get("interactions", {}).get("rows", [])
-            if r.get("targetB") and r.get("score", 0) > 0.5
+            if r.get("targetB") and (r.get("score") or 0) > 0.5
         ]
 
         # Tractability — garder uniquement les true
