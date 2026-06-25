@@ -474,6 +474,8 @@ def _compute_cluster_profiles(clusters_enriched: list[dict]) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def run() -> dict:
+    import time
+    start_time = time.time()
     print("=== Therapeutic Insight — Release 2 Sanofi ===\n")
 
     # Chargement clustering.json
@@ -537,7 +539,10 @@ def run() -> dict:
         json.dump(result, f, indent=2, default=str, ensure_ascii=False)
 
     print(f"\n{'='*60}")
-    print(f"✓ therapeutic_insight.json généré")
+    elapsed = time.time() - start_time
+    minutes = int(elapsed // 60)
+    seconds = int(elapsed % 60)
+    print(f"✓ therapeutic_insight.json généré — temps total : {minutes}m {seconds}s")
     print(f"  Clusters traités : {len(clusters_enriched)}")
     for c in clusters_enriched:
         print(
