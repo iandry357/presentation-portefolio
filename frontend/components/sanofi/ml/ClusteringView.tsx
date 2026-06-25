@@ -171,7 +171,7 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
         </summary>
         <div className="mt-2 space-y-2 text-xs text-gray-600 bg-gray-50 rounded-lg p-3">
           <p><span className="font-medium text-gray-800">Signaux forts —</span> cibles les mieux documentées scientifiquement pour ce cluster. Un score élevé signifie de nombreuses évidences convergentes : génétique, essais cliniques, littérature. Ce sont les cibles que Sanofi connaît et travaille probablement déjà.</p>
-          <p><span className="font-medium text-gray-800">Signaux faibles —</span> cibles avec un score modeste mais qui apparaissent dans plusieurs diseases du cluster. Une fréquence élevée indique une cible transversale répétée — potentiellement sous-exploitée. C'est là que le Data Scientist apporte de la valeur : ces cibles ne se voient pas dans une analyse maladie par maladie.</p>
+          <p><span className="font-medium text-gray-800">Signaux faibles —</span> cibles avec un score modeste mais qui apparaissent dans plusieurs diseases du cluster. Une fréquence élevée indique une cible transversale répétée — potentiellement sous-exploitée. Ces cibles ne se voient pas dans une analyse maladie par maladie.</p>
         </div>
       </details>
 
