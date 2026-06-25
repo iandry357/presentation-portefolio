@@ -333,3 +333,9 @@ async def get_topic_modeling():
     await wake("sanofi-ml")
     await heartbeat("sanofi-ml")
     return await ml_service.get_topic_modeling()
+
+@router.get("/ml/therapeutic-insight")
+async def get_therapeutic_insight():
+    await wake("sanofi-ml")
+    await heartbeat("sanofi-ml")
+    return await ml_service.get_therapeutic_insight()
