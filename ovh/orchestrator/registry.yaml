@@ -51,11 +51,11 @@ services:
 
   # --- FUTUR : décommenter quand Graph RAG prêt ---
 
-  # neo4j:
-  #   container_name: neo4j
-  #   mvp: sanofi
-  #   port: 7474
-  #   priority: on-demand
-  #   ram_mb: 2500
-  #   compose_file: /home/ubuntu/ml-project/realisations/sanofi/neo4j/docker-compose.yml
-  #   compose_service: neo4j
+  neo4j:
+    container_name: sanofi-neo4j
+    mvp: sanofi
+    port: 7474
+    priority: on-demand
+    ram_mb: 900
+    compose_file: /home/ubuntu/ml-project/realisations/sanofi/ml/docker-compose.yml
+    compose_service: neo4j
