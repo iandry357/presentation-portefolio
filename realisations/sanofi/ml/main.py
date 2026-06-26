@@ -6,6 +6,9 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from pydantic import BaseModel
+from graph_rag import query_graph_rag
+
 RESULTS_DIR = Path(__file__).parent / "results"
 ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "*")
 
@@ -44,6 +47,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class GraphRagRequest(BaseModel):
+    cluster_id: int
+    question: str
 
 @app.get("/health")
 def health():
@@ -74,3 +80,13 @@ def get_therapeutic_insight():
     if "therapeutic_insight" not in cache:
         raise HTTPException(status_code=503, detail="therapeutic_insight.json not available")
     return cache["therapeutic_insight"]
+
+@app.post("/ml/graph-rag")
+def post_graph_rag(request: GraphRagRequest):
+    result = query_graph_rag(
+        cluster_id=request.cluster_id,
+        question=request.question,
+    )
+    if result.get("answer", "").startswith("Neo4j unavailable"):
+        raise HTTPException(status_code=503, detail=result["answer"])
+    return result
