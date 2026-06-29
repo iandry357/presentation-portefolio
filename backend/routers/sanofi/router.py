@@ -27,6 +27,8 @@ import json
 
 from app.services.orchestrator_client import wake, heartbeat
 
+from routers.sanofi.ml import GraphRagRequest
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sanofi", tags=["Sanofi Dashboard"])
 
@@ -339,3 +341,9 @@ async def get_therapeutic_insight():
     await wake("sanofi-ml")
     await heartbeat("sanofi-ml")
     return await ml_service.get_therapeutic_insight()
+
+@router.post("/ml/graph-rag")
+async def post_graph_rag(body: GraphRagRequest):
+    await wake("sanofi-ml")
+    await heartbeat("sanofi-ml")
+    return await ml_service.post_graph_rag(body)
