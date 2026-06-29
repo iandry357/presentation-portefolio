@@ -27,7 +27,8 @@ NEO4J_USER     = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 ORCHESTRATOR_URL     = os.getenv("OVH_ORCHESTRATOR_URL", "http://localhost:8080")
-NEO4J_HEALTH_URL     = "http://localhost:7474"
+# NEO4J_HEALTH_URL     = "http://localhost:7474"
+NEO4J_HEALTH_URL     = os.getenv("NEO4J_HEALTH_URL", "http://neo4j:7474")
 NEO4J_WAKE_TIMEOUT   = 60    # secondes max pour attendre Neo4j up
 NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 
