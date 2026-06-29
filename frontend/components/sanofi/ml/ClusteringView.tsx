@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   ScatterChart, Scatter, ZAxis, CartesianGrid, ReferenceLine,
 } from 'recharts';
-import { ClusteringResponse, TherapeuticInsightResponse, ClusterInsight, TargetSignal } from '@/lib/sanofiApi';
+import { ClusteringResponse, TherapeuticInsightResponse, ClusterInsight, TargetSignal, fetchGraphRag, GraphRagResponse } from '@/lib/sanofiApi';
+
 
 // ---------------------------------------------------------------------------
 // Constantes
@@ -91,6 +92,28 @@ function ProfileBadge({ profile }: { profile: string }) {
 // ---------------------------------------------------------------------------
 
 function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
+  const [graphRagOpen, setGraphRagOpen] = useState(false);
+  const [question, setQuestion] = useState('');
+  const [ragResult, setRagResult] = useState<GraphRagResponse | null>(null);
+  const [ragLoading, setRagLoading] = useState(false);
+  const [ragError, setRagError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleGraphRagSubmit = async () => {
+    if (!question.trim()) return;
+    setRagLoading(true);
+    setRagError(null);
+    setRagResult(null);
+    try {
+      const result = await fetchGraphRag(cluster.cluster_id, question.trim());
+      setRagResult(result);
+    } catch (e: any) {
+      setRagError(e.message ?? 'Erreur Graph RAG');
+    } finally {
+      setRagLoading(false);
+    }
+  };
+
   const medianScore = useMemo(() => {
     if (!cluster.targets.length) return 0;
     const sorted = [...cluster.targets].sort((a, b) => a.score - b.score);
@@ -237,6 +260,71 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
                 {weakSignals.map(t => <TargetRow key={t.ensembl_id} t={t} showScore={false} />)}
               </tbody>
             </table>
+          </div>
+        )}
+      </div>
+      
+      {/* ── Graph RAG ── */}
+      <div className="mt-2 border-t pt-3">
+        <button
+          onClick={() => {
+            setGraphRagOpen(v => !v);
+            if (!graphRagOpen) setTimeout(() => inputRef.current?.focus(), 100);
+          }}
+          className="text-xs text-indigo-600 hover:underline cursor-pointer select-none flex items-center gap-1"
+        >
+          <span>{graphRagOpen ? '▾' : '▸'}</span>
+          <span>Explorer ce cluster avec Graph RAG</span>
+        </button>
+
+        {graphRagOpen && (
+          <div className="mt-3 space-y-3">
+            <div className="flex gap-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={question}
+                onChange={e => setQuestion(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleGraphRagSubmit()}
+                placeholder="Ex : Quelles cibles ont un médicament approuvé ?"
+                className="flex-1 text-xs border rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+              />
+              <button
+                onClick={handleGraphRagSubmit}
+                disabled={ragLoading || !question.trim()}
+                className="text-xs px-3 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {ragLoading ? '…' : 'Envoyer'}
+              </button>
+            </div>
+
+            {ragError && (
+              <p className="text-xs text-red-500">{ragError}</p>
+            )}
+
+            {ragResult && (
+              <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-xs">
+                <p className="text-gray-500">
+                  <span className="font-medium text-gray-700">{ragResult.targets_count}</span> cibles dans le graphe
+                  {!ragResult.llm_available && (
+                    <span className="ml-2 text-amber-500 italic">— LLM non disponible</span>
+                  )}
+                </p>
+                <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
+                  {ragResult.answer}
+                </p>
+                {ragResult.context && (
+                  <details>
+                    <summary className="text-blue-600 cursor-pointer hover:underline">
+                      Voir le contexte extrait du graphe
+                    </summary>
+                    <pre className="mt-2 text-[10px] text-gray-500 whitespace-pre-wrap bg-white border rounded p-2 overflow-auto max-h-48">
+                      {ragResult.context}
+                    </pre>
+                  </details>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
