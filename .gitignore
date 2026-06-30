@@ -83,5 +83,6 @@ realisations/sanofi/training/models/lora/
 realisations/sanofi/training/models/merged/
 realisations/sanofi/training/models/offload/
 realisations/sanofi/training/models/hparam_runs/
+realisations/sanofi/training/models/*gguf
 realisations/sanofi/training/data/
 
