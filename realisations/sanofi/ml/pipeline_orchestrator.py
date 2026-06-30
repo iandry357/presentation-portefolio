@@ -37,7 +37,8 @@ THERAPEUTIC_SCRIPT   = Path(__file__).parent / "therapeutic_insight.py"
 NEO4J_INGESTION_SCRIPT = Path(__file__).parent / "neo4j_ingestion.py"
 
 ORCHESTRATOR_URL     = os.getenv("OVH_ORCHESTRATOR_URL", "http://localhost:8080")
-NEO4J_HEALTH_URL     = "http://localhost:7474"
+# NEO4J_HEALTH_URL     = "http://localhost:7474"
+NEO4J_HEALTH_URL = os.getenv("NEO4J_HEALTH_URL", "http://neo4j:7474")
 NEO4J_WAKE_TIMEOUT   = 60    # secondes max pour attendre Neo4j up
 NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 
