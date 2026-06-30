@@ -35,7 +35,7 @@ NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 # LLM_AVAILABLE = False        # Passer à True quand GGUF Mistral branché
 LLM_AVAILABLE = True
 
-LLAMA_SERVER_URL    = "http://172.17.0.1:8006/v1/chat/completions"
+LLAMA_SERVER_URL    = "http://172.21.0.1:8006/v1/chat/completions"
 LLAMA_MAX_TOKENS    = 300
 LLAMA_TIMEOUT       = 120.0
 
@@ -349,7 +349,7 @@ def query_graph_rag(cluster_id: int, question: str) -> dict:
 
     # # LLM — non branché
     # answer = "LLM not available yet — context retrieved successfully."
-    
+
     # LLM — appel llama-server si disponible
     answer = None
     if LLM_AVAILABLE:
