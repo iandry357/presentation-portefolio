@@ -1,0 +1,10 @@
+{
+  "base_model": "mistralai/Mistral-7B-Instruct-v0.3",
+  "r": 32,
+  "lora_alpha": 64,
+  "learning_rate": 0.0002,
+  "epochs": 3,
+  "eval_loss": 1.4209,
+  "perplexity": 4.141,
+  "training_time_minutes": 216.5
+}

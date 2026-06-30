@@ -1,0 +1,31 @@
+{
+  "run_name": "mistral7b-drug-discovery",
+  "base_model": "mistralai/Mistral-7B-Instruct-v0.3",
+  "generated_at": "retroactive",
+  "checkpoints": [
+    {
+      "epoch": 1.0,
+      "checkpoint": "checkpoint-173",
+      "eval_loss": 1.4209396839141846,
+      "perplexity": 4.141,
+      "eval_mean_token_accuracy": 0.65484907620215,
+      "eval_runtime": 267.2059
+    },
+    {
+      "epoch": 2.0,
+      "checkpoint": "checkpoint-346",
+      "eval_loss": 1.4225940704345703,
+      "perplexity": 4.1480,
+      "eval_mean_token_accuracy": 0.6549017543048528,
+      "eval_runtime": 273.1833
+    },
+    {
+      "epoch": 3.0,
+      "checkpoint": "checkpoint-519",
+      "eval_loss": 1.4729692935943604,
+      "perplexity": 4.3617,
+      "eval_mean_token_accuracy": 0.650629115587025,
+      "eval_runtime": 275.5352
+    }
+  ]
+}

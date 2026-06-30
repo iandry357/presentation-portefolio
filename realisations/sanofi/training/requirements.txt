@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────
+# Dataset preparation
+# ─────────────────────────────────────────
+datasets
+httpx
+python-dotenv
+requests
+
+# ─────────────────────────────────────────
+# Fine-tuning — Mistral 7B QLoRA
+# ─────────────────────────────────────────
+transformers==4.46.0
+peft
+bitsandbytes
+accelerate
+trl
+sentencepiece
+protobuf
+evaluate
+
+# ─────────────────────────────────────────
+# GCP — Vertex AI Model Registry
+# ─────────────────────────────────────────
+google-cloud-aiplatform
+google-cloud-storage
+
+# ─────────────────────────────────────────
+# PyTorch CUDA
+# ─────────────────────────────────────────
+# pip install -c constraints.txt torch torchvision --index-url https://download.pytorch.org/whl/nightly/cu128
+# NE PAS inclure torch ici pour éviter la version CPU par défaut
