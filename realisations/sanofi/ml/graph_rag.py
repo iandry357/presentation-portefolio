@@ -32,7 +32,12 @@ NEO4J_HEALTH_URL     = os.getenv("NEO4J_HEALTH_URL", "http://neo4j:7474")
 NEO4J_WAKE_TIMEOUT   = 60    # secondes max pour attendre Neo4j up
 NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 
-LLM_AVAILABLE = False        # Passer à True quand GGUF Mistral branché
+# LLM_AVAILABLE = False        # Passer à True quand GGUF Mistral branché
+LLM_AVAILABLE = True
+
+LLAMA_SERVER_URL    = "http://172.17.0.1:8006/v1/chat/completions"
+LLAMA_MAX_TOKENS    = 300
+LLAMA_TIMEOUT       = 120.0
 
 # ---------------------------------------------------------------------------
 # WAKE NEO4J
@@ -273,6 +278,36 @@ def _build_context(cluster_data: dict) -> str:
 
     return "\n".join(lines)
 
+# ---------------------------------------------------------------------------
+# APPEL LLM
+# ---------------------------------------------------------------------------
+
+def _call_llm(context: str, question: str) -> str | None:
+    """
+    Appel llama-server OVH (port 8005) — API compatible OpenAI.
+    Retourne la réponse texte, ou None si échec (timeout, connexion refusée).
+    """
+    prompt = (
+        f"[INST] Tu es un expert en drug discovery et biologie moléculaire. "
+        f"Voici le contexte scientifique d'un cluster de cibles thérapeutiques :\n\n"
+        f"{context}\n\n"
+        f"Question : {question} [/INST]"
+    )
+
+    payload = {
+        "model":      "mistral7b-drug",
+        "messages":   [{"role": "user", "content": prompt}],
+        "max_tokens": LLAMA_MAX_TOKENS,
+    }
+
+    try:
+        response = httpx.post(LLAMA_SERVER_URL, json=payload, timeout=LLAMA_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        print(f"[GRAPH RAG] LLM call failed : {e}")
+        return None
 
 # ---------------------------------------------------------------------------
 # ENTRYPOINT PRINCIPAL
@@ -312,8 +347,16 @@ def query_graph_rag(cluster_id: int, question: str) -> dict:
     # Construction contexte texte
     context = _build_context(cluster_data)
 
-    # LLM — non branché
-    answer = "LLM not available yet — context retrieved successfully."
+    # # LLM — non branché
+    # answer = "LLM not available yet — context retrieved successfully."
+    
+    # LLM — appel llama-server si disponible
+    answer = None
+    if LLM_AVAILABLE:
+        answer = _call_llm(context, question)
+
+    if answer is None:
+        answer = "LLM not available — context retrieved successfully."
 
     return {
         "cluster_label": meta.get("label"),
