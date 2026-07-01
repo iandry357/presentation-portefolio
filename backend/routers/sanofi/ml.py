@@ -51,7 +51,7 @@ async def get_therapeutic_insight():
 async def post_graph_rag(payload: GraphRagRequest) -> dict:
     url = f"{ML_BASE_URL}/ml/graph-rag"
     try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=180.0) as client:
             resp = await client.post(url, json=payload.model_dump())
             resp.raise_for_status()
             return resp.json()
