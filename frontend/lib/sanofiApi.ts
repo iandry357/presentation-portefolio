@@ -297,6 +297,33 @@ export async function fetchTherapeuticInsight(): Promise<TherapeuticInsightRespo
   return apiFetch<TherapeuticInsightResponse>('/sanofi/ml/therapeutic-insight');
 }
 
+// ─────────────────────────────────────────
+// Graph RAG
+// ─────────────────────────────────────────
+
+export interface GraphRagRequest {
+  cluster_id: number;
+  question: string;
+}
+
+export interface GraphRagResponse {
+  cluster_label: string | null;
+  targets_count: number;
+  context: string;
+  answer: string;
+  llm_available: boolean;
+}
+
+export async function fetchGraphRag(
+  cluster_id: number,
+  question: string
+): Promise<GraphRagResponse> {
+  return apiFetch<GraphRagResponse>('/sanofi/ml/graph-rag', {
+    method: 'POST',
+    body: JSON.stringify({ cluster_id, question }),
+  });
+}
+
 export interface PressReleaseItem {
   id: string;
   title: string;

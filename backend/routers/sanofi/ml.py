@@ -3,6 +3,12 @@ import os
 import httpx
 from fastapi import APIRouter, HTTPException
 
+from pydantic import BaseModel
+
+class GraphRagRequest(BaseModel):
+    cluster_id: int
+    question: str
+
 router = APIRouter()
 
 OVH_ML_HOST = os.getenv("OVH_ML_HOST", "51.68.130.23")
@@ -41,3 +47,17 @@ async def get_topic_modeling():
 @router.get("/sanofi/ml/therapeutic-insight")
 async def get_therapeutic_insight():
     return await _get("/ml/therapeutic-insight")
+
+async def post_graph_rag(payload: GraphRagRequest) -> dict:
+    url = f"{ML_BASE_URL}/ml/graph-rag"
+    try:
+        async with httpx.AsyncClient(timeout=180.0) as client:
+            resp = await client.post(url, json=payload.model_dump())
+            resp.raise_for_status()
+            return resp.json()
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="ML service timeout")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=e.response.status_code, detail="ML service error")
+    except httpx.RequestError:
+        raise HTTPException(status_code=503, detail="ML service unreachable")
