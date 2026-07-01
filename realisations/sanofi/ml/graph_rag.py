@@ -36,8 +36,8 @@ NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 LLM_AVAILABLE = True
 
 LLAMA_SERVER_URL    = "http://172.21.0.1:8006/v1/chat/completions"
-LLAMA_MAX_TOKENS    = 300
-LLAMA_TIMEOUT       = 120.0
+LLAMA_MAX_TOKENS    = 200
+LLAMA_TIMEOUT       = 180.0
 
 # ---------------------------------------------------------------------------
 # WAKE NEO4J
@@ -265,13 +265,13 @@ def _build_context(cluster_data: dict) -> str:
             lines.append(f"    Classe protéique : {', '.join(t['target_class'][:2])}")
 
         if t["drugs"]:
-            lines.append(f"    Médicaments : {', '.join(t['drugs'][:3])}")
+            lines.append(f"    Médicaments : {', '.join(t['drugs'][:2])}")
 
         if t["pathways"]:
             lines.append(f"    Voies biologiques : {', '.join(t['pathways'][:2])}")
 
         if t["diseases"]:
-            lines.append(f"    Maladies associées : {', '.join(t['diseases'][:2])}")
+            lines.append(f"    Maladies associées : {', '.join(t['diseases'][:1])}")
 
         if t["tractability"]:
             lines.append(f"    Druggabilité : {', '.join(t['tractability'][:2])}")
