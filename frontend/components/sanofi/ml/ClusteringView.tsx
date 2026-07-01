@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+// import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   ScatterChart, Scatter, ZAxis, CartesianGrid, ReferenceLine,
@@ -29,6 +30,37 @@ const PROFILE_LABELS: Record<string, string> = {
   'Émergent':     'Forte activité biologique, pipeline en construction',
   'Actif':        'Médicaments existants, biologie moins documentée',
   'Exploratoire': 'Territoire peu exploré — signaux faibles potentiels',
+};
+
+const PROFILE_QUESTIONS: Record<string, string[]> = {
+  'Mature': [
+    'Quels médicaments approuvés ciblent ce cluster ?',
+    'Quelles cibles ont le meilleur potentiel de développement additionnel ?',
+    'Existe-t-il des opportunités de repositionnement de médicaments ?',
+    'Quelles cibles ont un score OpenTargets élevé ?',
+    'Quels médicaments sont en phase clinique avancée ?',
+  ],
+  'Émergent': [
+    'Quelles cibles méritent d\'être explorées en priorité ?',
+    'Quels sont les signaux biologiques les plus forts ?',
+    'Quelles cibles ont une fréquence transversale élevée ?',
+    'Quelles voies biologiques sont les plus représentées ?',
+    'Quelles cibles n\'ont pas encore de médicament approuvé ?',
+  ],
+  'Actif': [
+    'Quelles opportunités de repositionnement de médicaments existent ?',
+    'Quelles cibles ont un score élevé mais peu de médicaments ?',
+    'Quels essais cliniques sont en cours sur ce cluster ?',
+    'Quelles cibles ont le meilleur profil de druggabilité ?',
+    'Quelles maladies sont les plus représentées ?',
+  ],
+  'Exploratoire': [
+    'Quelles cibles transversales sont sous-exploitées ?',
+    'Quels signaux faibles méritent une investigation approfondie ?',
+    'Quelles cibles ont une fréquence élevée malgré un faible score ?',
+    'Quelles voies biologiques émergentes sont présentes ?',
+    'Quelles cibles pourraient représenter des opportunités R&D non adressées ?',
+  ],
 };
 
 const PHASE_RANK: Record<string, number> = {
@@ -99,13 +131,39 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
   const [ragError, setRagError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleGraphRagSubmit = async () => {
-    if (!question.trim()) return;
+  const [elapsed, setElapsed] = useState(0);
+  const [finalElapsed, setFinalElapsed] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (ragLoading) {
+      setElapsed(0);
+      setFinalElapsed(null);
+      timerRef.current = setInterval(() => setElapsed(s => s + 1), 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+      setFinalElapsed(prev => prev === null ? elapsed : prev);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [ragLoading]);
+
+  const ragStep = useCallback((seconds: number) => {
+    if (seconds < 3)  return { label: 'Réveil Neo4j...', pct: 5 };
+    if (seconds < 6)  return { label: 'Requêtes Cypher sur le graphe...', pct: 15 };
+    if (seconds < 10) return { label: 'Construction du contexte biologique...', pct: 25 };
+    if (seconds < 20) return { label: 'Traitement du prompt Mistral 7B...', pct: 40 };
+    if (seconds < 60) return { label: 'Génération de la réponse (CPU OVH)...', pct: Math.min(40 + Math.floor((seconds - 20) / 40 * 50), 88) };
+    return { label: 'Finalisation de la réponse...', pct: 90 };
+  }, []);
+
+  const handleGraphRagSubmit = async (overrideQuestion?: string) => {
+    const q = overrideQuestion ?? question;
+    if (!q.trim()) return;
     setRagLoading(true);
     setRagError(null);
     setRagResult(null);
     try {
-      const result = await fetchGraphRag(cluster.cluster_id, question.trim());
+      const result = await fetchGraphRag(cluster.cluster_id, q.trim());
       setRagResult(result);
     } catch (e: any) {
       setRagError(e.message ?? 'Erreur Graph RAG');
@@ -274,11 +332,14 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
           className="text-xs text-indigo-600 hover:underline cursor-pointer select-none flex items-center gap-1"
         >
           <span>{graphRagOpen ? '▾' : '▸'}</span>
-          <span>Explorer ce cluster avec Graph RAG</span>
+          <span>Explorer ce cluster avec Graph RAG — analyse Mistral 7B fine-tuné</span>
         </button>
 
         {graphRagOpen && (
           <div className="mt-3 space-y-3">
+            <p className="text-[10px] text-gray-400 italic">
+              Le Graph RAG sélectionne jusqu'à 9 cibles clés depuis Neo4j pour le raisonnement — indépendamment des tableaux ci-dessus.
+            </p>
             <div className="flex gap-2">
               <input
                 ref={inputRef}
@@ -286,11 +347,11 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
                 value={question}
                 onChange={e => setQuestion(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleGraphRagSubmit()}
-                placeholder="Ex : Quelles cibles ont un médicament approuvé ?"
+                placeholder="Ex : Quelles cibles méritent une investigation ?"
                 className="flex-1 text-xs border rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-300"
               />
               <button
-                onClick={handleGraphRagSubmit}
+                onClick={() => handleGraphRagSubmit()}
                 disabled={ragLoading || !question.trim()}
                 className="text-xs px-3 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
               >
@@ -298,16 +359,64 @@ function SignalsPanel({ cluster }: { cluster: ClusterInsight }) {
               </button>
             </div>
 
+            {/* Questions d'exemple adaptées au profil */}
+            {!ragLoading && (
+              <div className="flex flex-wrap gap-1.5">
+                {(PROFILE_QUESTIONS[cluster.profile] ?? []).map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => {
+                      setQuestion(q);
+                      setRagResult(null);
+                      setRagError(null);
+                      setTimeout(() => {
+                        setQuestion(q);
+                        handleGraphRagSubmit();
+                      }, 0);
+                    }}
+                    className="text-[10px] px-2 py-1 border border-indigo-200 text-indigo-600 rounded-full hover:bg-indigo-50 transition-colors cursor-pointer"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {ragLoading && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span className="italic">{ragStep(elapsed).label}</span>
+                  <span className="tabular-nums font-medium text-indigo-500">{elapsed}s</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-1.5">
+                  <div
+                    className="bg-indigo-500 h-1.5 rounded-full transition-all duration-1000"
+                    style={{ width: `${ragStep(elapsed).pct}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-gray-400">
+                  Modèle Mistral 7B Q4_K_M · llama.cpp CPU 8Go RAM OVH · Neo4j Graph RAG · sélection indépendante des tableaux · ~120s
+                </p>
+              </div>
+            )}
+
             {ragError && (
               <p className="text-xs text-red-500">{ragError}</p>
             )}
 
             {ragResult && (
               <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-xs">
-                <p className="text-gray-500">
-                  <span className="font-medium text-gray-700">{ragResult.targets_count}</span> cibles dans le graphe
-                  {!ragResult.llm_available && (
-                    <span className="ml-2 text-amber-500 italic">— LLM non disponible</span>
+                <p className="text-gray-500 flex items-center justify-between">
+                  <span>
+                    <span className="font-medium text-gray-700">{ragResult.targets_count}</span> cibles dans le graphe
+                    {!ragResult.llm_available && (
+                      <span className="ml-2 text-amber-500 italic">— LLM non disponible</span>
+                    )}
+                  </span>
+                  {finalElapsed !== null && (
+                    <span className="text-gray-400 tabular-nums">
+                      ⏱ {finalElapsed}s
+                    </span>
                   )}
                 </p>
                 <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
@@ -605,7 +714,7 @@ export default function ClusteringView({ data, insight }: Props) {
         {/* Panneau signaux — affiché si cluster sélectionné */}
         {selectedCluster && (
           <div className="border border-blue-100 rounded-lg p-4 bg-blue-50/30">
-            <SignalsPanel cluster={selectedCluster} />
+            <SignalsPanel key={selectedCluster.cluster_id} cluster={selectedCluster} />
           </div>
         )}
 
