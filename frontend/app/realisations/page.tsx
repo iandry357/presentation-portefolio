@@ -18,8 +18,8 @@ const POCS: PocCard[] = [
     title: 'Sanofi Dashboard',
     company: 'Sanofi',
     description:
-      "Pipeline RAG multi-source sur les données publiques Sanofi — essais cliniques (ClinicalTrials.gov), publications R&D (PubMed) et actualités (Google News). Embeddings VoyageAI, ChromaDB, LLM Gemini/Mistral.",
-    tags: ['RAG', 'ChromaDB', 'VoyageAI', 'BigQuery', 'ETL', 'LLM'],
+      "Pipeline RAG multi-source + Therapeutic Insight — clustering thérapeutique OpenTargets, profils Mature/Émergent/Actif/Exploratoire, Graph RAG Neo4j + Mistral 7B fine-tuné drug discovery (win-rate 46.7%). Essais cliniques, PubMed, Google News. VoyageAI, ChromaDB, BigQuery.",
+    tags: ['RAG', 'Graph RAG', 'Neo4j', 'Fine-tuning', 'QLoRA', 'ChromaDB', 'VoyageAI', 'BigQuery', 'ETL', 'LLM'],
     status: 'live',
   },
   {
@@ -38,7 +38,7 @@ const POCS: PocCard[] = [
     description:
       "Veille assurance et analyse de documents contractuels — détection de zones YOLO, extraction d'entités NER, RAG sur actualités et modèle Qwen2.5 fine-tuné QLoRA sur corpus SG.",
     tags: ['YOLO', 'NER', 'RAG', 'QLoRA', 'ChromaDB', 'BigQuery', 'Vertex AI'],
-    status: 'wip',
+    status: 'live',
   },
 ];
 
