@@ -113,7 +113,7 @@ WITH c, t,
      collect(DISTINCT p.name)  AS pathways,
      collect(DISTINCT d.name)  AS diseases
 ORDER BY t.score DESC
-LIMIT 5
+LIMIT 3
 RETURN
     c.label AS cluster_label, c.profile AS profile,
     c.bio_score_avg AS bio_score_avg, c.approved_drug_rate AS approved_drug_rate,
@@ -136,7 +136,7 @@ WITH c, t,
      collect(DISTINCT p.name)  AS pathways,
      collect(DISTINCT d.name)  AS diseases
 ORDER BY t.frequency DESC
-LIMIT 5
+LIMIT 3
 RETURN
     c.label AS cluster_label, c.profile AS profile,
     c.bio_score_avg AS bio_score_avg, c.approved_drug_rate AS approved_drug_rate,
@@ -160,7 +160,7 @@ WITH c, t,
      collect(DISTINCT p.name)  AS pathways,
      collect(DISTINCT d.name)  AS diseases
 ORDER BY t.score DESC
-LIMIT 5
+LIMIT 3
 RETURN
     c.label AS cluster_label, c.profile AS profile,
     c.bio_score_avg AS bio_score_avg, c.approved_drug_rate AS approved_drug_rate,
@@ -262,16 +262,16 @@ def _build_context(cluster_data: dict) -> str:
         lines.append(f"    Stade clinique max : {t['max_clinical_stage']} | Médicament approuvé : {t['has_approved_drug']}")
 
         if t["target_class"]:
-            lines.append(f"    Classe protéique : {', '.join(t['target_class'][:3])}")
+            lines.append(f"    Classe protéique : {', '.join(t['target_class'][:2])}")
 
         if t["drugs"]:
-            lines.append(f"    Médicaments : {', '.join(t['drugs'][:5])}")
+            lines.append(f"    Médicaments : {', '.join(t['drugs'][:3])}")
 
         if t["pathways"]:
-            lines.append(f"    Voies biologiques : {', '.join(t['pathways'][:3])}")
+            lines.append(f"    Voies biologiques : {', '.join(t['pathways'][:2])}")
 
         if t["diseases"]:
-            lines.append(f"    Maladies associées : {', '.join(t['diseases'][:3])}")
+            lines.append(f"    Maladies associées : {', '.join(t['diseases'][:2])}")
 
         if t["tractability"]:
             lines.append(f"    Druggabilité : {', '.join(t['tractability'][:2])}")
