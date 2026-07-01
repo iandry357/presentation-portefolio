@@ -18,6 +18,7 @@ realisations/sanofi/.env
 backend/gcp_sa_sanofi.json 
 realisations/sanofi/ml/.env
 realisations/sanofi/ml/results/
+realisations/sanofi/training/venv-sanofi/
 
 # Savencia
 gcp/savencia/infra/terraform.tfvars 
@@ -77,4 +78,12 @@ realisations/sg/sg-assurances/llama.cpp/
 realisations/sg/sg-assurances/llamaZip/
 
 realisations/sg/sg-assurances/sa_sg_minified.txt
+
+realisations/sanofi/training/models/lora/
+realisations/sanofi/training/models/merged/
+realisations/sanofi/training/models/offload/
+realisations/sanofi/training/models/hparam_runs/
+realisations/sanofi/training/models/*gguf
+realisations/sanofi/training/models/eval*json
+realisations/sanofi/training/data/
 

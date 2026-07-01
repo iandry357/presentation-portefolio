@@ -13,7 +13,28 @@ services:
       - ../scripts:/app/scripts
     restart: unless-stopped
 
+  neo4j:
+    image: neo4j:5.20-community
+    container_name: sanofi-neo4j
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
+      NEO4J_PLUGINS: '[]'
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 128m
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - sanofi-ml-network
+    restart: unless-stopped
+
 networks:
   sanofi-ml-network:
     name: sanofi-ml-network
     driver: bridge
+
+volumes:
+  neo4j_data:

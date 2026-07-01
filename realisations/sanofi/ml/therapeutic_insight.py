@@ -371,12 +371,16 @@ def _aggregate_targets_for_cluster(
                     "target_class": t.get("target_class", []),
                     "score": t["score"],
                     "frequency": 1,
+                    "source_diseases": [all_diseases[disease_id]["name"]],
                     "pathways": t.get("pathways", []),
                     "interactions": t.get("interactions", []),
                     "tractability": t.get("tractability", []),
                 }
             else:
                 target_map[tid]["frequency"] += 1
+                disease_name = all_diseases[disease_id]["name"]
+                if disease_name not in target_map[tid]["source_diseases"]:
+                    target_map[tid]["source_diseases"].append(disease_name)
                 if t["score"] > target_map[tid]["score"]:
                     target_map[tid]["score"] = t["score"]
                 # Enrichir pathways/interactions/tractability si plus complets
@@ -404,6 +408,7 @@ def _aggregate_targets_for_cluster(
             "target_class": target.get("target_class", []),
             "score": round(target["score"], 4),
             "frequency": target["frequency"],
+            "source_diseases": target.get("source_diseases", []),
             "has_approved_drug": drug_info["has_approved_drug"],
             "max_clinical_stage": drug_info["max_clinical_stage"],
             "drugs": drug_info.get("drugs", []),

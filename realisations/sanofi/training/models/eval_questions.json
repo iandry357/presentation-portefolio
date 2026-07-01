@@ -1,0 +1,92 @@
+[
+  {
+    "id": "en_01",
+    "lang": "en",
+    "type": "cluster",
+    "question": "What does it mean for a therapeutic cluster to have a 'Mature' profile in drug discovery?"
+  },
+  {
+    "id": "en_02",
+    "lang": "en",
+    "type": "cluster",
+    "question": "What R&D opportunities does an 'Emergent' cluster profile represent compared to a 'Mature' one?"
+  },
+  {
+    "id": "fr_01",
+    "lang": "fr",
+    "type": "cluster",
+    "question": "Qu'est-ce qu'un cluster thérapeutique de profil 'Exploratoire' indique sur le niveau de maturité R&D ?"
+  },
+  {
+    "id": "en_03",
+    "lang": "en",
+    "type": "target",
+    "question": "What does a high OpenTargets association score mean for a biological target in a drug discovery context?"
+  },
+  {
+    "id": "en_04",
+    "lang": "en",
+    "type": "target",
+    "question": "Why is cross-cluster frequency an important signal when evaluating a biological target?"
+  },
+  {
+    "id": "en_05",
+    "lang": "en",
+    "type": "target",
+    "question": "What is tractability in drug discovery and why does it matter for target selection?"
+  },
+  {
+    "id": "fr_03",
+    "lang": "fr",
+    "type": "target",
+    "question": "Pourquoi une cible biologique avec une fréquence transversale élevée est-elle particulièrement intéressante en drug discovery ?"
+  },
+  {
+    "id": "fr_04",
+    "lang": "fr",
+    "type": "target",
+    "question": "Quelle est la différence entre un signal fort et un signal faible dans l'analyse des cibles biologiques ?"
+  },
+  {
+    "id": "en_06",
+    "lang": "en",
+    "type": "drug",
+    "question": "What is the significance of a target reaching APPROVAL stage in clinical development?"
+  },
+  {
+    "id": "fr_06",
+    "lang": "fr",
+    "type": "drug",
+    "question": "Que signifie le stade clinique maximum PHASE3 pour une cible biologique dans le contexte du pipeline Sanofi ?"
+  },
+  {
+    "id": "fr_07",
+    "lang": "fr",
+    "type": "drug",
+    "question": "Comment les données OpenTargets permettent-elles d'identifier des opportunités de repositionnement de médicaments ?"
+  },
+  {
+    "id": "en_08",
+    "lang": "en",
+    "type": "pathway",
+    "question": "Why are Reactome biological pathways relevant when prioritizing drug targets?"
+  },
+  {
+    "id": "fr_08",
+    "lang": "fr",
+    "type": "pathway",
+    "question": "Quel est l'intérêt d'analyser les voies biologiques Reactome associées à une cible thérapeutique ?"
+  },
+  {
+    "id": "en_09",
+    "lang": "en",
+    "type": "comparative",
+    "question": "What is the difference between a strong signal and a weak signal target in therapeutic clustering?"
+  },
+  {
+    "id": "fr_09",
+    "lang": "fr",
+    "type": "comparative",
+    "question": "En quoi un cluster de profil 'Actif' diffère-t-il d'un cluster 'Émergent' du point de vue stratégique ?"
+  }
+]
