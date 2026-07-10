@@ -104,3 +104,4 @@ gcp/dbt_transformation/infra/tfplan
 
 
 gcp/dbt_transformation/venv-dbt/
+gcp/dbt_transformation/.env
