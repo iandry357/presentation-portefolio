@@ -1,0 +1,20 @@
+name: 'emploi_marche_transformation'
+version: '1.0.0'
+config-version: 2
+
+profile: 'emploi_marche'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  emploi_marche_transformation:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: table

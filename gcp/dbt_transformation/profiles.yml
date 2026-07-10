@@ -1,0 +1,24 @@
+emploi_marche:
+  target: dev
+  outputs:
+
+    dev:
+      type: bigquery
+      method: oauth
+      project: gen-lang-client-0989575872
+      dataset: emploi_marche
+      location: EU
+      impersonate_service_account: pipeline-dbt@gen-lang-client-0989575872.iam.gserviceaccount.com
+      threads: 4
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+
+    prod:
+      type: bigquery
+      method: oauth
+      project: gen-lang-client-0989575872
+      dataset: emploi_marche
+      location: EU
+      threads: 4
+      job_execution_timeout_seconds: 300
+      job_retries: 1
