@@ -36,6 +36,55 @@ logger = logging.getLogger("main")
 
 MODE = os.environ.get("MODE", "sync").strip().lower()
 
+DBT_JOB_NAME = os.environ.get("DBT_JOB_NAME", "dbt-emploi-marche")
+DBT_JOB_REGION = os.environ.get("DBT_JOB_REGION", "europe-west9")
+
+
+def _trigger_dbt_job() -> None:
+    """
+    Déclenche le Cloud Run Job dbt-emploi-marche une fois la sync
+    (France Travail + Gmail) terminée avec succès.
+
+    Fire-and-forget, comme les Workflows existants (trigger_sync_job) :
+    ne bloque pas sur la fin d'exécution de dbt. Le seul objectif est de
+    garantir que dbt démarre APRÈS l'ingestion, pas en parallèle.
+
+    Le SA pipeline_emploi (utilisé par ce job) doit avoir le droit
+    d'invoquer le job dbt-emploi-marche (voir IAM à ajouter côté infra).
+    """
+    import google.auth
+    import google.auth.transport.requests
+    import requests
+
+    project_id = os.environ.get("BQ_PROJECT_ID", "").strip()
+    if not project_id:
+        logger.error("BQ_PROJECT_ID absent — impossible de déclencher dbt-emploi-marche")
+        return
+
+    url = (
+        f"https://{DBT_JOB_REGION}-run.googleapis.com/apis/run.googleapis.com/v1/"
+        f"namespaces/{project_id}/jobs/{DBT_JOB_NAME}:run"
+    )
+
+    credentials, _ = google.auth.default(
+        scopes=["https://www.googleapis.com/auth/cloud-platform"]
+    )
+    credentials.refresh(google.auth.transport.requests.Request())
+
+    response = requests.post(
+        url,
+        headers={"Authorization": f"Bearer {credentials.token}"},
+        timeout=30,
+    )
+
+    if response.status_code >= 300:
+        logger.error(
+            f"Déclenchement {DBT_JOB_NAME} — statut {response.status_code} : {response.text}"
+        )
+    else:
+        logger.info(f"Job {DBT_JOB_NAME} déclenché avec succès (statut {response.status_code})")
+
+
 if __name__ == "__main__":
     logger.info(f"Cloud Run Job démarré — MODE={MODE}")
 
@@ -81,6 +130,13 @@ if __name__ == "__main__":
         gmail_service = GmailSyncService()
         gmail_result  = gmail_service.run(bq_client, BQ_TABLE_REF)
         logger.info(f"Gmail sync terminé : {gmail_result}")
+
+        # Déclenchement dbt — uniquement si FT sync + Gmail sync ont réussi
+        # sans lever d'exception (sinon le script se serait arrêté avant).
+        try:
+            _trigger_dbt_job()
+        except Exception as e:
+            logger.error(f"Échec du déclenchement du job dbt-emploi-marche : {e}")
 
     elif MODE == "explore_rome":
         logger.info("Lancement exploration codes ROME")
