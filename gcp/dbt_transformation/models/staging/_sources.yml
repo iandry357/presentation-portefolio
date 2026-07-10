@@ -1,0 +1,50 @@
+version: 2
+
+sources:
+  - name: emploi_marche
+    database: gen-lang-client-0989575872
+    schema: emploi_marche
+    tables:
+      - name: offres_brutes
+        description: >
+          Table brute des offres d'emploi collectées via France Travail API
+          et parsing Gmail multi-plateformes (LinkedIn, APEC, HelloWork,
+          Talent, WTTJ, Indeed, etc.). Alimentée par les Cloud Run Jobs
+          programmés (7h, 12h, 1er/15 du mois).
+        config:
+          loaded_at_field: date_collecte
+          freshness:
+            warn_after: { count: 24, period: hour }
+            error_after: { count: 48, period: hour }
+        columns:
+          - name: id_unique
+            description: "Clé de déduplication — {source}_{id_source}"
+            tests:
+              - not_null
+          - name: source
+            description: "Plateforme d'origine de l'offre"
+            tests:
+              - not_null
+              - accepted_values:
+                  values:
+                    - france_travail_api
+                    - email_linkedin
+                    - email_apec
+                    - email_hellowork
+                    - email_talent
+                    - email_france_travail
+                    - email_jobijoba
+                    - email_meteojob
+                    - email_indeed
+                    - email_wttj
+                    - email_freework
+                    - email_jobleads
+          - name: id_source
+            tests:
+              - not_null
+          - name: date_publication
+            tests:
+              - not_null
+          - name: titre
+            tests:
+              - not_null

@@ -1,0 +1,4 @@
+project_id         = "gen-lang-client-0989575872"
+sa_account_id      = "pipeline-dbt"
+impersonator_member = "user:ton-email@example.com"
+region = "europe-west9"
