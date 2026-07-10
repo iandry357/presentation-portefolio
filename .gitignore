@@ -87,3 +87,20 @@ realisations/sanofi/training/models/*gguf
 realisations/sanofi/training/models/eval*json
 realisations/sanofi/training/data/
 
+# --- dbt (gcp/dbt_transformation) ---
+gcp/dbt_transformation/target/
+gcp/dbt_transformation/dbt_packages/
+gcp/dbt_transformation/logs/
+gcp/dbt_transformation/.user.yml
+
+# --- Terraform infra dbt ---
+gcp/dbt_transformation/infra/terraform.tfvars
+gcp/dbt_transformation/infra/*.json
+gcp/dbt_transformation/infra/.terraform/
+gcp/dbt_transformation/infra/.terraform.lock.hcl
+gcp/dbt_transformation/infra/*.tfstate
+gcp/dbt_transformation/infra/*.tfstate.*
+gcp/dbt_transformation/infra/tfplan
+
+
+gcp/dbt_transformation/venv-dbt/

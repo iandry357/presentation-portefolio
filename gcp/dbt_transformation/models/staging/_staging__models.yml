@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: stg_offres
+    description: >
+      Miroir renommé/typé de emploi_marche.offres_brutes, dédupliqué sur
+      id_unique (la ligne avec la date_collecte la plus récente est
+      conservée en cas de doublon). Aucun filtre métier appliqué à ce
+      niveau — voir les modèles intermediate pour les règles de qualité
+      et les filtres applicatifs.
+    columns:
+      - name: id_unique
+        description: "Clé de déduplication — {source}_{id_source}"
+        tests:
+          - unique
+          - not_null
+      - name: source
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - france_travail_api
+                - email_linkedin
+                - email_apec
+                - email_hellowork
+                - email_talent
+                - email_france_travail
+                - email_jobijoba
+                - email_meteojob
+                - email_indeed
+                - email_wttj
+                - email_freework
+                - email_jobleads
+      - name: date_publication
+        tests:
+          - not_null
+      - name: titre
+        tests:
+          - not_null
