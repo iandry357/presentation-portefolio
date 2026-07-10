@@ -5,6 +5,12 @@ Seules les requêtes de ce catalogue sont exécutables — aucun Text-to-SQL exp
 Socle commun (toutes sources) : Q01–Q07
 Extensions FT API uniquement  : Q08–Q10
 Requête signature              : Q11 — entreprises finales actives
+
+Q01–Q10 interrogent les tables agrégées produites par dbt
+(gcp/dbt_transformation/models/intermediate/) plutôt que offres_brutes
+directement — réduit le volume scanné par requête.
+Q11 reste sur offres_brutes : logique dynamique (score, exclusion
+entreprises en temps réel) non pré-calculable par dbt.
 """
 
 import logging
@@ -21,7 +27,12 @@ logger = logging.getLogger(__name__)
 
 PROJECT  = os.environ.get("BQ_PROJECT_ID", "gen-lang-client-0989575872")
 DATASET  = "emploi_marche"
-TABLE    = f"`{PROJECT}.{DATASET}.offres_brutes`"
+
+TABLE                  = f"`{PROJECT}.{DATASET}.offres_brutes`"
+TABLE_AGG_JOUR          = f"`{PROJECT}.{DATASET}.int_offres_agg_jour`"
+TABLE_AGG_ENTREPRISE    = f"`{PROJECT}.{DATASET}.int_offres_agg_entreprise`"
+TABLE_AGG_LOCALISATION  = f"`{PROJECT}.{DATASET}.int_offres_agg_localisation`"
+
 MAX_SCAN = "1024MB"  # quota BigQuery par requête
 
 
@@ -155,13 +166,15 @@ def execute_query(
 
 
 # ── SQL par query_id ──────────────────────────────────────────────────────────
+# Q01-Q10 : lecture sur les tables agrégées dbt (int_offres_agg_*)
+# Q11     : inchangée, lecture directe sur offres_brutes
 
 def _q01(days: int, src: str) -> str:
     return f"""
     SELECT
       date_publication,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       {src}
     GROUP BY date_publication
@@ -172,8 +185,8 @@ def _q02(days: int, src: str) -> str:
     return f"""
     SELECT
       source,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       {src}
     GROUP BY source
@@ -183,12 +196,10 @@ def _q02(days: int, src: str) -> str:
 def _q03(days: int, src: str) -> str:
     return f"""
     SELECT
-      COALESCE(entreprise_nom, '(non renseigné)') AS entreprise_nom,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      entreprise_nom,
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_ENTREPRISE}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
-      AND entreprise_nom IS NOT NULL
-      AND entreprise_nom != ''
       {src}
     GROUP BY entreprise_nom
     ORDER BY nb_offres DESC
@@ -197,12 +208,10 @@ def _q03(days: int, src: str) -> str:
 def _q04(days: int, src: str) -> str:
     return f"""
     SELECT
-      COALESCE(localisation_libelle, '(non renseigné)') AS localisation_libelle,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      localisation_libelle,
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_LOCALISATION}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
-      AND localisation_libelle IS NOT NULL
-      AND localisation_libelle != ''
       {src}
     GROUP BY localisation_libelle
     ORDER BY nb_offres DESC
@@ -212,9 +221,9 @@ def _q05(days: int, src: str) -> str:
     return f"""
     SELECT
       salaire_present,
-      COUNT(*) AS nb_offres,
-      ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pourcentage
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres,
+      ROUND(SUM(nb_offres) * 100.0 / SUM(SUM(nb_offres)) OVER (), 1) AS pourcentage
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       {src}
     GROUP BY salaire_present
@@ -228,8 +237,8 @@ def _q06(days: int, src: str) -> str:
         WHEN date_publication = CURRENT_DATE() THEN "aujourd'hui"
         WHEN date_publication = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) THEN 'hier'
       END AS jour,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
       {src}
     GROUP BY date_publication
@@ -241,8 +250,8 @@ def _q07(days: int, src: str) -> str:
     SELECT
       DATE_TRUNC(date_publication, WEEK) AS semaine,
       source,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       {src}
     GROUP BY semaine, source
@@ -252,9 +261,9 @@ def _q07(days: int, src: str) -> str:
 def _q08(days: int, src: str) -> str:
     return f"""
     SELECT
-      COALESCE(type_contrat, '(non renseigné)') AS type_contrat,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      type_contrat,
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       AND source = 'france_travail_api'
     GROUP BY type_contrat
@@ -266,8 +275,8 @@ def _q09(days: int, src: str) -> str:
     SELECT
       code_rome,
       libelle_rome,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       AND source = 'france_travail_api'
       AND code_rome IS NOT NULL
@@ -278,9 +287,9 @@ def _q09(days: int, src: str) -> str:
 def _q10(days: int, src: str) -> str:
     return f"""
     SELECT
-      COALESCE(localisation_departement, '(non renseigné)') AS localisation_departement,
-      COUNT(*) AS nb_offres
-    FROM {TABLE}
+      localisation_departement,
+      SUM(nb_offres) AS nb_offres
+    FROM {TABLE_AGG_JOUR}
     WHERE date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
       AND source = 'france_travail_api'
     GROUP BY localisation_departement

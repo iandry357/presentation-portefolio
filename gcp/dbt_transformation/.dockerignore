@@ -1,0 +1,9 @@
+infra/
+venv-dbt/
+target/
+dbt_packages/
+logs/
+.git/
+.env
+.user.yml
+dbt_env.bat
