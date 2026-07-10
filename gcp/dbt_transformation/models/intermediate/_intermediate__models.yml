@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: int_offres_agg_jour
+    description: >
+      Agrégation au grain jour × source × type_contrat × code_rome ×
+      département × salaire_present. Sert de socle partagé aux questions
+      Q01, Q02, Q05, Q06, Q07, Q08, Q09, Q10 du catalogue /market — le
+      backend applique ses propres filtres periode/source et son propre
+      GROUP BY partiel par-dessus cette table, plutôt que de rescanner
+      stg_offres à chaque appel.
+    columns:
+      - name: date_publication
+        tests:
+          - not_null
+      - name: source
+        tests:
+          - not_null
+      - name: nb_offres
+        tests:
+          - not_null
+          
+  - name: int_offres_agg_entreprise
+    description: >
+      Agrégation au grain jour × source × entreprise_nom, filtrée sur
+      entreprise_nom non vide. Sert de socle à Q03 (top entreprises).
+    columns:
+      - name: date_publication
+        tests:
+          - not_null
+      - name: entreprise_nom
+        tests:
+          - not_null
+      - name: nb_offres
+        tests:
+          - not_null
+
+  - name: int_offres_agg_localisation
+    description: >
+      Agrégation au grain jour × source × localisation_libelle, filtrée
+      sur localisation_libelle non vide. Sert de socle à Q04 (top
+      localisations).
+    columns:
+      - name: date_publication
+        tests:
+          - not_null
+      - name: localisation_libelle
+        tests:
+          - not_null
+      - name: nb_offres
+        tests:
+          - not_null
