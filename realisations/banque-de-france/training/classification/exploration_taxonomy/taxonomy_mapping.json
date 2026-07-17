@@ -1,0 +1,327 @@
+[
+  {
+    "segment":"abandon des poursuites disciplinaires",
+    "concept_final":"abandon des poursuites disciplinaires",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"cabinet de courtage",
+    "concept_final":"cabinet de courtage",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"caisse de crédit municipal",
+    "concept_final":"caisse de crédit municipal",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"exigence de fonds propre",
+    "concept_final":"capital réglementaire",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"insuffisance de fonds propre",
+    "concept_final":"capital réglementaire",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"capital minimum",
+    "concept_final":"capital réglementaire",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"fonds propres",
+    "concept_final":"capital réglementaire",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"changeur manuel",
+    "concept_final":"changement manuel",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"comptes d'épargne salariale",
+    "concept_final":"comptes d'épargne salariale",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"condition d'honorabilité des dirigeants",
+    "concept_final":"condition d'honorabilité",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"capacité professionnelle",
+    "concept_final":"condition d'honorabilité",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"condition d'honorabilité",
+    "concept_final":"condition d'honorabilité",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"respect de la condition d'honorabilité",
+    "concept_final":"condition d'honorabilité",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"contrats d'assurance sur la vie non réclamés",
+    "concept_final":"contrats d'assurance-vie non réclamés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"contrats d'assurance sur la vie non réglés",
+    "concept_final":"contrats d'assurance-vie non réglés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"déshérence",
+    "concept_final":"contrats en déshérence",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"contrats en déshérence",
+    "concept_final":"contrats en déshérence",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"contrôle des opérations et procédures internes",
+    "concept_final":"contrôle des opérations et procédures internes",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"devoir de conseil",
+    "concept_final":"devoir de conseil",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"respect des obligations d'information et de conseil précontractuels",
+    "concept_final":"devoir de conseil",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"respect des obligations d'information précontractuelle, du devoir de conseil et de l'obligation d'agir au mieux des intérêts du client",
+    "concept_final":"devoir de conseil",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"droit au compte",
+    "concept_final":"droit au compte",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"organisme d'assurance",
+    "concept_final":"entreprise d'assurance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"entreprise d'assurance",
+    "concept_final":"entreprise d'assurance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"entreprise d'investissement",
+    "concept_final":"entreprise d'investissement",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"gel des avoirs",
+    "concept_final":"gel des avoirs",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"règles de gouvernance",
+    "concept_final":"gouvernance",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"contrôle interne",
+    "concept_final":"gouvernance",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"information des assurés",
+    "concept_final":"information des assurés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"obligation d'information",
+    "concept_final":"information des assurés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"respect des obligations d'information et de conseil",
+    "concept_final":"information des assurés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"institution de prévoyance",
+    "concept_final":"institution de prévoyance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"intermédiaire d'assurances",
+    "concept_final":"intermédiaire d'assurances",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"intermédiaire d'assurance",
+    "concept_final":"intermédiaire en assurance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"intermédiation d'assurance",
+    "concept_final":"intermédiaire en assurance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"intermédiaire en financement participatif",
+    "concept_final":"intermédiaire en assurance",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"lutte contre la déshérence",
+    "concept_final":"lutte contre la déshérence",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"lutte contre le blanchiment des capitaux et le financement du terrorisme",
+    "concept_final":"lutte contre le blanchiment et le financement du terrorisme",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"lutte contre le blanchiment des capitaux",
+    "concept_final":"lutte contre le blanchiment et le financement du terrorisme",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"lutte contre le blanchiment et le financement du terrorisme",
+    "concept_final":"lutte contre le blanchiment et le financement du terrorisme",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"maîtrise des risques",
+    "concept_final":"maîtrise des risques",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"maîtrise des risques de crédit",
+    "concept_final":"maîtrise des risques",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"évaluation des risques",
+    "concept_final":"maîtrise des risques",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"système de surveillance et maîtrise des risques",
+    "concept_final":"maîtrise des risques",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"modification de contrats d'assurance",
+    "concept_final":"modification de contrats d'assurance",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"émetteur de monnaie électronique",
+    "concept_final":"monnaie électronique",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"établissement de monnaie électronique",
+    "concept_final":"monnaie électronique",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"non-respect d'une mise en demeure",
+    "concept_final":"non-respect de mise en demeure",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"non-respect d'une mise en demeure du collège de l'acpr",
+    "concept_final":"non-respect de mise en demeure",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"obligation d'identification des assurés décédés",
+    "concept_final":"obligation d'identification",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"organisation comptable",
+    "concept_final":"organisation comptable",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"établissement de paiement",
+    "concept_final":"paiement",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"établissement de paiement étranger",
+    "concept_final":"paiement",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"protection de la clientèle",
+    "concept_final":"protection des fonds collectés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"protection des fonds collectés",
+    "concept_final":"protection des fonds collectés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"protection des fonds reçus des clients",
+    "concept_final":"protection des fonds collectés",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"relations avec le superviseur",
+    "concept_final":"relations avec l'autorité de supervision",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"non-respect de l'article l. 322-2-2 du code des assurances",
+    "concept_final":"respect de la réglementation assurantielle",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"risque de crédit",
+    "concept_final":"risque",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"risque de non-conformité",
+    "concept_final":"risque",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"contrats d'épargne retraite",
+    "concept_final":"épargne retraite",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"établissement de crédit",
+    "concept_final":"établissement de crédit",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"établissement de crédit spécialisé",
+    "concept_final":"établissement de crédit",
+    "categorie":"ENTITY"
+  },
+  {
+    "segment":"gouvernance, contrôle de la conformité",
+    "concept_final":"gouvernance",
+    "categorie":"GRIEF"
+  },
+  {
+    "segment":"succursale",
+    "concept_final":"succursale bancaire",
+    "categorie":"ENTITY"
+  }
+]
