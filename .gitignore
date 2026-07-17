@@ -105,3 +105,15 @@ gcp/dbt_transformation/infra/tfplan
 
 gcp/dbt_transformation/venv-dbt/
 gcp/dbt_transformation/.env
+
+# --- Banque de France
+realisations/banque-de-francebanque-de-france/training/models/ 
+realisations/banque-de-france/ml/results/ 
+realisations/banque-de-france/gcp/infra/terraform.tfvars 
+realisations/banque-de-france/ingestion/*.pdf 
+realisations/banque-de-france/.env
+realisations/banque-de-france/gcp_sa_banque.json
+gcp/banque-de-france/infra/terraform.tfvars 
+gcp/banque-de-france/infra/.terraform/
+gcp/banque-de-france/infra/.terraform.lock.hcl
+realisations/banque-de-france/training/venv-banque-training/
