@@ -49,7 +49,14 @@ services:
     compose_file: /home/ubuntu/ml-project/realisations/sg/sg-assurances/embedding-service/docker-compose.yml
     compose_service: embedding-service
 
-  # --- FUTUR : décommenter quand Graph RAG prêt ---
+  banque-ml:
+    container_name: banque-ml-service
+    mvp: banque-de-france
+    port: 8007
+    priority: on-demand
+    ram_mb: 700
+    compose_file: /home/ubuntu/ml-project/realisations/banque-de-france/ml/docker-compose.yml
+    compose_service: ml-service
 
   neo4j:
     container_name: sanofi-neo4j
