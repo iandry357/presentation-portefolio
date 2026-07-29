@@ -119,6 +119,7 @@ gcp/banque-de-france/infra/.terraform.lock.hcl
 realisations/banque-de-france/training/venv-banque-training/
 realisations/banque-de-france/training/classification/.env
 realisations/banque-de-france/training/classification/data/
+realisations/banque-de-france/training/classification/checkpoints/
 realisations/banque-de-france/training/models/classification/final/embedding_body
 realisations/banque-de-france/training/models/classification/fold*/
 realisations/banque-de-france/training/registry/handlers/__pycache__
