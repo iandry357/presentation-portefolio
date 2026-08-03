@@ -118,3 +118,12 @@ def predict_classification(request: ClassificationRequest):
     except Exception as e:
         logger.error(f"[banque-ml] Erreur classification : {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/predict/classification/examples")
+def get_classification_examples():
+    try:
+        return {"examples": classification_inference.get_demo_examples()}
+    except Exception as e:
+        logger.error(f"[banque-ml] Erreur lecture exemples demo : {e}")
+        raise HTTPException(status_code=500, detail=str(e))

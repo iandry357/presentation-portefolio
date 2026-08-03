@@ -33,6 +33,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY *.py ./
+COPY data ./data
 
 RUN mkdir -p /app/results /app/models
 

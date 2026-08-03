@@ -80,3 +80,35 @@ def predict(text: str) -> dict:
         })
 
     return {"predictions": predictions}
+
+# ─────────────────────────────────────────
+# Exemples de demo (training/classification/data/demo/demo.csv, commite
+# directement dans ml/data/demo.csv — petit jeu de donnees curé, pas un
+# artefact d'entrainement volumineux)
+# ─────────────────────────────────────────
+
+import csv
+
+DEMO_CSV_PATH = Path(__file__).resolve().parent / "data" / "demo.csv"
+
+
+def get_demo_examples() -> list:
+    """Charge les decisions de demo avec leurs vrais griefs (verite terrain),
+    pour comparer visuellement prediction vs realite dans l'interface."""
+    if not DEMO_CSV_PATH.exists():
+        logger.warning(f"[classification] {DEMO_CSV_PATH} introuvable — aucun exemple de demo")
+        return []
+
+    examples = []
+    with open(DEMO_CSV_PATH, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        category_cols = [c for c in (reader.fieldnames or []) if c not in ("decision_number", "text", "Autre")]
+        for row in reader:
+            true_labels = [cat for cat in category_cols if row.get(cat) == "1"]
+            examples.append({
+                "decision_number": row["decision_number"],
+                "text": row["text"],
+                "true_labels": true_labels,
+            })
+
+    return examples
