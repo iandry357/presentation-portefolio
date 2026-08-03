@@ -40,6 +40,15 @@ const POCS: PocCard[] = [
     tags: ['YOLO', 'NER', 'RAG', 'QLoRA', 'ChromaDB', 'BigQuery', 'Vertex AI'],
     status: 'live',
   },
+  {
+    href: '/realisations/banque-de-france',
+    title: 'Banque de France',
+    company: 'Banque de France / ACPR',
+    description:
+      "POC Suptech — classification multi-label des griefs de sanction ACPR (CamemBERT fine-tuné + têtes k-NN), RAG sur la veille réglementaire, topic modeling LDA et scoring composite de risque bancaire à partir des données EBA Transparency Exercise.",
+    tags: ['Classification', 'RAG', 'Topic Modeling', 'k-NN', 'ChromaDB', 'BigQuery', 'Vertex AI'],
+    status: 'wip',
+  },
 ];
 
 
