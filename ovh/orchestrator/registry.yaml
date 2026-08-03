@@ -40,9 +40,9 @@ services:
     compose_file: /home/ubuntu/ml-project/realisations/sg/sg-assurances/ml/docker-compose.yml
     compose_service: ml-service
 
-  sg-embedding:
+  embedding-service:
     container_name: embedding-service
-    mvp: sg
+    mvp: shared
     port: 8004
     priority: on-demand
     ram_mb: 500
