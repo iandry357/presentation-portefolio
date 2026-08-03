@@ -7,4 +7,5 @@ python-dotenv==1.0.1
 pydantic==2.7.1
 scikit-learn
 litellm>=1.81.16
-sentence-transformers
+sentence-transformers==2.7.0
+transformers==4.40.0
