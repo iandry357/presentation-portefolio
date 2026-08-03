@@ -114,7 +114,10 @@ def upload_to_gcs(artifact_dir: Path, gcs_model_dir: str,
     uploaded = 0
 
     for file_path in files:
-        relative = file_path.relative_to(artifact_dir)
+        # .as_posix() force le separateur '/' quelle que soit la plateforme -
+        # sans ca, Windows produit des noms d'objet GCS avec des antislashs
+        # litteraux (pas de vraie hierarchie de dossiers sur GCS).
+        relative = file_path.relative_to(artifact_dir).as_posix()
         blob_name = f"{GCS_PREFIX}/{gcs_model_dir}/{relative}"
         blob = bucket.blob(blob_name)
         blob.upload_from_filename(str(file_path))
