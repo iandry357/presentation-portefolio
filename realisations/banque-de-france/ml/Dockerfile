@@ -26,13 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Torch CPU en premier — evite reinstallation GPU par dependances transitives
 # de sentence-transformers (meme precaution que ML Service SG Assurances)
 RUN pip install --no-cache-dir \
-    torch==2.1.0+cpu \
+    torch \
     --index-url https://download.pytorch.org/whl/cpu
 
-RUN pip install --no-cache-dir numpy==1.26.4
-
-COPY requirements.txt constraints.txt ./
-RUN pip install --no-cache-dir -c constraints.txt -r requirements.txt
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY *.py ./
 
