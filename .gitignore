@@ -123,3 +123,5 @@ realisations/banque-de-france/training/classification/checkpoints/
 realisations/banque-de-france/training/models/classification/final/embedding_body
 realisations/banque-de-france/training/models/classification/fold*/
 realisations/banque-de-france/training/registry/handlers/__pycache__
+realisations/banque-de-france/training/eba/__pycache__
+realisations/banque-de-france/training/eba/data/*
