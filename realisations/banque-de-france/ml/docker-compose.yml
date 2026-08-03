@@ -1,0 +1,21 @@
+services:
+  ml-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: banque-ml-service
+    ports:
+      - "8007:8007"
+    volumes:
+      - ./results:/app/results
+      - ./models:/app/models
+      - ../gcp_sa_banque.json:/app/gcp_sa_banque.json:ro
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

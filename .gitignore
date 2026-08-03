@@ -125,3 +125,4 @@ realisations/banque-de-france/training/models/classification/fold*/
 realisations/banque-de-france/training/registry/handlers/__pycache__
 realisations/banque-de-france/training/eba/__pycache__
 realisations/banque-de-france/training/eba/data/*
+realisations/banque-de-france/ml/.env

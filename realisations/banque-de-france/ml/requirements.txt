@@ -1,0 +1,10 @@
+fastapi==0.111.0
+uvicorn==0.29.0
+httpx==0.27.0
+google-auth==2.29.0
+google-cloud-bigquery
+python-dotenv==1.0.1
+pydantic==2.7.1
+scikit-learn
+litellm>=1.81.16
+sentence-transformers
