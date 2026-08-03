@@ -52,3 +52,6 @@ async def get_eba_scores() -> dict:
 
 async def predict_classification(text: str) -> dict:
     return await _post("/predict/classification", {"text": text})
+
+async def get_classification_examples() -> dict:
+    return await _get("/predict/classification/examples")

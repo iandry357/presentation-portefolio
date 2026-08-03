@@ -4,6 +4,26 @@ Schémas Pydantic pour les routes /banque-de-france/*.
 from typing import List, Optional
 from pydantic import BaseModel
 
+# ─────────────────────────────────────────
+# Stats & News
+# ─────────────────────────────────────────
+
+class BdfStats(BaseModel):
+    total_news: int
+    last_updated: Optional[str] = None
+
+
+class NewsItem(BaseModel):
+    id: str
+    title: str
+    date: Optional[str]
+    source: Optional[str]
+    url: Optional[str]
+
+
+class NewsResponse(BaseModel):
+    total: int
+    items: List[NewsItem]
 
 # ─────────────────────────────────────────
 # RAG
@@ -105,3 +125,13 @@ class ClassificationPrediction(BaseModel):
 
 class ClassificationResponse(BaseModel):
     predictions: List[ClassificationPrediction]
+
+
+class ClassificationExample(BaseModel):
+    decision_number: str
+    text: str
+    true_labels: List[str]
+
+
+class ClassificationExamplesResponse(BaseModel):
+    examples: List[ClassificationExample]
