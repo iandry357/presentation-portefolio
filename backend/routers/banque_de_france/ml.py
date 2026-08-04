@@ -9,7 +9,7 @@ OVH_ML_HOST        = os.getenv("OVH_ML_HOST", "51.68.130.23")
 OVH_ML_PORT_BANQUE = os.getenv("OVH_ML_PORT_BANQUE", "8007")
 ML_BASE_URL         = f"http://{OVH_ML_HOST}:{OVH_ML_PORT_BANQUE}"
 
-TIMEOUT_DEFAULT = 30.0
+TIMEOUT_DEFAULT = 120.0
 
 
 async def _get(path: str, timeout: float = TIMEOUT_DEFAULT) -> dict:
