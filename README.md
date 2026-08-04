@@ -39,7 +39,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 | **Explorer** | Parcours paginé de toutes les offres collectées avec filtres avancés |
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
-| **Réalisations** | 3 MVPs sectoriels en production — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA) |
+| **Réalisations** | 4 MVPs sectoriels en production — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA) |
 
 ---
 
@@ -60,7 +60,7 @@ Backend (FastAPI — Scaleway Serverless Container)
           │     ├── Scoring hybride (BM25 + VoyageAI + rerank-2)
           │     └── Enrichissement CrewAI (Parser → Analyste → Rédacteur)
           │
-          ├── Routers Réalisations (sanofi / savencia / sg)
+          ├── Routers Réalisations (sanofi / savencia / sg / banque_de_france)
           │     └── orchestrator_client.py ──► Orchestrateur OVH :8080
           │                                       │
           │                                       ▼
@@ -83,7 +83,9 @@ OVH VPS (51.68.130.23) — Compute ML / VectorDB
     ├── ChromaDB (port 8000, always-on)
     ├── Sanofi   : ml-service (8001), Neo4j (7474/7687), llama-server Mistral 7B (8006)
     ├── Savencia : ml-service (8002)
-    └── SG Assurances : ml-service (8003), embedding-service (8004), llama-server Qwen (8005)
+    ├── SG Assurances   : ml-service (8003), llama-server Qwen (8005)
+    ├── Embedding Service (8004) — partagé SG Assurances + Banque de France
+    └── Banque de France : ml-service (8007) — classification, topic modeling, scoring EBA
 ```
 
 ---
@@ -126,7 +128,17 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
   - CamemBERT NER — F1 = 0.84 (5 entités : NUMERO_POLICE, NOM_ASSURE, MONTANT, DATE, ADRESSE)
   - QLoRA Qwen2.5-1.5B — win-rate = 29 % (r=32, lora_alpha=64, NEFTune noise_alpha=5)
 - Serving : llama.cpp sur OVH port 8005 (Q4_K_M ~934 Mo, ~20 tok/sec CPU)
-- ML Service OVH port 8003, Embedding Service port 8004
+- ML Service OVH port 8003, Embedding Service port 8004 (partagé avec Banque de France)
+
+### Banque de France — ✅ En production
+*Cible : offre Data Scientist Suptech (ACPR), en complément du MVP SG Assurances*
+
+- Pipeline ETL veille RSS (2 flux) + décisions ACPR (découverte automatique du Recueil des sanctions, extraction PDF) → BigQuery `banque_de_france_veille` + ChromaDB (156-158 docs veille, 1924 chunks / 105 décisions ACPR)
+- Classification multi-label des griefs de sanction : corps `sentence-camembert-base` fine-tuné + têtes k-NN one-vs-rest par catégorie (4 catégories), seuils dérivés du déséquilibre positif/négatif — modèle enregistré Vertex AI Model Registry (registre seul, inférence sur OVH)
+- Scoring composite EBA : indicateur comparatif de robustesse financière (CET1 fully loaded / levier fully phased-in / NPL) des 6 grandes banques françaises vs moyenne UE simple, calcul déterministe (pas de ML), couverture 2022-2024
+- RAG + Topic Modeling LDA restreints à la veille (décisions ACPR exclues, registres de langue trop différents)
+- Frontend : `/realisations/banque-de-france` — Actualités, Ask AI, ML Insights (Topic Modeling / Scoring EBA / Classification avec démo interactive sur 82 décisions réelles)
+- Backlog assumé : Webstat (fréquence des séries insuffisante), NER (chantier lourd pour un gain surtout méthodologique)
 
 ### Mirakl — 🔜 Prochain MVP
 *E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
@@ -179,7 +191,7 @@ Timer 5 min armé, reset à chaque heartbeat
         ▼
 Inactivité 5 min → container stoppé automatiquement
 ```
-Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, SG Embedding.
+Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, Embedding Service (partagé SG + Banque de France), Banque de France ML.
 
 ### CI/CD (déploiement application)
 ```
@@ -216,10 +228,12 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Cloud Run Job `dbt-emploi-marche` | Transformation dbt déclenchée après chaque sync réussie |
 | Cloud Scheduler × 3 | Sync 7h/12h quotidien + exploration ROME 1er/15 du mois |
 | GCP Workflows | Orchestration Scheduler → Cloud Run Job |
-| Vertex AI Model Registry (`europe-west9`) | Modèles fine-tunés (Mistral 7B Sanofi, YOLO/NER/Qwen SG Assurances) |
+| Vertex AI Model Registry (`europe-west9`) | Modèles fine-tunés (Mistral 7B Sanofi, YOLO/NER/Qwen SG Assurances, classification griefs Banque de France) |
 | Secret Manager | Secrets pipeline GCP (`ft-client-id`, `ft-client-secret`, `gmail-token`, `gmail-credentials`) |
 | Cloud Storage `portfolio-emploi-config` | Configuration ROME codes + liste entreprises exclues |
 | Cloud Storage `sanofi-models` | Adaptateurs LoRA Sanofi |
+| Cloud Storage `banque-de-france-models` | Corps d'embeddings + têtes k-NN classification griefs ACPR |
+| BigQuery `banque_de_france_veille` | Veille + décisions ACPR (colonne `source` distingue les deux) |
 | Artifact Registry `europe-west9` | Images Docker Cloud Run Jobs |
 
 ### OVH VPS (`51.68.130.23`)
@@ -231,9 +245,10 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Neo4j | 7474 / 7687 | Graphe Therapeutic Insight (Sanofi Release 2) |
 | Savencia ML Service | 8002 | Topic modeling, inférence ViT |
 | SG ML Service | 8003 | YOLO, NER, topic modeling |
-| SG Embedding Service | 8004 | Embeddings pour RAG SG Assurances |
+| Embedding Service | 8004 | Embeddings pour RAG — partagé SG Assurances + Banque de France |
 | llama-server Qwen (SG) | 8005 | Serving Qwen2.5 fine-tuné (`-c 1024`) |
 | llama-server Mistral (Sanofi) | 8006 | Serving Mistral 7B fine-tuné (`-c 2048`) |
+| Banque de France ML Service | 8007 | Classification griefs, topic modeling, scoring EBA |
 
 Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Actions** sur la branche `infra-scaleway-v1.1`.
 
@@ -247,8 +262,8 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | Backend | FastAPI, Python, SQLAlchemy (async), asyncpg, Pydantic |
 | Pipeline IA | CrewAI, LangChain LCEL, LiteLLM |
 | LLMs | GPT-4o-mini (OpenAI), Mistral (magistral-small + Mistral 7B fine-tuné), Gemini (GCP), Qwen2.5 fine-tuné |
-| Embeddings / Rerank | VoyageAI `voyage-3`, `rerank-2` |
-| ML sectoriel | KMeans, Bayesian GLM (MAP + Laplace), LDA, ViT, YOLO, CamemBERT NER, QLoRA |
+| Embeddings / Rerank | VoyageAI `voyage-3`, `rerank-2` ; `paraphrase-multilingual-mpnet-base-v2` (RAG sectoriels) |
+| ML sectoriel | KMeans, Bayesian GLM (MAP + Laplace), LDA, ViT, YOLO, CamemBERT NER, QLoRA, CamemBERT + k-NN (classification multi-label) |
 | Bases de données | PostgreSQL + pgvector (Scaleway), BigQuery (GCP), Neo4j (OVH), ChromaDB (OVH) |
 | Transformation data | dbt-core + dbt-bigquery |
 | Recherche web | DuckDuckGo (`backend="html"`), Brave Search API |
@@ -276,6 +291,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/realisations/sanofi` | MVP Sanofi — Essais Cliniques, PubMed, Actualités, Press Releases, Ask AI, ML Insights, Graph RAG |
 | `/realisations/savencia` | MVP Savencia — Actualités, Ask AI, Topics LDA, Détection maturité fromagère |
 | `/realisations/sg/sg-assurances` | MVP SG Assurances — Actualités, RAG, YOLO/NER (Document), Qwen |
+| `/realisations/banque-de-france` | MVP Banque de France — Actualités, Ask AI, ML Insights (Topic Modeling, Scoring EBA, Classification) |
 
 ---
 
@@ -461,7 +477,8 @@ presentation-portefolio/
 │   ├── routers/
 │   │   ├── sanofi/                 # router, ml.py, rag.py, schemas.py
 │   │   ├── savencia/                # router, ml.py, rag.py, schemas.py
-│   │   └── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
+│   │   ├── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
+│   │   └── banque_de_france/        # router, ml.py, rag.py, schemas.py
 │   ├── migrations/sql/              # Scripts SQL (001 → 016)
 │   ├── scheduler/                   # job_pipeline.py
 │   ├── scripts/                     # Scripts utilitaires manuels
@@ -498,9 +515,14 @@ presentation-portefolio/
 │   ├── savencia/
 │   │   ├── pipeline/                 # ETL Google News + Trafilatura
 │   │   └── scripts/                  # check_data.py, inspect_chromadb.py, reset_chromadb.py
-│   └── sg/sg-assurances/
-│       ├── ml/, embedding-service/, serving/, training/
-│       └── scripts/
+│   ├── sg/sg-assurances/
+│   │   ├── ml/, embedding-service/, serving/, training/
+│   │   └── scripts/
+│   └── banque-de-france/
+│       ├── pipeline/                 # ETL veille RSS + décisions ACPR
+│       ├── ml/                       # classification_inference.py, eba_service.py, topic_modeling.py
+│       ├── training/                 # classification/, eba/, ner/ (backlog), webstat/ (backlog)
+│       └── scripts/                  # check_data.py, inspect_chromadb.py
 ├── infra/                            # Terraform Scaleway
 └── frontend/
     ├── app/
@@ -508,11 +530,12 @@ presentation-portefolio/
     │   └── realisations/
     │       ├── sanofi/
     │       ├── savencia/
-    │       └── sg/sg-assurances/
+    │       ├── sg/sg-assurances/
+    │       └── banque-de-france/
     ├── components/
-    │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/
+    │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/, banque-de-france/ml/
     │   └── ui/                       # shadcn/ui
-    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts
+    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts
     └── Dockerfile
 ```
 
@@ -523,9 +546,11 @@ presentation-portefolio/
 ### Court terme
 - Finaliser le backlog Release 2 Sanofi (règle iptables persistante, streaming Graph RAG, LangSmith sur Graph RAG)
 - MVP Mirakl — E-commerce NLP/GenAI
+- Banque de France : Webstat (détection d'anomalies, série à fréquence adaptée à trouver) et NER (établissement, base légale) sur les décisions ACPR
+- Mettre à jour `docker-compose` sur OVH (bug `KeyError: 'ContainerConfig'`, incompatibilité avec le moteur Docker actuel — impacte potentiellement tous les MVPs)
 
 ### Moyen terme
-- Automatisation Cloud Run Jobs pour les 3 MVPs (refresh périodique des pipelines ML)
+- Automatisation Cloud Run Jobs pour les 4 MVPs (refresh périodique des pipelines ML)
 - Pipeline de scraping qualifié complet des offres partenaires (BM25 → filtre LLM local → scraping)
 - `NEXT_PUBLIC_ENV` pour conditionner `isDev` en prod
 - Domaine custom Scaleway
