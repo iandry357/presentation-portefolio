@@ -18,6 +18,7 @@ SERVICE_PORTS = {
     "savencia-ml": "8002",
     "sg-ml": "8003",
     "embedding-service": "8004",
+    "banque-ml": "8007",
 }
 
 
