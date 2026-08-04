@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import FeedbackWidget from "@/components/feedback/FeedbackWidget";
-import { FileText, MessageSquare, Github } from 'lucide-react';
+import { FileText, MessageSquare, Github, BarChart3, LayoutGrid } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Iandry RAKOTONIAINA — Data Scientist & AI-ML Engineer',
@@ -40,7 +40,7 @@ export default function HomePage() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center pt-4">
           <Link
             href="/cv"
             className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[200px] justify-center"
@@ -54,6 +54,20 @@ export default function HomePage() {
           >
             <MessageSquare className="w-5 h-5" />
             CV Interactif
+          </Link>
+          <Link
+            href="/realisations"
+            className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[200px] justify-center"
+          >
+            <LayoutGrid className="w-5 h-5" />
+            Réalisations MVPs
+          </Link>
+          <Link
+            href="/market"
+            className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[200px] justify-center"
+          >
+            <BarChart3 className="w-5 h-5" />
+            Observatoire Marché
           </Link>
         </div>
 
