@@ -127,6 +127,13 @@ if __name__ == "__main__":
         # debug_reader.dump_html("ne-pas-repondre@meteojob.com", "/app/debug")
         # debug_reader.dump_html("mailer@jobleads.com", "/app/debug")
 
+        # "jobalerts-noreply@linkedin.com":       LinkedInParser(),
+        # "jobs-listings@linkedin.com":       LinkedInParser(),
+        # "jobs-noreply@linkedin.com":        LinkedInParser(),
+        # debug_reader.dump_html("jobalerts-noreply@linkedin.com", "/app/debug")
+        # debug_reader.dump_html("jobs-listings@linkedin.com", "/app/debug")
+        # debug_reader.dump_html("jobs-noreply@linkedin.com", "/app/debug")
+
         gmail_service = GmailSyncService()
         gmail_result  = gmail_service.run(bq_client, BQ_TABLE_REF)
         logger.info(f"Gmail sync terminé : {gmail_result}")

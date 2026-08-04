@@ -52,7 +52,12 @@ def _fetch(table_key: str) -> list[dict]:
     table = TABLES[table_key]
     query = (
         f"SELECT {COLUMNS} FROM `{PROJECT_ID}.{table}` "
-        f"WHERE source = '{SOURCE_FILTER}' ORDER BY date DESC"
+        f"WHERE source = '{SOURCE_FILTER}' "
+        f"QUALIFY ROW_NUMBER() OVER ("
+        f"    PARTITION BY LOWER(TRIM(REGEXP_REPLACE(title, r'\\s+', ' '))) "
+        f"    ORDER BY ingested_at DESC"
+        f") = 1 "
+        f"ORDER BY date DESC"
     )
     rows = client.query(query).result()
     return [_parse_metadata(dict(row)) for row in rows]
