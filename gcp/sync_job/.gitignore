@@ -1,3 +1,6 @@
 gcp_sa.json
 .env.local
 debug/
+sources/__pycache__
+sources/gmail_alerts/__pycache__
+sources/gmail_alerts/parsers/__pycache__

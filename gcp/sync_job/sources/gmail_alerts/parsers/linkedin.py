@@ -43,15 +43,19 @@ class LinkedInParser(BaseParser):
                 continue
             seen_urls.add(url)
 
-            title_link = card.find("a", class_=lambda c: c and "font-bold" in c and "text-md" in c)
+            # title_link = card.find("a", class_=lambda c: c and "font-bold" in c and "text-md" in c)
+            title_link = card.find("a", class_=lambda c: c and "text-md" in c)
             title = title_link.get_text(strip=True) if title_link else None
             if not title:
                 continue
 
             company = None
             location = None
+            # company_tag = card.find(
+            #     "p", class_=lambda c: c and "text-system-gray-100" in c and "text-xs" in c
+            # )
             company_tag = card.find(
-                "p", class_=lambda c: c and "text-system-gray-100" in c and "text-xs" in c
+                "p", class_=lambda c: c and "text-system-gray-100" in c
             )
             if company_tag:
                 raw = company_tag.get_text(strip=True)

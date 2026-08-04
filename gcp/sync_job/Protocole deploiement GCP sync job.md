@@ -14,3 +14,14 @@ gcloud run jobs update sync-ft-bigquery --image europe-west9-docker.pkg.dev/gen-
 
 # --- 4. RUN MANUEL de validation ---
 gcloud run jobs execute sync-ft-bigquery --region europe-west9
+
+
+
+
+# ============================================================
+# LOCAL RUN GCP — sync_job
+# À lancer depuis : gcp/sync_job/
+# ============================================================
+docker build --no-cache -t sync-job-local .
+
+docker run --rm -v "%cd%\debug:/app/debug" --env-file .env.local sync-job-local
