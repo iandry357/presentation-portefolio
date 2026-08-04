@@ -3,3 +3,4 @@ gcp_sa.json
 debug/
 sources/__pycache__
 sources/gmail_alerts/__pycache__
+sources/gmail_alerts/parsers/__pycache__
