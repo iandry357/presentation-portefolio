@@ -57,6 +57,8 @@ resource "scaleway_container" "backend" {
     CHROMA_COLLECTION_SG                     = "sg_assurances_news"
     OVH_ML_PORT_SG                           = "8003"
     EMBEDDING_SERVICE_PORT                   = "8004"
+    CHROMA_COLLECTION_BANQUE                 = "banque_de_france"
+    OVH_ML_PORT_BANQUE                       = "8007"
     OVH_ORCHESTRATOR_PORT                    = "8080"
   }
 
@@ -80,6 +82,7 @@ resource "scaleway_container" "backend" {
     CHROMA_PASSWORD                   = var.chroma_password
     GCP_SERVICE_ACCOUNT_JSON_SAVENCIA = var.gcp_service_account_json_savencia
     GCP_SERVICE_ACCOUNT_JSON_SG       = var.gcp_service_account_json_sg
+    GCP_SERVICE_ACCOUNT_JSON_BANQUE   = var.gcp_service_account_json_banque
   }
 
   lifecycle {
