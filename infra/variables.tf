@@ -220,3 +220,9 @@ variable "gcp_service_account_json_sg" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_service_account_json_banque" {
+  description = "GCP Service Account JSON Banque de France"
+  type        = string
+  sensitive   = true
+}
