@@ -1,9 +1,31 @@
 # Portfolio CV — Iandry RAKOTONIAINA
 
-Plateforme full-stack d'intelligence de recherche d'emploi, servant simultanément de **portfolio interactif** et d'**outil personnel de candidature**, construite autour d'une stack data/AI moderne déployée sur Scaleway et GCP.
+Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, à double vocation :
+
+1. **Portfolio technique live** — démontrer des compétences réelles Data/AI Engineering, ML et MLOps à travers des MVPs sectoriels déployés en production.
+2. **Outil de veille emploi opérationnel** — observatoire du marché de l'emploi data, utilisé au quotidien (collecte multi-sources, scoring sémantique, enrichissement IA, suivi de candidatures).
 
 🔗 **Démo live** : [portfoliocvcy2iktuv-portfolio-cv-frontend.functions.fnc.fr-par.scw.cloud](https://portfoliocvcy2iktuv-portfolio-cv-frontend.functions.fnc.fr-par.scw.cloud/)
 📁 **Repo** : [github.com/iandry357/presentation-portefolio](https://github.com/iandry357/presentation-portefolio/tree/infra-scaleway-v1.1)
+
+---
+
+## Sommaire
+
+- [Ce que fait la plateforme](#ce-que-fait-la-plateforme)
+- [Architecture globale](#architecture-globale)
+- [MVPs sectoriels](#mvps-sectoriels)
+- [Workflows clés](#workflows-clés)
+- [Infrastructure](#infrastructure)
+- [Stack technique](#stack-technique)
+- [Pages de la plateforme](#pages-de-la-plateforme)
+- [Pipeline Gmail alerts](#pipeline-gmail-alerts)
+- [Prérequis](#prérequis)
+- [Installation et lancement](#installation-et-lancement)
+- [Variables d'environnement](#variables-denvironnement)
+- [Déploiement](#déploiement)
+- [Structure du projet](#structure-du-projet)
+- [Roadmap](#roadmap)
 
 ---
 
@@ -11,13 +33,13 @@ Plateforme full-stack d'intelligence de recherche d'emploi, servant simultanéme
 
 | Module | Description |
 |---|---|
-| **CV interactif** | Chatbot RAG (BM25 + VoyageAI embeddings + reranking) qui répond aux questions sur le parcours |
-| **Matching d'offres** | Collecte automatique France Travail + Gmail alerts, scoring hybride, enrichissement agents LLM |
+| **CV interactif** | Chatbot RAG (BM25 + VoyageAI embeddings + reranking, LiteLLM multi-provider) qui répond aux questions sur le parcours |
+| **Matching d'offres** | Collecte automatique France Travail + Gmail alerts (10 sources), scoring hybride, enrichissement agents LLM |
 | **Tracker de candidatures** | Suivi des offres avec statuts, ajout manuel ; enrichissement offre via CrewAI + fiche entreprise via LangChain LCEL (`company_crew`) ; suivi des pipelines via LangSmith |
 | **Explorer** | Parcours paginé de toutes les offres collectées avec filtres avancés |
-| **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11) |
+| **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
-| **Réalisations** | MVPs sectoriels — pipeline ETL données publiques → ChromaDB (OVH) → RAG LLM ; MVP en production |
+| **Réalisations** | 3 MVPs sectoriels en production — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA) |
 
 ---
 
@@ -30,7 +52,7 @@ Frontend (Next.js — Scaleway)
           ▼
 Backend (FastAPI — Scaleway Serverless Container)
           │
-          ├── RAG Chatbot ──────────────────► PostgreSQL + pgvector (Scaleway)
+          ├── RAG Chatbot CV ───────────────► PostgreSQL + pgvector (Scaleway)
           │
           ├── Pipeline Jobs
           │     ├── Collecte France Travail API
@@ -38,14 +60,138 @@ Backend (FastAPI — Scaleway Serverless Container)
           │     ├── Scoring hybride (BM25 + VoyageAI + rerank-2)
           │     └── Enrichissement CrewAI (Parser → Analyste → Rédacteur)
           │
+          ├── Routers Réalisations (sanofi / savencia / sg)
+          │     └── orchestrator_client.py ──► Orchestrateur OVH :8080
+          │                                       │
+          │                                       ▼
+          │                              Wake-on-demand des services ML
+          │                              (démarrage/arrêt containers Docker,
+          │                               timer d'inactivité 5 min)
+          │
           ├── API Jobs / CV / Explorer / Market / Feedback
           │
           └── GCP BigQuery ◄──────────────── Cloud Run Job (sync-ft-bigquery)
-                                                    ▲
-                                              GCP Workflows
-                                                    ▲
-                                           Cloud Scheduler (3 triggers)
+                    │                               ▲
+                    │ déclenche (fire-and-forget)  GCP Workflows
+                    ▼                               ▲
+              Cloud Run Job (dbt-emploi-marche)   Cloud Scheduler (3 triggers)
+                    │
+                    ▼
+        stg_offres / int_offres_agg_* (BigQuery)
+
+OVH VPS (51.68.130.23) — Compute ML / VectorDB
+    ├── ChromaDB (port 8000, always-on)
+    ├── Sanofi   : ml-service (8001), Neo4j (7474/7687), llama-server Mistral 7B (8006)
+    ├── Savencia : ml-service (8002)
+    └── SG Assurances : ml-service (8003), embedding-service (8004), llama-server Qwen (8005)
 ```
+
+---
+
+## MVPs sectoriels
+
+Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH → Backend Scaleway → Frontend Next.js**, avec ses modèles enregistrés dans Vertex AI Model Registry (`europe-west9`) quand applicable.
+
+### Sanofi — ✅ En production (Release 2)
+*Cible : poste "Accelerator Data Scientist Paris H/F" (CDI, Digital R&D)*
+
+**Release 1 :**
+- Pipeline ETL : ClinicalTrials (391 essais), PubMed (100 publications), Google News + Press Releases → BigQuery + ChromaDB
+- ML : KMeans clustering (11 clusters thérapeutiques, TF-IDF + embeddings hybrides), Bayesian GLM forecasting (Poisson + MAP BFGS + approximation de Laplace), Topic Modeling
+- RAG multi-sources avec fallback multi-provider
+- Frontend : 6 vues — Essais Cliniques, Publications R&D, Actualités, Press Releases, Ask AI, ML Insights
+
+**Release 2 — Therapeutic Insight + Graph RAG :**
+- Ingestion OpenTargets GraphQL (gènes / maladies / médicaments / essais) → graphe Neo4j local
+- Profils de clusters (Mature / Émergent / Exploratoire / Actif) basés sur `bio_score_avg` × `approved_drug_rate`
+- Fine-tuning Mistral 7B (QLoRA) sur corpus drug discovery — win-rate **46,7 %** vs modèle de base
+- Endpoint Graph RAG dédié (Neo4j + LLM fine-tuné), intégré dans la vue clusters (~125–140s de réponse)
+- Serving : llama.cpp, OVH port 8006 (`-c 2048`)
+- Modèle enregistré dans Vertex AI Model Registry (adaptateurs LoRA sur GCS, bucket `sanofi-models`)
+
+### Savencia — ✅ En production
+*Cible : Soredab, centre R&D agroalimentaire*
+
+- Pipeline ETL Google News (2 flux RSS + Trafilatura) → BigQuery `savencia_veille` + ChromaDB
+- ML : Topic Modeling LDA (5 topics cohérents en français), Computer Vision ViT (val_acc = 1.00 avec encoder dégelé + Grad-CAM heatmaps)
+- Frontend : `/realisations/savencia` — Actualités, Ask AI RAG, Topics LDA, Détection maturité fromagère
+- Deployed : OVH port 8002, réseau `savencia-ml-network`
+
+### SG Assurances — ✅ En production
+*Cible : secteur Banque/Assurance*
+
+- Pipeline ETL → BigQuery `sg_assurance_veille` + ChromaDB (74 articles, embeddings 768 dim)
+- 3 modèles ML entraînés et enregistrés dans Vertex AI Model Registry :
+  - YOLO document detection — mAP50 = 0.51 (4 classes : contract, identity, amount, signature)
+  - CamemBERT NER — F1 = 0.84 (5 entités : NUMERO_POLICE, NOM_ASSURE, MONTANT, DATE, ADRESSE)
+  - QLoRA Qwen2.5-1.5B — win-rate = 29 % (r=32, lora_alpha=64, NEFTune noise_alpha=5)
+- Serving : llama.cpp sur OVH port 8005 (Q4_K_M ~934 Mo, ~20 tok/sec CPU)
+- ML Service OVH port 8003, Embedding Service port 8004
+
+### Mirakl — 🔜 Prochain MVP
+*E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
+
+---
+
+## Workflows clés
+
+### Observatoire emploi (collecte → transformation → restitution)
+```
+Cloud Scheduler (7h / 12h / 1er-15 du mois)
+        │
+        ▼
+Cloud Run Job "sync-ft-bigquery"
+   ├── Collecte France Travail API
+   └── Collecte Gmail OAuth (10 sources)
+        │
+        ▼
+BigQuery emploi_marche.offres_brutes
+        │
+        │ déclenchement fire-and-forget si succès
+        ▼
+Cloud Run Job "dbt-emploi-marche"
+   ├── dbt run  → staging (dédup) + intermediate (agrégats jour/entreprise/localisation)
+   └── dbt test → échec bloquant si tests qualité KO
+        │
+        ▼
+Frontend /market (Q01–Q10 sur tables agrégées, Q11 direct sur offres_brutes)
+```
+
+### Wake-on-demand OVH (orchestrateur)
+```
+Utilisateur ouvre une page Réalisations
+        │
+        ▼
+Backend appelle wake(service_key) → Orchestrateur OVH :8080
+        │
+        ▼
+Orchestrateur démarre le container ML via SDK Docker
+        │
+        ▼
+Backend poll /health du service jusqu'à 200 OK
+        │
+        ▼
+Appel ML exécuté normalement, heartbeat envoyé
+        │
+        ▼
+Timer 5 min armé, reset à chaque heartbeat
+        │
+        ▼
+Inactivité 5 min → container stoppé automatiquement
+```
+Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, SG Embedding.
+
+### CI/CD (déploiement application)
+```
+Push sur infra-scaleway-v1.1
+        │
+        ▼
+GitHub Actions
+   ├── Build images Docker (backend + frontend)
+   ├── Push Scaleway Container Registry
+   └── Déploiement Serverless Containers (redeploy automatique)
+```
+Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune modification manuelle via console.
 
 ---
 
@@ -58,21 +204,38 @@ Backend (FastAPI — Scaleway Serverless Container)
 | Serverless Container | Frontend Next.js |
 | PostgreSQL managé + pgvector | Données candidat, offres trackées, embeddings |
 | Container Registry | Images Docker backend + frontend |
-| Secret Manager | Secrets applicatifs |
+| Secret Manager | Secrets applicatifs (noms en kebab-case) |
+| Terraform state | Bucket S3 `portfolio-emploi-tfstate` |
 
 ### GCP (projet `gen-lang-client-0989575872`)
 | Ressource | Usage |
 |---|---|
 | BigQuery `emploi_marche.offres_brutes` | Source de vérité des offres marché (partitionné `date_publication`, clustérisé `source, code_rome`) |
+| BigQuery `stg_offres`, `int_offres_agg_*` | Couche de transformation dbt (staging + intermediate) |
 | Cloud Run Job `sync-ft-bigquery` | Pipeline de collecte France Travail + Gmail → BigQuery |
+| Cloud Run Job `dbt-emploi-marche` | Transformation dbt déclenchée après chaque sync réussie |
 | Cloud Scheduler × 3 | Sync 7h/12h quotidien + exploration ROME 1er/15 du mois |
 | GCP Workflows | Orchestration Scheduler → Cloud Run Job |
+| Vertex AI Model Registry (`europe-west9`) | Modèles fine-tunés (Mistral 7B Sanofi, YOLO/NER/Qwen SG Assurances) |
 | Secret Manager | Secrets pipeline GCP (`ft-client-id`, `ft-client-secret`, `gmail-token`, `gmail-credentials`) |
 | Cloud Storage `portfolio-emploi-config` | Configuration ROME codes + liste entreprises exclues |
-| Artifact Registry `europe-west9` | Image Docker Cloud Run Job |
+| Cloud Storage `sanofi-models` | Adaptateurs LoRA Sanofi |
+| Artifact Registry `europe-west9` | Images Docker Cloud Run Jobs |
 
-### OVH VPS-1
-- **ChromaDB** — base vectorielle active, utilisée par les MVPs Réalisations (requêtes depuis le backend Scaleway)
+### OVH VPS (`51.68.130.23`)
+| Service | Port | Rôle |
+|---|---|---|
+| Orchestrateur (FastAPI) | 8080 | Wake-on-demand, heartbeat, statut, health |
+| ChromaDB | 8000 | Base vectorielle globale — always-on |
+| Sanofi ML Service | 8001 | Clustering, forecasting, topic modeling, Graph RAG |
+| Neo4j | 7474 / 7687 | Graphe Therapeutic Insight (Sanofi Release 2) |
+| Savencia ML Service | 8002 | Topic modeling, inférence ViT |
+| SG ML Service | 8003 | YOLO, NER, topic modeling |
+| SG Embedding Service | 8004 | Embeddings pour RAG SG Assurances |
+| llama-server Qwen (SG) | 8005 | Serving Qwen2.5 fine-tuné (`-c 1024`) |
+| llama-server Mistral (Sanofi) | 8006 | Serving Mistral 7B fine-tuné (`-c 2048`) |
+
+Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Actions** sur la branche `infra-scaleway-v1.1`.
 
 ---
 
@@ -83,13 +246,15 @@ Backend (FastAPI — Scaleway Serverless Container)
 | Frontend | Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Recharts, TipTap, ReactMarkdown |
 | Backend | FastAPI, Python, SQLAlchemy (async), asyncpg, Pydantic |
 | Pipeline IA | CrewAI, LangChain LCEL, LiteLLM |
-| LLMs | GPT-4o-mini (OpenAI), magistral-small (Mistral), Gemini (GCP) |
+| LLMs | GPT-4o-mini (OpenAI), Mistral (magistral-small + Mistral 7B fine-tuné), Gemini (GCP), Qwen2.5 fine-tuné |
 | Embeddings / Rerank | VoyageAI `voyage-3`, `rerank-2` |
-| Bases de données | PostgreSQL + pgvector (Scaleway), BigQuery (GCP) |
+| ML sectoriel | KMeans, Bayesian GLM (MAP + Laplace), LDA, ViT, YOLO, CamemBERT NER, QLoRA |
+| Bases de données | PostgreSQL + pgvector (Scaleway), BigQuery (GCP), Neo4j (OVH), ChromaDB (OVH) |
+| Transformation data | dbt-core + dbt-bigquery |
 | Recherche web | DuckDuckGo (`backend="html"`), Brave Search API |
 | Matching ROME | ROMEO v2 API |
-| Monitoring | LangSmith (projet `portfolio-rag` — traces CrewAI + company_crew), Langfuse (partiel) |
-| Infra as Code | Terraform (Scaleway `infra/` + GCP `gcp/infra/`) |
+| Monitoring | LangSmith (projet `portfolio-rag` — traces CrewAI + company_crew) |
+| Infra as Code | Terraform (Scaleway `infra/`, GCP `gcp/infra/`, `gcp/dbt_transformation/infra/`, OVH orchestrateur) |
 | CI/CD | GitHub Actions + Docker |
 
 ---
@@ -100,14 +265,17 @@ Backend (FastAPI — Scaleway Serverless Container)
 |---|---|
 | `/` | Landing page |
 | `/cv` | CV statique rendu depuis PostgreSQL |
-| `/cv/edit` | Interface CRUD expériences (Chantier 1A) |
+| `/cv/edit` | Interface CRUD expériences |
 | `/chat` | Chatbot RAG interactif |
 | `/jobs` | Tracker candidatures avec scoring et enrichissement CrewAI |
 | `/jobs/[id]` | Fiche détail offre enrichie + recalcul (max 3) |
 | `/companies/[id]` | Fiche entreprise enrichie pour préparation entretien |
 | `/explore` | Exploration des offres BigQuery avec filtres |
-| `/market` | Observatoire marché emploi — catalogue Q01–Q11 sur BigQuery |
-| `/realisations` | MVPs sectoriels — pipeline ETL + clustering + RAG sur données publiques |
+| `/market` | Observatoire marché emploi — catalogue Q01–Q11 (dbt) |
+| `/realisations` | Vue d'ensemble des MVPs sectoriels |
+| `/realisations/sanofi` | MVP Sanofi — Essais Cliniques, PubMed, Actualités, Press Releases, Ask AI, ML Insights, Graph RAG |
+| `/realisations/savencia` | MVP Savencia — Actualités, Ask AI, Topics LDA, Détection maturité fromagère |
+| `/realisations/sg/sg-assurances` | MVP SG Assurances — Actualités, RAG, YOLO/NER (Document), Qwen |
 
 ---
 
@@ -122,20 +290,21 @@ Backend (FastAPI — Scaleway Serverless Container)
 | APEC | `offres@diffusion.apec.fr` |
 | Hellowork | `notification@emails.hellowork.com` |
 | Talent.com | `no-reply@alerts.talent.com` |
-| Jobijoba | — |
-| Free-Work | — |
+| Jobijoba | `contact@jobijoba.com` |
+| Free-Work | `alerts@welcometothejungle.com` |
 | WTTJ | — |
-| Indeed | — |
-| JobLeads | — |
+| Indeed | `donotreply-jobalert@indeed.com` |
+| JobLeads | `mailer@jobleads.com` |
+| Meteojob | `ne-pas-repondre@meteojob.com` |
 
-> ⚠️ Token OAuth Gmail à régénérer manuellement tous les 7 jours (app en mode Test).  
+> ⚠️ Token OAuth Gmail à régénérer manuellement tous les 7 jours (app en mode Test).
 > Voir `backend/scripts/README_gmail_token.md` pour la procédure.
 
 ---
 
 ## Prérequis
 
-- Docker et Docker Compose
+- Docker et Docker Compose (`docker-compose` v1 syntax requis côté OVH)
 - Node.js v18+
 - Python 3.11+
 - Comptes : Scaleway, GCP, VoyageAI, OpenAI, Mistral, LangSmith
@@ -145,7 +314,7 @@ Backend (FastAPI — Scaleway Serverless Container)
 
 ## Installation et lancement
 
-### Avec Docker *(recommandé)*
+### Application (backend + frontend) — Avec Docker *(recommandé)*
 
 ```bash
 git clone https://github.com/iandry357/presentation-portefolio.git
@@ -166,7 +335,7 @@ docker build -t portfolio-frontend .
 docker run -p 3000:3000 --env-file .env portfolio-frontend
 ```
 
-### Sans Docker
+### Application — Sans Docker
 
 ```bash
 # Backend
@@ -180,6 +349,29 @@ uvicorn app.main:app --reload
 cd frontend
 npm install
 npm run dev
+```
+
+### Couche dbt (Observatoire Emploi) — en local
+
+```bash
+cd gcp/dbt_transformation
+python -m venv venv-dbt
+venv-dbt\Scripts\activate
+pip install -r requirements.txt
+gcloud auth application-default login
+
+dbt debug                  # vérifier la connexion BigQuery (target dev)
+dbt run                    # construire tous les modèles
+dbt test                   # lancer les tests qualité
+dbt source freshness       # vérifier la fraîcheur de offres_brutes
+```
+
+### Orchestrateur OVH (wake-on-demand)
+
+```bash
+cd ovh
+docker-compose up -d
+# API disponible sur le port 8080 : /wake, /heartbeat, /status, /health
 ```
 
 ---
@@ -212,6 +404,9 @@ ROMEO_API_KEY=
 # GCP
 GCP_SERVICE_ACCOUNT_JSON=
 
+# Orchestrateur OVH
+OVH_ORCHESTRATOR_PORT=8080
+
 # Monitoring
 LANGSMITH_API_KEY=
 LANGCHAIN_TRACING_V2=true
@@ -225,17 +420,23 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_FT_BASE_URL=https://candidat.francetravail.fr/offres/recherche/detail
 ```
 
+### dbt — `gcp/dbt_transformation/profiles.yml`
+
+Valeurs de connexion (projet, dataset, SA à impersonner) mises en dur — dbt ne lit pas automatiquement de `.env`. Deux targets : `dev` (ADC + impersonation SA `pipeline-dbt` en local) et `prod` (SA natif attaché au Cloud Run Job).
+
 ---
 
 ## Déploiement
 
-Entièrement automatisé via **GitHub Actions** sur push branche principale :
+Entièrement automatisé via **GitHub Actions** sur push de la branche `infra-scaleway-v1.1` :
 
 1. Build images Docker backend + frontend
 2. Push sur Scaleway Container Registry
 3. Déploiement Serverless Containers Scaleway
 
-L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastructure GCP est gérée via **Terraform** (`gcp/infra/`). Aucune modification manuelle via console.
+Les Cloud Run Jobs (`sync-ft-bigquery`, `dbt-emploi-marche`) se redéploient manuellement via `gcloud run jobs update` après changement d'image (voir procédures dans `gcp/sync_job/` et `gcp/dbt_transformation/`).
+
+L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastructure GCP est gérée via **Terraform** (`gcp/infra/`, `gcp/dbt_transformation/infra/`). Aucune modification manuelle via console.
 
 ---
 
@@ -245,37 +446,104 @@ L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastruc
 presentation-portefolio/
 ├── backend/
 │   ├── app/
-│   │   ├── core/              # Config, base de données, sécurité
-│   │   ├── models/            # Modèles SQLAlchemy
-│   │   ├── routers/           # Endpoints FastAPI
-│   │   ├── schemas/           # Schémas Pydantic
+│   │   ├── core/                  # Config, base de données, sécurité
+│   │   ├── models/                # Modèles SQLAlchemy
+│   │   ├── routers/                # Endpoints FastAPI (jobs, cv, explore, market, feedback, chat, company...)
+│   │   ├── schemas/                # Schémas Pydantic
 │   │   └── services/
-│   │       ├── job_crew/      # Agents CrewAI (Parser, Analyste, Rédacteur)
+│   │       ├── job_crew/           # Agents CrewAI (Parser, Analyste, Rédacteur)
+│   │       ├── company_crew/       # Agents fiche entreprise (LangChain LCEL)
+│   │       ├── gmail_alerts/       # Parsing alertes email
+│   │       ├── orchestrator_client.py  # Wake + heartbeat vers l'orchestrateur OVH
 │   │       ├── market_queries.py
 │   │       ├── excluded_companies.py
 │   │       └── bigquery_client.py
-│   ├── migrations/sql/        # Scripts SQL (001 → 014)
-│   ├── scripts/               # Scripts utilitaires manuels
-│   │   ├── upload_cv_pdf.py   # Upload CV → PostgreSQL
-│   │   └── generate_gmail_token.py  # Régénération token OAuth Gmail
+│   ├── routers/
+│   │   ├── sanofi/                 # router, ml.py, rag.py, schemas.py
+│   │   ├── savencia/                # router, ml.py, rag.py, schemas.py
+│   │   └── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
+│   ├── migrations/sql/              # Scripts SQL (001 → 016)
+│   ├── scheduler/                   # job_pipeline.py
+│   ├── scripts/                     # Scripts utilitaires manuels
 │   └── Dockerfile
 ├── gcp/
-│   ├── sync_job/              # Cloud Run Job (France Travail + Gmail → BigQuery)
+│   ├── sync_job/                    # Cloud Run Job (France Travail + Gmail → BigQuery)
 │   │   ├── sources/
 │   │   │   ├── france_travail.py
-│   │   │   └── gmail_alerts/  # 10 parseurs sources
-│   │   ├── main.py
+│   │   │   └── gmail_alerts/        # 10 parseurs sources
+│   │   ├── main.py                  # inclut _trigger_dbt_job (fire-and-forget)
 │   │   └── Dockerfile
-│   └── infra/                 # Terraform GCP
-├── infra/                     # Terraform Scaleway
+│   ├── dbt_transformation/          # Cloud Run Job — couche dbt Observatoire Emploi
+│   │   ├── models/
+│   │   │   ├── staging/             # stg_offres (dédup id_unique)
+│   │   │   ├── intermediate/        # int_offres_agg_jour / entreprise / localisation
+│   │   │   └── marts/               # vide pour l'instant
+│   │   ├── profiles.yml
+│   │   ├── entrypoint.sh
+│   │   ├── Dockerfile
+│   │   └── infra/                   # Terraform SA pipeline-dbt + IAM
+│   └── infra/                       # Terraform GCP (sync job, scheduler, secrets)
+├── ovh/
+│   ├── orchestrator/                # Orchestrateur wake-on-demand
+│   │   ├── registry.yaml            # déclaration des services
+│   │   ├── docker_client.py
+│   │   ├── resource_manager.py
+│   │   ├── timer_manager.py
+│   │   └── main.py                  # API FastAPI /wake /heartbeat /status /health
+│   └── docker-compose.yml
+├── realisations/
+│   ├── sanofi/
+│   │   ├── ml/                      # graph_rag.py, neo4j_ingestion.py, pipeline_orchestrator.py
+│   │   └── training/                 # finetune.py, export_gguf.py, evaluate.py, register_model.py
+│   ├── savencia/
+│   │   ├── pipeline/                 # ETL Google News + Trafilatura
+│   │   └── scripts/                  # check_data.py, inspect_chromadb.py, reset_chromadb.py
+│   └── sg/sg-assurances/
+│       ├── ml/, embedding-service/, serving/, training/
+│       └── scripts/
+├── infra/                            # Terraform Scaleway
 └── frontend/
-    ├── app/                   # Pages Next.js
-    │   ├── cv/, chat/, jobs/, companies/
-    │   ├── explore/, market/
+    ├── app/
+    │   ├── cv/, chat/, jobs/, companies/, explore/, market/
     │   └── realisations/
-    ├── components/            # Composants React
+    │       ├── sanofi/
+    │       ├── savencia/
+    │       └── sg/sg-assurances/
+    ├── components/
+    │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/
+    │   └── ui/                       # shadcn/ui
+    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts
     └── Dockerfile
 ```
+
+---
+
+## Roadmap
+
+### Court terme
+- Finaliser le backlog Release 2 Sanofi (règle iptables persistante, streaming Graph RAG, LangSmith sur Graph RAG)
+- MVP Mirakl — E-commerce NLP/GenAI
+
+### Moyen terme
+- Automatisation Cloud Run Jobs pour les 3 MVPs (refresh périodique des pipelines ML)
+- Pipeline de scraping qualifié complet des offres partenaires (BM25 → filtre LLM local → scraping)
+- `NEXT_PUBLIC_ENV` pour conditionner `isDev` en prod
+- Domaine custom Scaleway
+
+### Long terme
+- Multi-utilisateur onboarding (upload CV PDF + extraction LLM)
+- LangGraph pour orchestration du scraping
+- Pattern multi-secteurs réplicable (autres comptes cibles)
+
+---
+
+## Ce qui différencie ce projet
+
+- **Construit seul**, de bout en bout : data engineering, ML training, MLOps, DevOps, frontend
+- **En production réelle** : chaque composant est containerisé, déployé, monitoré — pas des notebooks
+- **Piloté par un objectif métier concret** : décrocher un CDI Data Scientist à Paris
+- **Architecture scalable** : pattern IaC Terraform + GitHub Actions reproductible à chaque nouveau secteur
+- **Décisions pragmatiques assumées** : seuils MVP acceptés (mAP50=0.51, F1=0.84), coût OVH CPU préféré à Vertex AI T4 permanent, on-demand plutôt que toujours-allumé
 
 ---
 
