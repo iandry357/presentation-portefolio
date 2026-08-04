@@ -17,6 +17,7 @@ from app.routers.market import router as market_router
 from routers.sanofi.router import router as sanofi_router
 from routers.savencia.router import router as savencia_router
 from routers.sg.sg_assurances.router import router as sg_router
+from routers.banque_de_france.router import router as bf_router
 
 
 
@@ -87,6 +88,7 @@ app.include_router(market_router)
 app.include_router(sanofi_router)
 app.include_router(savencia_router)
 app.include_router(sg_router)
+app.include_router(bf_router)
 
 @app.get("/")
 async def root():

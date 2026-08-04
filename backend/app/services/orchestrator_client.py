@@ -17,7 +17,7 @@ SERVICE_PORTS = {
     "sanofi-ml": "8001",
     "savencia-ml": "8002",
     "sg-ml": "8003",
-    "sg-embedding": "8004",
+    "embedding-service": "8004",
 }
 
 

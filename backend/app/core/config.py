@@ -92,6 +92,11 @@ class Settings(BaseSettings):
     OVH_ML_PORT_SG: str = "8003"
     EMBEDDING_SERVICE_PORT: str = "8004"
 
+    # ─── Banque de France ─────────────────────────────────────
+    GCP_SERVICE_ACCOUNT_JSON_BANQUE: Optional[str] = None
+    CHROMA_COLLECTION_BANQUE: str = "banque_de_france"
+    OVH_ML_PORT_BANQUE: str = "8007"
+
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 
