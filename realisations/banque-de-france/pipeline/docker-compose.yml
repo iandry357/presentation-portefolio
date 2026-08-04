@@ -1,0 +1,23 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    container_name: banque-de-france-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ../gcp_sa_banque.json:/app/gcp_sa_banque.json:ro
+      - huggingface_cache:/root/.cache/huggingface
+      - acpr_cache:/app/data
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true
+
+volumes:
+  huggingface_cache:
+  acpr_cache:

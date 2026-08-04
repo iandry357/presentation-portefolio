@@ -1,0 +1,66 @@
+segment,concept_final,categorie
+abandon des poursuites disciplinaires,abandon des poursuites disciplinaires,GRIEF
+cabinet de courtage,cabinet de courtage,ENTITY
+caisse de crédit municipal,caisse de crédit municipal,ENTITY
+exigence de fonds propre,capital réglementaire,GRIEF
+insuffisance de fonds propre,capital réglementaire,GRIEF
+capital minimum,capital réglementaire,GRIEF
+fonds propres,capital réglementaire,GRIEF
+changeur manuel,changement manuel,ENTITY
+comptes d'épargne salariale,comptes d'épargne salariale,ENTITY
+condition d'honorabilité des dirigeants,condition d'honorabilité,ENTITY
+capacité professionnelle,condition d'honorabilité,ENTITY
+condition d'honorabilité,condition d'honorabilité,ENTITY
+respect de la condition d'honorabilité,condition d'honorabilité,ENTITY
+contrats d'assurance sur la vie non réclamés,contrats d'assurance-vie non réclamés,GRIEF
+contrats d'assurance sur la vie non réglés,contrats d'assurance-vie non réglés,GRIEF
+déshérence,contrats en déshérence,GRIEF
+contrats en déshérence,contrats en déshérence,GRIEF
+contrôle des opérations et procédures internes,contrôle des opérations et procédures internes,GRIEF
+devoir de conseil,devoir de conseil,GRIEF
+respect des obligations d'information et de conseil précontractuels,devoir de conseil,GRIEF
+"respect des obligations d'information précontractuelle, du devoir de conseil et de l'obligation d'agir au mieux des intérêts du client",devoir de conseil,GRIEF
+droit au compte,droit au compte,ENTITY
+organisme d'assurance,entreprise d'assurance,ENTITY
+entreprise d'assurance,entreprise d'assurance,ENTITY
+entreprise d'investissement,entreprise d'investissement,ENTITY
+gel des avoirs,gel des avoirs,GRIEF
+règles de gouvernance,gouvernance,GRIEF
+contrôle interne,gouvernance,GRIEF
+information des assurés,information des assurés,GRIEF
+obligation d'information,information des assurés,GRIEF
+respect des obligations d'information et de conseil,information des assurés,GRIEF
+institution de prévoyance,institution de prévoyance,ENTITY
+intermédiaire d'assurances,intermédiaire d'assurances,ENTITY
+intermédiaire d'assurance,intermédiaire en assurance,ENTITY
+intermédiation d'assurance,intermédiaire en assurance,ENTITY
+intermédiaire en financement participatif,intermédiaire en assurance,ENTITY
+lutte contre la déshérence,lutte contre la déshérence,GRIEF
+lutte contre le blanchiment des capitaux et le financement du terrorisme,lutte contre le blanchiment et le financement du terrorisme,GRIEF
+lutte contre le blanchiment des capitaux,lutte contre le blanchiment et le financement du terrorisme,GRIEF
+lutte contre le blanchiment et le financement du terrorisme,lutte contre le blanchiment et le financement du terrorisme,GRIEF
+maîtrise des risques,maîtrise des risques,ENTITY
+maîtrise des risques de crédit,maîtrise des risques,ENTITY
+évaluation des risques,maîtrise des risques,ENTITY
+système de surveillance et maîtrise des risques,maîtrise des risques,ENTITY
+modification de contrats d'assurance,modification de contrats d'assurance,GRIEF
+émetteur de monnaie électronique,monnaie électronique,ENTITY
+établissement de monnaie électronique,monnaie électronique,ENTITY
+non-respect d'une mise en demeure,non-respect de mise en demeure,GRIEF
+non-respect d'une mise en demeure du collège de l'acpr,non-respect de mise en demeure,GRIEF
+obligation d'identification des assurés décédés,obligation d'identification,GRIEF
+organisation comptable,organisation comptable,ENTITY
+établissement de paiement,paiement,ENTITY
+établissement de paiement étranger,paiement,ENTITY
+protection de la clientèle,protection des fonds collectés,GRIEF
+protection des fonds collectés,protection des fonds collectés,GRIEF
+protection des fonds reçus des clients,protection des fonds collectés,GRIEF
+relations avec le superviseur,relations avec l'autorité de supervision,ENTITY
+non-respect de l'article l. 322-2-2 du code des assurances,respect de la réglementation assurantielle,GRIEF
+risque de crédit,risque,GRIEF
+risque de non-conformité,risque,GRIEF
+contrats d'épargne retraite,épargne retraite,ENTITY
+établissement de crédit,établissement de crédit,ENTITY
+établissement de crédit spécialisé,établissement de crédit,ENTITY
+"gouvernance, contrôle de la conformité",gouvernance,GRIEF
+succursale,succursale bancaire,ENTITY
