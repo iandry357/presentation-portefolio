@@ -17,6 +17,8 @@ from bs4 import BeautifulSoup
 
 from ..base_parser import BaseParser, OffreNormalisee
 
+import re
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +36,17 @@ class TalentParser(BaseParser):
         offers = []
         # seen_urls = set()
         seen_titles = set()
+
+        recherche_mot_cle = None
+        recherche_localisation = None
+        header_h1 = soup.find("h1")
+        if header_h1:
+            kw_match = re.search(r"pour\s+(.+)$", header_h1.get_text(strip=True))
+            if kw_match:
+                recherche_mot_cle = kw_match.group(1).strip()
+            header_h2 = header_h1.find_next_sibling("h2")
+            if header_h2:
+                recherche_localisation = header_h2.get_text(strip=True) or None
 
         for outer_a in soup.find_all(
             "a",
@@ -86,6 +99,8 @@ class TalentParser(BaseParser):
                 source_offer="email_talent",
                 source_branch="email_external",
                 email_date=email_date,
+                recherche_mot_cle=recherche_mot_cle,
+                recherche_localisation=recherche_localisation,
             ))
 
         return offers

@@ -18,6 +18,8 @@ from bs4 import BeautifulSoup
 
 from ..base_parser import BaseParser, OffreNormalisee
 
+import re
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +36,16 @@ class JobijobaParser(BaseParser):
         soup = BeautifulSoup(html, "html.parser")
         offers = []
         seen_urls = set()
+
+        _HEADER_RE = re.compile(r"^\d+\s+nouveaux emplois\s+(.+?)\s+à\s+(.+)$", re.IGNORECASE)
+        recherche_mot_cle = None
+        recherche_localisation = None
+        header_node = soup.find(string=re.compile(r"nouveaux emplois", re.IGNORECASE))
+        if header_node:
+            header_match = _HEADER_RE.match(header_node.strip())
+            if header_match:
+                recherche_mot_cle = header_match.group(1).strip()
+                recherche_localisation = header_match.group(2).strip()
 
         for row in soup.find_all("table", class_="row-34"):
             try:
@@ -93,6 +105,8 @@ class JobijobaParser(BaseParser):
                     source_offer="email_jobijoba",
                     source_branch="email_external",
                     email_date=email_date,
+                    recherche_mot_cle=recherche_mot_cle,
+                    recherche_localisation=recherche_localisation,
                 ))
 
             except Exception as e:

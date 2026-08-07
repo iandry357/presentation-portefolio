@@ -33,6 +33,13 @@ class ApecParser(BaseParser):
         offers = []
         seen_urls = set()
 
+        recherche_mot_cle = None
+        header_h2 = soup.find("h2")
+        if header_h2:
+            orange_spans = header_h2.find_all("span", class_="orange")
+            if len(orange_spans) >= 2:
+                recherche_mot_cle = orange_spans[-1].get_text(strip=True) or None
+
         for div in soup.find_all("div", class_="content"):
             title_tag = div.find("a", style=lambda s: s and "#0e6c8a" in s and "18px" in s)
             if not title_tag:
@@ -77,6 +84,7 @@ class ApecParser(BaseParser):
                 source_offer="email_apec",
                 source_branch="email_external",
                 email_date=email_date,
+                recherche_mot_cle=recherche_mot_cle,
             ))
 
         return offers

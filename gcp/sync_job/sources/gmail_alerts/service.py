@@ -56,6 +56,8 @@ def _build_row(offre: OffreNormalisee) -> dict:
         "competences":               [],
         "url_offre":                 offre.offer_url,
         "alternance":                None,
+        "recherche_mot_cle":         offre.recherche_mot_cle,
+        "recherche_localisation":    offre.recherche_localisation,
     }
 
 

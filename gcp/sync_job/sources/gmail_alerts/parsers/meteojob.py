@@ -42,6 +42,14 @@ class MeteojobParser(BaseParser):
         offers = []
         seen_ids = set()
 
+        recherche_mot_cle = None
+        recherche_localisation = None
+        criteria_badges = soup.find_all("p", style=lambda s: s and "background-color:#F3F5F6" in s)
+        if len(criteria_badges) >= 1:
+            recherche_mot_cle = criteria_badges[0].get_text(strip=True) or None
+        if len(criteria_badges) >= 2:
+            recherche_localisation = criteria_badges[1].get_text(strip=True) or None
+
         # Ancre fiable : tous les liens /jobs/{id} dans le document
         # job_links = soup.find_all(
         #     "a",
@@ -107,6 +115,8 @@ class MeteojobParser(BaseParser):
                 source_offer="email_meteojob",
                 source_branch="email_external",
                 email_date=email_date,
+                recherche_mot_cle=recherche_mot_cle,
+                recherche_localisation=recherche_localisation,
             ))
 
         return offers

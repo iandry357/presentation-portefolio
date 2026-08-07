@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # Regex pour détecter une localisation (ville + code postal optionnel)
 _LOC_RE = re.compile(r"[A-ZÀ-Ö][a-zà-ö\-]+.*?\(\d{2,5}\)|[A-ZÀ-Ö][a-zà-ö\-]+.*?\d{2,5}")
-
+_HEADER_RE = re.compile(r"^\d+\s+nouveaux?\s+emplois?\s+(.+?)\s+-\s+(.+)$", re.IGNORECASE)
 
 class IndeedParser(BaseParser):
 
@@ -35,15 +35,29 @@ class IndeedParser(BaseParser):
             logger.error(f"[IndeedParser] Erreur inattendue : {e}", exc_info=True)
             return []
 
+
     def _parse(self, html: str, email_date: datetime) -> list[OffreNormalisee]:
         soup = BeautifulSoup(html, "html.parser")
         offers = []
         seen_urls = set()
 
-        for td in soup.find_all("td", class_="pb-24"):
+        all_h2 = soup.find_all("h2")
+
+        # --- Mot-clé / localisation : en-tête unique en haut de l'email ---
+        # Ex: "30 nouveaux emplois machine learning engineer - Paris (75)"
+        recherche_mot_cle = None
+        recherche_localisation = None
+        if all_h2:
+            header_match = self._HEADER_RE.match(all_h2[0].get_text(strip=True))
+            if header_match:
+                recherche_mot_cle = header_match.group(1).strip()
+                recherche_localisation = header_match.group(2).strip()
+
+        for h2 in all_h2:
             try:
-                # URL — <a> direct enfant pointant vers indeed
-                wrapper = td.find(
+                # Ancrage par offre : le h2 doit contenir un lien direct vers l'offre
+                # (exclut l'en-tête de digest qui n'a pas de tel lien)
+                wrapper = h2.find(
                     "a",
                     href=lambda h: h and (
                         "fr.indeed.com/rc/clk" in h
@@ -53,7 +67,6 @@ class IndeedParser(BaseParser):
                 if not wrapper:
                     continue
 
-                # Déduplication sur le job key (paramètre jk= dans l'URL)
                 raw_url = wrapper.get("href", "")
                 jk_match = re.search(r"[?&]jk=([a-f0-9]+)", raw_url)
                 dedup_key = jk_match.group(1) if jk_match else raw_url.split("?")[0]
@@ -61,67 +74,38 @@ class IndeedParser(BaseParser):
                     continue
                 seen_urls.add(dedup_key)
 
-                # URL propre — on conserve l'URL complète (tracking Indeed)
                 url = raw_url
-
-                # Titre — <h2> > <a style*="text-decoration:underline">
-                h2 = wrapper.find("h2")
-                if not h2:
-                    continue
-                title_link = h2.find(
-                    "a", style=lambda s: s and "text-decoration:underline" in s
-                )
-                title = title_link.get_text(strip=True) if title_link else h2.get_text(strip=True)
+                title = wrapper.get_text(strip=True)
                 if not title:
                     continue
 
-                # Entreprise — premier <td> dans la table juste après le h2
-                # qui ne contient pas d'image et dont le texte est non vide
+                # Bloc titre+entreprise+localisation : table immédiatement parente du h2
+                row1_table = h2.find_parent("table")
                 company = None
-                company_table = h2.find_next_sibling("tr")
-                if company_table:
-                    for td_cell in company_table.find_all("td"):
-                        text = td_cell.get_text(strip=True)
-                        if text and not td_cell.find("img"):
-                            company = text
-                            break
-
-                # Localisation — <td> standalone avec texte court ressemblant à une ville
                 location = None
-                for td_cell in wrapper.find_all("td"):
-                    style = td_cell.get("style", "")
-                    # Les tds de localisation ont color:#2d2d2d, font-size:14px
-                    # et contiennent uniquement du texte (pas de table imbriquée)
-                    if (
-                        "color:#2d2d2d" in style
-                        and "font-size:14px" in style
-                        and not td_cell.find("table")
-                        and not td_cell.find("a")
-                    ):
-                        text = td_cell.get_text(strip=True)
-                        # Filtre : texte court (< 60 chars), pas une description
-                        if text and len(text) < 60 and not text.endswith("…"):
-                            location = text
-                            break
+                if row1_table:
+                    rows = row1_table.find_all("tr", recursive=False)
+                    if len(rows) >= 2:
+                        paragraphs = rows[1].find_all("p")
+                        if len(paragraphs) >= 1:
+                            company = paragraphs[0].get_text(strip=True) or None
+                        if len(paragraphs) >= 2:
+                            location = paragraphs[1].get_text(strip=True) or None
 
-                # Salaire — <td> dans <table bgcolor="#f3f2f1">
+                # Bloc offre complet (englobe aussi la ligne salaire, sœur de row1_table)
+                offer_block = row1_table.find_parent("table") if row1_table else None
+
                 salary_label = None
-                salary_table = wrapper.find("table", attrs={"bgcolor": "#f3f2f1"})
-                if salary_table:
-                    salary_td = salary_table.find("td")
-                    if salary_td:
-                        salary_label = salary_td.get_text(strip=True)
+                if offer_block:
+                    salary_table = offer_block.find("table", attrs={"bgcolor": "#f3f2f1"})
+                    if salary_table:
+                        salary_td = salary_table.find("td")
+                        if salary_td:
+                            salary_label = salary_td.get_text(strip=True)
 
-                # Description — <td> avec color:#767676 et font-size:14px
+                # Description : Indeed a retiré ce champ du template (vérifié —
+                # color:#767676 ne sert plus qu'à la date relative "il y a X jours")
                 description = None
-                for td_cell in wrapper.find_all("td"):
-                    style = td_cell.get("style", "")
-                    if "color:#767676" in style and "font-size:14px" in style:
-                        text = td_cell.get_text(strip=True)
-                        # Exclure les tds de date ("il y a X jours", "Publié à l'instant")
-                        if text and "jour" not in text.lower() and "instant" not in text.lower():
-                            description = text
-                            break
 
                 offers.append(OffreNormalisee(
                     ft_id=None,
@@ -135,6 +119,8 @@ class IndeedParser(BaseParser):
                     source_offer="email_indeed",
                     source_branch="email_external",
                     email_date=email_date,
+                    recherche_mot_cle=recherche_mot_cle,
+                    recherche_localisation=recherche_localisation,
                 ))
 
             except Exception as e:

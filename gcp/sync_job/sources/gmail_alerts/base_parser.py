@@ -28,6 +28,12 @@ class OffreNormalisee(BaseModel):
     location:     Optional[str] = None
     contract:     Optional[str] = None
     salary_label: Optional[str] = None
+    
+    # Mot-clé / localisation de la recherche ou alerte à l'origine de l'offre
+    # (ex: "Data Scientist" / "Paris (75)") — None si la source ne l'expose pas
+    # (JobLeads, LinkedIn recommandations sans catégorie exploitable, etc.)
+    recherche_mot_cle:      Optional[str] = None
+    recherche_localisation: Optional[str] = None
 
     # Extrait de description — disponible uniquement pour France Travail email
     description_excerpt: Optional[str] = None
