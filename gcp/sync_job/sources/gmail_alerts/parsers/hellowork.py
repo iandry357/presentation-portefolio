@@ -33,6 +33,16 @@ class HelloworkParser(BaseParser):
         offers = []
         seen_urls = set()
 
+        recherche_mot_cle = None
+        recherche_localisation = None
+        criteria_td = soup.find("td", style=lambda s: s and "color:#292929" in s and "font-size:14px" in s)
+        if criteria_td:
+            parts = [p.strip() for p in criteria_td.get_text(strip=True).split(" - ")]
+            if len(parts) >= 1:
+                recherche_mot_cle = parts[0] or None
+            if len(parts) >= 2:
+                recherche_localisation = parts[1] or None
+
         for card in soup.find_all(
             "td", class_=lambda c: c and "bg-dark-cards" in c and "padding-cards" in c
         ):
@@ -77,6 +87,8 @@ class HelloworkParser(BaseParser):
                 source_offer="email_hellowork",
                 source_branch="email_external",
                 email_date=email_date,
+                recherche_mot_cle=recherche_mot_cle,
+                recherche_localisation=recherche_localisation,
             ))
 
         return offers

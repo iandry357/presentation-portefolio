@@ -117,14 +117,35 @@ if __name__ == "__main__":
         logger.info("=" * 60)
 
         # DEBUG — dump HTML nouvelles sources
-        from sources.gmail_alerts.reader import GmailReader
-        debug_reader = GmailReader()
+        # SENDER_MAP: dict[str, BaseParser] = {
+        #     "nepasrepondre@offre.francetravail.fr": FranceTravailParser(),
+        #     "jobalerts-noreply@linkedin.com":       LinkedInParser(),
+        #     "jobs-listings@linkedin.com":       LinkedInParser(),
+        #     "jobs-noreply@linkedin.com":        LinkedInParser(),
+        #     "offres@diffusion.apec.fr":             ApecParser(),
+        #     "notification@emails.hellowork.com":    HelloworkParser(),
+        #     "alerte@emails.hellowork.com":          HelloworkParser(),
+        #     "no-reply@alerts.talent.com":           TalentParser(),
+        #     "contact@jobijoba.com": JobijobaParser(),
+        #     "jobs@free-work.com":   FreeworkParser(),
+        #     "alerts@welcometothejungle.com":    WTTJParser(),
+        #     "donotreply@jobalert.indeed.com":   IndeedParser(),
+        #     "mailer@jobleads.com": JobleadsParser(),
+        #     "ne-pas-repondre@meteojob.com": MeteojobParser(),
+        # }
+
+        # from sources.gmail_alerts.reader import GmailReader
+        # debug_reader = GmailReader()
+        # debug_reader.dump_html("nepasrepondre@offre.francetravail.fr", "/app/debug")
         # debug_reader.dump_html("contact@jobijoba.com", "/app/debug")
         # debug_reader.dump_html("jobs@free-work.com", "/app/debug")
-        # debug_reader.dump_html("alerts@welcometothejungle.com", "/app/debug")
+        # # debug_reader.dump_html("alerts@welcometothejungle.com", "/app/debug")
         # debug_reader.dump_html("donotreply@jobalert.indeed.com", "/app/debug")
         # debug_reader.dump_html("offres@diffusion.apec.fr", "/app/debug")
+        # debug_reader.dump_html("notification@emails.hellowork.com", "/app/debug")
+        # debug_reader.dump_html("alerte@emails.hellowork.com", "/app/debug")
         # debug_reader.dump_html("ne-pas-repondre@meteojob.com", "/app/debug")
+        # debug_reader.dump_html("no-reply@alerts.talent.com", "/app/debug")
         # debug_reader.dump_html("mailer@jobleads.com", "/app/debug")
 
         # "jobalerts-noreply@linkedin.com":       LinkedInParser(),

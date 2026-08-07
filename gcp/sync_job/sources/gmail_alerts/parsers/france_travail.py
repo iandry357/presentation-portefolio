@@ -18,6 +18,8 @@ from bs4 import BeautifulSoup
 
 from ..base_parser import BaseParser, OffreNormalisee
 
+import re
+
 logger = logging.getLogger(__name__)
 
 FT_DETAIL_PATTERN = "candidat.francetravail.fr/offres/recherche/detail/"
@@ -36,6 +38,13 @@ class FranceTravailParser(BaseParser):
         soup = BeautifulSoup(html, "html.parser")
         offers = []
         seen_ft_ids = set()
+
+        recherche_mot_cle = None
+        header_text = soup.find(string=re.compile(r"pour votre alerte"))
+        if header_text:
+            kw_match = re.search(r'alerte\s+"(.+?)"', header_text)
+            if kw_match:
+                recherche_mot_cle = kw_match.group(1).strip()
 
         for a in soup.find_all("a", href=lambda h: h and FT_DETAIL_PATTERN in h):
             raw_url = a.get("href", "").split("?")[0]
@@ -98,6 +107,7 @@ class FranceTravailParser(BaseParser):
                 source_offer="email_france_travail",
                 source_branch="email_ft",
                 email_date=email_date,
+                recherche_mot_cle=recherche_mot_cle,
             ))
 
         return offers

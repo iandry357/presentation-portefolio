@@ -37,73 +37,77 @@ class FreeworkParser(BaseParser):
         offers = []
         seen_urls = set()
 
-        for li in soup.select("ul.alerts li"):
-            try:
-                # link = li.find("a", href=lambda h: h and "free-work.com" in h)
-                link = li.find("a", href=True)
-                if not link:
-                    continue
+        for ul in soup.select("ul.alerts"):
+            # Mot-clé propre à ce bloc d'alerte : texte juste après
+            # "N offres correspondant à votre alerte"
+            recherche_mot_cle = None
+            header_node = ul.find_previous(string=re.compile(r"correspondant à votre alerte"))
+            if header_node:
+                keyword_node = header_node.find_next(string=True)
+                while keyword_node is not None and not keyword_node.strip():
+                    keyword_node = keyword_node.find_next(string=True)
+                if keyword_node:
+                    recherche_mot_cle = keyword_node.strip()
 
-                url = link["href"].split("?")[0]
-                if url in seen_urls:
-                    continue
-                seen_urls.add(url)
+            for li in ul.find_all("li", recursive=False):
+                try:
+                    link = li.find("a", href=True)
+                    if not link:
+                        continue
 
-                # Titre — texte du <b> avant le span contrat
-                bold = link.find("b")
-                if not bold:
-                    continue
+                    url = link["href"].split("?")[0]
+                    if url in seen_urls:
+                        continue
+                    seen_urls.add(url)
 
-                # Extraire le titre en retirant le span contrat du texte du <b>
-                contract_span = bold.find(
-                    "span", class_=lambda c: c and c in ("contractor", "worker")
-                )
-                contract = contract_span.get_text(strip=True) if contract_span else None
+                    bold = link.find("b")
+                    if not bold:
+                        continue
 
-                # Titre = texte du <b> sans le span et sans le " - "
-                if contract_span:
-                    contract_span.extract()
-                title_raw = bold.get_text(separator=" ", strip=True)
-                title = re.sub(r"\s*-\s*$", "", title_raw).strip()
-                if not title:
-                    continue
+                    contract_span = bold.find(
+                        "span", class_=lambda c: c and c in ("contractor", "worker")
+                    )
+                    contract = contract_span.get_text(strip=True) if contract_span else None
+                    if contract_span:
+                        contract_span.extract()
+                    title_raw = bold.get_text(separator=" ", strip=True)
+                    title = re.sub(r"\s*-\s*$", "", title_raw).strip()
+                    if not title:
+                        continue
 
-                # Localisation — extraite du texte après <br>
-                location = None
-                salary_label = None
-                br = link.find("br")
-                if br and br.next_sibling:
-                    raw_detail = br.next_sibling
-                    if hasattr(raw_detail, "get_text"):
-                        detail = raw_detail.get_text(strip=True)
-                    else:
-                        detail = str(raw_detail).strip()
+                    location = None
+                    salary_label = None
+                    br = link.find("br")
+                    if br and br.next_sibling:
+                        raw_detail = br.next_sibling
+                        if hasattr(raw_detail, "get_text"):
+                            detail = raw_detail.get_text(strip=True)
+                        else:
+                            detail = str(raw_detail).strip()
 
-                    if detail:
-                        # Format : "X mois - salaire - tjm - Localisation" ou "salaire - Localisation"
-                        parts = [p.strip() for p in detail.split(" - ")]
-                        # La localisation est toujours le dernier segment
-                        location = parts[-1] if parts else None
-                        # Le salaire est le segment contenant "€" ou "k€"
-                        for part in parts:
-                            if "€" in part or "k€" in part:
-                                salary_label = part
-                                break
+                        if detail:
+                            parts = [p.strip() for p in detail.split(" - ")]
+                            location = parts[-1] if parts else None
+                            for part in parts:
+                                if "€" in part or "k€" in part:
+                                    salary_label = part
+                                    break
 
-                offers.append(OffreNormalisee(
-                    ft_id=None,
-                    offer_url=url,
-                    title=title,
-                    company="Free-Work",
-                    location=location,
-                    contract=contract,
-                    salary_label=salary_label,
-                    source_offer="email_freework",
-                    source_branch="email_external",
-                    email_date=email_date,
-                ))
+                    offers.append(OffreNormalisee(
+                        ft_id=None,
+                        offer_url=url,
+                        title=title,
+                        company="Free-Work",
+                        location=location,
+                        contract=contract,
+                        salary_label=salary_label,
+                        source_offer="email_freework",
+                        source_branch="email_external",
+                        email_date=email_date,
+                        recherche_mot_cle=recherche_mot_cle,
+                    ))
 
-            except Exception as e:
-                logger.warning(f"[FreeworkParser] Erreur offre : {e}")
+                except Exception as e:
+                    logger.warning(f"[FreeworkParser] Erreur offre : {e}")
 
         return offers
