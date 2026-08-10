@@ -26,5 +26,7 @@
   { "name": "naf_code",                "type": "STRING",    "mode": "NULLABLE", "description": "Code NAF complet" },
   { "name": "competences",             "type": "STRING",    "mode": "REPEATED", "description": "Liste des libellés de compétences" },
   { "name": "url_offre",               "type": "STRING",    "mode": "NULLABLE", "description": "Lien vers l'offre originale" },
-  { "name": "alternance",              "type": "BOOLEAN",   "mode": "NULLABLE", "description": "True si offre en alternance — API FT uniquement" }
+  { "name": "alternance",              "type": "BOOLEAN",   "mode": "NULLABLE", "description": "True si offre en alternance — API FT uniquement" },
+  { "name": "recherche_mot_cle",       "type": "STRING",    "mode": "NULLABLE", "description": "Mot-clé de la recherche/alerte à l'origine de l'offre" },
+  { "name": "recherche_localisation",  "type": "STRING",    "mode": "NULLABLE", "description": "Localisation de la recherche/alerte à l'origine de l'offre" }
 ]
