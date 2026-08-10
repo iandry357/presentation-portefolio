@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 # Regex pour détecter une localisation (ville + code postal optionnel)
 _LOC_RE = re.compile(r"[A-ZÀ-Ö][a-zà-ö\-]+.*?\(\d{2,5}\)|[A-ZÀ-Ö][a-zà-ö\-]+.*?\d{2,5}")
-_HEADER_RE = re.compile(r"^\d+\s+nouveaux?\s+emplois?\s+(.+?)\s+-\s+(.+)$", re.IGNORECASE)
 
 class IndeedParser(BaseParser):
 
@@ -34,6 +33,7 @@ class IndeedParser(BaseParser):
         except Exception as e:
             logger.error(f"[IndeedParser] Erreur inattendue : {e}", exc_info=True)
             return []
+    _HEADER_RE = re.compile(r"^\d+\s+nouveaux?\s+emplois?\s+(.+?)\s+-\s+(.+)$", re.IGNORECASE)      
 
 
     def _parse(self, html: str, email_date: datetime) -> list[OffreNormalisee]:
