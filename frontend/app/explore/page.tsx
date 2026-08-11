@@ -13,12 +13,13 @@ const DEFAULT_FILTERS = {
   localisation_libelle: "",
   periode_jours: "",
   entreprise_nom: "",
+  recherche_mot_cle: "",
 };
 
 export default function ExplorePage() {
   const [offers, setOffers]         = useState<ExploreOffer[]>([]);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
-    sources: [], types_contrat: [], regions: [], entreprise_nom: []
+    sources: [], types_contrat: [], regions: [], entreprise_nom: [], recherche_mot_cle: []
   });
   const [filters, setFilters]       = useState(DEFAULT_FILTERS);
   const [page, setPage]             = useState(1);
@@ -48,6 +49,7 @@ export default function ExplorePage() {
         periode_jours:       currentFilters.periode_jours ? Number(currentFilters.periode_jours) : undefined,
         titre:               currentFilters.titre || undefined,
         entreprise_nom:              currentFilters.entreprise_nom || undefined,
+        recherche_mot_cle:    currentFilters.recherche_mot_cle || undefined,
       });
       setOffers(result.offers);
       setTotal(result.total);

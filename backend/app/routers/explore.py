@@ -25,6 +25,7 @@ async def get_explore_offers(
     periode_jours: Optional[int] = Query(default=None, ge=1, le=365),
     titre: Optional[str] = Query(default=None),
     entreprise_nom: Optional[str] = Query(default=None),
+    recherche_mot_cle: Optional[str] = Query(default=None),
 ):
     try:
         result = fetch_offers(
@@ -36,6 +37,7 @@ async def get_explore_offers(
             periode_jours=periode_jours,
             titre=titre,
             entreprise_nom=entreprise_nom,
+            recherche_mot_cle=recherche_mot_cle,
         )
         return result
     except Exception as e:

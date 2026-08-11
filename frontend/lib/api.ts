@@ -562,6 +562,7 @@ export async function getExploreOffers(params: {
   periode_jours?: number;
   titre?: string;
   entreprise_nom?: string;
+  recherche_mot_cle?: string;
 }): Promise<ExploreResponse> {
   const p = new URLSearchParams();
   if (params.page)               p.set('page', String(params.page));
@@ -572,6 +573,7 @@ export async function getExploreOffers(params: {
   if (params.periode_jours)      p.set('periode_jours', String(params.periode_jours));
   if (params.titre)              p.set('titre', params.titre);
   if (params.entreprise_nom)              p.set('entreprise_nom', params.entreprise_nom);
+  if (params.recherche_mot_cle)           p.set('recherche_mot_cle', params.recherche_mot_cle);
 
   const response = await fetch(`${API_URL}/explore?${p.toString()}`);
   if (!response.ok) {

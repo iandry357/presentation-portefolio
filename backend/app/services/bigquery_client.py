@@ -57,6 +57,7 @@ def fetch_offers(
     periode_jours: Optional[int] = None,
     titre: Optional[str] = None,
     entreprise_nom: Optional[str] = None,
+    recherche_mot_cle: Optional[str] = None,
 ) -> dict:
     """
     Lecture paginée des offres depuis BigQuery avec filtres optionnels.
@@ -97,6 +98,10 @@ def fetch_offers(
         conditions.append("LOWER(entreprise_nom) LIKE LOWER(@entreprise_nom)")
         params.append(bigquery.ScalarQueryParameter("entreprise_nom", "STRING", f"%{entreprise_nom}%"))
 
+    if recherche_mot_cle:
+        conditions.append("LOWER(TRIM(recherche_mot_cle)) = LOWER(TRIM(@recherche_mot_cle))")
+        params.append(bigquery.ScalarQueryParameter("recherche_mot_cle", "STRING", recherche_mot_cle))
+
     where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
 
     # Requête count
@@ -125,7 +130,8 @@ def fetch_offers(
             libelle_rome,
             url_offre,
             date_publication,
-            date_collecte
+            date_collecte,
+            recherche_mot_cle
         FROM {table}
         {where_clause}
         ORDER BY date_publication DESC, id_unique ASC
@@ -185,7 +191,15 @@ def fetch_filter_options() -> dict:
                     HAVING nb > 5
                     ORDER BY nb DESC
                 )
-            ) as entreprise_nom
+            ) as entreprise_nom,
+            ARRAY_AGG(
+                        DISTINCT LOWER(
+                                        TRIM(
+                                            recherche_mot_cle
+                                            )
+                                    ) 
+                        IGNORE NULLS ORDER BY LOWER(TRIM(recherche_mot_cle))
+                    ) as recherche_mot_cle
         FROM {table}
     """
 
@@ -195,4 +209,5 @@ def fetch_filter_options() -> dict:
         "types_contrat": list(result.types_contrat or []),
         "regions": list(result.regions or []),
         "entreprise_nom": list(result.entreprise_nom or []),
+        "recherche_mot_cle": list(result.recherche_mot_cle or []),
     }
