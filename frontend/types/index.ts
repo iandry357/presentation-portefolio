@@ -296,6 +296,7 @@ export interface ExploreOffer {
   url_offre: string | null;
   date_publication: string | null;
   date_collecte: string | null;
+  recherche_mot_cle: string | null;
 }
 
 export interface ExploreResponse {
@@ -311,4 +312,5 @@ export interface FilterOptions {
   types_contrat: string[];
   regions: string[];
   entreprise_nom: string[];
+  recherche_mot_cle: string[];
 }

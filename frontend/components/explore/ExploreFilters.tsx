@@ -11,6 +11,7 @@ interface ExploreFiltersProps {
     localisation_libelle: string;
     periode_jours: string;
     entreprise_nom: string;
+    recherche_mot_cle: string;
   };
   onChange: (key: string, value: string) => void;
   onReset: () => void;
@@ -90,6 +91,23 @@ export default function ExploreFilters({
           <option value="">Tous les contrats</option>
           {filters.types_contrat.map(t => (
             <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Mot-clé de recherche */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Mot-clé de recherche
+        </label>
+        <select
+          value={values.recherche_mot_cle}
+          onChange={e => onChange("recherche_mot_cle", e.target.value)}
+          className="w-full border border-gray-200 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-gray-400"
+        >
+          <option value="">Tous les mots-clés</option>
+          {filters.recherche_mot_cle.map(k => (
+            <option key={k} value={k}>{k}</option>
           ))}
         </select>
       </div>

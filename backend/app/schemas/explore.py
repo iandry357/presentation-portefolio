@@ -24,6 +24,7 @@ class ExploreOffer(BaseModel):
     url_offre: Optional[str] = None
     date_publication: Optional[str] = None
     date_collecte: Optional[str] = None
+    recherche_mot_cle: Optional[str] = None
 
 
 class ExploreResponse(BaseModel):
@@ -39,3 +40,4 @@ class FilterOptions(BaseModel):
     types_contrat: list[str]
     regions: list[str]
     entreprise_nom: list[str]
+    recherche_mot_cle: list[str]
