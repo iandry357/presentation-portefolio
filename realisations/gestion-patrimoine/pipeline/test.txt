@@ -1,0 +1,192 @@
+"""
+test_piste_connection.py
+
+Script de test ISOLE (pas un composant du pipeline final) pour valider :
+    1. L'authentification OAuth2 sur PISTE
+    2. Un appel /search sur le CGI avec un seul mot-clé
+    3. Un appel /consult/getArticle sur le premier résultat trouvé
+
+Objectif : afficher les réponses brutes pour confirmer ou corriger les
+hypothèses de structure JSON faites dans legifrance_collector.py
+(voir les ⚠️ dans ce fichier).
+
+Usage :
+    python test_piste_connection.py
+
+Nécessite un fichier .env à côté de ce script avec :
+    PISTE_ENV=sandbox            # ou "production"
+    PISTE_CLIENT_ID=...
+    PISTE_CLIENT_SECRET=...
+"""
+
+import json
+import os
+
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+PISTE_ENV = os.getenv("PISTE_ENV", "sandbox").lower()
+CLIENT_ID = os.getenv("PISTE_CLIENT_ID")
+CLIENT_SECRET = os.getenv("PISTE_CLIENT_SECRET")
+
+if not CLIENT_ID or not CLIENT_SECRET:
+    raise ValueError("PISTE_CLIENT_ID et PISTE_CLIENT_SECRET doivent être définis dans .env")
+
+if PISTE_ENV == "production":
+    TOKEN_URL = "https://oauth.piste.gouv.fr/api/oauth/token"
+    BASE_URL = "https://api.piste.gouv.fr"
+else:
+    TOKEN_URL = "https://sandbox-oauth.piste.gouv.fr/api/oauth/token"
+    BASE_URL = "https://sandbox-api.piste.gouv.fr"
+
+API_URL = f"{BASE_URL}/dila/legifrance/lf-engine-app"
+
+CODE_CIBLE = "Code général des impôts"
+CODE_FACETTE_NAME = "NOM_CODE"  # hypothèse à vérifier
+MOT_CLE_TEST = "donation"
+
+
+def afficher_titre(titre: str):
+    print("\n" + "=" * 70)
+    print(titre)
+    print("=" * 70)
+
+
+def get_access_token() -> str:
+    afficher_titre("ETAPE 1 — Authentification OAuth2")
+    response = requests.post(
+        TOKEN_URL,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            "grant_type": "client_credentials",
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "scope": "openid",
+        },
+        timeout=30,
+    )
+    print(f"Status code : {response.status_code}")
+    response.raise_for_status()
+    token_data = response.json()
+    print(f"Token obtenu, expire dans {token_data.get('expires_in')}s")
+    return token_data["access_token"]
+
+
+def tester_search(token: str) -> dict:
+    afficher_titre(f"ETAPE 2 — POST /search (mot-clé='{MOT_CLE_TEST}', code='{CODE_CIBLE}')")
+
+    payload = {
+        "recherche": {
+            "champs": [
+                {
+                    "typeChamp": "ALL",
+                    "criteres": [
+                        {
+                            "typeRecherche": "UN_DES_MOTS",
+                            "valeur": MOT_CLE_TEST,
+                            "operateur": "ET",
+                        }
+                    ],
+                    "operateur": "ET",
+                }
+            ],
+            "filtres": [
+                {
+                    "facette": CODE_FACETTE_NAME,
+                    "valeurs": [CODE_CIBLE],
+                }
+            ],
+            "pageNumber": 1,
+            "pageSize": 5,
+            "operateur": "ET",
+            "sort": "PERTINENCE",
+            "typePagination": "ARTICLE",
+        },
+        "fond": "CODE_DATE",
+    }
+
+    print("Payload envoyé :")
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+
+    response = requests.post(
+        f"{API_URL}/search",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        json=payload,
+        timeout=30,
+    )
+    print(f"\nStatus code : {response.status_code}")
+
+    if response.status_code != 200:
+        print("Réponse brute (erreur) :")
+        print(response.text)
+        response.raise_for_status()
+
+    resultat = response.json()
+    print("\nRéponse brute complète :")
+    print(json.dumps(resultat, ensure_ascii=False, indent=2))
+
+    return resultat
+
+
+def tester_get_article(token: str, article_id: str) -> dict:
+    afficher_titre(f"ETAPE 3 — POST /consult/getArticle (id={article_id})")
+
+    response = requests.post(
+        f"{API_URL}/consult/getArticle",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        json={"id": article_id},
+        timeout=30,
+    )
+    print(f"Status code : {response.status_code}")
+
+    if response.status_code != 200:
+        print("Réponse brute (erreur) :")
+        print(response.text)
+        response.raise_for_status()
+
+    resultat = response.json()
+    print("\nRéponse brute complète :")
+    print(json.dumps(resultat, ensure_ascii=False, indent=2))
+
+    return resultat
+
+
+def main():
+    token = get_access_token()
+    resultat_recherche = tester_search(token)
+
+    # Tentative d'extraction d'un id selon l'hypothèse de structure actuelle.
+    # Si ça ne trouve rien, regarde le JSON affiché ci-dessus pour repérer
+    # le bon chemin et ajuste ici pour continuer le test manuellement.
+    ids_trouves = []
+    for resultat in resultat_recherche.get("results", []):
+        for titre in resultat.get("titles", []):
+            if titre.get("id"):
+                ids_trouves.append(titre["id"])
+
+    afficher_titre("RESUME")
+    print(f"Nombre d'ids extraits avec l'hypothèse actuelle : {len(ids_trouves)}")
+
+    if ids_trouves:
+        print(f"Test de récupération du premier article : {ids_trouves[0]}")
+        tester_get_article(token, ids_trouves[0])
+    else:
+        print(
+            "Aucun id extrait — regarde la réponse brute du /search ci-dessus "
+            "pour trouver le bon chemin JSON, et corrige extraire_ids_articles() "
+            "dans legifrance_collector.py en conséquence."
+        )
+
+
+if __name__ == "__main__":
+    main()
