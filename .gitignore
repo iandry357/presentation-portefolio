@@ -132,3 +132,8 @@ realisations/banque-de-france/pipeline/.env
 
 .env
 realisations/gestion-patrimoine/pipeline/data/*
+gcp/gestion-patrimoine/infra/key_b64.txt
+gcp/gestion-patrimoine/infra/terraform.tfvars 
+gcp/gestion-patrimoine/infra/.terraform/
+gcp/gestion-patrimoine/infra/.terraform.lock.hcl
+realisations/gestion-patrimoine/gcp_sa_gestion_patrimoine.json
