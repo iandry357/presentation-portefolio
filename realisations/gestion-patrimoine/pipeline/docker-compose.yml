@@ -1,0 +1,30 @@
+# docker-compose.yml — pipeline gestion-patrimoine
+#
+# Usage (pattern "one-shot" du portfolio, jamais `up -d` pour ce service) :
+#   docker-compose build
+#   docker-compose run --rm pipeline
+#   docker-compose run --rm pipeline python pipeline/collectors/legifrance_collector.py   (debug ciblé)
+
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    container_name: gestion-patrimoine-pipeline
+    env_file:
+      - .env
+    volumes:
+      # Clé de service GCP — à récupérer via Terraform (SA pipeline-gestion-patrimoine),
+      # jamais commitée en Git (voir .gitignore existant du portfolio)
+      - ../gcp_sa_gestion_patrimoine.json:/app/gcp_sa_gestion_patrimoine.json:ro
+      # Persiste les fichiers intermédiaires (raw_articles.json, chunks.json)
+      # entre deux étapes du pipeline lancées séparément pour du debug —
+      # chemin cible aligné sur pipeline/config.py (DATA_DIR relatif à /app/pipeline/)
+      - ./data:/app/pipeline/data
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true

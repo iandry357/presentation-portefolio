@@ -1,0 +1,11 @@
+requests==2.32.3
+python-dotenv==1.0.1
+google-cloud-bigquery==3.25.0
+tenacity==9.0.0
+
+# chromadb : version client a verifier contre celle deja utilisee par le
+# serveur ChromaDB sur OVH (l'API a change entre les branches 0.x et 1.x).
+# 0.5.23 est propose par prudence (derniere version 0.x, compatible avec la
+# plupart des deploiements ChromaDB existants du portfolio) - a confirmer
+# ou ajuster par Ian'ch avant le premier build.
+chromadb==0.5.23
