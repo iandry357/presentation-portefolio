@@ -127,3 +127,8 @@ realisations/banque-de-france/training/eba/__pycache__
 realisations/banque-de-france/training/eba/data/*
 realisations/banque-de-france/ml/.env
 realisations/banque-de-france/ml/models/classification
+realisations/banque-de-france/pipeline/.env
+
+
+.env
+realisations/gestion-patrimoine/pipeline/data/*
