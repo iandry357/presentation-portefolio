@@ -12,6 +12,7 @@ interface Message {
   role: 'user' | 'assistant';
   texte: string;
   articles_cites?: ArticleCite[];
+  latence_ms?: number;
 }
 
 const THEMATIQUE_LABELS: Record<string, string> = {
@@ -37,7 +38,7 @@ export default function ChatAssistant({ sessionId, profil }: Props) {
     premierTourDeclenche.current = true;
     setLoading(true);
     envoyerMessage(sessionId)
-      .then(res => setMessages([{ role: 'assistant', texte: res.texte, articles_cites: res.articles_cites }]))
+      .then(res => setMessages([{ role: 'assistant', texte: res.texte, articles_cites: res.articles_cites, latence_ms: res.latence_ms }]))
       .catch(e => setError(e instanceof Error ? e.message : 'Erreur inconnue'))
       .finally(() => setLoading(false));
   }, [sessionId]);
@@ -55,7 +56,7 @@ export default function ChatAssistant({ sessionId, profil }: Props) {
     setError(null);
     try {
       const res = await envoyerMessage(sessionId, message);
-      setMessages(prev => [...prev, { role: 'assistant', texte: res.texte, articles_cites: res.articles_cites }]);
+      setMessages(prev => [...prev, { role: 'assistant', texte: res.texte, articles_cites: res.articles_cites, latence_ms: res.latence_ms }]);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Erreur inconnue');
     } finally {
@@ -122,6 +123,11 @@ export default function ChatAssistant({ sessionId, profil }: Props) {
                       </a>
                     ))}
                   </div>
+                )}
+                {m.role === 'assistant' && m.latence_ms !== undefined && (
+                  <p className="text-[11px] text-gray-400 mt-2">
+                    Généré en {(m.latence_ms / 1000).toFixed(1)}s
+                  </p>
                 )}
               </div>
             </div>
