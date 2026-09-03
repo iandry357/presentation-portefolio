@@ -26,6 +26,7 @@ export interface ArticleCite {
 export interface ChatResponse {
   texte: string;
   articles_cites: ArticleCite[];
+  latence_ms: number;
 }
 
 export const THEMATIQUES = [

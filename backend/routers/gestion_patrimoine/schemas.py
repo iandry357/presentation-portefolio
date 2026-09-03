@@ -38,3 +38,4 @@ class ArticleCiteSchema(BaseModel):
 class ChatResponseSchema(BaseModel):
     texte: str
     articles_cites: list[ArticleCiteSchema]
+    latence_ms: int
