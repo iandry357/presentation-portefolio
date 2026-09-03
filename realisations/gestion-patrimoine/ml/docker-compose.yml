@@ -1,0 +1,17 @@
+services:
+  ml-service:
+    build:
+      context: ..
+      dockerfile: ml/Dockerfile
+    container_name: gestion-patrimoine-ml
+    env_file:
+      - ../.env
+    ports:
+      - "8008:8008"
+    networks:
+      - gestion-patrimoine-ml-network
+    restart: "no"
+
+networks:
+  gestion-patrimoine-ml-network:
+    external: true

@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+httpx
+requests
+chromadb==0.5.23
