@@ -173,14 +173,13 @@ Corrige et renvoie un nouveau JSON strictement conforme au schéma.
 # Appel LLM avec fallback Mistral → Gemini (géré nativement par LiteLLM)
 # --------------------------------------------------------------------------
 
-def _appeler_llm(prompt: str) -> str:
-    response = litellm.completion(
+def _appeler_llm(prompt: str):
+    return litellm.completion(
         model=MODELE_PRIMAIRE,
         messages=[{"role": "user", "content": prompt}],
         fallbacks=[MODELE_FALLBACK],
         response_format={"type": "json_object"},
     )
-    return response.choices[0].message.content
 
 
 # --------------------------------------------------------------------------
@@ -192,7 +191,8 @@ def generer_profil(thematique: Optional[str] = None) -> dict:
     Génère un profil client synthétique validé.
 
     :param thematique: une des valeurs de THEMATIQUES, ou None pour tirage aléatoire uniforme
-    :return: dict conforme au schéma Pydantic de la thématique
+    :return: {"profil": dict conforme au schéma Pydantic, "usage": {"tokens_entree": int,
+        "tokens_sortie": int, "cout_estime": float}}
     :raises ProfilAgentError: si l'appel LLM échoue (après fallback) ou si la
         validation Pydantic échoue après le retry
     """
@@ -208,15 +208,22 @@ def generer_profil(thematique: Optional[str] = None) -> dict:
         prompt = _construire_prompt(thematique, erreur_precedente)
 
         try:
-            contenu_brut = _appeler_llm(prompt)
+            response = _appeler_llm(prompt)
         except Exception as exc:
             logger.error("Échec appel LLM (tentative %s) : %s", tentative, exc)
             raise ProfilAgentError(f"Échec appel LLM (Mistral + fallback Gemini) : {exc}") from exc
 
+        contenu_brut = response.choices[0].message.content
+
         try:
             data = json.loads(contenu_brut)
             profil = schema_cls.model_validate(data)
-            return profil.model_dump()
+            usage = {
+                "tokens_entree": response.usage.prompt_tokens,
+                "tokens_sortie": response.usage.completion_tokens,
+                "cout_estime": litellm.completion_cost(completion_response=response),
+            }
+            return {"profil": profil.model_dump(), "usage": usage}
         except (json.JSONDecodeError, ValidationError) as exc:
             logger.warning("Validation Pydantic échouée (tentative %s) : %s", tentative, exc)
             erreur_precedente = str(exc)

@@ -30,6 +30,7 @@ import json
 import logging
 import os
 from typing import Optional
+import time
 
 import httpx
 from pydantic import BaseModel, ValidationError
@@ -123,10 +124,13 @@ def _appeler_llama_server(messages: list[dict]) -> str:
 # Réponse de repli (anti-hallucination / limite d'itérations atteinte)
 # --------------------------------------------------------------------------
 
-def _reponse_refus(motif: str) -> dict:
+def _reponse_refus(motif: str, latence_ms: int) -> dict:
     return {
         "texte": f"Je ne peux pas répondre de manière fiable : {motif}",
         "articles_cites": [],
+        "tokens_entree": 0,
+        "tokens_sortie": 0,
+        "latence_ms": latence_ms,
     }
 
 
@@ -151,6 +155,7 @@ def repondre(
     """
     historique = historique or []
     premier_tour = len(historique) == 0
+    debut = time.perf_counter()
 
     messages: list[dict] = [{"role": "system", "content": _construire_system_prompt(thematique)}]
 
@@ -210,12 +215,17 @@ def repondre(
                 messages.append({"role": "user", "content": f"JSON invalide : {exc}. Corrige et renvoie."})
                 continue
 
+            latence_ms = int((time.perf_counter() - debut) * 1000)
+
             if not reponse.articles_cites:
-                return _reponse_refus("aucun article pertinent trouvé dans le référentiel.")
+                return _reponse_refus("aucun article pertinent trouvé dans le référentiel.", latence_ms)
 
             return {
                 "texte": reponse.texte,
                 "articles_cites": [a.model_dump() for a in reponse.articles_cites],
+                "tokens_entree": 0,
+                "tokens_sortie": 0,
+                "latence_ms": latence_ms,
             }
 
         else:
@@ -226,4 +236,7 @@ def repondre(
             })
             continue
 
-    return _reponse_refus("nombre maximal de recherches atteint sans résultat concluant.")
+    return _reponse_refus(
+        "nombre maximal de recherches atteint sans résultat concluant.",
+        int((time.perf_counter() - debut) * 1000),
+    )
