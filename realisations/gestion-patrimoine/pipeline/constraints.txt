@@ -1,0 +1,10 @@
+# constraints.txt — pipeline gestion-patrimoine
+#
+# Contrairement aux pipelines SG/Banque de France, ce pipeline n'embarque pas
+# sentence-transformers/torch (les embeddings sont calculés via un appel HTTP
+# à l'embedding-service existant, voir config.py). Pas de conflit de
+# dépendances ML connu à ce jour, donc rien à contraindre ici pour l'instant.
+#
+# A completer si une dependance transitive pose probleme au premier build
+# (meme pattern que training/constraints.txt des autres MVPs : pin torch CPU
+# en premier si jamais une lib tire torch GPU par erreur).

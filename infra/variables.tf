@@ -226,3 +226,9 @@ variable "gcp_service_account_json_banque" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_service_account_json_gestion_patrimoine" {
+  description = "GCP Service Account JSON Gestion Patrimoine"
+  type        = string
+  sensitive   = true
+}

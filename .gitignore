@@ -127,3 +127,13 @@ realisations/banque-de-france/training/eba/__pycache__
 realisations/banque-de-france/training/eba/data/*
 realisations/banque-de-france/ml/.env
 realisations/banque-de-france/ml/models/classification
+realisations/banque-de-france/pipeline/.env
+
+
+.env
+realisations/gestion-patrimoine/pipeline/data/*
+gcp/gestion-patrimoine/infra/key_b64.txt
+gcp/gestion-patrimoine/infra/terraform.tfvars 
+gcp/gestion-patrimoine/infra/.terraform/
+gcp/gestion-patrimoine/infra/.terraform.lock.hcl
+realisations/gestion-patrimoine/gcp_sa_gestion_patrimoine.json
