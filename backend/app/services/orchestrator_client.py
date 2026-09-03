@@ -19,6 +19,7 @@ SERVICE_PORTS = {
     "sg-ml": "8003",
     "embedding-service": "8004",
     "banque-ml": "8007",
+    "gestion-patrimoine-ml": "8008",
 }
 
 
