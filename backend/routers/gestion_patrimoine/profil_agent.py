@@ -151,6 +151,10 @@ def _construire_prompt(thematique: str, erreur_precedente: Optional[str] = None)
 
 Thématique imposée : {thematique}
 
+Varie fortement les caractéristiques du profil à chaque génération : âge, situation familiale,
+montants et objectif doivent être réalistes mais différents d'un profil à l'autre. Évite les
+valeurs par défaut ou stéréotypées (ex: systématiquement 45 ans, marié, 2 enfants).
+
 Réponds UNIQUEMENT avec un objet JSON valide respectant strictement ce schéma :
 {json.dumps(schema_json, ensure_ascii=False, indent=2)}
 
@@ -179,6 +183,7 @@ def _appeler_llm(prompt: str):
         messages=[{"role": "user", "content": prompt}],
         fallbacks=[MODELE_FALLBACK],
         response_format={"type": "json_object"},
+        temperature=1.0,
     )
 
 
