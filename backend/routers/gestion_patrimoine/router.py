@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/gestion-patrimoine", tags=["Gestion Patrimoine"])
 
 ML_SERVICE_KEY = "gestion-patrimoine-ml"
-ML_SERVICE_TIMEOUT_SEC = 400.0  # couvre le pire cas : 3 itérations x 120s côté ml-service + marge
+ML_SERVICE_TIMEOUT_SEC = 800.0  # couvre le pire cas : 3 itérations x 120s côté ml-service + marge
 
 
 def _ml_service_url() -> str:
