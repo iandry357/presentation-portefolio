@@ -47,6 +47,15 @@ const POCS: PocCard[] = [
     description:
       "POC Suptech — classification multi-label des griefs de sanction ACPR (CamemBERT fine-tuné + têtes k-NN), RAG sur la veille réglementaire, topic modeling LDA et scoring composite de risque bancaire à partir des données EBA Transparency Exercise.",
     tags: ['Classification', 'RAG', 'Topic Modeling', 'k-NN', 'ChromaDB', 'BigQuery', 'Vertex AI'],
+    status: 'live',
+  },
+  {
+    href: '/realisations/gestion-patrimoine',
+    title: 'Gestion Patrimoine',
+    company: 'Copilote patrimonial',
+    description:
+      "Copilote d'ingénierie patrimoniale — génération de profils clients synthétiques RGPD-safe (Mistral, fallback Gemini) et assistant RAG juridique groundé sur le Code Général des Impôts (function calling ReAct, Qwen2.5-Instruct local OVH), citation d'article obligatoire.",
+    tags: ['RAG', 'Function Calling', 'ChromaDB', 'LiteLLM', 'Pydantic', 'llama.cpp', 'PostgreSQL'],
     status: 'wip',
   },
 ];
