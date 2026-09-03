@@ -57,6 +57,15 @@ services:
     ram_mb: 700
     compose_file: /home/ubuntu/ml-project/realisations/banque-de-france/ml/docker-compose.yml
     compose_service: ml-service
+    
+  gestion-patrimoine-ml:
+    container_name: gestion-patrimoine-ml
+    mvp: gestion-patrimoine
+    port: 8008
+    priority: on-demand
+    ram_mb: 300
+    compose_file: /home/ubuntu/ml-project/realisations/gestion-patrimoine/ml/docker-compose.yml
+    compose_service: ml-service
 
   neo4j:
     container_name: sanofi-neo4j
