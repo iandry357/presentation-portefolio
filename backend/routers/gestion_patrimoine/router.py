@@ -151,14 +151,16 @@ async def chat_route(
         historique.append({"role": "user", "content": body.message})
         payload["historique"] = historique
 
-    try:
-        async with httpx.AsyncClient(timeout=ML_SERVICE_TIMEOUT_SEC) as client:
-            response = await client.post(_ml_service_url(), json=payload)
-            response.raise_for_status()
-            data = response.json()
-    except Exception as e:
-        logger.error(f"❌ /gestion-patrimoine/chat ml-service error: {e}")
-        raise HTTPException(status_code=502, detail="Échec de communication avec ml-service")
+        try:
+            async with httpx.AsyncClient(timeout=ML_SERVICE_TIMEOUT_SEC) as client:
+                response = await client.post(_ml_service_url(), json=payload)
+                if response.status_code >= 400:
+                    logger.error(f"❌ /gestion-patrimoine/chat ml-service returned {response.status_code}: {response.text}")
+                    raise HTTPException(status_code=502, detail=f"ml-service error: {response.text}")
+                data = response.json()
+        except httpx.HTTPError as e:
+            logger.error(f"❌ /gestion-patrimoine/chat ml-service unreachable: {e}")
+            raise HTTPException(status_code=502, detail="Échec de communication avec ml-service")
 
     try:
         if not premier_tour:
