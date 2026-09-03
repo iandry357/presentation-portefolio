@@ -59,30 +59,32 @@ resource "scaleway_container" "backend" {
     EMBEDDING_SERVICE_PORT                   = "8004"
     CHROMA_COLLECTION_BANQUE                 = "banque_de_france"
     OVH_ML_PORT_BANQUE                       = "8007"
+    OVH_ML_PORT_GESTION_PATRIMOINE           = "8008"
     OVH_ORCHESTRATOR_PORT                    = "8080"
   }
 
   secret_environment_variables = {
-    GEMINI_API_KEY                    = var.gemini_api_key
-    SECRET_KEY                        = var.secret_key
-    MISTRAL_API_KEY                   = var.mistral_api_key
-    GROQ_API_KEY                      = var.groq_api_key
-    LANGSMITH_API_KEY                 = var.langsmith_api_key
-    LANGFUSE_PUBLIC_KEY               = var.langfuse_public_key
-    LANGFUSE_SECRET_KEY               = var.langfuse_secret_key
-    VOYAGE_API_KEY                    = var.voyage_api_key
-    FRANCE_TRAVAIL_CLIENT_ID          = var.france_travail_client_id
-    FRANCE_TRAVAIL_CLIENT_SECRET      = var.france_travail_client_secret
-    DATABASE_URL                      = var.database_url
-    OPENAI_API_KEY                    = var.openai_api_key
-    POSTGRES_PASSWORD                 = var.postgres_password
-    SERPER_API_KEY                    = var.serper_api_key
-    GCP_SERVICE_ACCOUNT_JSON          = var.gcp_service_account_json
-    GCP_SERVICE_ACCOUNT_JSON_SANOFI   = var.gcp_service_account_json_sanofi
-    CHROMA_PASSWORD                   = var.chroma_password
-    GCP_SERVICE_ACCOUNT_JSON_SAVENCIA = var.gcp_service_account_json_savencia
-    GCP_SERVICE_ACCOUNT_JSON_SG       = var.gcp_service_account_json_sg
-    GCP_SERVICE_ACCOUNT_JSON_BANQUE   = var.gcp_service_account_json_banque
+    GEMINI_API_KEY                              = var.gemini_api_key
+    SECRET_KEY                                  = var.secret_key
+    MISTRAL_API_KEY                             = var.mistral_api_key
+    GROQ_API_KEY                                = var.groq_api_key
+    LANGSMITH_API_KEY                           = var.langsmith_api_key
+    LANGFUSE_PUBLIC_KEY                         = var.langfuse_public_key
+    LANGFUSE_SECRET_KEY                         = var.langfuse_secret_key
+    VOYAGE_API_KEY                              = var.voyage_api_key
+    FRANCE_TRAVAIL_CLIENT_ID                    = var.france_travail_client_id
+    FRANCE_TRAVAIL_CLIENT_SECRET                = var.france_travail_client_secret
+    DATABASE_URL                                = var.database_url
+    OPENAI_API_KEY                              = var.openai_api_key
+    POSTGRES_PASSWORD                           = var.postgres_password
+    SERPER_API_KEY                              = var.serper_api_key
+    GCP_SERVICE_ACCOUNT_JSON                    = var.gcp_service_account_json
+    GCP_SERVICE_ACCOUNT_JSON_SANOFI             = var.gcp_service_account_json_sanofi
+    CHROMA_PASSWORD                             = var.chroma_password
+    GCP_SERVICE_ACCOUNT_JSON_SAVENCIA           = var.gcp_service_account_json_savencia
+    GCP_SERVICE_ACCOUNT_JSON_SG                 = var.gcp_service_account_json_sg
+    GCP_SERVICE_ACCOUNT_JSON_BANQUE             = var.gcp_service_account_json_banque
+    GCP_SERVICE_ACCOUNT_JSON_GESTION_PATRIMOINE = var.gcp_service_account_json_gestion_patrimoine
   }
 
   lifecycle {
