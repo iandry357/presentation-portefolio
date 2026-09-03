@@ -39,7 +39,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 | **Explorer** | Parcours paginé de toutes les offres collectées avec filtres avancés |
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
-| **Réalisations** | 4 MVPs sectoriels en production — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA) |
+| **Réalisations** | 5 MVPs sectoriels — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct) |
 
 ---
 
@@ -60,13 +60,15 @@ Backend (FastAPI — Scaleway Serverless Container)
           │     ├── Scoring hybride (BM25 + VoyageAI + rerank-2)
           │     └── Enrichissement CrewAI (Parser → Analyste → Rédacteur)
           │
-          ├── Routers Réalisations (sanofi / savencia / sg / banque_de_france)
-          │     └── orchestrator_client.py ──► Orchestrateur OVH :8080
-          │                                       │
-          │                                       ▼
-          │                              Wake-on-demand des services ML
-          │                              (démarrage/arrêt containers Docker,
-          │                               timer d'inactivité 5 min)
+          ├── Routers Réalisations (sanofi / savencia / sg / banque_de_france / gestion_patrimoine)
+          │     ├── orchestrator_client.py ──► Orchestrateur OVH :8080
+          │     │                                 │
+          │     │                                 ▼
+          │     │                        Wake-on-demand des services ML
+          │     │                        (démarrage/arrêt containers Docker,
+          │     │                         timer d'inactivité 5 min)
+          │     │
+          │     └── profil_agent.py (gestion_patrimoine) ──► Mistral / Gemini (LiteLLM, appel direct, pas de service dédié)
           │
           ├── API Jobs / CV / Explorer / Market / Feedback
           │
@@ -83,9 +85,10 @@ OVH VPS (51.68.130.23) — Compute ML / VectorDB
     ├── ChromaDB (port 8000, always-on)
     ├── Sanofi   : ml-service (8001), Neo4j (7474/7687), llama-server Mistral 7B (8006)
     ├── Savencia : ml-service (8002)
-    ├── SG Assurances   : ml-service (8003), llama-server Qwen (8005)
-    ├── Embedding Service (8004) — partagé SG Assurances + Banque de France
-    └── Banque de France : ml-service (8007) — classification, topic modeling, scoring EBA
+    ├── SG Assurances   : ml-service (8003), llama-server Qwen fine-tuné (8005)
+    ├── Embedding Service (8004) — partagé SG Assurances + Banque de France + Gestion Patrimoine
+    ├── Banque de France : ml-service (8007) — classification, topic modeling, scoring EBA
+    └── Gestion Patrimoine : ml-service (8008, function calling ReAct), llama-server Qwen2.5-3B base (8009)
 ```
 
 ---
@@ -128,7 +131,7 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
   - CamemBERT NER — F1 = 0.84 (5 entités : NUMERO_POLICE, NOM_ASSURE, MONTANT, DATE, ADRESSE)
   - QLoRA Qwen2.5-1.5B — win-rate = 29 % (r=32, lora_alpha=64, NEFTune noise_alpha=5)
 - Serving : llama.cpp sur OVH port 8005 (Q4_K_M ~934 Mo, ~20 tok/sec CPU)
-- ML Service OVH port 8003, Embedding Service port 8004 (partagé avec Banque de France)
+- ML Service OVH port 8003, Embedding Service port 8004 (partagé avec Banque de France et Gestion Patrimoine)
 
 ### Banque de France — ✅ En production
 *Cible : offre Data Scientist Suptech (ACPR), en complément du MVP SG Assurances*
@@ -139,6 +142,18 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 - RAG + Topic Modeling LDA restreints à la veille (décisions ACPR exclues, registres de langue trop différents)
 - Frontend : `/realisations/banque-de-france` — Actualités, Ask AI, ML Insights (Topic Modeling / Scoring EBA / Classification avec démo interactive sur 82 décisions réelles)
 - Backlog assumé : Webstat (fréquence des séries insuffisante), NER (chantier lourd pour un gain surtout méthodologique)
+
+### Gestion Patrimoine — 🚧 Développé et testé, non déployé en production (branche non mergée)
+*Copilote d'ingénierie patrimoniale — démonstration d'un pattern agentique RAG juridique avec anti-hallucination*
+
+- Génération de profils clients synthétiques RGPD-safe via `profil_agent` (Mistral, fallback Gemini natif via LiteLLM, validation Pydantic stricte, 1 retry sur échec)
+- Pipeline ETL Légifrance (API PISTE) → 213 articles du Code Général des Impôts, 761 chunks (chunking par marqueurs juridiques), BigQuery `referentiel_patrimoine` + ChromaDB
+- `assistant_agent` : function calling **simulé par prompt (pattern ReAct)** — pas de function calling natif OpenAI-style, choix délibéré pour la robustesse sur un petit modèle local quantifié et la cohérence avec le pattern d'appel `llama-server` existant (SG/Sanofi)
+- Anti-hallucination stricte : refus explicite si aucun article pertinent trouvé, citation obligatoire (numéro d'article + URL Légifrance) sur toute réponse
+- Serving : llama.cpp, OVH port 8009, Qwen2.5-3B-Instruct **base** (non fine-tuné), `-c 4096`
+- ML Service OVH port 8008 (boucle ReAct + `search_referentiel`)
+- Frontend dédié : flux séquentiel profil → chat, format de conversation propre (carte profil persistante + fil de discussion, articles cités en pastilles cliquables)
+- **Statut** : testé de bout en bout avec succès (génération profil → RAG → réponse citée, latence mesurée ~94s sur ce VPS), déployé manuellement sur OVH pour validation, **non mergé dans `infra-scaleway-v1.1`** — voir Roadmap
 
 ### Mirakl — 🔜 Prochain MVP
 *E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
@@ -191,7 +206,9 @@ Timer 5 min armé, reset à chaque heartbeat
         ▼
 Inactivité 5 min → container stoppé automatiquement
 ```
-Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, Embedding Service (partagé SG + Banque de France), Banque de France ML.
+Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, Embedding Service (partagé SG + Banque de France + Gestion Patrimoine), Banque de France ML, Gestion Patrimoine ML.
+
+> ⚠️ Les `llama-server` (SG, Sanofi, Gestion Patrimoine) sont **hors du périmètre de l'orchestrateur** — services systemd tournant en continu, pas des conteneurs Docker wake-on-demand. Avec 3 modèles désormais potentiellement actifs en permanence, la pression RAM/CPU du VPS est un point de vigilance actif (voir Roadmap).
 
 ### CI/CD (déploiement application)
 ```
@@ -214,7 +231,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 |---|---|
 | Serverless Container | Backend FastAPI (`min_scale=0` + lazy loading) |
 | Serverless Container | Frontend Next.js |
-| PostgreSQL managé + pgvector | Données candidat, offres trackées, embeddings |
+| PostgreSQL managé + pgvector | Données candidat, offres trackées, embeddings, sessions/messages MVPs sectoriels |
 | Container Registry | Images Docker backend + frontend |
 | Secret Manager | Secrets applicatifs (noms en kebab-case) |
 | Terraform state | Bucket S3 `portfolio-emploi-tfstate` |
@@ -224,6 +241,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 |---|---|
 | BigQuery `emploi_marche.offres_brutes` | Source de vérité des offres marché (partitionné `date_publication`, clustérisé `source, code_rome`) |
 | BigQuery `stg_offres`, `int_offres_agg_*` | Couche de transformation dbt (staging + intermediate) |
+| BigQuery `referentiel_patrimoine.articles_cgi` | Traçabilité des articles du CGI (Gestion Patrimoine) |
 | Cloud Run Job `sync-ft-bigquery` | Pipeline de collecte France Travail + Gmail → BigQuery |
 | Cloud Run Job `dbt-emploi-marche` | Transformation dbt déclenchée après chaque sync réussie |
 | Cloud Scheduler × 3 | Sync 7h/12h quotidien + exploration ROME 1er/15 du mois |
@@ -245,10 +263,12 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Neo4j | 7474 / 7687 | Graphe Therapeutic Insight (Sanofi Release 2) |
 | Savencia ML Service | 8002 | Topic modeling, inférence ViT |
 | SG ML Service | 8003 | YOLO, NER, topic modeling |
-| Embedding Service | 8004 | Embeddings pour RAG — partagé SG Assurances + Banque de France |
-| llama-server Qwen (SG) | 8005 | Serving Qwen2.5 fine-tuné (`-c 1024`) |
+| Embedding Service | 8004 | Embeddings pour RAG — partagé SG Assurances, Banque de France, Gestion Patrimoine |
+| llama-server Qwen fine-tuné (SG) | 8005 | Serving Qwen2.5 fine-tuné QLoRA (`-c 1024`) |
 | llama-server Mistral (Sanofi) | 8006 | Serving Mistral 7B fine-tuné (`-c 2048`) |
 | Banque de France ML Service | 8007 | Classification griefs, topic modeling, scoring EBA |
+| Gestion Patrimoine ML Service | 8008 | Boucle ReAct, function calling simulé, `search_referentiel` |
+| llama-server Qwen2.5-3B base (Gestion Patrimoine) | 8009 | Serving Qwen2.5-3B-Instruct **non fine-tuné** (`-c 4096`) |
 
 Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Actions** sur la branche `infra-scaleway-v1.1`.
 
@@ -261,7 +281,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | Frontend | Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Recharts, TipTap, ReactMarkdown |
 | Backend | FastAPI, Python, SQLAlchemy (async), asyncpg, Pydantic |
 | Pipeline IA | CrewAI, LangChain LCEL, LiteLLM |
-| LLMs | GPT-4o-mini (OpenAI), Mistral (magistral-small + Mistral 7B fine-tuné), Gemini (GCP), Qwen2.5 fine-tuné |
+| LLMs | GPT-4o-mini (OpenAI), Mistral (magistral-small + Mistral 7B fine-tuné), Gemini (GCP), Qwen2.5 fine-tuné (SG), Qwen2.5-3B base (Gestion Patrimoine) |
 | Embeddings / Rerank | VoyageAI `voyage-3`, `rerank-2` ; `paraphrase-multilingual-mpnet-base-v2` (RAG sectoriels) |
 | ML sectoriel | KMeans, Bayesian GLM (MAP + Laplace), LDA, ViT, YOLO, CamemBERT NER, QLoRA, CamemBERT + k-NN (classification multi-label) |
 | Bases de données | PostgreSQL + pgvector (Scaleway), BigQuery (GCP), Neo4j (OVH), ChromaDB (OVH) |
@@ -292,6 +312,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/realisations/savencia` | MVP Savencia — Actualités, Ask AI, Topics LDA, Détection maturité fromagère |
 | `/realisations/sg/sg-assurances` | MVP SG Assurances — Actualités, RAG, YOLO/NER (Document), Qwen |
 | `/realisations/banque-de-france` | MVP Banque de France — Actualités, Ask AI, ML Insights (Topic Modeling, Scoring EBA, Classification) |
+| `/realisations/gestion-patrimoine` | MVP Gestion Patrimoine — génération de profil, assistant RAG juridique avec citation (non en prod, branche non mergée) |
 
 ---
 
@@ -320,10 +341,10 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 
 ## Prérequis
 
-- Docker et Docker Compose (`docker-compose` v1 syntax requis côté OVH)
+- Docker et Docker Compose (`docker-compose` v1 syntax requis côté OVH — bug connu `KeyError: 'ContainerConfig'` sur recréation, voir Roadmap)
 - Node.js v18+
 - Python 3.11+
-- Comptes : Scaleway, GCP, VoyageAI, OpenAI, Mistral, LangSmith
+- Comptes : Scaleway, GCP, VoyageAI, OpenAI, Mistral, Gemini, LangSmith
 - Voir section Variables d'environnement
 
 ---
@@ -390,6 +411,13 @@ docker-compose up -d
 # API disponible sur le port 8080 : /wake, /heartbeat, /status, /health
 ```
 
+### Pipeline ETL Gestion Patrimoine (ponctuel, one-shot)
+
+```bash
+cd realisations/gestion-patrimoine/pipeline
+docker-compose run --rm pipeline
+```
+
 ---
 
 ## Variables d'environnement
@@ -410,6 +438,7 @@ FT_CLIENT_SECRET=
 # LLM
 OPENAI_API_KEY=
 MISTRAL_API_KEY=
+GEMINI_API_KEY=
 
 # Embeddings & Reranking
 VOYAGE_API_KEY=
@@ -436,6 +465,18 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_FT_BASE_URL=https://candidat.francetravail.fr/offres/recherche/detail
 ```
 
+### Gestion Patrimoine — `realisations/gestion-patrimoine/.env` (OVH, hors dépôt)
+
+```env
+CHROMA_HOST=
+CHROMA_PORT=8000
+CHROMA_USER=
+CHROMA_PASSWORD=
+EMBEDDING_SERVICE_URL=http://<gateway_gestion-patrimoine-ml-network>:8004
+OVH_ORCHESTRATOR_URL=http://<gateway_gestion-patrimoine-ml-network>:8080
+LLAMA_SERVER_URL=http://<gateway_gestion-patrimoine-ml-network>:8009/v1/chat/completions
+```
+
 ### dbt — `gcp/dbt_transformation/profiles.yml`
 
 Valeurs de connexion (projet, dataset, SA à impersonner) mises en dur — dbt ne lit pas automatiquement de `.env`. Deux targets : `dev` (ADC + impersonation SA `pipeline-dbt` en local) et `prod` (SA natif attaché au Cloud Run Job).
@@ -453,6 +494,8 @@ Entièrement automatisé via **GitHub Actions** sur push de la branche `infra-sc
 Les Cloud Run Jobs (`sync-ft-bigquery`, `dbt-emploi-marche`) se redéploient manuellement via `gcloud run jobs update` après changement d'image (voir procédures dans `gcp/sync_job/` et `gcp/dbt_transformation/`).
 
 L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastructure GCP est gérée via **Terraform** (`gcp/infra/`, `gcp/dbt_transformation/infra/`). Aucune modification manuelle via console.
+
+**Gestion Patrimoine — cas particulier** : développé sur la branche `feature/gestion-patrimoine-mvp`, déployé et testé sur OVH manuellement, mais **pas encore mergé** dans `infra-scaleway-v1.1` — le CI/CD ne l'a donc pas encore déployé en production Scaleway. Voir `Guide_Lancement_Gestion_Patrimoine.md` pour la procédure de merge.
 
 ---
 
@@ -478,8 +521,9 @@ presentation-portefolio/
 │   │   ├── sanofi/                 # router, ml.py, rag.py, schemas.py
 │   │   ├── savencia/                # router, ml.py, rag.py, schemas.py
 │   │   ├── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
-│   │   └── banque_de_france/        # router, ml.py, rag.py, schemas.py
-│   ├── migrations/sql/              # Scripts SQL (001 → 016)
+│   │   ├── banque_de_france/        # router, ml.py, rag.py, schemas.py
+│   │   └── gestion_patrimoine/      # router.py, schemas.py, profil_agent.py (copie — exécution directe backend)
+│   ├── migrations/sql/              # Scripts SQL (001 → 017)
 │   ├── scheduler/                   # job_pipeline.py
 │   ├── scripts/                     # Scripts utilitaires manuels
 │   └── Dockerfile
@@ -502,7 +546,7 @@ presentation-portefolio/
 │   └── infra/                       # Terraform GCP (sync job, scheduler, secrets)
 ├── ovh/
 │   ├── orchestrator/                # Orchestrateur wake-on-demand
-│   │   ├── registry.yaml            # déclaration des services
+│   │   ├── registry.yaml            # déclaration des services (inclut gestion-patrimoine-ml, port 8008)
 │   │   ├── docker_client.py
 │   │   ├── resource_manager.py
 │   │   ├── timer_manager.py
@@ -518,11 +562,16 @@ presentation-portefolio/
 │   ├── sg/sg-assurances/
 │   │   ├── ml/, embedding-service/, serving/, training/
 │   │   └── scripts/
-│   └── banque-de-france/
-│       ├── pipeline/                 # ETL veille RSS + décisions ACPR
-│       ├── ml/                       # classification_inference.py, eba_service.py, topic_modeling.py
-│       ├── training/                 # classification/, eba/, ner/ (backlog), webstat/ (backlog)
-│       └── scripts/                  # check_data.py, inspect_chromadb.py
+│   ├── banque-de-france/
+│   │   ├── pipeline/                 # ETL veille RSS + décisions ACPR
+│   │   ├── ml/                       # classification_inference.py, eba_service.py, topic_modeling.py
+│   │   ├── training/                 # classification/, eba/, ner/ (backlog), webstat/ (backlog)
+│   │   └── scripts/                  # check_data.py, inspect_chromadb.py
+│   └── gestion-patrimoine/
+│       ├── pipeline/                 # ETL Légifrance (API PISTE) — collectors/loaders/transformation/validators
+│       ├── agents/                   # profil_agent.py, assistant_agent.py, tools.py (function calling ReAct)
+│       ├── ml/                       # main.py (FastAPI /chat), config.py, Dockerfile, docker-compose.yml
+│       └── scripts/                  # check_data.py
 ├── infra/                            # Terraform Scaleway
 └── frontend/
     ├── app/
@@ -531,11 +580,13 @@ presentation-portefolio/
     │       ├── sanofi/
     │       ├── savencia/
     │       ├── sg/sg-assurances/
-    │       └── banque-de-france/
+    │       ├── banque-de-france/
+    │       └── gestion-patrimoine/
     ├── components/
     │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/, banque-de-france/ml/
+    │   ├── gestion-patrimoine/       # ProfilGenerator.tsx, ChatAssistant.tsx
     │   └── ui/                       # shadcn/ui
-    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts
+    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
     └── Dockerfile
 ```
 
@@ -544,16 +595,20 @@ presentation-portefolio/
 ## Roadmap
 
 ### Court terme
+- **Merger `feature/gestion-patrimoine-mvp` dans `infra-scaleway-v1.1`** une fois la stratégie de cohabitation RAM/CPU des `llama-server` tranchée (voir ci-dessous)
+- Trancher la cohabitation des 3 `llama-server` toujours-actifs (SG, Sanofi, Gestion Patrimoine) sur un VPS à RAM/CPU limités : upgrade VPS OVH, ou conteneuriser les `llama-server` pour les rendre pilotables par l'orchestrateur wake-on-demand
+- Mettre à jour `docker-compose` sur OVH (bug `KeyError: 'ContainerConfig'`, incompatibilité avec le moteur Docker actuel — impacte potentiellement tous les MVPs, contourné ponctuellement par `docker rm -f` + `DOCKER_BUILDKIT=0`)
+- Toujours isoler le nom de projet Docker Compose (`-p <nom>`) sur OVH — plusieurs dossiers `ml/` homonymes entre MVPs créent une confusion de nommage de conteneurs
 - Finaliser le backlog Release 2 Sanofi (règle iptables persistante, streaming Graph RAG, LangSmith sur Graph RAG)
 - MVP Mirakl — E-commerce NLP/GenAI
 - Banque de France : Webstat (détection d'anomalies, série à fréquence adaptée à trouver) et NER (établissement, base légale) sur les décisions ACPR
-- Mettre à jour `docker-compose` sur OVH (bug `KeyError: 'ContainerConfig'`, incompatibilité avec le moteur Docker actuel — impacte potentiellement tous les MVPs)
 
 ### Moyen terme
-- Automatisation Cloud Run Jobs pour les 4 MVPs (refresh périodique des pipelines ML)
+- Automatisation Cloud Run Jobs pour les MVPs (refresh périodique des pipelines ML)
 - Pipeline de scraping qualifié complet des offres partenaires (BM25 → filtre LLM local → scraping)
 - `NEXT_PUBLIC_ENV` pour conditionner `isDev` en prod
 - Domaine custom Scaleway
+- Investiguer la cause du timeout `embedding-service` observé au premier wake à froid (Gestion Patrimoine) — `WAKE_TIMEOUT_SEC` potentiellement trop court
 
 ### Long terme
 - Multi-utilisateur onboarding (upload CV PDF + extraction LLM)
@@ -568,7 +623,7 @@ presentation-portefolio/
 - **En production réelle** : chaque composant est containerisé, déployé, monitoré — pas des notebooks
 - **Piloté par un objectif métier concret** : décrocher un CDI Data Scientist à Paris
 - **Architecture scalable** : pattern IaC Terraform + GitHub Actions reproductible à chaque nouveau secteur
-- **Décisions pragmatiques assumées** : seuils MVP acceptés (mAP50=0.51, F1=0.84), coût OVH CPU préféré à Vertex AI T4 permanent, on-demand plutôt que toujours-allumé
+- **Décisions pragmatiques assumées** : seuils MVP acceptés (mAP50=0.51, F1=0.84), coût OVH CPU préféré à Vertex AI T4 permanent, on-demand plutôt que toujours-allumé, function calling simulé par prompt plutôt que natif quand la robustesse prime sur l'élégance
 
 ---
 
