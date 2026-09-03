@@ -51,4 +51,4 @@ SEARCH_TOP_K = int(os.getenv("SEARCH_TOP_K", "3"))
 
 LLAMA_SERVER_URL = os.environ["LLAMA_SERVER_URL"]  # ex: http://172.x.x.1:PORT/v1/chat/completions
 LLAMA_MAX_TOKENS = int(os.getenv("LLAMA_MAX_TOKENS", "400"))
-LLAMA_TIMEOUT_SEC = float(os.getenv("LLAMA_TIMEOUT_SEC", "120.0"))
+LLAMA_TIMEOUT_SEC = float(os.getenv("LLAMA_TIMEOUT_SEC", "240.0"))
