@@ -190,4 +190,4 @@ async def chat_route(
         logger.error(f"❌ /gestion-patrimoine/chat DB error: {e}")
         raise HTTPException(status_code=500, detail="Erreur lors de l'enregistrement de l'échange")
 
-    return ChatResponseSchema(texte=data["texte"], articles_cites=data["articles_cites"])
+    return ChatResponseSchema(texte=data["texte"], articles_cites=data["articles_cites"], latence_ms=data["latence_ms"])
