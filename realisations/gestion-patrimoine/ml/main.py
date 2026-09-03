@@ -47,6 +47,9 @@ class ArticleCiteResponse(BaseModel):
 class ChatResponse(BaseModel):
     texte: str
     articles_cites: list[ArticleCiteResponse]
+    tokens_entree: int
+    tokens_sortie: int
+    latence_ms: int
 
 
 # --------------------------------------------------------------------------
