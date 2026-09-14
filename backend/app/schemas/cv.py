@@ -54,7 +54,7 @@ class ProjectCreate(ProjectBase):
 
 class ProjectUpdate(BaseModel):
     """Schéma pour modifier un projet"""
-    id: int
+    id: Optional[int] = None
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     project_type: Optional[str] = Field(None, min_length=1, max_length=50)
     description: Optional[str] = Field(None, min_length=1)
