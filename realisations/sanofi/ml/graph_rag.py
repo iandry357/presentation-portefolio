@@ -29,7 +29,7 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 ORCHESTRATOR_URL     = os.getenv("OVH_ORCHESTRATOR_URL", "http://localhost:8080")
 # NEO4J_HEALTH_URL     = "http://localhost:7474"
 NEO4J_HEALTH_URL     = os.getenv("NEO4J_HEALTH_URL", "http://neo4j:7474")
-NEO4J_WAKE_TIMEOUT   = 60    # secondes max pour attendre Neo4j up
+NEO4J_WAKE_TIMEOUT   = 90    # secondes max pour attendre Neo4j up
 NEO4J_POLL_INTERVAL  = 2     # secondes entre chaque poll
 
 # LLM_AVAILABLE = False        # Passer à True quand GGUF Mistral branché
@@ -37,7 +37,7 @@ LLM_AVAILABLE = True
 
 LLAMA_SERVER_URL    = "http://172.21.0.1:8006/v1/chat/completions"
 LLAMA_MAX_TOKENS    = 200
-LLAMA_TIMEOUT       = 180.0
+LLAMA_TIMEOUT       = 200.0
 
 # ---------------------------------------------------------------------------
 # WAKE NEO4J
@@ -50,7 +50,7 @@ def _wake_neo4j() -> bool:
     """
     # 1 — Signal wake à l'orchestrateur
     try:
-        httpx.post(f"{ORCHESTRATOR_URL}/wake/neo4j", timeout=10)
+        httpx.post(f"{ORCHESTRATOR_URL}/wake/neo4j", timeout=60)
     except Exception as e:
         print(f"[GRAPH RAG] Wake orchestrateur échoué : {e}")
 

@@ -1,5 +1,6 @@
 services:
   ml-service:
+    image: gestion-patrimoine-ml-service:latest
     build:
       context: ..
       dockerfile: ml/Dockerfile
