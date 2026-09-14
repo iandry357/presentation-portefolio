@@ -1,5 +1,6 @@
 services:
   ml-service:
+    image: sanofi-ml-service:latest
     build: .
     ports:
       - "8001:8001"
@@ -11,7 +12,7 @@ services:
       - ./results:/app/results
       - ../gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
       - ../scripts:/app/scripts
-    restart: unless-stopped
+    restart: "no"
 
   neo4j:
     image: neo4j:5.20-community
@@ -29,7 +30,7 @@ services:
       - neo4j_data:/data
     networks:
       - sanofi-ml-network
-    restart: unless-stopped
+    restart: "no"
 
 networks:
   sanofi-ml-network:

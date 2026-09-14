@@ -10,7 +10,7 @@ services:
     volumes:
       - ./results:/app/results
       - ../gcp_sa_savencia.json:/app/gcp_sa_savencia.json:ro
-    restart: unless-stopped
+    restart: "no"
 
 networks:
   savencia-ml-network:
