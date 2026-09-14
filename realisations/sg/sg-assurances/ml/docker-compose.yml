@@ -12,7 +12,7 @@ services:
       - ../gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
     env_file:
       - .env
-    restart: unless-stopped
+    restart: "no"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
       interval: 30s
