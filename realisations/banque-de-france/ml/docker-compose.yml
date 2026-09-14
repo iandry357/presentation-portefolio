@@ -1,5 +1,6 @@
 services:
   ml-service:
+    image: banque-ml-service:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,7 +13,7 @@ services:
       - ../gcp_sa_banque.json:/app/gcp_sa_banque.json:ro
     env_file:
       - .env
-    restart: unless-stopped
+    restart: "no"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
       interval: 30s
