@@ -236,7 +236,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Secret Manager | Secrets applicatifs (noms en kebab-case) |
 | Terraform state | Bucket S3 `portfolio-emploi-tfstate` |
 
-### GCP (projet `gen-lang-client-0989575872`)
+### GCP 
 | Ressource | Usage |
 |---|---|
 | BigQuery `emploi_marche.offres_brutes` | Source de vérité des offres marché (partitionné `date_publication`, clustérisé `source, code_rome`) |
@@ -254,7 +254,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | BigQuery `banque_de_france_veille` | Veille + décisions ACPR (colonne `source` distingue les deux) |
 | Artifact Registry `europe-west9` | Images Docker Cloud Run Jobs |
 
-### OVH VPS (`51.68.130.23`)
+### OVH VPS
 | Service | Port | Rôle |
 |---|---|---|
 | Orchestrateur (FastAPI) | 8080 | Wake-on-demand, heartbeat, statut, health |
