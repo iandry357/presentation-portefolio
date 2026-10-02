@@ -10,6 +10,10 @@ on:
       - 'gcp/sanofi/infra/**'
   workflow_dispatch:
 
+concurrency:
+  group: terraform-gcp-sanofi-infra
+  cancel-in-progress: false
+
 jobs:
   terraform:
     name: Terraform Apply

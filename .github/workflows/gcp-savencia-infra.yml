@@ -10,6 +10,10 @@ on:
       - 'gcp/savencia/infra/**'
   workflow_dispatch:
 
+concurrency:
+  group: terraform-gcp-savencia-infra
+  cancel-in-progress: false
+
 jobs:
   terraform:
     name: Terraform Apply
