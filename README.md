@@ -143,7 +143,7 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 - Frontend : `/realisations/banque-de-france` — Actualités, Ask AI, ML Insights (Topic Modeling / Scoring EBA / Classification avec démo interactive sur 82 décisions réelles)
 - Backlog assumé : Webstat (fréquence des séries insuffisante), NER (chantier lourd pour un gain surtout méthodologique)
 
-### Gestion Patrimoine — 🚧 Développé et testé, non déployé en production (branche non mergée)
+### Gestion Patrimoine — ✅ En production
 *Copilote d'ingénierie patrimoniale — démonstration d'un pattern agentique RAG juridique avec anti-hallucination*
 
 - Génération de profils clients synthétiques RGPD-safe via `profil_agent` (Mistral, fallback Gemini natif via LiteLLM, validation Pydantic stricte, 1 retry sur échec)
@@ -153,7 +153,7 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 - Serving : llama.cpp, OVH port 8009, Qwen2.5-3B-Instruct **base** (non fine-tuné), `-c 4096`
 - ML Service OVH port 8008 (boucle ReAct + `search_referentiel`)
 - Frontend dédié : flux séquentiel profil → chat, format de conversation propre (carte profil persistante + fil de discussion, articles cités en pastilles cliquables)
-- **Statut** : testé de bout en bout avec succès (génération profil → RAG → réponse citée, latence mesurée ~94s sur ce VPS), déployé manuellement sur OVH pour validation, **non mergé dans `infra-scaleway-v1.1`** — voir Roadmap
+- **Statut** : en production — testé de bout en bout (génération profil → RAG → réponse citée, latence mesurée ~94s sur ce VPS), mergé dans `infra-scaleway-v1.1`
 
 ### Mirakl — 🔜 Prochain MVP
 *E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
@@ -312,7 +312,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/realisations/savencia` | MVP Savencia — Actualités, Ask AI, Topics LDA, Détection maturité fromagère |
 | `/realisations/sg/sg-assurances` | MVP SG Assurances — Actualités, RAG, YOLO/NER (Document), Qwen |
 | `/realisations/banque-de-france` | MVP Banque de France — Actualités, Ask AI, ML Insights (Topic Modeling, Scoring EBA, Classification) |
-| `/realisations/gestion-patrimoine` | MVP Gestion Patrimoine — génération de profil, assistant RAG juridique avec citation (non en prod, branche non mergée) |
+| `/realisations/gestion-patrimoine` | MVP Gestion Patrimoine — génération de profil, assistant RAG juridique avec citation |
 
 ---
 
@@ -595,7 +595,6 @@ presentation-portefolio/
 ## Roadmap
 
 ### Court terme
-- **Merger `feature/gestion-patrimoine-mvp` dans `infra-scaleway-v1.1`** une fois la stratégie de cohabitation RAM/CPU des `llama-server` tranchée (voir ci-dessous)
 - Trancher la cohabitation des 3 `llama-server` toujours-actifs (SG, Sanofi, Gestion Patrimoine) sur un VPS à RAM/CPU limités : upgrade VPS OVH, ou conteneuriser les `llama-server` pour les rendre pilotables par l'orchestrateur wake-on-demand
 - Mettre à jour `docker-compose` sur OVH (bug `KeyError: 'ContainerConfig'`, incompatibilité avec le moteur Docker actuel — impacte potentiellement tous les MVPs, contourné ponctuellement par `docker rm -f` + `DOCKER_BUILDKIT=0`)
 - Toujours isoler le nom de projet Docker Compose (`-p <nom>`) sur OVH — plusieurs dossiers `ml/` homonymes entre MVPs créent une confusion de nommage de conteneurs

@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash",
+      "PowerShell",
+      "Monitor",
+      "Grep",
+
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(!.env.example)",
+
+      "Read(gcp_sa_*.json)",
+      "Read(gen-lang-client-*.json)",
+      "Read(*_minified.txt)",
+      "Read(key_b64.txt)",
+
+      "Read(*.tfvars)",
+      "Read(*.tfstate)",
+      "Read(*.tfstate.*)",
+
+      "Read(credentials.json)",
+      "Read(token.json)",
+
+      "Read(new_cred.txt)",
+      "Read(OVH_info.txt)"
+    ],
+    "ask": [
+      "Read(*.json)",
+      "Read(!package.json)",
+      "Read(!package-lock.json)",
+      "Read(!tsconfig*.json)",
+
+      "Read(*.txt)",
+      "Read(!requirements*.txt)",
+
+      "Read(*.bat)",
+      "Read(docker-compose*.yml)",
+      "Read(docker-compose*.yaml)"
+    ],
+    "disableBypassPermissionsMode": "disable"
+  },
+  "disableAutoMode": "disable"
+}
