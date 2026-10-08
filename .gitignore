@@ -7,6 +7,8 @@ chromadb/server.htpasswd
 chromadb/.env
 chromadb/chromadb_password.txt
 
+Claude outputs/
+
 # Sanofi
 gcp/sanofi/infra/terraform.tfvars 
 realisations/sanofi/gcp_sa_sanofi.json 
