@@ -54,6 +54,9 @@ class Settings(BaseSettings):
 
     cv_edit_secret_code: str = Field(default="dev123")
 
+    # Code d'accès aux zones privées (variable d'env ACCESS_CODE, sans défaut)
+    ACCESS_CODE: str
+
     gmail_client_id: Optional[str] = None
     gmail_client_secret: Optional[str] = None
     gmail_refresh_token: Optional[str] = None

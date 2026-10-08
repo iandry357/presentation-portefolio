@@ -60,6 +60,7 @@ services:
       - ENVIRONMENT=${ENVIRONMENT:-development}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - SECRET_KEY=${SECRET_KEY}
+      - ACCESS_CODE=${ACCESS_CODE}
       
       # RAG Config
       - EMBEDDING_MODEL=${EMBEDDING_MODEL:-voyage-4}
