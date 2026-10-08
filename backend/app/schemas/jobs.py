@@ -7,8 +7,16 @@ from datetime import datetime
 # JobOffer - Offre brute
 # ============================================================================
 
-class JobOfferSummary(BaseModel):
-    """Vue résumée pour la liste des cards frontend."""
+class PrivateFields(BaseModel):
+    """Champs réservés à l'accès déverrouillé (absents de la réponse publique)."""
+    status: str
+    applied_at: Optional[datetime]
+    has_enriched: bool = False
+    notes: Optional[str] = None
+
+
+class JobOfferPublicSummary(BaseModel):
+    """Vue résumée publique : sans les champs de suivi personnel."""
     id: int
     ft_id: Optional[str] = None
     source_offer: Optional[str] = None
@@ -24,18 +32,20 @@ class JobOfferSummary(BaseModel):
     sector_label: Optional[str]
     offer_url: Optional[str]
     ft_published_at: Optional[datetime]
-    status: str
-    applied_at: Optional[datetime]
-    # has_enriched: bool  # indique si la fiche enrichie existe déjà
-    has_enriched: bool = False
-    notes: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 
-class JobOfferDetail(JobOfferSummary):
-    """Vue complète pour la page détail — inclut les données brutes."""
+class JobOfferSummary(JobOfferPublicSummary, PrivateFields):
+    """Vue résumée privée pour la liste des cards frontend."""
+
+    class Config:
+        from_attributes = True
+
+
+class JobOfferPublicDetail(JobOfferPublicSummary):
+    """Vue complète publique — inclut les données brutes, sans champs privés."""
     # description: Optional[str]
     rome_code: Optional[str]
     location_postal_code: Optional[str]
@@ -43,12 +53,19 @@ class JobOfferDetail(JobOfferSummary):
     location_lng: Optional[float]
     company_description: Optional[str]
     company_url: Optional[str]
-    company_profile_id: Optional[int] = None
     source_offer: Optional[str] = None
     naf_code: Optional[str]
     raw_data: Dict[str, Any]
     created_at: datetime
     updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class JobOfferDetail(JobOfferPublicDetail, JobOfferSummary):
+    """Vue complète privée — champs publics + suivi personnel + lien fiche entreprise."""
+    company_profile_id: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -145,6 +162,12 @@ class JobListResponse(BaseModel):
     """Réponse paginée pour la liste des offres."""
     total: int
     items: List[JobOfferSummary]
+
+
+class JobListPublicResponse(BaseModel):
+    """Réponse paginée publique (sans champs de suivi personnel)."""
+    total: int
+    items: List[JobOfferPublicSummary]
 
 
 class PipelineTriggerResponse(BaseModel):
