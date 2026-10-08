@@ -197,6 +197,12 @@ async def _touch_token(db: AsyncSession, token: str) -> bool:
     return found
 
 
+async def revoke_access_token(db: AsyncSession, token: str) -> None:
+    """Supprime le jeton en base (verrouillage manuel)."""
+    await db.execute(delete(AccessToken).where(AccessToken.token_hash == hash_token(token)))
+    await db.commit()
+
+
 # ─── Dépendances FastAPI ─────────────────────────────────────────────────────
 
 async def get_access_state(
