@@ -1,6 +1,6 @@
 ---
 name: livraison
-description: Clôture une session de travail (mise à jour de STATUS.md) ou, avec l'argument "mvp", la livraison d'un MVP (STATUS.md + CLAUDE.md + README.md). Lancé uniquement par l'utilisateur.
+description: Clôture une session de travail (mise à jour de STATUS.md et du cahier des charges de la feature) ou, avec l'argument "mvp", la livraison d'un MVP (STATUS.md + cahier des charges + CLAUDE.md + README.md). Lancé uniquement par l'utilisateur.
 disable-model-invocation: true
 argument-hint: "[mvp]"
 ---
@@ -9,8 +9,8 @@ argument-hint: "[mvp]"
 
 Argument reçu : `$ARGUMENTS`
 
-- Argument vide → **mode FIN DE SESSION** (étapes 1 à 3).
-- Argument `mvp` → **mode FIN DE MVP** (étapes 1 à 3, puis 4 à 7).
+- Argument vide → **mode FIN DE SESSION** (étapes 1 à 3 bis).
+- Argument `mvp` → **mode FIN DE MVP** (étapes 1 à 3 bis, puis 4 à 7).
 
 Règles valables pour tout le skill :
 - Tu proposes chaque modification sous forme de diff ciblé, **un fichier à la fois**, et tu attends ma
@@ -41,11 +41,32 @@ pour situer le bilan par rapport à l'objectif de la feature.
 ## Étape 3 — Diff de STATUS.md
 
 Propose le diff de `_docs-local/STATUS.md` en respectant ces règles :
+- « Avancement global » (cumulatif) : **mis à jour**, jamais vidé. Il contient un résumé de la
+  feature en 2 à 3 lignes (ce qu'elle fait concrètement), l'état par grand bloc (ex. backend /
+  frontend) et la liste des étapes du cahier des charges avec leur état (faite / à faire). On coche
+  les étapes terminées aujourd'hui ; on n'invente aucune étape absente du cahier des charges.
+  Objectif : qu'à la question « où en est-on ? », on lise d'abord le résumé, l'objectif et ce qui
+  est fait, puis seulement ce qui reste.
 - « Où je me suis arrêté » et « Prochaine étape » : **remplacés** par le bilan du jour.
 - « Points ouverts / à vérifier » : remplacé (on retire ce qui est résolu, on ajoute le nouveau).
 - « Décisions prises » : **cumulatif**, on ajoute les nouvelles décisions sans supprimer les anciennes.
 - « Historique » : **ajout** d'une ligne `- AAAA-MM-JJ : <résumé en une phrase>` (date du jour).
 - Ne touche pas à la ligne d'import du cahier des charges actif (sauf en mode MVP, étape 6).
+
+## Étape 3 bis — Diff du cahier des charges de la feature
+
+Après validation du diff de STATUS.md, propose le diff du cahier des charges actif
+(`_docs-local/specs/<feature>.md`), **uniquement pour ce que la session a changé** :
+- en-tête « Statut / Implémentation » : étapes faites et date ;
+- tableau des écarts (« Écarts et ajouts constatés à l'implémentation ») : une ligne par écart
+  entre le prévu et le réalisé, avec la raison ;
+- tableau des contenus / règles de la section 2, si une règle fonctionnelle a changé ;
+- section des composants (3.3) et liste des fichiers (section 5), si des fichiers ont été
+  ajoutés ou modifiés hors plan ;
+- « Points ouverts » : retirer le résolu, ajouter le nouveau ;
+- section « État d'avancement » : cocher ce qui est terminé et testé ;
+- étapes de développement : ajuster une étape si le périmètre a bougé.
+Si la session n'a rien changé au cahier des charges, dis-le et passe.
 
 En mode FIN DE SESSION, termine ici par : « Tu peux faire /clear : STATUS.md sera rechargé
 automatiquement à la prochaine session. »

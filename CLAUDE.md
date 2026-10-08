@@ -123,5 +123,12 @@ Métriques, datasets BigQuery et buckets : section « MVPs sectoriels » du `REA
 
 Le suivi d'avancement (feature en cours, où je me suis arrêté, prochaine étape) est dans
 `_docs-local/STATUS.md`, chargé automatiquement via `CLAUDE.local.md`. Commence toute nouvelle tâche
-en t'appuyant dessus. En fin de session, si je te le demande, propose la mise à jour de `STATUS.md`
-sous forme de diff.
+en t'appuyant dessus.
+
+Toute mise à jour de suivi passe par le skill `/livraison` (lancé par moi seul), jamais à la main :
+- fin de session (`/livraison`) : `STATUS.md` + cahier des charges de la feature (`_docs-local/specs/`) ;
+- fin de MVP (`/livraison mvp`) : en plus `CLAUDE.md` et `README.md`.
+
+Quand je dis vouloir m'arrêter, rappelle-moi `/livraison` au lieu de mettre à jour ces fichiers toi-même.
+À la question « où en est-on ? », réponds dans l'ordre : résumé de la feature, objectif, ce qui est
+fait (section « Avancement global » de `STATUS.md`), puis seulement la suite.
