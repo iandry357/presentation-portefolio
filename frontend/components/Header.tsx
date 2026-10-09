@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAccess } from '@/components/AccessProvider';
+import { Lock } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/cv',        label: 'CV',        match: (p: string) => p === '/cv' },
@@ -18,6 +20,7 @@ const NAV_LINKS = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { unlocked, lock } = useAccess();
 
   return (
     <header className="border-b bg-white sticky top-0 z-50">
@@ -47,6 +50,16 @@ export default function Header() {
                 {label}
               </Link>
             ))}
+            {unlocked && (
+              <button
+                onClick={() => lock()}
+                title="Verrouiller l'accès privé"
+                className="ml-2 inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors"
+              >
+                <Lock className="w-4 h-4" />
+                Verrouiller
+              </button>
+            )}
           </nav>
 
           {/* Bouton hamburger mobile */}
@@ -88,6 +101,15 @@ export default function Header() {
               {label}
             </Link>
           ))}
+          {unlocked && (
+            <button
+              onClick={() => { setOpen(false); lock(); }}
+              className="mt-1 flex w-full items-center gap-2 px-4 py-3 rounded-md text-sm font-medium border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors"
+            >
+              <Lock className="w-4 h-4" />
+              Verrouiller
+            </button>
+          )}
         </div>
       )}
     </header>

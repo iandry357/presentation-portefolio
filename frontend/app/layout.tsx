@@ -4,6 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
 import SessionInitializer from "@/components/SessionInitializer";
+import AccessProvider from "@/components/AccessProvider";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -51,11 +52,13 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        <div className="min-h-screen flex flex-col bg-gray-50">
-          <Header />
-          <SessionInitializer />
-          <main className="flex-1">{children}</main>
-        </div>
+        <AccessProvider>
+          <div className="min-h-screen flex flex-col bg-gray-50">
+            <Header />
+            <SessionInitializer />
+            <main className="flex-1">{children}</main>
+          </div>
+        </AccessProvider>
       </body>
     </html>
   );

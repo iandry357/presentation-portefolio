@@ -9,11 +9,3 @@ export const POLL_INTERVAL_MS = 60 * 1000;    // intervalle de resynchronisation
 export function shouldPoll(remainingSeconds: number | null): boolean {
   return remainingSeconds !== null && remainingSeconds <= POLL_THRESHOLD_SECONDS;
 }
-
-// 875 -> "14:35"
-export function formatCountdown(totalSeconds: number): string {
-  const s = Math.max(0, Math.ceil(totalSeconds));
-  const minutes = Math.floor(s / 60);
-  const seconds = s % 60;
-  return `${minutes}:${String(seconds).padStart(2, '0')}`;
-}
