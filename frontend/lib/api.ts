@@ -8,7 +8,7 @@ import {
   ExternalJobOfferCreate,
   FeedbackCreate, FeedbackCreateResponse  } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = '/backend';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
 
 export async function sendMessage(
