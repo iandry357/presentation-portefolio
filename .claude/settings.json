@@ -26,6 +26,10 @@
       "Read(OVH_info.txt)"
     ],
     "ask": [
+      "Edit",
+      "Write",
+      "NotebookEdit",
+
       "Read(*.json)",
       "Read(!package.json)",
       "Read(!package-lock.json)",

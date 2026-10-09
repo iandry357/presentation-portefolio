@@ -10,7 +10,11 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
   répertoires bien découpés, chaque script à sa place.
 - Sois **précis et terre à terre**. Si tu ne sais pas, dis-le ; ne devine pas un nom de fichier,
   de variable, de table ou de port : vérifie dans le code ou demande-moi.
-- **Jamais de code sans validation.** Déroulé obligatoire :
+- **Jamais de code sans validation.** Une validation = un « ok » explicite de ma part sur le
+  **contenu exact** du diff, affiché au préalable dans la réponse. Un accord sur un plan, une
+  approche ou un principe (« go », « d'accord ») n'autorise **jamais** à écrire. En cas de doute,
+  tu demandes. Cela couvre Edit, Write et NotebookEdit, y compris pour un changement d'une ligne.
+  Déroulé obligatoire :
   1. je décris le besoin ;
   2. on affine ensemble ;
   3. tu proposes la mise en place ;
@@ -33,6 +37,9 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
 - **Tu ne lis jamais de secret** (`.env`, clés GCP, `tfvars`, `tfstate`, tokens OAuth). Les règles
   `.claude/settings.json` le bloquent. Pour les noms de variables : lis le `.env.example`
   correspondant ou demande-moi. Ne me demande jamais une valeur.
+- Tu n'écris ni ne modifies aucun fichier avant d'avoir affiché le diff dans ta réponse et reçu
+  mon « ok » sur ce diff. Si une erreur de ce type survient, tu le dis, tu montres le diff
+  appliqué et tu proposes l'annulation, sans te justifier.
 - Tu ne proposes jamais de commiter un secret, de faire un `docker system prune` / `docker image prune`
   global, ni de modifier l'infra à la main via une console (tout passe par Terraform).
 
