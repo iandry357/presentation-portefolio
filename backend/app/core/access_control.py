@@ -226,6 +226,27 @@ async def get_access_state(
     return False
 
 
+async def get_access_remaining(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+) -> Optional[int]:
+    """
+    Lecture seule : secondes restantes du jeton, ou None s'il est absent ou expiré.
+    Ne prolonge pas la fenêtre et ne touche à aucun cookie.
+    """
+    token: Optional[str] = request.cookies.get(ACCESS_COOKIE_NAME)
+    if not token:
+        return None
+    result = await db.execute(
+        select(AccessToken.expires_at).where(
+            AccessToken.token_hash == hash_token(token),
+            AccessToken.expires_at > now_utc(),
+        )
+    )
+    expires_at = result.scalar_one_or_none()
+    return seconds_until(expires_at) if expires_at else None
+
+
 async def require_access(unlocked: bool = Depends(get_access_state)) -> None:
     """Garde stricte : 403 si l'accès n'est pas déverrouillé."""
     if not unlocked:

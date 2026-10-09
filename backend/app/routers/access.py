@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import uuid
+from typing import Optional
 
 from app.core import access_control as ac
 from app.core.database import get_db
@@ -86,14 +87,11 @@ async def unlock(
 
 
 @router.get("/status", response_model=AccessStatusResponse)
-async def get_status(unlocked: bool = Depends(ac.get_access_state)):
+async def get_status(remaining: Optional[int] = Depends(ac.get_access_remaining)):
     """
-    Suis-je déverrouillé ?
-
-    Passe par la garde souple : si l'accès est actif, la fenêtre de 15 min
-    est prolongée et le cookie ré-émis.
+    Suis-je déverrouillé ? Lecture seule : ne prolonge pas la fenêtre de 15 min.
     """
-    return AccessStatusResponse(unlocked=unlocked)
+    return AccessStatusResponse(unlocked=remaining is not None, expires_in_seconds=remaining)
 
 
 @router.post("/lock", response_model=AccessStatusResponse)
