@@ -314,3 +314,21 @@ export interface FilterOptions {
   entreprise_nom: string[];
   recherche_mot_cle: string[];
 }
+
+// ============================================================================
+// Accès privé / public
+// ============================================================================
+
+export interface AccessStatus {
+  unlocked: boolean;
+  expires_in_seconds: number | null;
+}
+
+export type UnlockResult =
+  | { ok: true; status: AccessStatus }
+  | {
+      ok: false;
+      reason: 'invalid' | 'blocked' | 'error';
+      message: string;
+      retryAfterSeconds?: number;
+    };
