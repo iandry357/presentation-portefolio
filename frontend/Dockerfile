@@ -19,6 +19,10 @@ ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 ARG NEXT_PUBLIC_ENV
 ENV NEXT_PUBLIC_ENV=$NEXT_PUBLIC_ENV
 
+# Lu au build par next.config.ts (les rewrites sont figés dans l'image standalone)
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 # Copy and build
 COPY . .
 RUN npm run build
