@@ -45,7 +45,7 @@ class JobOfferSummary(JobOfferPublicSummary, PrivateFields):
 
 
 class JobOfferPublicDetail(JobOfferPublicSummary):
-    """Vue complète publique — inclut les données brutes, sans champs privés."""
+    """Vue complète publique — sans champs privés ni données brutes (clés internes, contacts)."""
     # description: Optional[str]
     rome_code: Optional[str]
     location_postal_code: Optional[str]
@@ -55,7 +55,6 @@ class JobOfferPublicDetail(JobOfferPublicSummary):
     company_url: Optional[str]
     source_offer: Optional[str] = None
     naf_code: Optional[str]
-    raw_data: Dict[str, Any]
     created_at: datetime
     updated_at: datetime
 
@@ -64,7 +63,8 @@ class JobOfferPublicDetail(JobOfferPublicSummary):
 
 
 class JobOfferDetail(JobOfferPublicDetail, JobOfferSummary):
-    """Vue complète privée — champs publics + suivi personnel + lien fiche entreprise."""
+    """Vue complète privée — champs publics + données brutes + suivi personnel + lien fiche entreprise."""
+    raw_data: Dict[str, Any]
     company_profile_id: Optional[int] = None
 
     class Config:
