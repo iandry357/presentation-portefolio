@@ -39,6 +39,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 | **Explorer** | Parcours paginé de toutes les offres collectées avec filtres avancés |
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
+| **Accès public / privé** | Version publique des offres pour tout visiteur ; statut, notes, fiches, Explorer, Companies et actions d'écriture réservés derrière un code unique (session de 15 min glissantes, cookie httpOnly) |
 | **Réalisations** | 5 MVPs sectoriels — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct) |
 
 ---
@@ -48,7 +49,8 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 ```
 Frontend (Next.js — Scaleway)
           │
-          │ HTTP/REST
+          │ HTTP/REST — jobs, explore, companies, accès : proxy Next.js `/backend/*`
+          │ (cookies first-party) ; MVPs sectoriels : appel direct
           ▼
 Backend (FastAPI — Scaleway Serverless Container)
           │
@@ -69,6 +71,8 @@ Backend (FastAPI — Scaleway Serverless Container)
           │     │                         timer d'inactivité 5 min)
           │     │
           │     └── profil_agent.py (gestion_patrimoine) ──► Mistral / Gemini (LiteLLM, appel direct, pas de service dédié)
+          │
+          ├── Contrôle d'accès public / privé (/access) — gardes sur Explorer, Companies, routes d'écriture jobs
           │
           ├── API Jobs / CV / Explorer / Market / Feedback
           │
@@ -162,6 +166,23 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 
 ## Workflows clés
 
+### Accès public / privé
+```
+Visiteur ──► /jobs (public) : offres sans statut, notes ni fiche ; pas d'Explorer ni de Companies
+   │ bouton « Déverrouiller » (Header) → POST /backend/access/unlock { code }
+   ▼
+Backend : anti brute-force (5 essais, blocage 10 min, par cookie visiteur, compteur en base)
+   │ code correct
+   ▼
+Jeton opaque (SHA-256 en base, clair seulement dans le cookie httpOnly) — 15 min glissantes,
+prolongées à chaque requête protégée ; GET /access/status en lecture seule
+   ▼
+Gardes FastAPI : stricte (403) sur Explorer, Companies et routes d'écriture jobs ;
+souple sur GET /jobs et /jobs/{id} (schéma public ou privé, `raw_data` réservé au privé)
+```
+Côté frontend : état global (`AccessProvider`), `PrivateSection` (option `reauth` : popup de code qui
+conserve la saisie en modale), et tout 403 d'un appel API resynchronise l'état d'accès.
+
 ### Observatoire emploi (collecte → transformation → restitution)
 ```
 Cloud Scheduler (7h / 12h / 1er-15 du mois)
@@ -212,13 +233,10 @@ Services concernés : ChromaDB (always-on), Sanofi ML, Savencia ML, SG ML, Embed
 
 ### CI/CD (déploiement application)
 ```
-Push sur infra-scaleway-v1.1
-        │
-        ▼
-GitHub Actions
-   ├── Build images Docker (backend + frontend)
-   ├── Push Scaleway Container Registry
-   └── Déploiement Serverless Containers (redeploy automatique)
+Push / merge sur infra-scaleway-v1.1
+        ├── backend/**  → Deploy Backend  (build, push Registry, redeploy)
+        ├── frontend/** → Deploy Frontend (build-args NEXT_PUBLIC_* et BACKEND_URL, redeploy)
+        └── infra/**    → Terraform Infra (fmt, validate, plan ; apply sur push ou dispatch)
 ```
 Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune modification manuelle via console.
 
@@ -229,12 +247,12 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 ### Scaleway
 | Ressource | Usage |
 |---|---|
-| Serverless Container | Backend FastAPI (`min_scale=0` + lazy loading) |
+| Serverless Container | Backend FastAPI (`min_scale=1`, `max_scale=2`) |
 | Serverless Container | Frontend Next.js |
 | PostgreSQL managé + pgvector | Données candidat, offres trackées, embeddings, sessions/messages MVPs sectoriels |
 | Container Registry | Images Docker backend + frontend |
-| Secret Manager | Secrets applicatifs (noms en kebab-case) |
-| Terraform state | Bucket S3 `portfolio-emploi-tfstate` |
+| Secret Manager | Secrets applicatifs, dont `ACCESS_CODE` |
+| Terraform state | Bucket S3 `portfolio-tfstate` |
 
 ### GCP 
 | Ressource | Usage |
@@ -289,6 +307,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | Recherche web | DuckDuckGo (`backend="html"`), Brave Search API |
 | Matching ROME | ROMEO v2 API |
 | Monitoring | LangSmith (projet `portfolio-rag` — traces CrewAI + company_crew) |
+| Contrôle d'accès | Jeton serveur httpOnly (SHA-256), anti brute-force PostgreSQL, proxy Next.js (`rewrites`) |
 | Infra as Code | Terraform (Scaleway `infra/`, GCP `gcp/infra/`, `gcp/dbt_transformation/infra/`, OVH orchestrateur) |
 | CI/CD | GitHub Actions + Docker |
 
@@ -302,10 +321,10 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/cv` | CV statique rendu depuis PostgreSQL |
 | `/cv/edit` | Interface CRUD expériences |
 | `/chat` | Chatbot RAG interactif |
-| `/jobs` | Tracker candidatures avec scoring et enrichissement CrewAI |
-| `/jobs/[id]` | Fiche détail offre enrichie + recalcul (max 3) |
-| `/companies/[id]` | Fiche entreprise enrichie pour préparation entretien |
-| `/explore` | Exploration des offres BigQuery avec filtres |
+| `/jobs` | Offres (public) ; statut, filtres de suivi et actions (🔒 privé) |
+| `/jobs/[id]` | Détail offre (public) ; fiche enrichie, notes, recalcul max 3, fiche entreprise (🔒 privé) |
+| `/companies/[id]` | 🔒 Fiche entreprise enrichie pour préparation entretien |
+| `/explore` | 🔒 Exploration des offres BigQuery avec filtres |
 | `/market` | Observatoire marché emploi — catalogue Q01–Q11 (dbt) |
 | `/realisations` | Vue d'ensemble des MVPs sectoriels |
 | `/realisations/sanofi` | MVP Sanofi — Essais Cliniques, PubMed, Actualités, Press Releases, Ask AI, ML Insights, Graph RAG |
@@ -431,9 +450,12 @@ DATABASE_URL=postgresql+asyncpg://user:password@host:5432/dbname
 # Sécurité
 SECRET_KEY=your_secret_key
 
+# Accès privé (code unique ; pas de valeur par défaut)
+ACCESS_CODE=
+
 # France Travail API
-FT_CLIENT_ID=
-FT_CLIENT_SECRET=
+FRANCE_TRAVAIL_CLIENT_ID=
+FRANCE_TRAVAIL_CLIENT_SECRET=
 
 # LLM
 OPENAI_API_KEY=
@@ -463,6 +485,8 @@ LANGSMITH_PROJECT=portfolio-rag
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_FT_BASE_URL=https://candidat.francetravail.fr/offres/recherche/detail
+# Cible du proxy /backend (lue au build ; défaut http://localhost:8000)
+BACKEND_URL=http://localhost:8000
 ```
 
 ### Gestion Patrimoine — `realisations/gestion-patrimoine/.env` (OVH, hors dépôt)
@@ -495,7 +519,9 @@ Les Cloud Run Jobs (`sync-ft-bigquery`, `dbt-emploi-marche`) se redéploient man
 
 L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastructure GCP est gérée via **Terraform** (`gcp/infra/`, `gcp/dbt_transformation/infra/`). Aucune modification manuelle via console.
 
-**Gestion Patrimoine — cas particulier** : développé sur la branche `feature/gestion-patrimoine-mvp`, déployé et testé sur OVH manuellement, mais **pas encore mergé** dans `infra-scaleway-v1.1` — le CI/CD ne l'a donc pas encore déployé en production Scaleway. Voir `Guide_Lancement_Gestion_Patrimoine.md` pour la procédure de merge.
+**Nouvelle variable d'infra** : la valeur va dans `infra/terraform.tfvars` (ignoré par git) et dans le secret GitHub `TF_VARS_FILE`, puis `terraform apply` **avant** de fusionner le code qui la lit (le backend plante au démarrage sans `ACCESS_CODE`). `BACKEND_URL` est un build-arg du frontend (`Dockerfile`, `deploy-frontend.yml`), figé au `next build`.
+
+**Gestion Patrimoine** : développé sur la branche `feature/gestion-patrimoine-mvp`, mergé dans `infra-scaleway-v1.1` et déployé par le CI/CD comme les autres MVPs. Procédure de lancement OVH : `realisations/gestion-patrimoine/Guide_Lancement_Gestion_Patrimoine.md`.
 
 ---
 
@@ -505,9 +531,9 @@ L'infrastructure Scaleway est gérée via **Terraform** (`infra/`). L'infrastruc
 presentation-portefolio/
 ├── backend/
 │   ├── app/
-│   │   ├── core/                  # Config, base de données, sécurité
+│   │   ├── core/                  # Config, base de données, sécurité (access_control.py, time_utils.py)
 │   │   ├── models/                # Modèles SQLAlchemy
-│   │   ├── routers/                # Endpoints FastAPI (jobs, cv, explore, market, feedback, chat, company...)
+│   │   ├── routers/                # Endpoints FastAPI (jobs, cv, explore, market, feedback, chat, company, access...)
 │   │   ├── schemas/                # Schémas Pydantic
 │   │   └── services/
 │   │       ├── job_crew/           # Agents CrewAI (Parser, Analyste, Rédacteur)
@@ -523,7 +549,7 @@ presentation-portefolio/
 │   │   ├── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
 │   │   ├── banque_de_france/        # router, ml.py, rag.py, schemas.py
 │   │   └── gestion_patrimoine/      # router.py, schemas.py, profil_agent.py (copie — exécution directe backend)
-│   ├── migrations/sql/              # Scripts SQL (001 → 017)
+│   ├── migrations/sql/              # Scripts SQL (001 → 018)
 │   ├── scheduler/                   # job_pipeline.py
 │   ├── scripts/                     # Scripts utilitaires manuels
 │   └── Dockerfile
@@ -585,8 +611,9 @@ presentation-portefolio/
     ├── components/
     │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/, banque-de-france/ml/
     │   ├── gestion-patrimoine/       # ProfilGenerator.tsx, ChatAssistant.tsx
+    │   ├── AccessProvider.tsx, AccessCodeForm.tsx, PrivateSection.tsx   # accès public / privé
     │   └── ui/                       # shadcn/ui
-    ├── lib/                          # api.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
+    ├── lib/                          # api.ts (helper request, ApiError), access.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
     └── Dockerfile
 ```
 
@@ -606,6 +633,8 @@ presentation-portefolio/
 - Automatisation Cloud Run Jobs pour les MVPs (refresh périodique des pipelines ML)
 - Pipeline de scraping qualifié complet des offres partenaires (BM25 → filtre LLM local → scraping)
 - `NEXT_PUBLIC_ENV` pour conditionner `isDev` en prod
+- Migrer les familles restantes de `lib/api.ts` (CV, access, feedback, session, chat) vers le helper `request`
+- Aligner la garde du CV (`X-CV-Edit-Code`) sur le jeton d'accès ; éventuelle migration de la session du chat
 - Domaine custom Scaleway
 - Investiguer la cause du timeout `embedding-service` observé au premier wake à froid (Gestion Patrimoine) — `WAKE_TIMEOUT_SEC` potentiellement trop court
 
