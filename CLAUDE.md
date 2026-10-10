@@ -14,6 +14,10 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
   **contenu exact** du diff, affiché au préalable dans la réponse. Un accord sur un plan, une
   approche ou un principe (« go », « d'accord ») n'autorise **jamais** à écrire. En cas de doute,
   tu demandes. Cela couvre Edit, Write et NotebookEdit, y compris pour un changement d'une ligne.
+  La validation est **par fichier** : le diff affiché regroupe **tous** les changements prévus
+  dans ce fichier (une seule vue globale, un seul « ok »), puis on passe au fichier suivant.
+  Un changement supplémentaire sur un fichier déjà validé demande une nouvelle validation.
+  Techniquement : un seul appel d'édition par fichier (une confirmation de l'IDE par fichier).
   Déroulé obligatoire :
   1. je décris le besoin ;
   2. on affine ensemble ;
