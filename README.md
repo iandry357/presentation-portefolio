@@ -247,7 +247,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 ### Scaleway
 | Ressource | Usage |
 |---|---|
-| Serverless Container | Backend FastAPI (`min_scale=1`, `max_scale=2`) |
+| Serverless Container | Backend FastAPI (`min_scale=1` : démarrage à froid lent ; `max_scale=2`) |
 | Serverless Container | Frontend Next.js |
 | PostgreSQL managé + pgvector | Données candidat, offres trackées, embeddings, sessions/messages MVPs sectoriels |
 | Container Registry | Images Docker backend + frontend |

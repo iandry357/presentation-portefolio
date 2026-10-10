@@ -64,8 +64,9 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
 ## Architecture
 
 ```
-Frontend Next.js (Scaleway Serverless) ──HTTP──► Backend FastAPI (Scaleway Serverless, min_scale=0)
+Frontend Next.js (Scaleway Serverless) ──HTTP──► Backend FastAPI (Scaleway Serverless, min_scale=1, max 2)
                                                    ├── PostgreSQL + pgvector (Scaleway)
+                                                   ├── contrôle d'accès /access (jeton httpOnly, gardes stricte / souple)
                                                    ├── BigQuery (GCP) : emploi_marche + datasets par MVP
                                                    └── routers MVP ──► orchestrateur OVH :8080 ──► services ML (Docker, wake-on-demand)
 GCP : Cloud Scheduler → Workflows → Cloud Run Job sync-ft-bigquery → Cloud Run Job dbt-emploi-marche
@@ -75,6 +76,8 @@ OVH VPS : ChromaDB 8000 · Sanofi 8001 (+Neo4j 7474/7687, llama 8006) · Savenci
 ```
 
 - Les `llama-server` tournent hors orchestrateur (systemd, always-on) : RAM du VPS = point de vigilance.
+- Frontend → backend : proxy Next.js `/backend/*` pour jobs / explore / companies / accès (cookies first-party) ;
+  les fichiers API des MVPs restent en appel direct (`NEXT_PUBLIC_API_URL`). `BACKEND_URL` = build-arg frontend.
 - Détails (tables BigQuery, buckets, secrets, pages frontend) : sections « Infrastructure » et
   « Pages de la plateforme » du `README.md`.
 
@@ -105,6 +108,7 @@ que d'inventer une structure.
 | Observatoire marché | `/market` | Q01–Q10 sur tables dbt agrégées, Q11 direct sur `offres_brutes` |
 | Collecte emploi | `gcp/sync_job/` | France Travail API + Gmail alerts (10 sources) → `emploi_marche.offres_brutes` → dbt (`gcp/dbt_transformation/`) |
 | Feedback | toutes pages | Retour visiteur intégré |
+| Accès public / privé | `/access/*`, zones 🔒 | Code unique → jeton serveur httpOnly (15 min glissantes, anti brute-force) ; public : offres sans statut / notes / fiches / `raw_data` ; privé : Explorer, Companies, routes d'écriture jobs ; `lib/api.ts` (helper `request`) via proxy `/backend` |
 
 ## MVPs sectoriels
 
