@@ -6,7 +6,6 @@ import { JobOfferDetail } from '@/types';
 import FranceTravailForm from './FranceTravailForm';
 import ExternalJobForm from './ExternalJobForm';
 import { fetchGmailAlerts } from '@/lib/api';
-import { useAccess } from '@/components/AccessProvider';
 
 type Mode = 'france_travail' | 'externe' | 'gmail';
 
@@ -21,7 +20,6 @@ export default function AddJobModal({ onSuccess, onClose }: AddJobModalProps) {
   const [gmailResult, setGmailResult] = useState<{ inserted: number; skipped: number; errors: number } | null>(null);
   const [gmailError, setGmailError] = useState<string | null>(null);
   const router = useRouter();
-  const { refresh } = useAccess();
 
   const handleGmailFetch = async () => {
     setGmailLoading(true);
@@ -36,7 +34,6 @@ export default function AddJobModal({ onSuccess, onClose }: AddJobModalProps) {
       }
     } catch (e) {
       setGmailError(e instanceof Error ? e.message : 'Erreur lors de la récupération');
-      refresh();
     } finally {
       setGmailLoading(false);
     }

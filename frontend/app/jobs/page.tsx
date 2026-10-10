@@ -55,7 +55,7 @@ export default function JobsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
-  const { state, unlocked, refresh } = useAccess();
+  const { state, unlocked } = useAccess();
 
 //   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
   const isDev = true;
@@ -110,7 +110,6 @@ export default function JobsPage() {
       await loadOffers();
     } catch (e) {
       setTriggerResult(e instanceof Error ? e.message : 'Erreur pipeline');
-      refresh();
     } finally {
       setTriggering(false);
     }
@@ -134,7 +133,6 @@ export default function JobsPage() {
       await loadOffers();  // recharge la liste
     } catch (err: any) {
       setResetResult(err.message || 'Erreur lors du reset');
-      refresh();
     } finally {
       setResetting(false);
     }

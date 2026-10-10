@@ -24,6 +24,12 @@ interface RequestOptions {
   body?: unknown;   // sérialisé en JSON
 }
 
+// Abonné unique, notifié sur tout 403 (accès perdu ou quota) : AccessProvider se resynchronise.
+let onForbidden: (() => void) | null = null;
+export function setForbiddenHandler(handler: (() => void) | null) {
+  onForbidden = handler;
+}
+
 // Appel JSON vers le backend (via le proxy). Corps vide ou 204 : renvoie undefined.
 async function request<T>(path: string, { method = 'GET', body }: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
@@ -35,6 +41,7 @@ async function request<T>(path: string, { method = 'GET', body }: RequestOptions
   });
 
   if (!response.ok) {
+    if (response.status === 403) onForbidden?.();
     const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
     throw new ApiError(response.status, error.detail || `HTTP ${response.status}`);
   }
