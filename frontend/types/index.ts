@@ -70,7 +70,7 @@ export interface JobOfferDetail extends JobOfferSummary {
   company_profile_id?: number | null;   // privé
   source_offer: string | null;
   naf_code: string | null;
-  raw_data: Record<string, unknown>;
+  raw_data?: Record<string, unknown>;   // privé : absent en mode public
   created_at: string;
   updated_at: string;
 }
