@@ -52,10 +52,11 @@ export interface JobOfferSummary {
   sector_label: string | null;
   offer_url: string | null;
   ft_published_at: string | null;
-  status: JobStatus;
-  applied_at: string | null;
-  has_enriched: boolean;
-  notes: string | null;
+  // Champs privés : absents de la réponse si l'accès est verrouillé
+  status?: JobStatus;
+  applied_at?: string | null;
+  has_enriched?: boolean;   // absent = faux
+  notes?: string | null;
 }
 
 export interface JobOfferDetail extends JobOfferSummary {
@@ -66,7 +67,7 @@ export interface JobOfferDetail extends JobOfferSummary {
   location_lng: number | null;
   company_description: string | null;
   company_url: string | null;
-  company_profile_id: number | null;
+  company_profile_id?: number | null;   // privé
   source_offer: string | null;
   naf_code: string | null;
   raw_data: Record<string, unknown>;

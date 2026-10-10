@@ -7,11 +7,15 @@ import { JobOfferDetail, JobEnriched } from '@/types';
 import { getJob, getJobEnriched, enrichJob } from '@/lib/api';
 import JobDetail from '@/components/jobs/JobDetail';
 import FeedbackWidget from "@/components/feedback/FeedbackWidget";
+import { useAccess } from '@/components/AccessProvider';
 
 export default function JobDetailPage() {
   const params = useParams();
   const router = useRouter();
   const jobId = Number(params.id);
+  const { state, unlocked } = useAccess();
+  // Offre déjà chargée une fois : les rechargements suivants (changement d'accès) sont silencieux
+  const loadedFor = useRef<number | null>(null);
 
   const [offer, setOffer] = useState<JobOfferDetail | null>(null);
   const [enriched, setEnriched] = useState<JobEnriched | null>(null);
@@ -22,8 +26,13 @@ export default function JobDetailPage() {
   const triggerEnrich = searchParams.get('enrich') === 'true';
 
   useEffect(() => {
+    if (!jobId || state === 'loading') return;
+    const silent = loadedFor.current === jobId;
+    // Verrouillage / expiration : pas de rechargement, les sections privées se masquent seules
+    if (silent && !unlocked) return;
+
     const load = async () => {
-      setLoading(true);
+      if (!silent) setLoading(true);
       setError(null);
       try {
         const offerData = await getJob(jobId);
@@ -38,26 +47,27 @@ export default function JobDetailPage() {
         // const enrichedData = await enrichJob(offerData.id);
         // setEnriched(enrichedData);
         // }
+        loadedFor.current = jobId;
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Erreur de chargement');
+        if (!silent) setError(e instanceof Error ? e.message : 'Erreur de chargement');
       } finally {
-        setLoading(false);
+        if (!silent) setLoading(false);
       }
     };
 
-    if (jobId) load();
-  }, [jobId]);
+    load();
+  }, [jobId, state, unlocked]);
 
   const enrichTriggered = useRef(false);
   // Déclenchement enrichissement si query param présent
   useEffect(() => {
-    if (!triggerEnrich || !offer || enriched || enrichTriggered.current) return;
+    if (!unlocked || !triggerEnrich || !offer || enriched || enrichTriggered.current) return;
     
     enrichTriggered.current = true;
     enrichJob(offer.id)
       .then(setEnriched)
       .catch(e => console.error('Enrichissement auto échoué :', e));
-  }, [offer]);
+  }, [offer, unlocked]);
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 px-4 py-8">

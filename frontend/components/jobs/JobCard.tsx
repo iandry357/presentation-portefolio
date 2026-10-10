@@ -78,7 +78,7 @@ export default function JobCard({ offer }: JobCardProps) {
             </p>
           )}
         </div>
-        <StatusBadge status={offer.status} />
+        {offer.status && <StatusBadge status={offer.status} />}
       </div>
 
       {/* Infos clés */}
