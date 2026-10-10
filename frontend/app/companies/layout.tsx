@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import AccessGate from '@/components/AccessGate';
+import { AccessGate } from '@/components/PrivateSection';
 
 export const metadata: Metadata = {
   title: 'Fiches entreprises',

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAccess } from '@/components/AccessProvider';
-import AccessUnlockButton from '@/components/AccessUnlockButton';
+import { AccessUnlockButton } from '@/components/AccessCodeForm';
 import { Lock } from 'lucide-react';
 
 const NAV_LINKS = [
