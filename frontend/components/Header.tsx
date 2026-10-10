@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAccess } from '@/components/AccessProvider';
+import AccessUnlockButton from '@/components/AccessUnlockButton';
 import { Lock } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -20,7 +21,7 @@ const NAV_LINKS = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const { unlocked, lock } = useAccess();
+  const { state, unlocked, lock } = useAccess();
 
   return (
     <header className="border-b bg-white sticky top-0 z-50">
@@ -60,6 +61,7 @@ export default function Header() {
                 Verrouiller
               </button>
             )}
+            {state === 'locked' && <AccessUnlockButton variant="desktop" />}
           </nav>
 
           {/* Bouton hamburger mobile */}
@@ -110,6 +112,7 @@ export default function Header() {
               Verrouiller
             </button>
           )}
+          {state === 'locked' && <AccessUnlockButton variant="mobile" />}
         </div>
       )}
     </header>
