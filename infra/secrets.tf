@@ -12,6 +12,7 @@ locals {
     OPENAI_API_KEY               = var.openai_api_key
     POSTGRES_PASSWORD            = var.postgres_password
     SERPER_API_KEY               = var.serper_api_key
+    ACCESS_CODE                  = var.access_code
   }
 }
 

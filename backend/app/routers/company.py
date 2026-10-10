@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.access_control import require_access
 from app.core.config import settings
 from app.core.database import get_db
 from app.models.company_profile import CompanyProfile
@@ -29,7 +30,7 @@ from app.models.job_offer import JobOffer
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/companies", tags=["companies"])
+router = APIRouter(prefix="/companies", tags=["companies"], dependencies=[Depends(require_access)])
 
 RECALCUL_MAX = 3
 

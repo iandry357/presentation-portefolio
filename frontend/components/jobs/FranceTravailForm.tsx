@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { addManualJob } from '@/lib/api';
 import { JobOfferDetail } from '@/types';
+import { useAccess } from '@/components/AccessProvider';
 
 interface FranceTravailFormProps {
   onSuccess: (job: JobOfferDetail) => void;
@@ -14,6 +15,7 @@ export default function FranceTravailForm({ onSuccess, onCancel }: FranceTravail
   const [ftId, setFtId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { refresh } = useAccess();
 
   const handleSubmit = async () => {
     if (!ftId.trim()) return;
@@ -24,6 +26,7 @@ export default function FranceTravailForm({ onSuccess, onCancel }: FranceTravail
       onSuccess(job);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur ajout manuel');
+      refresh();
     } finally {
       setLoading(false);
     }

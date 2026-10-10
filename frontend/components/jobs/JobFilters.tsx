@@ -1,6 +1,7 @@
 'use client';
 
 import { JobFilters } from '@/types';
+import PrivateSection from '@/components/PrivateSection';
 
 // ============================================================================
 // Options filtres
@@ -73,18 +74,20 @@ export default function JobFiltersPanel({ filters, onChange, onClose  }: JobFilt
       </div>
 
       {/* Statut */}
-      <div className="space-y-1">
-        <label className="text-xs text-gray-500 dark:text-gray-400">Statut</label>
-        <select
-          value={filters.status ?? ''}
-          onChange={e => update({ status: e.target.value || undefined })}
-          className="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded px-3 py-1.5 text-gray-900 dark:text-white"
-        >
-          {STATUSES.map(o => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-      </div>
+      <PrivateSection>
+        <div className="space-y-1">
+          <label className="text-xs text-gray-500 dark:text-gray-400">Statut</label>
+          <select
+            value={filters.status ?? ''}
+            onChange={e => update({ status: e.target.value || undefined })}
+            className="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded px-3 py-1.5 text-gray-900 dark:text-white"
+          >
+            {STATUSES.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+      </PrivateSection>
 
       {/* Code postal */}
       <div className="space-y-1">
@@ -114,18 +117,20 @@ export default function JobFiltersPanel({ filters, onChange, onClose  }: JobFilt
       </div>
 
       {/* Masquer consultées */}
-      <div className="flex items-center gap-2 pt-1">
-        <input
-          type="checkbox"
-          id="hide_consulted"
-          checked={filters.hide_consulted}
-          onChange={e => update({ hide_consulted: e.target.checked })}
-          className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
-        />
-        <label htmlFor="hide_consulted" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
-          Masquer les consultées
-        </label>
-      </div>
+      <PrivateSection>
+        <div className="flex items-center gap-2 pt-1">
+          <input
+            type="checkbox"
+            id="hide_consulted"
+            checked={filters.hide_consulted}
+            onChange={e => update({ hide_consulted: e.target.checked })}
+            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
+          />
+          <label htmlFor="hide_consulted" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+            Masquer les consultées
+          </label>
+        </div>
+      </PrivateSection>
       
       {/* Alertes email */}
       <div className="space-y-2 pt-1">

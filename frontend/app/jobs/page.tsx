@@ -9,6 +9,8 @@ import JobFiltersPanel from '@/components/jobs/JobFilters';
 import FeedbackWidget from "@/components/feedback/FeedbackWidget";
 
 import AddJobModal from '@/components/jobs/AddJobModal';
+import PrivateSection from '@/components/PrivateSection';
+import { useAccess } from '@/components/AccessProvider';
 
 import { useRouter } from 'next/navigation';
 
@@ -53,6 +55,7 @@ export default function JobsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
+  const { state, unlocked, refresh } = useAccess();
 
 //   const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
   const isDev = true;
@@ -75,9 +78,22 @@ export default function JobsPage() {
     }
   }, [filters]);
 
+  // Attend de connaître l'état d'accès, puis recharge quand il change
+  // (le backend renvoie des champs différents selon le mode).
   useEffect(() => {
+    if (state === 'loading') return;
     loadOffers();
-  }, [loadOffers]);
+  }, [loadOffers, state, unlocked]);
+
+  // Au verrouillage, les filtres privés sont remis à zéro (leurs contrôles disparaissent)
+  useEffect(() => {
+    if (state !== 'locked') return;
+    setFilters(f =>
+      f.status || f.hide_consulted
+        ? { ...f, status: undefined, hide_consulted: false, page: 1 }
+        : f
+    );
+  }, [state]);
 
   // ============================================================================
   // Déclenchement manuel pipeline
@@ -94,6 +110,7 @@ export default function JobsPage() {
       await loadOffers();
     } catch (e) {
       setTriggerResult(e instanceof Error ? e.message : 'Erreur pipeline');
+      refresh();
     } finally {
       setTriggering(false);
     }
@@ -117,6 +134,7 @@ export default function JobsPage() {
       await loadOffers();  // recharge la liste
     } catch (err: any) {
       setResetResult(err.message || 'Erreur lors du reset');
+      refresh();
     } finally {
       setResetting(false);
     }
@@ -174,6 +192,7 @@ export default function JobsPage() {
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             </button>
 
+            <PrivateSection>
             {/* Trigger pipeline (dev uniquement) */}
             {isDev && (
               <button
@@ -208,13 +227,16 @@ export default function JobsPage() {
               <span className="sm:hidden">+</span>
               <span className="hidden sm:inline">+ Ajouter une offre</span>
             </button>
+            </PrivateSection>
 
             {/* Modale ajout manuel */}
             {showManualModal && (
-              <AddJobModal
-                onSuccess={handleJobAdded}
-                onClose={() => setShowManualModal(false)}
-              />
+              <PrivateSection reauth>
+                <AddJobModal
+                  onSuccess={handleJobAdded}
+                  onClose={() => setShowManualModal(false)}
+                />
+              </PrivateSection>
             )}
           </div>
         </div>

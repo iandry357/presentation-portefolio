@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AccessGate } from "@/components/PrivateSection";
 
 export const metadata: Metadata = {
   title: "Explorer le marché | Portfolio",
@@ -10,5 +11,5 @@ export default function ExploreLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <AccessGate title="Explorer le marché">{children}</AccessGate>;
 }

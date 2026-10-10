@@ -11,6 +11,8 @@ import remarkGfm from 'remark-gfm';
 import { updateJobStatus, enrichJob, FT_BASE_URL } from '@/lib/api';
 // import CompanySection from '@/components/jobs/CompanyDetail';
 import CompanySection from '@/components/jobs/CompanySection';
+import PrivateSection from '@/components/PrivateSection';
+import { useAccess } from '@/components/AccessProvider';
 
 import { useRouter } from 'next/navigation';
 import ExternalJobForm from '@/components/jobs/ExternalJobForm';
@@ -64,13 +66,14 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState<string | null>(null);
   const [enregistre, setEnregistre] = useState(offer.status === 'enregistre');
-  const [notes, setNotes] = useState<string | null>(offer.notes);
+  const [notes, setNotes] = useState<string | null>(offer.notes ?? null);
   const [companyOpen, setCompanyOpen] = useState(false);
   const companyRef = useRef<HTMLDivElement>(null);
   const [companyProfileId, setCompanyProfileId] = useState<number | null>(
-    offer.company_profile_id
+    offer.company_profile_id ?? null
   );
   const router = useRouter();
+  const { refresh } = useAccess();
   const [editOpen, setEditOpen] = useState(false);
 
   // États des accordéons
@@ -92,12 +95,21 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
     }, 50);
   };
 
+  // Resynchronise les états dérivés quand l'offre est rechargée (changement d'accès)
+  useEffect(() => {
+    setStatus(offer.status);
+    setEnregistre(offer.status === 'enregistre');
+    setNotes(offer.notes ?? null);
+    setCompanyProfileId(offer.company_profile_id ?? null);
+  }, [offer]);
+
   const handlePostule = async () => {
     try {
       await updateJobStatus(offer.id, 'postule');
       setStatus('postule');
     } catch (e) {
       console.error(e);
+      refresh();
     }
   };
 
@@ -109,6 +121,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       onEnrichedUpdate(result);
     } catch (e) {
       setEnrichError(e instanceof Error ? e.message : 'Erreur enrichissement');
+      refresh();
     } finally {
       setEnriching(false);
     }
@@ -120,6 +133,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       setEnregistre(true);
     } catch (e) {
       console.error(e);
+      refresh();
     }
   };
 
@@ -171,6 +185,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
             )}
           </div>
 
+          <PrivateSection>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             {status !== 'postule' ? (
               <button
@@ -210,6 +225,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
               Modifier
             </button>
           </div>
+          </PrivateSection>
         </div>
 
         {/* Infos clés */}
@@ -258,6 +274,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       <div className="sticky top-16 z-20 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 flex items-center gap-1 shadow-sm">
         <span className="text-xs text-gray-400 dark:text-gray-500 mr-2 shrink-0">Aller à :</span>
 
+        <PrivateSection>
         <button
           onClick={() => scrollTo(ficheRef, () => setFicheOpen(true))}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
@@ -269,6 +286,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           <Sparkles className="w-3.5 h-3.5" />
           Fiche synthétique
         </button>
+        </PrivateSection>
 
         {offer.description && (
           <button
@@ -284,6 +302,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           </button>
         )}
 
+        <PrivateSection>
         <button
           onClick={() => scrollTo(notesRef, () => setNotesOpen(true))}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
@@ -295,7 +314,9 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           <NotebookPen className="w-3.5 h-3.5" />
           Mes notes
         </button>
+        </PrivateSection>
 
+        <PrivateSection>
         <button
           onClick={() => scrollTo(companyRef, () => setCompanyOpen(true))}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
@@ -307,9 +328,11 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           <Factory className="w-3.5 h-3.5" />
           Fiche entreprise
         </button>
+        </PrivateSection>
       </div>
 
       {/* ── Fiche enrichie (accordéon) ───────────────────────────────────── */}
+      <PrivateSection>
       <div ref={ficheRef}>
         <CollapsibleSection
           title="Fiche synthétique"
@@ -439,6 +462,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           </div>
         </CollapsibleSection>
       </div>
+      </PrivateSection>
 
       {/* ── Description brute (accordéon) ───────────────────────────────── */}
       {offer.description && (
@@ -457,6 +481,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       )}
 
       {/* ── Mes notes (accordéon) ────────────────────────────────────────── */}
+      <PrivateSection>
       <div ref={notesRef}>
         <CollapsibleSection
           title="Mes notes"
@@ -467,7 +492,9 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           <JobNotes jobId={offer.id} initialNotes={notes} onNotesSaved={setNotes} />
         </CollapsibleSection>
       </div>
+      </PrivateSection>
 
+      <PrivateSection>
       <div ref={companyRef}>
         <CollapsibleSection
           title="Fiche entreprise"
@@ -491,8 +518,10 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
           />
         </CollapsibleSection>
       </div>
+      </PrivateSection>
 
       {editOpen && (
+        <PrivateSection reauth>
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-8 px-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-2xl">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -527,6 +556,7 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
             </div>
           </div>
         </div>
+        </PrivateSection>
       )}
 
     </div>

@@ -8,7 +8,7 @@ import {
   ExternalJobOfferCreate,
   FeedbackCreate, FeedbackCreateResponse  } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = '/backend';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
 
 export async function sendMessage(
@@ -590,4 +590,53 @@ export async function getExploreFilters(): Promise<FilterOptions> {
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
   return response.json();
+}
+
+// ============================================================================
+// Accès privé — statut, déverrouillage, verrouillage
+// ============================================================================
+
+import { AccessStatus, UnlockResult } from '@/types';
+
+// Lecture seule côté serveur : ne prolonge pas la session
+export async function getAccessStatus(): Promise<AccessStatus> {
+  const response = await fetch(`${API_URL}/access/status`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function unlockAccess(code: string): Promise<UnlockResult> {
+  const response = await fetch(`${API_URL}/access/unlock`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code }),
+  });
+
+  if (response.ok) {
+    return { ok: true, status: await response.json() };
+  }
+
+  const error = await response.json().catch(() => ({}));
+  const message =
+    typeof error.detail === 'string' ? error.detail : `HTTP ${response.status}`;
+
+  if (response.status === 429) {
+    const retryAfter = Number(response.headers.get('Retry-After'));
+    return {
+      ok: false,
+      reason: 'blocked',
+      message,
+      retryAfterSeconds: retryAfter > 0 ? retryAfter : undefined,
+    };
+  }
+  return { ok: false, reason: response.status === 401 ? 'invalid' : 'error', message };
+}
+
+export async function lockAccess(): Promise<void> {
+  const response = await fetch(`${API_URL}/access/lock`, { method: 'POST' });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
 }

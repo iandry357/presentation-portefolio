@@ -5,14 +5,15 @@ Router /explore — lecture paginée des offres depuis BigQuery.
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
+from app.core.access_control import require_access
 from app.services.bigquery_client import fetch_offers, fetch_filter_options
 from app.schemas.explore import ExploreResponse, FilterOptions
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/explore", tags=["explore"])
+router = APIRouter(prefix="/explore", tags=["explore"], dependencies=[Depends(require_access)])
 
 
 @router.get("", response_model=ExploreResponse)

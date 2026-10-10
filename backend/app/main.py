@@ -10,6 +10,7 @@ from app.routers.company import router as company_router
 from app.routers.jobs import router as jobs_router
 from app.routers import feedback
 from app.routers import session
+from app.routers import access
 
 from app.routers.explore import router as explore_router
 from app.routers.market import router as market_router
@@ -83,6 +84,7 @@ app.include_router(jobs_router)
 app.include_router(company_router)
 app.include_router(feedback.router)
 app.include_router(session.router)
+app.include_router(access.router)
 app.include_router(explore_router)
 app.include_router(market_router)
 

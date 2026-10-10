@@ -3,9 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, delete
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime, timedelta
 
+from app.core.access_control import get_access_state, require_access
 from app.core.database import get_db
 from sqlalchemy.orm import selectinload
 from app.core.config import settings
@@ -16,8 +17,11 @@ from app.services.france_travail_client import get_offer_detail
 from scheduler.job_pipeline import _map_offer_to_model
 from app.schemas.jobs import (
     JobListResponse,
+    JobListPublicResponse,
     JobOfferSummary,
+    JobOfferPublicSummary,
     JobOfferDetail,
+    JobOfferPublicDetail,
     JobEnrichedResponse,
     RecalculRequest,
     StatusUpdateRequest,
@@ -44,9 +48,10 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 # GET /jobs — Liste paginée avec filtres
 # ============================================================================
 
-@router.get("", response_model=JobListResponse)
+@router.get("", response_model=Union[JobListResponse, JobListPublicResponse])
 async def list_jobs(
     db: AsyncSession = Depends(get_db),
+    unlocked: bool = Depends(get_access_state),
     # Pagination
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
@@ -63,10 +68,11 @@ async def list_jobs(
     if contract_type:
         filters.append(JobOffer.contract_type == contract_type)
 
-    if status:
+    # Filtres sur le statut ignorés en public : ils permettraient de déduire le statut des offres
+    if status and unlocked:
         filters.append(JobOffer.status == status)
 
-    if hide_consulted:
+    if hide_consulted and unlocked:
         filters.append(JobOffer.status != "consulte")
 
     if postal_code:
@@ -95,6 +101,13 @@ async def list_jobs(
     result = await db.execute(query)
     offers = result.scalars().all()
 
+    # Public : schéma sans champs privés (ni statut, ni notes, ni has_enriched)
+    if not unlocked:
+        return JobListPublicResponse(
+            total=total,
+            items=[JobOfferPublicSummary.model_validate(o) for o in offers],
+        )
+
     # Vérifier quelles offres ont une fiche enrichie
     offer_ids = [o.id for o in offers]
     enriched_ids = set()
@@ -118,7 +131,7 @@ async def list_jobs(
 # POST /jobs/manual — Ajout manuel d'une offre par ft_id
 # ============================================================================
 
-@router.post("/manual", response_model=JobOfferDetail)
+@router.post("/manual", response_model=JobOfferDetail, dependencies=[Depends(require_access)])
 async def add_manual_job(
     body: ManualJobRequest,
     db: AsyncSession = Depends(get_db),
@@ -156,8 +169,12 @@ async def add_manual_job(
 # GET /jobs/{id} — Détail offre + fiche enrichie
 # ============================================================================
 
-@router.get("/{job_id}", response_model=JobOfferDetail)
-async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
+@router.get("/{job_id}", response_model=Union[JobOfferDetail, JobOfferPublicDetail])
+async def get_job(
+    job_id: int,
+    db: AsyncSession = Depends(get_db),
+    unlocked: bool = Depends(get_access_state),
+):
     # offer = await db.get(JobOffer, job_id)
     # if not offer:
     #     raise HTTPException(status_code=404, detail="Offre introuvable")
@@ -171,6 +188,10 @@ async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
     offer = result.scalar_one_or_none()
     if not offer:
         raise HTTPException(status_code=404, detail="Offre introuvable")
+
+    # Public : schéma sans champs privés, et pas d'effet de bord sur le statut
+    if not unlocked:
+        return JobOfferPublicDetail.model_validate(offer)
 
     # Marquer comme consultée si pas encore postulée
     if offer.status == "nouveau" or offer.status == "existant":
@@ -192,7 +213,7 @@ async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
 # GET /jobs/{id}/enriched — Fiche enrichie
 # ============================================================================
 
-@router.get("/{job_id}/enriched", response_model=JobEnrichedResponse)
+@router.get("/{job_id}/enriched", response_model=JobEnrichedResponse, dependencies=[Depends(require_access)])
 async def get_job_enriched(job_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(JobEnriched).where(JobEnriched.job_offer_id == job_id)
@@ -210,7 +231,7 @@ async def get_job_enriched(job_id: int, db: AsyncSession = Depends(get_db)):
 # PATCH /jobs/{id}/status — Mise à jour statut
 # ============================================================================
 
-@router.patch("/{job_id}/status")
+@router.patch("/{job_id}/status", dependencies=[Depends(require_access)])
 async def update_status(
     job_id: int,
     body: StatusUpdateRequest,
@@ -231,7 +252,7 @@ async def update_status(
 # PATCH /jobs/{id}/notes — Sauvegarde des notes personnelles
 # ============================================================================
 
-@router.patch("/{job_id}/notes")
+@router.patch("/{job_id}/notes", dependencies=[Depends(require_access)])
 async def update_notes(
     job_id: int,
     body: JobNotesUpdate,
@@ -250,7 +271,7 @@ async def update_notes(
 # POST /jobs/{id}/enrich — Calcul initial Crew
 # ============================================================================
 
-@router.post("/{job_id}/enrich", response_model=JobEnrichedResponse)
+@router.post("/{job_id}/enrich", response_model=JobEnrichedResponse, dependencies=[Depends(require_access)])
 async def enrich_job(
     job_id: int,
     db: AsyncSession = Depends(get_db),
@@ -316,7 +337,7 @@ async def enrich_job(
 # POST /jobs/{id}/recalcul — Recalcul avec instruction
 # ============================================================================
 
-@router.post("/{job_id}/recalcul", response_model=JobEnrichedResponse)
+@router.post("/{job_id}/recalcul", response_model=JobEnrichedResponse, dependencies=[Depends(require_access)])
 async def recalcul_job(
     job_id: int,
     body: RecalculRequest,
@@ -371,7 +392,7 @@ async def recalcul_job(
 # POST /jobs/pipeline/trigger — Déclenchement manuel (dev uniquement)
 # ============================================================================
 
-@router.post("/pipeline/trigger", response_model=PipelineTriggerResponse)
+@router.post("/pipeline/trigger", response_model=PipelineTriggerResponse, dependencies=[Depends(require_access)])
 async def trigger_pipeline(
     body: TriggerPipelineRequest,
     db: AsyncSession = Depends(get_db),
@@ -411,7 +432,7 @@ async def trigger_pipeline(
 #     await db.commit()
 #     logger.info(f"Reset jobs : {count} offre(s) supprimée(s)")
 #     return {"message": f"{count} offre(s) supprimée(s)", "deleted": count}
-@router.delete("/reset")
+@router.delete("/reset", dependencies=[Depends(require_access)])
 async def reset_jobs(db: AsyncSession = Depends(get_db)):
     """
     Supprime toutes les offres sauf celles avec statut 'postule' ou 'enregistre'.
@@ -451,7 +472,7 @@ async def reset_jobs(db: AsyncSession = Depends(get_db)):
 # POST /jobs/external — Ajout manuel d'une offre externe
 # ============================================================================
 
-@router.post("/external", response_model=JobOfferDetail)
+@router.post("/external", response_model=JobOfferDetail, dependencies=[Depends(require_access)])
 async def add_external_job(
     body: ExternalJobOfferCreate,
     background_tasks: BackgroundTasks,
@@ -533,7 +554,7 @@ async def _background_external_job(
         except Exception as e:
             logger.error(f"Background task job {job_id} : {e}")
 
-@router.patch("/{job_id}", response_model=JobOfferDetail)
+@router.patch("/{job_id}", response_model=JobOfferDetail, dependencies=[Depends(require_access)])
 async def update_job_offer(
     job_id: int,
     payload: JobOfferUpdate,
@@ -594,7 +615,7 @@ async def update_job_offer(
     return detail
     # return _build_detail_response(job, enriched)
 
-@router.post("/gmail/fetch")
+@router.post("/gmail/fetch", dependencies=[Depends(require_access)])
 # async def fetch_gmail_alerts(db: Session = Depends(get_db)):
 async def fetch_gmail_alerts(db: AsyncSession = Depends(get_db)):
     """

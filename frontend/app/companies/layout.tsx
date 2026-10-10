@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { AccessGate } from '@/components/PrivateSection';
 
 export const metadata: Metadata = {
   title: 'Fiches entreprises',
@@ -10,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function CompaniesLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <AccessGate title="Fiches entreprises">{children}</AccessGate>;
 }

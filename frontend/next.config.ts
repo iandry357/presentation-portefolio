@@ -1,14 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
-
-module.exports = {
   output: 'standalone',
-  experimental: {
-    turbo: false, // Désactive Turbopack
+  reactCompiler: true,
+  async rewrites() {
+    return [
+      {
+        source: '/backend/:path*',
+        destination: `${process.env.BACKEND_URL || 'http://localhost:8000'}/:path*`,
+      },
+    ];
   },
 };
 

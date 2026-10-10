@@ -10,7 +10,15 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
   répertoires bien découpés, chaque script à sa place.
 - Sois **précis et terre à terre**. Si tu ne sais pas, dis-le ; ne devine pas un nom de fichier,
   de variable, de table ou de port : vérifie dans le code ou demande-moi.
-- **Jamais de code sans validation.** Déroulé obligatoire :
+- **Jamais de code sans validation.** Une validation = un « ok » explicite de ma part sur le
+  **contenu exact** du diff, affiché au préalable dans la réponse. Un accord sur un plan, une
+  approche ou un principe (« go », « d'accord ») n'autorise **jamais** à écrire. En cas de doute,
+  tu demandes. Cela couvre Edit, Write et NotebookEdit, y compris pour un changement d'une ligne.
+  La validation est **par fichier** : le diff affiché regroupe **tous** les changements prévus
+  dans ce fichier (une seule vue globale, un seul « ok »), puis on passe au fichier suivant.
+  Un changement supplémentaire sur un fichier déjà validé demande une nouvelle validation.
+  Techniquement : un seul appel d'édition par fichier (une confirmation de l'IDE par fichier).
+  Déroulé obligatoire :
   1. je décris le besoin ;
   2. on affine ensemble ;
   3. tu proposes la mise en place ;
@@ -33,6 +41,9 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
 - **Tu ne lis jamais de secret** (`.env`, clés GCP, `tfvars`, `tfstate`, tokens OAuth). Les règles
   `.claude/settings.json` le bloquent. Pour les noms de variables : lis le `.env.example`
   correspondant ou demande-moi. Ne me demande jamais une valeur.
+- Tu n'écris ni ne modifies aucun fichier avant d'avoir affiché le diff dans ta réponse et reçu
+  mon « ok » sur ce diff. Si une erreur de ce type survient, tu le dis, tu montres le diff
+  appliqué et tu proposes l'annulation, sans te justifier.
 - Tu ne proposes jamais de commiter un secret, de faire un `docker system prune` / `docker image prune`
   global, ni de modifier l'infra à la main via une console (tout passe par Terraform).
 
@@ -123,5 +134,12 @@ Métriques, datasets BigQuery et buckets : section « MVPs sectoriels » du `REA
 
 Le suivi d'avancement (feature en cours, où je me suis arrêté, prochaine étape) est dans
 `_docs-local/STATUS.md`, chargé automatiquement via `CLAUDE.local.md`. Commence toute nouvelle tâche
-en t'appuyant dessus. En fin de session, si je te le demande, propose la mise à jour de `STATUS.md`
-sous forme de diff.
+en t'appuyant dessus.
+
+Toute mise à jour de suivi passe par le skill `/livraison` (lancé par moi seul), jamais à la main :
+- fin de session (`/livraison`) : `STATUS.md` + cahier des charges de la feature (`_docs-local/specs/`) ;
+- fin de MVP (`/livraison mvp`) : en plus `CLAUDE.md` et `README.md`.
+
+Quand je dis vouloir m'arrêter, rappelle-moi `/livraison` au lieu de mettre à jour ces fichiers toi-même.
+À la question « où en est-on ? », réponds dans l'ordre : résumé de la feature, objectif, ce qui est
+fait (section « Avancement global » de `STATUS.md`), puis seulement la suite.
