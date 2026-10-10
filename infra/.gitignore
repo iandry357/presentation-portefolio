@@ -8,3 +8,4 @@ terraform.tfstate.backup
 *.tfstate.*
 crash.log
 backend.hcl
+tfplan
