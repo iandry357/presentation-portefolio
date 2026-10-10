@@ -173,6 +173,12 @@ variable "cv_edit_secret_code" {
   sensitive   = true
 }
 
+variable "access_code" {
+  description = "Code d'accès privé (Explorer, Companies, jobs : déverrouillage)"
+  type        = string
+  sensitive   = true
+}
+
 variable "scw_access_key" {
   description = "Scaleway Access Key"
   type        = string

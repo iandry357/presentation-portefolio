@@ -3,6 +3,7 @@ project_id   = ""
 region       = "fr-par"
 zone         = "fr-par-1"
 cors_origins = ""
+
 scw_access_key = "SCWxxxxxxxxxxxxxxxx"
 scw_secret_key = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
@@ -25,9 +26,9 @@ openai_api_key               = ""
 postgres_password            = ""
 
 postgres_host  = ""
-
 serper_api_key = ""
-
 cv_edit_secret_code = "your-secret-code-here"
+access_code = "code"
+
 gcp_service_account_json = ""
 chroma_password = ""
