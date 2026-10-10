@@ -56,7 +56,7 @@ const POCS: PocCard[] = [
     description:
       "Copilote d'ingénierie patrimoniale — génération de profils clients synthétiques RGPD-safe (Mistral, fallback Gemini) et assistant RAG juridique groundé sur le Code Général des Impôts (function calling ReAct, Qwen2.5-Instruct local OVH), citation d'article obligatoire.",
     tags: ['RAG', 'Function Calling', 'ChromaDB', 'LiteLLM', 'Pydantic', 'llama.cpp', 'PostgreSQL'],
-    status: 'wip',
+    status: 'live',
   },
 ];
 
