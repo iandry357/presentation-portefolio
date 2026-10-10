@@ -298,7 +298,7 @@ async def fetch_conversation_history(session_id: str, limit: int = 6) -> List[Di
 
 async def summarize_history(history: List[Dict]) -> str:
     """
-    Compresse l'historique conversationnel en un résumé court via Groq.
+    Compresse l'historique conversationnel en un résumé court via Mistral.
     Retourne une string vide si pas d'historique.
     """
     if not history:
@@ -309,7 +309,7 @@ async def summarize_history(history: List[Dict]) -> str:
     result = await generate_with_fallback(
         system_prompt="Tu résumes en 2-3 phrases maximum les échanges d'une conversation. Garde uniquement les sujets abordés et les informations mentionnées. Ne réponds qu'avec le résumé, rien d'autre.",
         user_prompt=exchanges,
-        models=["groq"],
+        models=["mistral"],
         max_tokens=200,
         temperature=0.1
     )
@@ -341,7 +341,7 @@ période temporelle, continuité explicite.
 Exemples : "tu as utilisé Python ?", "c'était quand ?", "parle-moi de GE Healthcare".""",
         # user_prompt=f"{context_block}\n\nQuestion : {question}",
         user_prompt=question,
-        models=["groq"],
+        models=["mistral"],
         max_tokens=30,
         temperature=0.0
     )
@@ -373,7 +373,7 @@ async def reformulate_question(question: str, history_summary: str) -> str:
 en utilisant le contexte de la conversation précédente.
 Réponds UNIQUEMENT avec la question reformulée, rien d'autre.""",
         user_prompt=f"Conversation précédente : {history_summary}\n\nQuestion à reformuler : {question}",
-        models=["groq"],
+        models=["mistral"],
         max_tokens=50,
         temperature=0.0
     )
