@@ -12,7 +12,6 @@ import { updateJobStatus, enrichJob, FT_BASE_URL } from '@/lib/api';
 // import CompanySection from '@/components/jobs/CompanyDetail';
 import CompanySection from '@/components/jobs/CompanySection';
 import PrivateSection from '@/components/PrivateSection';
-import { useAccess } from '@/components/AccessProvider';
 
 import { useRouter } from 'next/navigation';
 import ExternalJobForm from '@/components/jobs/ExternalJobForm';
@@ -73,7 +72,6 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
     offer.company_profile_id ?? null
   );
   const router = useRouter();
-  const { refresh } = useAccess();
   const [editOpen, setEditOpen] = useState(false);
 
   // États des accordéons
@@ -109,7 +107,6 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       setStatus('postule');
     } catch (e) {
       console.error(e);
-      refresh();
     }
   };
 
@@ -121,7 +118,6 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       onEnrichedUpdate(result);
     } catch (e) {
       setEnrichError(e instanceof Error ? e.message : 'Erreur enrichissement');
-      refresh();
     } finally {
       setEnriching(false);
     }
@@ -133,7 +129,6 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       setEnregistre(true);
     } catch (e) {
       console.error(e);
-      refresh();
     }
   };
 

@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { createExternalJob, updateJob  } from '@/lib/api';
 import { ExternalJobOfferCreate, JobOfferDetail } from '@/types';
-import { useAccess } from '@/components/AccessProvider';
 
 // interface ExternalJobFormProps {
 //   onSuccess: (job: JobOfferDetail, triggerEnrichment: boolean) => void;
@@ -46,7 +45,6 @@ export default function ExternalJobForm({ onSuccess, onCancel, initialValues, jo
   const [form, setForm] = useState<ExternalJobOfferCreate>({ ...EMPTY_FORM, ...initialValues });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { refresh } = useAccess();
 
   const set =(field: keyof ExternalJobOfferCreate, value: string | boolean) =>
     setForm(f => ({ ...f, [field]: value }));
@@ -86,7 +84,6 @@ export default function ExternalJobForm({ onSuccess, onCancel, initialValues, jo
         onSuccess(job, form.trigger_enrichment);
     } catch (e) {
         setError(e instanceof Error ? e.message : "Erreur lors de l'enregistrement");
-        refresh();
     } finally {
         setLoading(false);
     }

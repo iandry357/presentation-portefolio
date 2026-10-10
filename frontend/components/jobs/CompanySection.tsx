@@ -5,7 +5,6 @@ import { Building2, Sparkles } from 'lucide-react';
 import { CompanyProfile } from '@/types';
 import { getCompany, generateCompany } from '@/lib/api';
 import CompanyDetail, { hasPending } from '@/components/jobs/CompanyDetail';
-import { useAccess } from '@/components/AccessProvider';
 
 // ============================================================================
 // Helpers
@@ -45,7 +44,6 @@ export default function CompanySection({ jobId, companyName, companyProfileId, c
   // const [recalculating, setRecalculating] = useState(false);
   // const [recalculInstruction, setRecalculInstruction] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { refresh } = useAccess();
 
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -99,7 +97,6 @@ export default function CompanySection({ jobId, companyName, companyProfileId, c
       if (hasPending(created)) startPolling(created.id);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur lors de la génération.');
-      refresh();
     } finally {
       setGenerating(false);
     }

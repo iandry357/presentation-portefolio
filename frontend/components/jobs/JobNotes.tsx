@@ -13,7 +13,6 @@ import {
   Minus, RemoveFormatting, Pencil, Save, Loader2,
 } from 'lucide-react';
 import { saveJobNotes } from '@/lib/api';
-import { useAccess } from '@/components/AccessProvider';
 
 interface JobNotesProps {
   jobId: number;
@@ -36,7 +35,6 @@ export default function JobNotes({ jobId, initialNotes, onNotesSaved }: JobNotes
   const [editing, setEditing] = useState(!initialNotes);
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState<string | null>(null);
-  const { refresh } = useAccess();
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -74,11 +72,10 @@ export default function JobNotes({ jobId, initialNotes, onNotesSaved }: JobNotes
       setTimeout(() => setSavedMessage(null), 3000);
     } catch {
       setSavedMessage('Erreur lors de la sauvegarde');
-      refresh();
     } finally {
       setSaving(false);
     }
-  }, [editor, jobId, refresh]);
+  }, [editor, jobId]);
 
   if (!editor) return null;
 

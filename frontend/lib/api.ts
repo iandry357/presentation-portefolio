@@ -11,6 +11,45 @@ import {
 const API_URL = '/backend';
 export const FT_BASE_URL = process.env.NEXT_PUBLIC_FT_BASE_URL;
 
+// Erreur HTTP de l'API : `message` = `detail` du backend (ou « HTTP <statut> »)
+export class ApiError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+interface RequestOptions {
+  method?: string;
+  body?: unknown;   // sérialisé en JSON
+}
+
+// Abonné unique, notifié sur tout 403 (accès perdu ou quota) : AccessProvider se resynchronise.
+let onForbidden: (() => void) | null = null;
+export function setForbiddenHandler(handler: (() => void) | null) {
+  onForbidden = handler;
+}
+
+// Appel JSON vers le backend (via le proxy). Corps vide ou 204 : renvoie undefined.
+async function request<T>(path: string, { method = 'GET', body }: RequestOptions = {}): Promise<T> {
+  const response = await fetch(`${API_URL}${path}`, {
+    method,
+    ...(body !== undefined && {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 403) onForbidden?.();
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+    throw new ApiError(response.status, error.detail || `HTTP ${response.status}`);
+  }
+
+  const text = await response.text();
+  return (text ? JSON.parse(text) : undefined) as T;
+}
+
 export async function sendMessage(
   message: string,
   sessionId: string
@@ -71,14 +110,7 @@ export async function getJobs(filters: JobFilters): Promise<JobListResponse> {
     filters.email_sources.forEach(s => params.append('email_sources', s));
   }
 
-  const response = await fetch(`${API_URL}/jobs?${params.toString()}`);
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobListResponse>(`/jobs?${params.toString()}`);
 }
 
 // ============================================================================
@@ -86,31 +118,13 @@ export async function getJobs(filters: JobFilters): Promise<JobListResponse> {
 // ============================================================================
 
 export async function getJob(id: number): Promise<JobOfferDetail> {
-  const response = await fetch(`${API_URL}/jobs/${id}`);
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobOfferDetail>(`/jobs/${id}`);
 }
 
 export async function createExternalJob(
   data: ExternalJobOfferCreate
 ): Promise<JobOfferDetail> {
-  const response = await fetch(`${API_URL}/jobs/external`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobOfferDetail>('/jobs/external', { method: 'POST', body: data });
 }
 
 // ============================================================================
@@ -118,14 +132,7 @@ export async function createExternalJob(
 // ============================================================================
 
 export async function getJobEnriched(id: number): Promise<JobEnriched> {
-  const response = await fetch(`${API_URL}/jobs/${id}/enriched`);
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobEnriched>(`/jobs/${id}/enriched`);
 }
 
 // ============================================================================
@@ -136,16 +143,7 @@ export async function updateJobStatus(
   id: number,
   status: 'consulte' | 'postule' | 'enregistre'
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/jobs/${id}/status`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
+  return request<void>(`/jobs/${id}/status`, { method: 'PATCH', body: { status } });
 }
 
 // ============================================================================
@@ -153,16 +151,7 @@ export async function updateJobStatus(
 // ============================================================================
 
 export async function enrichJob(id: number): Promise<JobEnriched> {
-  const response = await fetch(`${API_URL}/jobs/${id}/enrich`, {
-    method: 'POST',
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobEnriched>(`/jobs/${id}/enrich`, { method: 'POST' });
 }
 
 // ============================================================================
@@ -173,18 +162,7 @@ export async function recalculJob(
   id: number,
   instruction: string
 ): Promise<JobEnriched> {
-  const response = await fetch(`${API_URL}/jobs/${id}/recalcul`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ instruction }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobEnriched>(`/jobs/${id}/recalcul`, { method: 'POST', body: { instruction } });
 }
 
 // ============================================================================
@@ -197,50 +175,15 @@ export async function triggerPipeline(region?: string): Promise<{
   offers_scored: number;
   offers_enriched: number;
 }> {
-  const response = await fetch(`${API_URL}/jobs/pipeline/trigger`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ region: region ?? null }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request('/jobs/pipeline/trigger', { method: 'POST', body: { region: region ?? null } });
 }
 
 export async function resetJobs() {
-  const response = await fetch(`${API_URL}/jobs/reset`, {  // ← adapte le chemin si tu utilises un proxy ou une base url différente
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // credentials: 'include',   // si tu as de l'auth plus tard
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || `Erreur ${response.status}`);
-  }
-
-  return response.json();
+  return request<{ message: string; deleted: number }>('/jobs/reset', { method: 'DELETE' });
 }
 
 export async function addManualJob(ft_id: string): Promise<JobOfferDetail> {
-  const response = await fetch(`${API_URL}/jobs/manual`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ft_id }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+  return request<JobOfferDetail>('/jobs/manual', { method: 'POST', body: { ft_id } });
 }
 
 // ============================================================================
@@ -248,16 +191,7 @@ export async function addManualJob(ft_id: string): Promise<JobOfferDetail> {
 // ============================================================================
 
 export async function saveJobNotes(id: number, notes: string): Promise<void> {
-  const response = await fetch(`${API_URL}/jobs/${id}/notes`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ notes }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
+  return request<void>(`/jobs/${id}/notes`, { method: 'PATCH', body: { notes } });
 }
 
 // ============================================================================
@@ -265,31 +199,20 @@ export async function saveJobNotes(id: number, notes: string): Promise<void> {
 // ============================================================================
 
 export async function getCompanies(): Promise<CompanyProfileSummary[]> {
-  const response = await fetch(`${API_URL}/companies`);
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-  return response.json();
+  return request<CompanyProfileSummary[]>('/companies');
 }
 
 export async function getCompany(id: number): Promise<CompanyProfile> {
-  const response = await fetch(`${API_URL}/companies/${id}`);
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-  return response.json();
+  return request<CompanyProfile>(`/companies/${id}`);
 }
 
 export async function getCompanyByJob(jobId: number): Promise<CompanyProfile | null> {
-  const response = await fetch(`${API_URL}/companies/by-job/${jobId}`);
-  if (response.status === 404) return null;
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
+  try {
+    return await request<CompanyProfile>(`/companies/by-job/${jobId}`);
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 404) return null;
+    throw e;
   }
-  return response.json();
 }
 
 // export async function generateCompany(
@@ -300,64 +223,33 @@ export async function generateCompany(
   jobId: number,
   companyName?: string
 ): Promise<{ company_profile_id: number; message: string }> {
-  const response = await fetch(`${API_URL}/companies/generate`, {
+  return request('/companies/generate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify({ job_id: jobId, company_name: companyName ?? null }),
-    body: JSON.stringify({ job_offer_id: jobId, name_input: companyName ?? '' }),
+    // body: { job_id: jobId, company_name: companyName ?? null },
+    body: { job_offer_id: jobId, name_input: companyName ?? '' },
   });
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-  return response.json();
 }
 
 export async function refreshCompany(id: number): Promise<void> {
-  const response = await fetch(`${API_URL}/companies/${id}/refresh`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
-  });
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
+  return request<void>(`/companies/${id}/refresh`, { method: 'POST', body: {} });
 }
 
 export async function recalculCompany(
   id: number,
   instruction?: string
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/companies/${id}/recalcul`, {
+  return request<void>(`/companies/${id}/recalcul`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ instruction: instruction ?? null }),
+    body: { instruction: instruction ?? null },
   });
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
 }
 
 export async function relaunchCompany(id: number): Promise<void> {
-  const response = await fetch(`${API_URL}/companies/${id}/relaunch`, {
-    method: 'POST',
-  });
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
+  return request<void>(`/companies/${id}/relaunch`, { method: 'POST' });
 }
 
 export async function deleteCompany(id: number): Promise<void> {
-  const response = await fetch(`${API_URL}/companies/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok && response.status !== 204) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
+  return request<void>(`/companies/${id}`, { method: 'DELETE' });   // 204 géré par le helper
 }
 
 // ============================================================================
@@ -534,19 +426,11 @@ export async function updateJob(
   jobId: number,
   data: Partial<ExternalJobOfferCreate>
 ): Promise<JobOfferDetail> {
-  const res = await fetch(`${API_URL}/jobs/${jobId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) throw new Error('Erreur lors de la mise à jour');
-  return res.json();
+  return request<JobOfferDetail>(`/jobs/${jobId}`, { method: 'PATCH', body: data });
 }
 
 export async function fetchGmailAlerts(): Promise<{ inserted: number; skipped: number; errors: number }> {
-  const res = await fetch(`${API_URL}/jobs/gmail/fetch`, { method: 'POST' });
-  if (!res.ok) throw new Error('Erreur lors de la récupération Gmail');
-  return res.json();
+  return request<{ inserted: number; skipped: number; errors: number }>('/jobs/gmail/fetch', { method: 'POST' });
 }
 
 // ============================================================================
@@ -575,21 +459,11 @@ export async function getExploreOffers(params: {
   if (params.entreprise_nom)              p.set('entreprise_nom', params.entreprise_nom);
   if (params.recherche_mot_cle)           p.set('recherche_mot_cle', params.recherche_mot_cle);
 
-  const response = await fetch(`${API_URL}/explore?${p.toString()}`);
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-  return response.json();
+  return request<ExploreResponse>(`/explore?${p.toString()}`);
 }
 
 export async function getExploreFilters(): Promise<FilterOptions> {
-  const response = await fetch(`${API_URL}/explore/filters`);
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
-  }
-  return response.json();
+  return request<FilterOptions>('/explore/filters');
 }
 
 // ============================================================================

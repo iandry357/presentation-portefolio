@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { getAccessStatus, lockAccess, unlockAccess } from '@/lib/api';
+import { getAccessStatus, lockAccess, setForbiddenHandler, unlockAccess } from '@/lib/api';
 import { POLL_INTERVAL_MS, POLL_THRESHOLD_SECONDS, shouldPoll } from '@/lib/access';
 import type { AccessStatus, UnlockResult } from '@/types';
 
@@ -70,6 +70,12 @@ export default function AccessProvider({ children }: { children: ReactNode }) {
   // Au chargement
   useEffect(() => {
     refresh();
+  }, [refresh]);
+
+  // Tout 403 d'un appel API resynchronise l'état d'accès (accès perdu → verrouillé)
+  useEffect(() => {
+    setForbiddenHandler(refresh);
+    return () => setForbiddenHandler(null);
   }, [refresh]);
 
   // Au retour sur l'onglet

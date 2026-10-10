@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { JobEnriched } from '@/types';
 import { recalculJob } from '@/lib/api';
-import { useAccess } from '@/components/AccessProvider';
 
 interface RecalculButtonProps {
   jobId: number;
@@ -22,7 +21,6 @@ export default function RecalculButton({
   const [instruction, setInstruction] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { refresh } = useAccess();
 
   const isDisabled = recalculRemaining === 0;
 
@@ -36,7 +34,6 @@ export default function RecalculButton({
       setInstruction('');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur recalcul');
-      refresh();
     } finally {
       setLoading(false);
     }
