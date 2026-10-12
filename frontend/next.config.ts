@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
+  experimental: {
+    proxyTimeout: 180_000,
+  },
   async rewrites() {
     return [
       {
