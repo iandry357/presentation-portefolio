@@ -62,6 +62,18 @@ variable "db_user" {
   default     = "portefolio-credential"
 }
 
+variable "top_offres_db_user" {
+  description = "Utilisateur PostgreSQL lecture seule du MVP Top Offres"
+  type        = string
+  default     = "top-offres-reader"
+}
+
+variable "top_offres_db_password" {
+  description = "Mot de passe de l'utilisateur PostgreSQL lecture seule du MVP Top Offres"
+  type        = string
+  sensitive   = true
+}
+
 # Secrets
 variable "gemini_api_key" {
   description = "Gemini API Key"
