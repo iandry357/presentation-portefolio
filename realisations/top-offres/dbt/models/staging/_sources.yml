@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: emploi_marche
+    database: gen-lang-client-0989575872
+    schema: emploi_marche
+    tables:
+      - name: stg_offres
+        description: >
+          Vue dbt existante (projet gcp/dbt_transformation) : miroir dédupliqué de
+          emploi_marche.offres_brutes. Lecture seule, jamais modifiée par ce projet.
+        columns:
+          - name: id_unique
+            tests:
+              - not_null
+          - name: titre
+            tests:
+              - not_null
+          - name: date_collecte
+            tests:
+              - not_null
