@@ -57,6 +57,7 @@ APPLIQUER_EXCLUSIONS = _bool("APPLIQUER_EXCLUSIONS", True)
 TAUX_ERREUR_LLM_MAX = float(os.environ.get("TAUX_ERREUR_LLM_MAX", "0.05"))
 DERNIERS_JOURS_DEFAUT = int(os.environ.get("DERNIERS_JOURS_DEFAUT", "30"))
 CACHE_ENTREPRISE_JOURS = int(os.environ.get("CACHE_ENTREPRISE_JOURS", "90"))
+MAX_APPELS_API_PAR_RUN = int(os.environ.get("MAX_APPELS_API_PAR_RUN", "200"))
 
 # Chemins (racine du MVP = /app dans le conteneur)
 RESULTS_DIR = BASE_DIR / "results"

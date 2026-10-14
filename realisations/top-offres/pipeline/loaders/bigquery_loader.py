@@ -9,6 +9,9 @@ from pipeline import config
 logger = logging.getLogger(__name__)
 
 TABLE_CIBLES = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.cibles"
+TABLE_EXCLUES = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.entreprises_exclues"
+TABLE_ENTREPRISES_REF = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.entreprises_ref"
+TABLE_INTERMEDIAIRES = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.intermediaires_connus"  # seed dbt
 
 
 def _client() -> bigquery.Client:
@@ -81,3 +84,60 @@ def archiver_autres_versions(version_cibles: str) -> None:
         "WHERE statut = 'validee' AND version_cibles != @v"
     )
     _client().query(requete, job_config=_param_version(version_cibles)).result()
+
+
+def remplacer_exclues(lignes: list[dict]) -> None:
+    """Remplace le contenu de entreprises_exclues en conservant la table (et son schéma Terraform)."""
+    client = _client()
+    if not lignes:
+        client.query(f"TRUNCATE TABLE `{TABLE_EXCLUES}`").result()
+        return
+    job_config = bigquery.LoadJobConfig(
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+        schema=client.get_table(TABLE_EXCLUES).schema,
+    )
+    client.load_table_from_json(lignes, TABLE_EXCLUES, job_config=job_config).result()
+    logger.info("BigQuery : %d entreprises exclues chargées dans %s", len(lignes), TABLE_EXCLUES)
+
+
+def lire_cles_en_cache(cles: list[str], jours: int) -> set[str]:
+    """Clés de entreprises_ref dont la mise à jour date de moins de `jours` jours."""
+    if not cles:
+        return set()
+    requete = (
+        f"SELECT nom_normalise FROM `{TABLE_ENTREPRISES_REF}` "
+        "WHERE nom_normalise IN UNNEST(@cles) "
+        "AND maj_le >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @jours DAY)"
+    )
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ArrayQueryParameter("cles", "STRING", cles),
+            bigquery.ScalarQueryParameter("jours", "INT64", jours),
+        ]
+    )
+    return {ligne.nom_normalise for ligne in _client().query(requete, job_config=job_config).result()}
+
+
+def lire_intermediaires() -> set[str]:
+    """Noms normalisés du seed dbt intermediaires_connus."""
+    requete = f"SELECT nom_normalise FROM `{TABLE_INTERMEDIAIRES}`"
+    return {ligne.nom_normalise for ligne in _client().query(requete).result()}
+
+
+def ecrire_entreprises_ref(lignes: list[dict]) -> int:
+    """Remplace les lignes des clés concernées (suppression puis chargement)."""
+    if not lignes:
+        return 0
+    client = _client()
+    cles = [ligne["nom_normalise"] for ligne in lignes]
+    suppression = bigquery.QueryJobConfig(
+        query_parameters=[bigquery.ArrayQueryParameter("cles", "STRING", cles)]
+    )
+    client.query(
+        f"DELETE FROM `{TABLE_ENTREPRISES_REF}` WHERE nom_normalise IN UNNEST(@cles)",
+        job_config=suppression,
+    ).result()
+    job_config = bigquery.LoadJobConfig(write_disposition=bigquery.WriteDisposition.WRITE_APPEND)
+    client.load_table_from_json(lignes, TABLE_ENTREPRISES_REF, job_config=job_config).result()
+    logger.info("BigQuery : %d entreprises écrites dans %s", len(lignes), TABLE_ENTREPRISES_REF)
+    return len(lignes)
