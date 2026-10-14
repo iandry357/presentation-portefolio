@@ -1,0 +1,5 @@
+# constraints.txt — pipeline top-offres
+#
+# Rien à contraindre pour l'instant. A completer apres le premier build
+# (pip freeze dans le conteneur) : figer numpy, google-cloud-bigquery et
+# google-cloud-storage, dont les versions sont imposees par dbt-bigquery.

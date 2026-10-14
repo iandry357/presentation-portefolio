@@ -1,0 +1,21 @@
+# docker-compose.yml — pipeline top-offres
+#
+# Usage (pattern "one-shot" du portfolio, jamais `up -d` pour ce service) :
+#   docker-compose build
+#   docker-compose run --rm pipeline pipeline/orchestrator.py <mode> [options]
+#   docker-compose run --rm pipeline scripts/inspect_run.py   (script ponctuel)
+
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    container_name: top-offres-pipeline
+    env_file:
+      - ../.env
+    volumes:
+      # Clé de service GCP (SA pipeline-top-offres), jamais commitée
+      - ../gcp_sa_top_offres.json:/app/gcp_sa_top_offres.json:ro
+      # Rapports locaux et exports de cibles, non versionnés
+      - ../results:/app/results
+    restart: "no"
