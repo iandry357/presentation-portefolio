@@ -148,6 +148,8 @@ _docs-local/
 
 # --- Top Offres ---
 realisations/top-offres/.env
+realisations/top-offres/gcp_sa_top_offres.json
+realisations/top-offres/key_b64.txt
 realisations/top-offres/results/*
 !realisations/top-offres/results/.gitkeep
 realisations/top-offres/dbt/target/
