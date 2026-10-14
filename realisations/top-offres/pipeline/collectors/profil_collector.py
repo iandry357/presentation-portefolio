@@ -45,3 +45,18 @@ def construire_texte_profil(experiences: list[dict]) -> str:
             f"Technologies : {technologies}"
         )
     return "\n\n".join(blocs)
+
+
+def construire_resume_profil(experiences: list[dict]) -> str:
+    """Résumé court transmis au scoring : une ligne par expérience (rôle, années, technologies)
+    et la liste agrégée des technologies. Construit sans LLM."""
+    lignes, technologies = [], []
+    for exp in experiences:
+        debut = exp["start_date"].year if exp["start_date"] else "?"
+        fin = exp["end_date"].year if exp["end_date"] else "aujourd'hui"
+        techs = exp["technologies"] or []
+        lignes.append(
+            f"- {exp['role']} ({debut}-{fin}) : {', '.join(techs) if techs else 'technologies non précisées'}"
+        )
+        technologies.extend(t for t in techs if t not in technologies)
+    return "\n".join(lignes) + "\n\nTechnologies : " + ", ".join(technologies)

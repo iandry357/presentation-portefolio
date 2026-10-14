@@ -141,3 +141,52 @@ def ecrire_entreprises_ref(lignes: list[dict]) -> int:
     client.load_table_from_json(lignes, TABLE_ENTREPRISES_REF, job_config=job_config).result()
     logger.info("BigQuery : %d entreprises écrites dans %s", len(lignes), TABLE_ENTREPRISES_REF)
     return len(lignes)
+
+
+TABLE_STAGING = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.offres_scores_staging"
+
+
+def lire_cibles_validees() -> list[dict]:
+    """Cibles de la version validée la plus récente (une seule version active)."""
+    requete = f"""
+        SELECT version_cibles, cible_id, intitule, niveau, description
+        FROM `{TABLE_CIBLES}`
+        WHERE statut = 'validee'
+          AND version_cibles = (
+              SELECT version_cibles FROM `{TABLE_CIBLES}`
+              WHERE statut = 'validee' ORDER BY valide_le DESC LIMIT 1
+          )
+        ORDER BY cible_id
+    """
+    return [dict(ligne.items()) for ligne in _client().query(requete).result()]
+
+
+def lire_entreprises_ref(cles: list[str]) -> dict[str, dict]:
+    """Lignes de entreprises_ref pour les clés demandées, indexées par nom_normalise."""
+    if not cles:
+        return {}
+    requete = (
+        "SELECT nom_normalise, type_annonceur, naf_code, naf_libelle "
+        f"FROM `{TABLE_ENTREPRISES_REF}` WHERE nom_normalise IN UNNEST(@cles)"
+    )
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[bigquery.ArrayQueryParameter("cles", "STRING", cles)]
+    )
+    return {
+        ligne.nom_normalise: dict(ligne.items())
+        for ligne in _client().query(requete, job_config=job_config).result()
+    }
+
+
+def remplacer_staging(lignes: list[dict]) -> None:
+    """Remplace le contenu de offres_scores_staging (vidé à chaque run) en conservant la table Terraform."""
+    client = _client()
+    if not lignes:
+        client.query(f"TRUNCATE TABLE `{TABLE_STAGING}`").result()
+        return
+    job_config = bigquery.LoadJobConfig(
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+        schema=client.get_table(TABLE_STAGING).schema,
+    )
+    client.load_table_from_json(lignes, TABLE_STAGING, job_config=job_config).result()
+    logger.info("BigQuery : %d lignes chargées dans %s", len(lignes), TABLE_STAGING)
