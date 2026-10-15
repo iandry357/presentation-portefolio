@@ -55,6 +55,10 @@ resource "google_bigquery_table" "entreprises_ref" {
     { name = "origine", type = "STRING" },
     { name = "confiance", type = "FLOAT" },
     { name = "maj_le", type = "TIMESTAMP" },
+    { name = "secteur", type = "STRING" },
+    { name = "secteur_source", type = "STRING" },
+    { name = "secteur_confiance", type = "STRING" },
+    { name = "secteur_essai", type = "INTEGER" },
   ])
 
   lifecycle {
