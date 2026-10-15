@@ -179,10 +179,23 @@ def enrichir_entreprises(entreprises: list[dict]) -> dict:
     intermediaires = bigquery_loader.lire_intermediaires()
     a_traiter = [e for e in entreprises if e["nom_normalise"] and e["nom_normalise"] not in en_cache]
 
+    nb_connues = sum(est_intermediaire_connu(e["nom_normalise"], intermediaires) for e in a_traiter)
+    logger.info(
+        "Entreprises : %d demandées, %d déjà connues (cache de %d jours), %d à traiter",
+        len(entreprises), len(entreprises) - len(a_traiter), config.CACHE_ENTREPRISE_JOURS, len(a_traiter),
+    )
+    logger.info(
+        "À traiter : %d appels API prévus (plafond %d), %d intermédiaires du seed sans appel ; "
+        "recherches web de secteur selon le NAF (plafond %d)",
+        min(len(a_traiter) - nb_connues, config.MAX_APPELS_API_PAR_RUN), config.MAX_APPELS_API_PAR_RUN,
+        nb_connues, config.MAX_RECHERCHES_WEB_PAR_RUN,
+    )
+
     debut_run = time.monotonic()
     lignes, nb_appels, nb_erreurs, nb_reportees = [], 0, 0, 0
     nb_recherches_web, nb_reportees_web = 0, 0
-    for entreprise in a_traiter:
+    for numero, entreprise in enumerate(a_traiter, start=1):
+        debut_entreprise = time.monotonic()
         connue = est_intermediaire_connu(entreprise["nom_normalise"], intermediaires)
         if not connue:
             if nb_appels >= config.MAX_APPELS_API_PAR_RUN:
@@ -196,13 +209,14 @@ def enrichir_entreprises(entreprises: list[dict]) -> dict:
                     nb_reportees_web += 1
                     continue
                 nb_recherches_web += 1
-                debut_web = time.monotonic()
                 ligne.update(rechercher_secteur_web(entreprise["nom_source"]))
-                logger.info(
-                    "Secteur '%s' : %s (essai %s) en %.1f s",
-                    entreprise["nom_source"], ligne["secteur_source"], ligne["secteur_essai"], time.monotonic() - debut_web,
-                )
             lignes.append(ligne)
+            logger.info(
+                "Entreprise %d/%d '%s' : %s, secteur %s (essai %s) — %.1f s (écoulé %.0f s)",
+                numero, len(a_traiter), entreprise["nom_source"], ligne["origine"],
+                ligne["secteur_source"] or "aucun", ligne["secteur_essai"] or "-",
+                time.monotonic() - debut_entreprise, time.monotonic() - debut_run,
+            )
         except entreprises_collector.ErreurAPIEntreprises as e:
             nb_erreurs += 1
             logger.warning("Entreprise '%s' non enrichie : %s", entreprise["nom_source"], e)

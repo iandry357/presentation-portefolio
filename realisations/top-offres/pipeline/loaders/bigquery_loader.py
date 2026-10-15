@@ -190,3 +190,37 @@ def remplacer_staging(lignes: list[dict]) -> None:
     )
     client.load_table_from_json(lignes, TABLE_STAGING, job_config=job_config).result()
     logger.info("BigQuery : %d lignes chargées dans %s", len(lignes), TABLE_STAGING)
+
+
+TABLE_RUNS = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.runs"
+TABLE_INT_OFFRES = f"{config.GCP_PROJECT_ID}.{config.BQ_DATASET}.int_offres_a_scorer"
+
+
+def lire_dernier_run_succes() -> Optional[dict]:
+    """Dernier run (mode run) au verdict succes : run_id, version_scoring et fenêtre ; None s'il n'y en a pas."""
+    requete = (
+        "SELECT run_id, version_scoring, fenetre_debut, fenetre_fin "
+        f"FROM `{TABLE_RUNS}` WHERE mode = 'run' AND verdict = 'succes' ORDER BY fin DESC LIMIT 1"
+    )
+    lignes = list(_client().query(requete).result())
+    return dict(lignes[0].items()) if lignes else None
+
+
+def lire_comptes_fenetre() -> dict:
+    """Comptes de int_offres_a_scorer : offres lues, filtrées (filtre dur) et à scorer."""
+    requete = (
+        "SELECT COUNT(*) AS nb_lues, COUNTIF(filtre_dur IS NOT NULL) AS nb_filtrees, COUNTIF(a_scorer) AS nb_a_scorer "
+        f"FROM `{TABLE_INT_OFFRES}`"
+    )
+    return dict(list(_client().query(requete).result())[0].items())
+
+
+def ecrire_run(ligne: dict) -> None:
+    """Ajoute une ligne au journal runs (job de chargement, schéma de la table Terraform)."""
+    client = _client()
+    job_config = bigquery.LoadJobConfig(
+        write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+        schema=client.get_table(TABLE_RUNS).schema,
+    )
+    client.load_table_from_json([ligne], TABLE_RUNS, job_config=job_config).result()
+    logger.info("BigQuery : run %s journalisé (verdict %s)", ligne["run_id"], ligne["verdict"])
