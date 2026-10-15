@@ -1,18 +1,22 @@
 import logging
 import re
+import time
 import unicodedata
 from datetime import datetime, timezone
 
+from agents import llm_client, secteur_agent
 from pipeline import config
-from pipeline.collectors import entreprises_collector, exclues_collector
+from pipeline.collectors import entreprises_collector, exclues_collector, recherche_web_collector
 from pipeline.loaders import bigquery_loader
 
 logger = logging.getLogger(__name__)
 
 SEUIL_CONFIANCE = 0.7
+SEUIL_CANDIDAT_MIN = 0.3
 CONFIANCE_AMBIGUE_MAX = 0.5
 NAF_INTERMEDIAIRE = "78.10Z"
-NAF_HOLDING = "70.10Z"
+NAFS_HOLDING = ("70.10Z", "64.20Z")
+NON_DETERMINE = "NON DETERMINE"
 RANG_TAILLE = {"GE": 3, "ETI": 2, "PME": 1}
 
 SECTIONS_NAF = {
@@ -90,7 +94,7 @@ def choisir_candidat(nom_normalise: str, departement: str | None, candidats: lis
         return None, 0.0
     notes = [(_score_nom(nom_normalise, c), c) for c in valides]
     meilleur = max(note for note, _ in notes)
-    if meilleur < SEUIL_CONFIANCE:
+    if meilleur < SEUIL_CANDIDAT_MIN:
         return None, meilleur
     ex_aequo = [c for note, c in notes if note == meilleur]
     taille_max = max(_rang_taille(c) for c in ex_aequo)
@@ -118,13 +122,17 @@ def enrichir_entreprise(entreprise: dict, intermediaires: set[str]) -> dict:
         "origine": "non_trouve",
         "confiance": 0.0,
         "maj_le": datetime.now(timezone.utc).isoformat(),
+        "secteur": None,
+        "secteur_source": None,
+        "secteur_confiance": None,
+        "secteur_essai": None,
     }
     if est_intermediaire_connu(nom_normalise, intermediaires):
         return {**ligne, "type_annonceur": "intermediaire", "origine": "dictionnaire", "confiance": 1.0}
 
     candidats = entreprises_collector.rechercher(entreprise["nom_source"])
     candidat, confiance = choisir_candidat(nom_normalise, entreprise.get("departement"), candidats)
-    if candidat is None or confiance < SEUIL_CONFIANCE:
+    if candidat is None:
         return {**ligne, "confiance": confiance}
 
     naf = candidat.get("activite_principale")
@@ -133,25 +141,47 @@ def enrichir_entreprise(entreprise: dict, intermediaires: set[str]) -> dict:
         categorie=candidat.get("categorie_entreprise"),
         tranche_effectif=candidat.get("tranche_effectif_salarie"),
         type_annonceur="intermediaire" if naf == NAF_INTERMEDIAIRE else "employeur_direct",
-        origine="api",
+        origine="api" if confiance >= SEUIL_CONFIANCE else "a_valider",
         confiance=confiance,
     )
-    if naf != NAF_HOLDING:  # NAF d'une holding : domaine d'activité non exploité
+    if naf not in NAFS_HOLDING:  # NAF d'une holding : domaine d'activité non exploité
         ligne["naf_code"] = naf
         ligne["naf_libelle"] = SECTIONS_NAF.get(candidat.get("section_activite_principale"))
+        if ligne["naf_libelle"]:
+            ligne.update(secteur=ligne["naf_libelle"], secteur_source="naf")
     return ligne
+
+
+def rechercher_secteur_web(nom_source: str) -> dict:
+    """Secteur par recherche web + LLM : jusqu'à NB_ESSAIS_SECTEUR_MAX requêtes de plus en plus larges,
+    arrêt au premier résultat concluant ; sinon NON DETERMINE.
+    Lève ErreurRechercheWeb ou LLMError : l'appelant n'écrit alors pas la ligne."""
+    for essai in range(1, config.NB_ESSAIS_SECTEUR_MAX + 1):
+        extraits = recherche_web_collector.rechercher(nom_source, essai)
+        resultat = secteur_agent.determiner_secteur(nom_source, extraits)
+        if secteur_agent.est_concluant(resultat):
+            return {
+                "secteur": resultat["secteur"],
+                "secteur_source": "web_llm",
+                "secteur_confiance": resultat["confiance"],
+                "secteur_essai": essai,
+            }
+    return {"secteur": NON_DETERMINE, "secteur_source": "non_determine", "secteur_confiance": None, "secteur_essai": None}
 
 
 def enrichir_entreprises(entreprises: list[dict]) -> dict:
     """Enrichit les entreprises absentes du cache (ou trop anciennes), dans l'ordre fourni, dans la limite de
-    MAX_APPELS_API_PAR_RUN appels à l'API. Les intermédiaires du seed ne comptent pas dans le plafond."""
+    MAX_APPELS_API_PAR_RUN appels à l'API et de MAX_RECHERCHES_WEB_PAR_RUN recherches web de secteur.
+    Les intermédiaires du seed ne comptent pas dans le plafond."""
     en_cache = bigquery_loader.lire_cles_en_cache(
         [e["nom_normalise"] for e in entreprises if e["nom_normalise"]], config.CACHE_ENTREPRISE_JOURS
     )
     intermediaires = bigquery_loader.lire_intermediaires()
     a_traiter = [e for e in entreprises if e["nom_normalise"] and e["nom_normalise"] not in en_cache]
 
+    debut_run = time.monotonic()
     lignes, nb_appels, nb_erreurs, nb_reportees = [], 0, 0, 0
+    nb_recherches_web, nb_reportees_web = 0, 0
     for entreprise in a_traiter:
         connue = est_intermediaire_connu(entreprise["nom_normalise"], intermediaires)
         if not connue:
@@ -160,10 +190,25 @@ def enrichir_entreprises(entreprises: list[dict]) -> dict:
                 continue
             nb_appels += 1
         try:
-            lignes.append(enrichir_entreprise(entreprise, intermediaires))
+            ligne = enrichir_entreprise(entreprise, intermediaires)
+            if ligne["secteur_source"] is None and ligne["type_annonceur"] != "intermediaire":
+                if nb_recherches_web >= config.MAX_RECHERCHES_WEB_PAR_RUN:
+                    nb_reportees_web += 1
+                    continue
+                nb_recherches_web += 1
+                debut_web = time.monotonic()
+                ligne.update(rechercher_secteur_web(entreprise["nom_source"]))
+                logger.info(
+                    "Secteur '%s' : %s (essai %s) en %.1f s",
+                    entreprise["nom_source"], ligne["secteur_source"], ligne["secteur_essai"], time.monotonic() - debut_web,
+                )
+            lignes.append(ligne)
         except entreprises_collector.ErreurAPIEntreprises as e:
             nb_erreurs += 1
             logger.warning("Entreprise '%s' non enrichie : %s", entreprise["nom_source"], e)
+        except (recherche_web_collector.ErreurRechercheWeb, llm_client.LLMError) as e:
+            nb_erreurs += 1
+            logger.warning("Entreprise '%s' : secteur non déterminé, reprise au prochain run : %s", entreprise["nom_source"], e)
 
     bigquery_loader.ecrire_entreprises_ref(lignes)
     bilan = {
@@ -172,7 +217,10 @@ def enrichir_entreprises(entreprises: list[dict]) -> dict:
         "enrichies": len(lignes),
         "appels_api": nb_appels,
         "reportees": nb_reportees,
+        "recherches_web": nb_recherches_web,
+        "reportees_web": nb_reportees_web,
         "erreurs": nb_erreurs,
+        "duree_s": round(time.monotonic() - debut_run, 1),
     }
     logger.info("Entreprises : %s", bilan)
     return bilan

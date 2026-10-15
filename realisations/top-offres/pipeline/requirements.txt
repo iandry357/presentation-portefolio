@@ -8,3 +8,5 @@ dbt-bigquery==1.11.3
 # Versions imposées par dbt-bigquery : non épinglées volontairement.
 google-cloud-bigquery
 google-cloud-storage
+# Recherche web DuckDuckGo (secteur des entreprises) : non épinglée tant que le build n'a pas fixé la version.
+ddgs

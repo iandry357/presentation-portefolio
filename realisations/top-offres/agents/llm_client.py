@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 
 import requests
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
@@ -55,6 +56,7 @@ def generer_json(
     }
     if num_ctx:
         payload["options"]["num_ctx"] = num_ctx
+    debut = time.perf_counter()
     resp = _appeler_chat(payload)
     if resp.status_code == 400 and "thinking" in resp.text:
         # Modèle sans mode raisonnement : on retire le paramètre
@@ -62,6 +64,7 @@ def generer_json(
         resp = _appeler_chat(payload)
     if resp.status_code != 200:
         raise LLMError(f"Ollama HTTP {resp.status_code} : {resp.text[:300]}")
+    logger.info("Ollama %s : %.1f s", modele, time.perf_counter() - debut)
 
     contenu = resp.json().get("message", {}).get("content", "")
     try:

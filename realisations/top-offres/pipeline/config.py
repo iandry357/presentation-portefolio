@@ -32,6 +32,7 @@ PG_PASSWORD = os.environ["PG_PASSWORD"]
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
 MODELE_SCORING = os.environ.get("MODELE_SCORING", "")  # à fixer après benchmark (D7)
 MODELE_CIBLES = os.environ.get("MODELE_CIBLES", "gemma3:12b")
+MODELE_SECTEUR = os.environ.get("MODELE_SECTEUR", "mistral:latest")
 THINKING_SCORING = _bool("THINKING_SCORING", False)
 TAILLE_LOT_LLM = int(os.environ.get("TAILLE_LOT_LLM", "20"))
 
@@ -58,6 +59,9 @@ TAUX_ERREUR_LLM_MAX = float(os.environ.get("TAUX_ERREUR_LLM_MAX", "0.05"))
 DERNIERS_JOURS_DEFAUT = int(os.environ.get("DERNIERS_JOURS_DEFAUT", "30"))
 CACHE_ENTREPRISE_JOURS = int(os.environ.get("CACHE_ENTREPRISE_JOURS", "90"))
 MAX_APPELS_API_PAR_RUN = int(os.environ.get("MAX_APPELS_API_PAR_RUN", "200"))
+MAX_RECHERCHES_WEB_PAR_RUN = int(os.environ.get("MAX_RECHERCHES_WEB_PAR_RUN", "50"))
+NB_ESSAIS_SECTEUR_MAX = int(os.environ.get("NB_ESSAIS_SECTEUR_MAX", "3"))
+PAUSE_RECHERCHE_WEB_SECONDS = float(os.environ.get("PAUSE_RECHERCHE_WEB_SECONDS", "3"))
 
 # Chemins (racine du MVP = /app dans le conteneur)
 RESULTS_DIR = BASE_DIR / "results"
