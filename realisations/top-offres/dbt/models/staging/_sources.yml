@@ -19,3 +19,40 @@ sources:
           - name: date_collecte
             tests:
               - not_null
+
+  - name: top_offres
+    database: gen-lang-client-0989575872
+    schema: top_offres
+    tables:
+      - name: offres_scores_staging
+        description: >
+          Staging du scoring, vidé à chaque run et écrit par le worker Python. Porte de contrôle :
+          tout échec des tests de cette table (et des tests singuliers porte_*) bloque la fusion
+          dans offres_scores et les marts.
+        columns:
+          - name: id_unique
+            tests:
+              - not_null
+              - unique
+          - name: statut_llm
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values:
+                      - ok
+                      - json_invalide
+                      - erreur
+          - name: categorie
+            description: "Nul quand statut_llm n'est pas ok."
+            tests:
+              - accepted_values:
+                  arguments:
+                    values:
+                      - coeur
+                      - adjacent
+                      - hors_cible
+      - name: entreprises_ref
+        description: "Référentiel des entreprises enrichies (API, secteur web), écrit par le worker Python."
+      - name: entreprises_exclues
+        description: "Copie de la liste GCS des entreprises exclues, rechargée à chaque run."

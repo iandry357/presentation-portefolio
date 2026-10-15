@@ -1,0 +1,108 @@
+version: 2
+
+models:
+  - name: offres_scores
+    description: >
+      Historique incrémental des scores LLM (statut_llm = ok), une ligne par (id_unique, version_scoring).
+      Alimenté depuis le staging après la porte de contrôle ; jamais reconstruit en full-refresh.
+    columns:
+      - name: id_unique
+        tests:
+          - not_null
+      - name: version_scoring
+        tests:
+          - not_null
+      - name: score
+        tests:
+          - not_null
+      - name: categorie
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - coeur
+                  - adjacent
+                  - hors_cible
+
+  - name: mart_top_du_jour
+    description: >
+      Une ligne par offre connue du mart : dernier score de chaque offre scorée, doublons de la fenêtre
+      courante (score hérité du représentant) et offres filtrées de la fenêtre courante. Le top N et
+      l'exclusion des offres déjà traitées sont calculés à l'affichage.
+    columns:
+      - name: id_unique
+        tests:
+          - unique
+          - not_null
+      - name: groupe_doublon
+        tests:
+          - not_null
+      - name: score
+        description: "Nul uniquement pour les offres masquées par un filtre dur."
+        tests:
+          - not_null:
+              config:
+                where: "liste != 'masque'"
+      - name: liste
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - a_lire
+                  - zone_grise
+                  - masque
+      - name: motif_masque
+        description: "Nul quand l'offre n'est pas masquée."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - stage
+                  - alternance
+                  - hors_idf
+                  - score_bas
+      - name: entreprise_exclue
+        description: "Vrai si l'entreprise figure dans la liste des exclues ; l'affichage choisit de les montrer ou non."
+        tests:
+          - not_null
+      - name: type_entreprise
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - esn
+                  - conseil
+                  - esn_conseil
+                  - cabinet_recrutement
+                  - client_final
+                  - non_identifie
+
+  - name: mart_stats
+    description: >
+      Statistiques journalières au format long (jour de collecte, dimension, valeur, nombre d'offres),
+      sans contenu d'offre.
+    columns:
+      - name: jour
+        tests:
+          - not_null
+      - name: dimension
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - liste
+                  - categorie
+                  - cible
+                  - type_annonceur
+                  - naf_libelle
+                  - source
+      - name: valeur
+        tests:
+          - not_null
+      - name: nb_offres
+        tests:
+          - not_null
