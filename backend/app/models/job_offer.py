@@ -82,7 +82,7 @@ class JobOffer(Base):
 
     __table_args__ = (
         CheckConstraint(
-            "status IN ('nouveau', 'existant', 'ferme', 'consulte', 'postule', 'enregistre')",
+            "status IN ('nouveau', 'existant', 'ferme', 'consulte', 'postule', 'enregistre', 'manuel', 'brouillon')",
             name="job_offers_status_check"
         ),
         CheckConstraint(

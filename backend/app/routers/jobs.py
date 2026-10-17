@@ -73,7 +73,11 @@ async def list_jobs(
         filters.append(JobOffer.status == status)
 
     if hide_consulted and unlocked:
-        filters.append(JobOffer.status != "consulte")
+        filters.append(JobOffer.status != "consulte")        
+
+    # Brouillons réservés à l'accès déverrouillé
+    if not unlocked:
+        filters.append(JobOffer.status != "brouillon")
 
     if postal_code:
         filters.append(JobOffer.location_postal_code == postal_code)
@@ -191,7 +195,10 @@ async def get_job(
 
     # Public : schéma sans champs privés, et pas d'effet de bord sur le statut
     if not unlocked:
+        if offer.status == "brouillon":
+            raise HTTPException(status_code=404, detail="Offre introuvable")
         return JobOfferPublicDetail.model_validate(offer)
+
 
     # Marquer comme consultée si pas encore postulée
     if offer.status == "nouveau" or offer.status == "existant":
@@ -442,7 +449,7 @@ async def reset_jobs(db: AsyncSession = Depends(get_db)):
         result = await db.execute(
             select(JobOffer).where(
                 # JobOffer.status.notin_(["postule", "enregistre"])
-                JobOffer.status.notin_(["postule", "enregistre", "manuel"])
+                JobOffer.status.notin_(["postule", "enregistre", "manuel", "brouillon"])
             )
         )
         offers = result.scalars().all()
@@ -567,9 +574,9 @@ async def update_job_offer(
         raise HTTPException(status_code=404, detail="Offre introuvable")
 
     direct_fields = [
-        "title", "company_name", "location_label", "contract_type",
-        "salary_label", "experience_label", "work_time", "sector_label",
-        "offer_url", "source_offer", "description",
+        "title", "company_name", "company_description", "location_label",
+        "contract_type", "salary_label", "experience_label", "work_time",
+        "sector_label", "offer_url", "source_offer", "description",
     ]
     for field in direct_fields:
         value = getattr(payload, field, None)
