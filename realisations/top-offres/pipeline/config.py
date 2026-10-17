@@ -56,6 +56,7 @@ APPLIQUER_EXCLUSIONS = _bool("APPLIQUER_EXCLUSIONS", True)
 
 # Pipeline
 TAUX_ERREUR_LLM_MAX = float(os.environ.get("TAUX_ERREUR_LLM_MAX", "0.05"))
+NB_LOTS_ERREUR_MAX = int(os.environ.get("NB_LOTS_ERREUR_MAX", "3"))  # lots (ou offres si TAILLE_LOT_LLM=1) consécutifs en erreur d'appel avant d'abandonner
 DERNIERS_JOURS_DEFAUT = int(os.environ.get("DERNIERS_JOURS_DEFAUT", "30"))
 CACHE_ENTREPRISE_JOURS = int(os.environ.get("CACHE_ENTREPRISE_JOURS", "90"))
 MAX_APPELS_API_PAR_RUN = int(os.environ.get("MAX_APPELS_API_PAR_RUN", "200"))

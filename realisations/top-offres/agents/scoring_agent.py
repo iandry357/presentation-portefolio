@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 FICHIER_PROMPT = "scoring_v1.txt"  # le nom du fichier sert de version de prompt
 NUM_CTX = 8192
-NB_LOTS_ERREUR_MAX = 3  # lots consécutifs en erreur d'appel avant d'abandonner le run
 ALERTES_LLM = ("salaire_incoherent", "titre_ambigu", "seniorite_incertaine", "autre")
 
 SCHEMA_SCORING = {
@@ -135,8 +134,8 @@ def scorer_offres(offres: list[dict], contexte: dict) -> list[dict]:
 
         if statut_echec == "erreur":
             lots_en_erreur_consecutifs += 1
-            if lots_en_erreur_consecutifs >= NB_LOTS_ERREUR_MAX:
-                raise RuntimeError(f"{NB_LOTS_ERREUR_MAX} lots consécutifs en erreur d'appel : LLM indisponible ?")
+            if lots_en_erreur_consecutifs >= config.NB_LOTS_ERREUR_MAX:
+                raise RuntimeError(f"{config.NB_LOTS_ERREUR_MAX} lots consécutifs en erreur d'appel : LLM indisponible ?")
             resultats.extend(_resultat(o, None, "erreur") for o in lot)
             continue
         lots_en_erreur_consecutifs = 0
