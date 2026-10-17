@@ -31,6 +31,39 @@ logger = logging.getLogger(__name__)
 def _generer_run_id() -> str:
     return f"{datetime.now(timezone.utc):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
 
+def enrichir_offres(offres: list[dict], cibles: list[dict]) -> None:
+    """Étapes 3.3 et 3.4 : entreprises, puis embeddings (titres ↔ cibles).
+    Complète chaque offre en place (type_annonceur, naf_libelle, cible_proche, cible_proche_intitule, similarite) ;
+    n'écrit que dans le cache entreprises_ref. Les offres portent les clés de lire_offres_a_scorer,
+    dont entreprise_nom, entreprise_normalise et departement."""
+    logger.info("ÉTAPE 3.3 — Entreprises")
+    entreprises_transformation.enrichir_entreprises(offres_collector.regrouper_entreprises(offres))
+    cles = list({o["entreprise_normalise"] for o in offres if o["entreprise_normalise"]})
+    refs = bigquery_loader.lire_entreprises_ref(cles)
+
+    logger.info("ÉTAPE 3.4 — Embeddings (titres ↔ cibles)")
+    similarite.reveiller_service()
+    vecteurs_cibles = similarite.embedder([c["description"] for c in cibles])
+    vecteurs_titres = similarite.embedder([o["titre"] for o in offres])
+    indices, similarites = similarite.meilleure_cible(vecteurs_titres, vecteurs_cibles)
+    for offre, indice, similarite_max in zip(offres, indices, similarites):
+        ref = refs.get(offre["entreprise_normalise"], {})
+        offre.update(
+            type_annonceur=ref.get("type_annonceur"),
+            naf_libelle=ref.get("naf_libelle"),
+            cible_proche=cibles[indice]["cible_id"],
+            cible_proche_intitule=cibles[indice]["intitule"],
+            similarite=float(similarite_max),
+        )
+
+
+def enrichir_et_scorer(offres: list[dict], cibles: list[dict], resume_profil: str) -> list[dict]:
+    """Étapes 3.3 à 3.5 : enrichissement des offres (en place) puis scoring LLM ; retourne les résultats du scoring.
+    N'écrit ni dans le staging ni dans offres_scores."""
+    enrichir_offres(offres, cibles)
+    logger.info("ÉTAPE 3.5 — Scoring LLM (%s)", config.MODELE_SCORING)
+    return scoring_agent.scorer_offres(offres, {"resume_profil": resume_profil, "cibles": cibles})
+
 
 def etape_scoring(run_id: str, limite: int | None = None) -> dict:
     """Étape 3 du run : entreprises, embeddings, scoring LLM, écriture du staging.
@@ -57,28 +90,7 @@ def etape_scoring(run_id: str, limite: int | None = None) -> dict:
         bigquery_loader.remplacer_staging([])
         return {"offres": 0}
 
-    logger.info("ÉTAPE 3.3 — Entreprises")
-    entreprises_transformation.enrichir_entreprises(offres_collector.regrouper_entreprises(offres))
-    cles = list({o["entreprise_normalise"] for o in offres if o["entreprise_normalise"]})
-    refs = bigquery_loader.lire_entreprises_ref(cles)
-
-    logger.info("ÉTAPE 3.4 — Embeddings (titres ↔ cibles)")
-    similarite.reveiller_service()
-    vecteurs_cibles = similarite.embedder([c["description"] for c in cibles])
-    vecteurs_titres = similarite.embedder([o["titre"] for o in offres])
-    indices, similarites = similarite.meilleure_cible(vecteurs_titres, vecteurs_cibles)
-    for offre, indice, similarite_max in zip(offres, indices, similarites):
-        ref = refs.get(offre["entreprise_normalise"], {})
-        offre.update(
-            type_annonceur=ref.get("type_annonceur"),
-            naf_libelle=ref.get("naf_libelle"),
-            cible_proche=cibles[indice]["cible_id"],
-            cible_proche_intitule=cibles[indice]["intitule"],
-            similarite=float(similarite_max),
-        )
-
-    logger.info("ÉTAPE 3.5 — Scoring LLM (%s)", config.MODELE_SCORING)
-    resultats = scoring_agent.scorer_offres(offres, {"resume_profil": resume_profil, "cibles": cibles})
+    resultats = enrichir_et_scorer(offres, cibles, resume_profil)
 
     logger.info("ÉTAPE 3.6 — Écriture du staging")
     score_le = datetime.now(timezone.utc).isoformat()
