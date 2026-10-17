@@ -34,8 +34,7 @@ export interface Session {
 // Jobs — Types France Travail
 // ============================================================================
 
-export type JobStatus = 'nouveau' | 'existant' | 'ferme' | 'consulte' | 'postule' | 'enregistre' | 'manuel';
-
+export type JobStatus = 'nouveau' | 'existant' | 'ferme' | 'consulte' | 'postule' | 'enregistre' | 'manuel' | 'brouillon';
 export interface JobOfferSummary {
   id: number;
   ft_id: string | null;

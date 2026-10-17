@@ -16,6 +16,7 @@ const STATUS_STYLES: Record<JobStatus, string> = {
   postule:    'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
   enregistre: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
   manuel:     'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
+  brouillon:  'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
 };
 
 const STATUS_LABELS: Record<JobStatus, string> = {
@@ -26,6 +27,7 @@ const STATUS_LABELS: Record<JobStatus, string> = {
   postule:    'Postulé',
   enregistre: 'Enregistré',
   manuel:     'Manuel',
+  brouillon:  'Brouillon',
 };
 
 function StatusBadge({ status }: { status: JobStatus }) {

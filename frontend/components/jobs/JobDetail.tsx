@@ -204,9 +204,13 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
             {!enregistre ? (
               <button
                 onClick={handleEnregistre}
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+                disabled={status === 'brouillon' && (!offer.description || !offer.company_description)}
+                title={status === 'brouillon' && (!offer.description || !offer.company_description)
+                  ? 'Complétez la description et la présentation de l\'entreprise via « Modifier »'
+                  : undefined}
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Enregistrer
+                {status === 'brouillon' ? 'Valider' : 'Enregistrer'}
               </button>
             ) : (
               <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium">
