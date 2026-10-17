@@ -22,13 +22,22 @@ fenetre as (
 
 offres as (
 
-    -- Offres scorées (représentants), sur tout l'historique
+    -- Offres scorées (représentants), sur tout l'historique, sauf celles devenues doublons d'un représentant scoré
+    -- de la fenêtre courante : elles héritent de son score (branche suivante)
     select
         id_unique,
         id_unique as groupe_doublon,
         cast(null as string) as filtre_dur,
         id_unique as id_score
     from scores_courants
+    where id_unique not in (
+        select f.id_unique
+        from fenetre as f
+        inner join scores_courants as s
+            on s.id_unique = f.groupe_doublon
+        where f.id_unique != f.groupe_doublon
+          and f.filtre_dur is null
+    )
 
     union all
 
