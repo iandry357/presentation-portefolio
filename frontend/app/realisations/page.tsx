@@ -65,7 +65,7 @@ const POCS: PocCard[] = [
     description:
       "Classement quotidien des offres d'emploi collectées selon leur pertinence pour un profil : cibles de postes dérivées du CV et validées, pré-score par embeddings, scoring par LLM local (Ollama), porte de contrôle et marts dbt. Top du jour avec décisions « intéressé / pas intéressé » et brouillons vers le suivi de candidatures.",
     tags: ['LLM local', 'Ollama', 'Embeddings', 'dbt', 'BigQuery', 'Scoring', 'Docker', 'PostgreSQL'],
-    status: 'wip',
+    status: 'live',
   },
 ];
 
