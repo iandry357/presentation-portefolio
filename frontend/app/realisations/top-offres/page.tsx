@@ -19,7 +19,7 @@ export default function TopOffresPage() {
   const verrouille = vue !== 'overview' && !unlocked;
 
   return (
-    <div className="container mx-auto px-4 py-8 overflow-hidden">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/realisations" className="hover:text-gray-700 transition-colors">
           Réalisations
@@ -35,10 +35,10 @@ export default function TopOffresPage() {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="flex flex-col md:flex-row gap-6 items-stretch md:items-start">
         <TopSidebar activeView={vue} onViewChange={setChoix} unlocked={unlocked} />
 
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 w-full">
           {/* Rien n'est monté tant que l'état d'accès n'est pas connu : évite des appels voués au 403 */}
           {state === 'loading' && <div className="min-h-[40vh]" aria-busy="true" />}
 
