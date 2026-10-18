@@ -17,10 +17,13 @@ from app.core.database import get_db
 from app.core.normalisation import normaliser
 from app.models.job_offer import JobOffer
 from app.models.top_offres import TopOffreDecision, TopOffreTypeEntreprise
-from app.services.top_offres_bigquery import fetch_offer, fetch_stats, fetch_top_candidates
+from app.services.top_offres_bigquery import (
+    fetch_cibles, fetch_entreprises, fetch_offer, fetch_offres_entreprise, fetch_stats, fetch_top_candidates,
+)
 from routers.top_offres.schemas import (
-    DecisionCreate, DecisionResponse, OffreProche, StatLigne, StatsResponse,
-    TopCompteurs, TopOffre, TopResponse, TypeEntrepriseResponse, TypeEntrepriseUpdate,
+    DecisionCreate, DecisionResponse, EntrepriseStat, EntreprisesResponse, OffreEntreprise, OffreProche,
+    OffresEntrepriseResponse, StatLigne, StatsResponse, TopCompteurs, TopOffre, TopResponse,
+    TypeEntrepriseResponse, TypeEntrepriseUpdate,
 )
 
 
@@ -31,6 +34,8 @@ router = APIRouter(prefix="/top-offres", tags=["Top Offres"])
 JOURS_TOP_DEFAUT = 7
 JOURS_STATS_DEFAUT = 30
 TOP_N_DEFAUT = 20
+JOURS_ENTREPRISES_DEFAUT = 30
+ENTREPRISES_N_DEFAUT = 50
 STATUTS_TRAITES = ["postule", "enregistre"]   # offres de job_offers déjà traitées par l'utilisateur
 SOURCE_FT_BQ = "france_travail_api"           # valeur de `source` dans BigQuery
 PREFIXE_ID_FT = "france_travail_api_"         # id_unique = préfixe + identifiant France Travail
@@ -81,7 +86,15 @@ async def get_stats(jours: int = Query(default=JOURS_STATS_DEFAUT, ge=1, le=365)
     except Exception as e:
         logger.error(f"[top_offres] Erreur lecture statistiques BigQuery : {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Erreur lecture BigQuery")
-    return StatsResponse(jours=jours, lignes=[StatLigne(**ligne) for ligne in lignes])
+
+    # Les libellés des cibles sont facultatifs : une erreur n'empêche pas les statistiques
+    try:
+        cibles = await run_in_threadpool(fetch_cibles)
+    except Exception as e:
+        logger.warning(f"[top_offres] Libellés des cibles indisponibles : {e}")
+        cibles = {}
+
+    return StatsResponse(jours=jours, lignes=[StatLigne(**ligne) for ligne in lignes], cibles=cibles)
 
 
 # ============================================================================
@@ -138,6 +151,119 @@ async def get_top(
         compteurs=compteurs,
     )
 
+# ============================================================================
+# Entreprises (privé)
+# ============================================================================
+
+# Clés de tri ; à égalité, l'ordre alphabétique du nom normalisé (le tri de Python est stable)
+CLES_TRI_ENTREPRISES = {
+    "nom": lambda e: e.entreprise_normalise,
+    "secteur": lambda e: normaliser(e.secteur),
+    "type": lambda e: e.type_entreprise,
+    "offres": lambda e: (e.nb_offres, e.nb_coeur, e.score_max or 0),
+    "coeur": lambda e: (e.nb_coeur, e.nb_a_lire, e.score_max or 0, e.nb_offres),
+    "adjacent": lambda e: (e.nb_adjacent, e.nb_coeur, e.score_max or 0),
+    "hors_cible": lambda e: (e.nb_hors_cible, e.nb_coeur, e.score_max or 0),
+    "a_lire": lambda e: (e.nb_a_lire, e.nb_coeur, e.score_max or 0),
+    "score_max": lambda e: (e.score_max or 0, e.nb_coeur, e.nb_offres),
+    "derniere_offre": lambda e: e.derniere_offre or "",
+}
+
+
+@router.get("/entreprises", response_model=EntreprisesResponse, dependencies=[Depends(require_access)])
+async def get_entreprises(
+    db: AsyncSession = Depends(get_db),
+    jours: int = Query(default=JOURS_ENTREPRISES_DEFAUT, ge=1, le=90),
+    tri: str = Query(
+        default="coeur",
+        pattern="^(nom|secteur|type|offres|coeur|adjacent|hors_cible|a_lire|score_max|derniere_offre)$",
+    ),
+    ordre: str = Query(default="desc", pattern="^(asc|desc)$"),
+    type_entreprise: Optional[str] = Query(default=None),
+    secteur: Optional[str] = Query(default=None),
+    q: Optional[str] = Query(default=None),
+    inclure_exclues: bool = Query(default=False),
+    limite: int = Query(default=ENTREPRISES_N_DEFAUT, ge=1, le=200),
+):
+    try:
+        lignes = await run_in_threadpool(fetch_entreprises, jours, inclure_exclues)
+    except Exception as e:
+        logger.error(f"[top_offres] Erreur lecture entreprises BigQuery : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lecture BigQuery")
+
+    corriges = await _types_corriges(db)
+
+    # Options du filtre secteur : tous les secteurs de la période, avant les autres filtres
+    secteurs = sorted({
+        ligne["secteur"] for ligne in lignes
+        if ligne.get("secteur") and ligne["secteur"] != "NON DETERMINE"
+    })
+
+    recherche = normaliser(q) if q else ""
+    recherche_secteur = normaliser(secteur) if secteur else ""
+
+    entreprises: List[EntrepriseStat] = []
+    for ligne in lignes:
+        cle = ligne["entreprise_normalise"]
+        type_corrige = corriges.get(cle)
+        type_affiche = type_corrige or ligne.get("type_entreprise") or "non_identifie"
+
+        if type_entreprise and type_affiche != type_entreprise:
+            continue
+        if recherche_secteur and recherche_secteur not in normaliser(ligne.get("secteur")):
+            continue
+        if recherche and recherche not in cle:
+            continue
+
+        entreprises.append(EntrepriseStat(**{
+            **ligne,
+            "type_entreprise": type_affiche,
+            "type_entreprise_corrige": type_corrige is not None,
+            "entreprise_exclue": bool(ligne.get("entreprise_exclue")),
+        }))
+
+    entreprises.sort(key=lambda e: e.entreprise_normalise)
+    entreprises.sort(key=CLES_TRI_ENTREPRISES[tri], reverse=(ordre == "desc"))
+
+    # Tri par secteur : les entreprises sans secteur restent en fin de liste, quel que soit le sens
+    if tri == "secteur":
+        avec_secteur = [e for e in entreprises if e.secteur and e.secteur != "NON DETERMINE"]
+        sans_secteur = [e for e in entreprises if not (e.secteur and e.secteur != "NON DETERMINE")]
+        entreprises = avec_secteur + sans_secteur
+
+    return EntreprisesResponse(
+        jours=jours,
+        total=len(entreprises),
+        entreprises=entreprises[:limite],
+        secteurs=secteurs,
+    )
+
+
+@router.get(
+    "/entreprises/offres",
+    response_model=OffresEntrepriseResponse,
+    dependencies=[Depends(require_access)],
+)
+async def get_offres_entreprise(
+    entreprise: str = Query(..., min_length=1),
+    jours: int = Query(default=JOURS_ENTREPRISES_DEFAUT, ge=1, le=90),
+):
+    """Offres scorées d'une entreprise (à la demande, au dépliage d'une ligne)."""
+    cle = normaliser(entreprise)
+    if not cle:
+        raise HTTPException(status_code=422, detail="Nom d'entreprise invalide")
+
+    try:
+        offres = await run_in_threadpool(fetch_offres_entreprise, cle, jours)
+    except Exception as e:
+        logger.error(f"[top_offres] Erreur lecture offres de l'entreprise : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lecture BigQuery")
+
+    return OffresEntrepriseResponse(
+        entreprise_normalise=cle,
+        jours=jours,
+        offres=[OffreEntreprise(**offre) for offre in offres],
+    )
 
 
 # ============================================================================

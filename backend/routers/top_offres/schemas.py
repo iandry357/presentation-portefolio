@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import List, Literal, Optional
+from typing import Dict, List, Literal, Optional
+
 
 from pydantic import BaseModel, Field
 
@@ -61,7 +62,63 @@ class StatLigne(BaseModel):
 class StatsResponse(BaseModel):
     jours: int
     lignes: List[StatLigne]
+    # Intitulés des cibles validées, par cible_id (libellés des graphiques) ; vide si indisponible
+    cibles: Dict[str, str] = {}
 
+
+# ============================================================================
+# Entreprises (agrégat des offres scorées)
+# ============================================================================
+
+class EntrepriseStat(BaseModel):
+    """Une entreprise : volume et adéquation de ses offres scorées sur la période."""
+    entreprise_normalise: str
+    entreprise_nom: Optional[str] = None
+    secteur: Optional[str] = None
+    naf_libelle: Optional[str] = None
+    # Type affiché : la correction de l'utilisateur si elle existe, sinon l'automatique du mart
+    type_entreprise: str
+    type_entreprise_corrige: bool = False
+    entreprise_exclue: bool = False
+    nb_offres: int
+    nb_coeur: int
+    nb_adjacent: int
+    nb_hors_cible: int
+    nb_a_lire: int
+    nb_zone_grise: int
+    score_max: Optional[int] = None
+    score_moyen: Optional[float] = None
+    derniere_offre: Optional[str] = None
+
+
+class EntreprisesResponse(BaseModel):
+    jours: int
+    total: int                    # entreprises correspondant aux filtres, avant la limite
+    entreprises: List[EntrepriseStat]
+    secteurs: List[str]           # secteurs présents sur la période (options du filtre)
+
+
+class OffreEntreprise(BaseModel):
+    """Une offre scorée d'une entreprise (liste : a_lire, zone_grise ou masque)."""
+    id_unique: str
+    source: Optional[str] = None
+    titre: str
+    localisation_libelle: Optional[str] = None
+    type_contrat_libelle: Optional[str] = None
+    salaire_libelle: Optional[str] = None
+    url_offre: Optional[str] = None
+    date_publication: Optional[str] = None
+    date_collecte: Optional[str] = None
+    score: Optional[int] = None
+    categorie: Optional[str] = None
+    liste: str
+    raison: Optional[str] = None
+
+
+class OffresEntrepriseResponse(BaseModel):
+    entreprise_normalise: str
+    jours: int
+    offres: List[OffreEntreprise]
 
 # ============================================================================
 # Décisions « intéressé / pas intéressé »
