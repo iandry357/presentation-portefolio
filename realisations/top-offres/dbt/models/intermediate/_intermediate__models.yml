@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: int_offres_a_scorer
+    description: >
+      Offres de la fenêtre de collecte, normalisées, marquées par un filtre dur
+      (stage, alternance, hors Île-de-France) et dédoublonnées sur (titre, entreprise).
+      Une offre n'est jamais supprimée : elle est marquée. a_scorer indique les offres
+      à soumettre au scoring.
+    columns:
+      - name: id_unique
+        tests:
+          - unique
+          - not_null
+      - name: titre_normalise
+        tests:
+          - not_null
+      - name: groupe_doublon
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_offres_a_scorer')
+                field: id_unique
+      - name: est_representant
+        tests:
+          - not_null
+      - name: filtre_dur
+        description: "stage, alternance, hors_idf ou nul. Priorité : stage, puis alternance, puis hors_idf."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - stage
+                  - alternance
+                  - hors_idf
+      - name: a_scorer
+        tests:
+          - not_null

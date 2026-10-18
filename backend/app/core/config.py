@@ -99,6 +99,11 @@ class Settings(BaseSettings):
     GCP_SERVICE_ACCOUNT_JSON_BANQUE: Optional[str] = None
     CHROMA_COLLECTION_BANQUE: str = "banque_de_france"
     OVH_ML_PORT_BANQUE: str = "8007"
+    
+    # ─── Top Offres ───────────────────────────────────────────
+    GCP_SERVICE_ACCOUNT_JSON_TOP_OFFRES: Optional[str] = None
+    BQ_DATASET_TOP_OFFRES: str = "top_offres"
+    BQ_TABLE_TOP_DU_JOUR: str = "mart_top_du_jour"
 
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024

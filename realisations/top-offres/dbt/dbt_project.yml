@@ -1,0 +1,32 @@
+name: 'top_offres'
+version: '1.0.0'
+config-version: 2
+
+profile: 'top_offres'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  top_offres:
+    intermediate:
+      +materialized: table
+    marts:
+      +materialized: table
+
+seeds:
+  top_offres:
+    departements_idf:
+      +column_types:
+        code_departement: string
+        nom_departement: string
+    intermediaires_connus:
+      +column_types:
+        nom_normalise: string
+        nom_affichage: string

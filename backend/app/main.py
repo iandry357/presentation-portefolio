@@ -20,7 +20,7 @@ from routers.savencia.router import router as savencia_router
 from routers.sg.sg_assurances.router import router as sg_router
 from routers.banque_de_france.router import router as bf_router
 from routers.gestion_patrimoine.router import router as gp_router
-
+from routers.top_offres.router import router as top_offres_router
 
 
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -93,6 +93,7 @@ app.include_router(savencia_router)
 app.include_router(sg_router)
 app.include_router(bf_router)
 app.include_router(gp_router)
+app.include_router(top_offres_router)
 
 @app.get("/")
 async def root():

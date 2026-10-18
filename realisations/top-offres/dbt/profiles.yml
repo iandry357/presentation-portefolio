@@ -1,0 +1,12 @@
+top_offres:
+  target: prod
+  outputs:
+    prod:
+      type: bigquery
+      method: oauth
+      project: gen-lang-client-0989575872
+      dataset: top_offres
+      location: EU
+      threads: 4
+      job_execution_timeout_seconds: 300
+      job_retries: 1

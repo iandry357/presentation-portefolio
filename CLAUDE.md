@@ -31,6 +31,12 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
   puis tu remplis les fichiers.
 - **Modification de code** : modifications ciblées (diffs), jamais de réécriture complète d'un fichier
   sans demande explicite. Ne touche pas à un fichier hors du périmètre validé.
+  **Mode d'application** : pour toute modification de code existant, quels que soient le nombre de fichiers et la
+  taille, tu me présentes d'abord les éléments à copier-coller (par fichier, avec l'emplacement exact, et le numéro
+  des lignes concernées), puis tu me demandes : « tu l'appliques toi-même, ou on passe en validation ? ». Si je
+  l'applique, tu n'utilises ni Edit ni Write. Si je choisis la validation, comportement de base : diff global par
+  fichier, un seul « ok », puis tu écris. Nouveaux fichiers : script Cmder d'abord, puis le contenu proposé de la
+  même façon.
 - Réponses en français, directes et denses, sans préambule.
 
 ## Ce que tu ne fais pas (et pourquoi)

@@ -62,6 +62,18 @@ variable "db_user" {
   default     = "portefolio-credential"
 }
 
+variable "top_offres_db_user" {
+  description = "Utilisateur PostgreSQL lecture seule du MVP Top Offres"
+  type        = string
+  default     = "top-offres-reader"
+}
+
+variable "top_offres_db_password" {
+  description = "Mot de passe de l'utilisateur PostgreSQL lecture seule du MVP Top Offres"
+  type        = string
+  sensitive   = true
+}
+
 # Secrets
 variable "gemini_api_key" {
   description = "Gemini API Key"
@@ -235,6 +247,12 @@ variable "gcp_service_account_json_banque" {
 
 variable "gcp_service_account_json_gestion_patrimoine" {
   description = "GCP Service Account JSON Gestion Patrimoine"
+  type        = string
+  sensitive   = true
+}
+
+variable "gcp_service_account_json_top_offres" {
+  description = "GCP Service Account JSON Top Offres"
   type        = string
   sensitive   = true
 }

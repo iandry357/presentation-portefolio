@@ -144,3 +144,22 @@ realisations/gestion-patrimoine/gcp_sa_gestion_patrimoine.json
 CLAUDE.local.md
 _docs-local/
 .claude/settings.local.json
+
+
+# --- Top Offres ---
+realisations/top-offres/.env
+realisations/top-offres/gcp_sa_top_offres.json
+realisations/top-offres/key_b64.txt
+realisations/top-offres/results/*
+!realisations/top-offres/results/.gitkeep
+realisations/top-offres/dbt/target/
+realisations/top-offres/dbt/dbt_packages/
+realisations/top-offres/dbt/logs/
+realisations/top-offres/dbt/.user.yml
+gcp/top-offres/infra/terraform.tfvars
+gcp/top-offres/infra/*.json
+gcp/top-offres/infra/.terraform/
+gcp/top-offres/infra/.terraform.lock.hcl
+gcp/top-offres/infra/*.tfstate
+gcp/top-offres/infra/*.tfstate.*
+gcp/top-offres/infra/tfplan

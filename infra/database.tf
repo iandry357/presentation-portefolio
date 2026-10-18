@@ -16,3 +16,18 @@ resource "scaleway_rdb_instance" "main" {
     prevent_destroy = true
   }
 }
+
+# Utilisateur lecture seule pour le worker local Top Offres (lecture du profil, table experiences)
+resource "scaleway_rdb_user" "top_offres_reader" {
+  instance_id = scaleway_rdb_instance.main.id
+  name        = var.top_offres_db_user
+  password    = var.top_offres_db_password
+  is_admin    = false
+}
+
+resource "scaleway_rdb_privilege" "top_offres_reader" {
+  instance_id   = scaleway_rdb_instance.main.id
+  user_name     = scaleway_rdb_user.top_offres_reader.name
+  database_name = "rdb"
+  permission    = "readonly"
+}
