@@ -82,6 +82,7 @@ OVH VPS : ChromaDB 8000 · Sanofi 8001 (+Neo4j 7474/7687, llama 8006) · Savenci
 ```
 
 - Les `llama-server` tournent hors orchestrateur (systemd, always-on) : RAM du VPS = point de vigilance.
+- Top Offres s'écarte du pattern MVP : worker local (Windows, Docker, Ollama sur GPU, hors OVH), `agents/` et `dbt/` à la place de `ml/` et `training/` ; seul service OVH utilisé : Embedding 8004 via l'orchestrateur ; le backend lit BigQuery `top_offres` avec un compte de service dédié (`GCP_SERVICE_ACCOUNT_JSON_TOP_OFFRES`).
 - Frontend → backend : proxy Next.js `/backend/*` pour jobs / explore / companies / accès (cookies first-party) ;
   les fichiers API des MVPs restent en appel direct (`NEXT_PUBLIC_API_URL`). `BACKEND_URL` = build-arg frontend.
 - Détails (tables BigQuery, buckets, secrets, pages frontend) : sections « Infrastructure » et
@@ -115,6 +116,7 @@ que d'inventer une structure.
 | Collecte emploi | `gcp/sync_job/` | France Travail API + Gmail alerts (10 sources) → `emploi_marche.offres_brutes` → dbt (`gcp/dbt_transformation/`) |
 | Feedback | toutes pages | Retour visiteur intégré |
 | Accès public / privé | `/access/*`, zones 🔒 | Code unique → jeton serveur httpOnly (15 min glissantes, anti brute-force) ; public : offres sans statut / notes / fiches / `raw_data` ; privé : Explorer, Companies, routes d'écriture jobs ; `lib/api.ts` (helper `request`) via proxy `/backend` |
+| Top Offres | `/realisations/top-offres` | Offres classées chaque jour par LLM local ; public : vue d'ensemble (statistiques) ; privé 🔒 : Top du jour (« intéressé » → brouillon `job_offers`), Entreprises, Brouillons ; `backend/routers/top_offres/` |
 
 ## MVPs sectoriels
 
@@ -125,6 +127,7 @@ que d'inventer une structure.
 | SG Assurances | Veille + traitement documents assurance | YOLO zones (mAP50 0,51), CamemBERT NER (F1 0,84), QLoRA Qwen2.5-1.5B (win-rate 29 %), RAG | 8003, embedding 8004, llama 8005 | Prod |
 | Banque de France | Veille RSS + décisions ACPR (Suptech) | Classification multi-label griefs (CamemBERT + k-NN), scoring EBA déterministe, RAG + LDA sur la veille | 8007 | Prod |
 | Gestion Patrimoine | Copilote patrimonial, RAG juridique CGI | `profil_agent` (Mistral/Gemini via LiteLLM) + `assistant_agent` ReAct, Qwen2.5-3B base, citation obligatoire | 8008, llama 8009 | Prod |
+| Top Offres | Veille emploi personnelle : classement quotidien des offres collectées selon le profil, top du jour, brouillons vers `/jobs` | Cibles dérivées du profil (LLM local), scoring `gemma4:e4b` (Ollama, lots de 1, rappel 91,4 % à ≥ 60), embeddings OVH, dbt (porte de contrôle, marts) | embedding 8004 via l'orchestrateur ; worker local | Prod |
 | Mirakl | E-commerce NLP/GenAI | Sentiment, anomalies prix, agent vendeur (prévu) | — | Prochain MVP |
 
 Métriques, datasets BigQuery et buckets : section « MVPs sectoriels » du `README.md`.

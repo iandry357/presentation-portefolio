@@ -40,7 +40,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
 | **Accès public / privé** | Version publique des offres pour tout visiteur ; statut, notes, fiches, Explorer, Companies et actions d'écriture réservés derrière un code unique (session de 15 min glissantes, cookie httpOnly) |
-| **Réalisations** | 5 MVPs sectoriels — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct) |
+| **Réalisations** | 6 MVPs — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct), Top Offres (classement quotidien des offres par LLM local, dbt, BigQuery) |
 
 ---
 
@@ -93,6 +93,7 @@ OVH VPS (51.68.130.23) — Compute ML / VectorDB
     ├── Embedding Service (8004) — partagé SG Assurances + Banque de France + Gestion Patrimoine
     ├── Banque de France : ml-service (8007) — classification, topic modeling, scoring EBA
     └── Gestion Patrimoine : ml-service (8008, function calling ReAct), llama-server Qwen2.5-3B base (8009)
+    (Top Offres : aucun service dédié ; réutilise l'Embedding Service 8004 via l'orchestrateur — le worker tourne en local)
 ```
 
 ---
@@ -158,6 +159,18 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 - ML Service OVH port 8008 (boucle ReAct + `search_referentiel`)
 - Frontend dédié : flux séquentiel profil → chat, format de conversation propre (carte profil persistante + fil de discussion, articles cités en pastilles cliquables)
 - **Statut** : en production — testé de bout en bout (génération profil → RAG → réponse citée, latence mesurée ~94s sur ce VPS), mergé dans `infra-scaleway-v1.1`
+
+### Top Offres — ✅ En production
+*Veille emploi personnelle : classement quotidien des offres collectées selon leur pertinence pour un profil — outil utilisé au quotidien*
+
+- Cibles de postes dérivées de la table `experiences` par un LLM local (`gemma3:12b`), relues et validées à la main (8 cibles) ; la version des cibles entre dans la `version_scoring`
+- Pipeline local (Windows, Docker, GPU) : sélection et dédoublonnage dbt, filtres durs marqués (stage, alternance, hors Île-de-France), enrichissement des entreprises (API Recherche d'entreprises, secteur par recherche web + LLM local), similarité par embeddings (service OVH partagé, port 8004), scoring par LLM local `gemma4:e4b` sur Ollama, **une offre par appel** (écart nul entre copies identiques contre 11,5 à 16 points en lots de 5 à 20)
+- Porte de contrôle dbt avant fusion (tests sur le staging : un échec ne fusionne rien) ; marts `mart_top_du_jour` et `mart_stats` dans BigQuery `top_offres`
+- Évaluation : rappel de 91,4 % à un seuil de 60 sur les offres déjà postulées ou enregistrées (lots de 1), benchmark de 5 modèles, run réel de 170 offres en 531 s
+- Backend `/top-offres` : statistiques publiques ; Top du jour, Entreprises, décisions « intéressé / pas intéressé » (brouillon dans `job_offers`, contrôle de doublon) et correction du type d'entreprise réservés au code d'accès
+- Frontend : `/realisations/top-offres` — vue d'ensemble (graphiques), Top du jour, Entreprises (tableau triable, offres dépliables), Brouillons ; `/jobs` adapté au statut `brouillon`
+- Serving : aucun service dédié ; seul l'Embedding Service OVH (8004) est utilisé, via l'orchestrateur
+- Backlog assumé : clôture de l'évaluation (objectif de rappel, garde-fou GPU, revue du prompt), Planificateur de tâches Windows, groupes par mot-clé, bonus de mots-clés, signal de récurrence
 
 ### Mirakl — 🔜 Prochain MVP
 *E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
@@ -270,6 +283,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Cloud Storage `sanofi-models` | Adaptateurs LoRA Sanofi |
 | Cloud Storage `banque-de-france-models` | Corps d'embeddings + têtes k-NN classification griefs ACPR |
 | BigQuery `banque_de_france_veille` | Veille + décisions ACPR (colonne `source` distingue les deux) |
+| BigQuery `top_offres` | Cibles, cache des entreprises, scores et marts dbt du MVP Top Offres (compte de service `pipeline-top-offres`) |
 | Artifact Registry `europe-west9` | Images Docker Cloud Run Jobs |
 
 ### OVH VPS
@@ -332,6 +346,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/realisations/sg/sg-assurances` | MVP SG Assurances — Actualités, RAG, YOLO/NER (Document), Qwen |
 | `/realisations/banque-de-france` | MVP Banque de France — Actualités, Ask AI, ML Insights (Topic Modeling, Scoring EBA, Classification) |
 | `/realisations/gestion-patrimoine` | MVP Gestion Patrimoine — génération de profil, assistant RAG juridique avec citation |
+| `/realisations/top-offres` | MVP Top Offres — vue d'ensemble (public : tuiles et graphiques) ; 🔒 Top du jour (décisions, brouillons), Entreprises (tableau triable), Brouillons |
 
 ---
 
@@ -548,8 +563,9 @@ presentation-portefolio/
 │   │   ├── savencia/                # router, ml.py, rag.py, schemas.py
 │   │   ├── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
 │   │   ├── banque_de_france/        # router, ml.py, rag.py, schemas.py
-│   │   └── gestion_patrimoine/      # router.py, schemas.py, profil_agent.py (copie — exécution directe backend)
-│   ├── migrations/sql/              # Scripts SQL (001 → 018)
+│   │   ├── gestion_patrimoine/      # router.py, schemas.py, profil_agent.py (copie — exécution directe backend)
+│   │   └── top_offres/              # router.py, schemas.py (lectures BigQuery via services/top_offres_bigquery.py)
+│   ├── migrations/sql/              # Scripts SQL (001 → 021)
 │   ├── scheduler/                   # job_pipeline.py
 │   ├── scripts/                     # Scripts utilitaires manuels
 │   └── Dockerfile
@@ -593,11 +609,16 @@ presentation-portefolio/
 │   │   ├── ml/                       # classification_inference.py, eba_service.py, topic_modeling.py
 │   │   ├── training/                 # classification/, eba/, ner/ (backlog), webstat/ (backlog)
 │   │   └── scripts/                  # check_data.py, inspect_chromadb.py
-│   └── gestion-patrimoine/
-│       ├── pipeline/                 # ETL Légifrance (API PISTE) — collectors/loaders/transformation/validators
-│       ├── agents/                   # profil_agent.py, assistant_agent.py, tools.py (function calling ReAct)
-│       ├── ml/                       # main.py (FastAPI /chat), config.py, Dockerfile, docker-compose.yml
-│       └── scripts/                  # check_data.py
+│   ├── gestion-patrimoine/
+│   │   ├── pipeline/                 # ETL Légifrance (API PISTE) — collectors/loaders/transformation/validators
+│   │   ├── agents/                   # profil_agent.py, assistant_agent.py, tools.py (function calling ReAct)
+│   │   ├── ml/                       # main.py (FastAPI /chat), config.py, Dockerfile, docker-compose.yml
+│   │   └── scripts/                  # check_data.py
+│   └── top-offres/
+│       ├── pipeline/                 # Worker local : collectors, transformation, validators, loaders, orchestrator.py
+│       ├── agents/                   # cibles_agent.py, scoring_agent.py, secteur_agent.py, prompts/
+│       ├── dbt/                      # Projet dbt dédié : int_offres_a_scorer, offres_scores, mart_top_du_jour, mart_stats
+│       └── scripts/                  # run_quotidien.bat, test_rappel.py, benchmark.py
 ├── infra/                            # Terraform Scaleway
 └── frontend/
     ├── app/
@@ -607,13 +628,15 @@ presentation-portefolio/
     │       ├── savencia/
     │       ├── sg/sg-assurances/
     │       ├── banque-de-france/
-    │       └── gestion-patrimoine/
+    │       ├── gestion-patrimoine/
+    │       └── top-offres/             # page.tsx, layout.tsx
     ├── components/
     │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/, banque-de-france/ml/
     │   ├── gestion-patrimoine/       # ProfilGenerator.tsx, ChatAssistant.tsx
+    │   ├── top-offres/               # TopSidebar, OverviewView, TopCharts, TopDuJourView, EntreprisesView, BrouillonsView...
     │   ├── AccessProvider.tsx, AccessCodeForm.tsx, PrivateSection.tsx   # accès public / privé
     │   └── ui/                       # shadcn/ui
-    ├── lib/                          # api.ts (helper request, ApiError), access.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
+    ├── lib/                          # api.ts (helper request, ApiError), access.ts, topOffres.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
     └── Dockerfile
 ```
 
@@ -628,6 +651,7 @@ presentation-portefolio/
 - Finaliser le backlog Release 2 Sanofi (règle iptables persistante, streaming Graph RAG, LangSmith sur Graph RAG)
 - MVP Mirakl — E-commerce NLP/GenAI
 - Banque de France : Webstat (détection d'anomalies, série à fréquence adaptée à trouver) et NER (établissement, base légale) sur les décisions ACPR
+- Top Offres : clôturer l'évaluation (objectif de rappel, garde-fou si le modèle tourne sur CPU, revue du prompt de scoring), Planificateur de tâches Windows pour le run quotidien, recouvrement des 30 jours en tranches, groupes d'offres par mot-clé, bonus de mots-clés, signal de récurrence
 
 ### Moyen terme
 - Automatisation Cloud Run Jobs pour les MVPs (refresh périodique des pipelines ML)
