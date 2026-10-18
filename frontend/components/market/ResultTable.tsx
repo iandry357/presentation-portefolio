@@ -1,7 +1,7 @@
 "use client"
 
 import { Fragment, useState, useMemo } from "react"
-import { MarketQueryResult, toggleExcludedCompany, batchExcludeCompanies } from "@/lib/marketConfig"
+import { MarketQueryResult, Q11Offre, SOURCES, fetchQ11Offres, toggleExcludedCompany, batchExcludeCompanies } from "@/lib/marketConfig"
 
 interface Props {
   result: MarketQueryResult
@@ -20,6 +20,10 @@ const COL_LABELS: Record<string, string> = {
   titres:               "Intitulés",
 }
 
+const PAGE_SIZE = 50   // lignes affichées, puis +50 à chaque « Afficher plus »
+const LIBELLES_SOURCE: Record<string, string> = Object.fromEntries(SOURCES.map(s => [s.value, s.label]))
+
+type DetailState = { loading: boolean; error?: string; rows?: Q11Offre[] }
 type SortDir = "asc" | "desc" | null
 
 export default function ResultTable({ result, excludedCompanies, onExclusionChange }: Props) {
@@ -30,6 +34,8 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
   const [filterText, setFilterText]     = useState("")
   const [sortCol, setSortCol]           = useState<string | null>(null)
   const [sortDir, setSortDir]           = useState<SortDir>(null)
+  const [limit, setLimit]               = useState(PAGE_SIZE)
+  const [details, setDetails]           = useState<Record<string, DetailState>>({})
 
   const isQ11 = result.query_id === "Q11"
   const { colonnes, lignes } = result
@@ -60,6 +66,8 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
     return rows
   }, [lignes, filterText, sortCol, sortDir, isQ11])
 
+  const visibleRows = displayedRows.slice(0, limit)
+
   // ── Gestion tri ──────────────────────────────────────────────────────────
 
   function handleSort(col: string) {
@@ -73,6 +81,21 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
       setSortDir(null)
     }
   }
+
+  // ── Détail des intitulés (chargé au dépliage) ────────────────────────────
+  async function toggleDetail(nom: string) {
+    if (expandedRow === nom) { setExpandedRow(null); return }
+    setExpandedRow(nom)
+    if (details[nom]?.rows) return
+    setDetails(prev => ({ ...prev, [nom]: { loading: true } }))
+    try {
+      const rows = await fetchQ11Offres(nom, result.params)
+      setDetails(prev => ({ ...prev, [nom]: { loading: false, rows } }))
+    } catch {
+      setDetails(prev => ({ ...prev, [nom]: { loading: false, error: "Impossible de charger les offres." } }))
+    }
+  }
+
 
   function SortIcon({ col }: { col: string }) {
     if (sortCol !== col) return <span className="ml-1 text-gray-300">⇅</span>
@@ -134,7 +157,7 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
           <input
             type="text"
             value={filterText}
-            onChange={e => setFilterText(e.target.value)}
+            onChange={e => { setFilterText(e.target.value); setLimit(PAGE_SIZE) }}
             placeholder="Filtrer par entreprise…"
             className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 w-64 focus:outline-none focus:ring-1 focus:ring-blue-300"
           />
@@ -197,12 +220,14 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
-            {displayedRows.map((row, i) => {
+            {visibleRows.map((row, i) => {
               const nom        = row.entreprise_nom as string | undefined
               const isExcluded = nom ? excludedCompanies.includes(nom) : false
               const isToggling = nom === togglingRow
               const isExpanded = nom === expandedRow
               const isSelected = nom ? selected.has(nom) : false
+              const detail     = nom ? details[nom] : undefined
+              const detailRows = detail?.rows
 
               return (
                 <Fragment key={i}>
@@ -237,7 +262,7 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
                     {isQ11 && (
                       <td className="px-4 py-3 max-w-xs">
                         <button
-                          onClick={() => setExpandedRow(isExpanded ? null : (nom ?? null))}
+                          onClick={() => nom && toggleDetail(nom)}
                           className="text-xs text-blue-500 hover:underline"
                         >
                           {isExpanded ? "Masquer" : "Voir les intitulés"}
@@ -267,13 +292,52 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
                   {isQ11 && isExpanded && nom && (
                     <tr className="bg-blue-50">
                       <td colSpan={colonnes.length + 3} className="px-6 py-3">
-                        <p className="text-xs text-gray-600 leading-relaxed">
-                          {String(row.titres ?? "—").split(" | ").map((t, j) => (
-                            <span key={j} className="inline-block bg-white border border-blue-100 rounded px-2 py-0.5 mr-1 mb-1 text-gray-700">
-                              {t}
-                            </span>
-                          ))}
-                        </p>
+                        {detail?.loading && <p className="text-xs text-gray-500">Chargement…</p>}
+                        {detail?.error && <p className="text-xs text-red-600">{detail.error}</p>}
+                        {detailRows && detailRows.length === 0 && (
+                          <p className="text-xs text-gray-500">Aucune offre.</p>
+                        )}
+                        {detailRows && detailRows.length > 0 && (
+                          <div className="overflow-x-auto max-w-full">
+                            <table className="min-w-full text-xs bg-white border border-blue-100 rounded">
+                              <thead>
+                                <tr className="text-left text-gray-500 border-b border-blue-100">
+                                  <th className="px-3 py-2 font-medium">Titre</th>
+                                  <th className="px-3 py-2 font-medium whitespace-nowrap">Nombre</th>
+                                  <th className="px-3 py-2 font-medium whitespace-nowrap">Dernière date</th>
+                                  <th className="px-3 py-2 font-medium">Source</th>
+                                  <th className="px-3 py-2 font-medium">Lien</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-blue-50">
+                                {detailRows.map((o, j) => (
+                                  <tr key={j} className="align-top">
+                                    <td className="px-3 py-2 text-gray-800 min-w-[220px]">{o.titre}</td>
+                                    <td className="px-3 py-2 text-gray-600 whitespace-nowrap">
+                                      {o.nb_offres > 1 ? `× ${o.nb_offres}` : ""}
+                                    </td>
+                                    <td className="px-3 py-2 text-gray-600 whitespace-nowrap">{o.derniere_date ?? "—"}</td>
+                                    <td className="px-3 py-2 text-gray-600 whitespace-nowrap">
+                                      {LIBELLES_SOURCE[o.source] ?? o.source}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {o.url_offre ? (
+                                        <a
+                                          href={o.url_offre}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:underline"
+                                        >
+                                          Voir l&apos;offre ↗
+                                        </a>
+                                      ) : "—"}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   )}
@@ -283,6 +347,19 @@ export default function ResultTable({ result, excludedCompanies, onExclusionChan
           </tbody>
         </table>
       </div>
+      <p className="text-xs text-gray-500">
+        {visibleRows.length} entreprise{visibleRows.length > 1 ? "s" : ""} affichée{visibleRows.length > 1 ? "s" : ""} sur {displayedRows.length}
+      </p>
+      {visibleRows.length < displayedRows.length && (
+        <div className="text-center">
+          <button
+            onClick={() => setLimit(l => l + PAGE_SIZE)}
+            className="px-4 py-2 text-sm border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Afficher plus
+          </button>
+        </div>
+      )}
     </div>
   )
 }

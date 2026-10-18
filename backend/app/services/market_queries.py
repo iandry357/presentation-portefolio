@@ -48,11 +48,12 @@ def _source_filter(source: str) -> str:
     return f"AND source = '{source}'"
 
 
-def _run(sql: str) -> list[dict[str, Any]]:
+def _run(sql: str, params: list | None = None) -> list[dict[str, Any]]:
     # client = bigquery.Client(project=PROJECT)
     client = _get_bq_client()
     job_config = bigquery.QueryJobConfig(
         maximum_bytes_billed=1024 * 1024 * 1024,  # 1 GB
+        query_parameters=params or [],
     )
     job = client.query(sql, job_config=job_config)
     rows = job.result()
@@ -296,6 +297,20 @@ def _q10(days: int, src: str) -> str:
     ORDER BY nb_offres DESC
     """
 
+# Filtre data/IA partagé par Q11 et son détail par intitulé
+Q11_FILTRE_TITRE = """
+      AND (
+        LOWER(titre) LIKE '%data%'
+        OR LOWER(titre) LIKE '% ia %'
+        OR LOWER(titre) LIKE '% ai %'
+        OR LOWER(titre) LIKE '%machine learning%'
+        OR LOWER(titre) LIKE '%intelligence artificielle%'
+        OR LOWER(titre) LIKE '%artificial intelligence%'
+      )
+      AND titre NOT LIKE '%onsult%'
+"""
+
+
 def _q11(days: int, src: str) -> str:
     excluded = get_excluded()
     excl_sql = ""
@@ -307,7 +322,6 @@ def _q11(days: int, src: str) -> str:
     return f"""
     SELECT
       entreprise_nom,
-      STRING_AGG(DISTINCT LOWER(TRIM(titre)), ' | ' ORDER BY LOWER(TRIM(titre))) AS titres,
       COUNT(DISTINCT LOWER(TRIM(titre))) AS nb_titres_distincts,
       COUNT(DISTINCT source) AS nb_sources,
       MIN(date_publication) AS premiere_offre,
@@ -324,18 +338,38 @@ def _q11(days: int, src: str) -> str:
       AND entreprise_nom IS NOT NULL
       AND entreprise_nom != ''
       {excl_sql}
-      AND (
-        LOWER(titre) LIKE '%data%'
-        OR LOWER(titre) LIKE '% ia %'
-        OR LOWER(titre) LIKE '% ai %'
-        OR LOWER(titre) LIKE '%machine learning%'
-        OR LOWER(titre) LIKE '%intelligence artificielle%'
-        OR LOWER(titre) LIKE '%artificial intelligence%'
-      )
-      AND titre NOT LIKE '%onsult%'
+      {Q11_FILTRE_TITRE}
     GROUP BY entreprise_nom
     ORDER BY duree_jours DESC, nb_titres_distincts DESC
     """
+
+
+def execute_q11_offres(
+    entreprise: str,
+    periode: str = "30j",
+    source: str = "toutes",
+) -> list[dict[str, Any]]:
+    """Détail de Q11 : une ligne par intitulé (normalisé) d'une entreprise."""
+    days = _periode_to_days(periode)
+    src  = _source_filter(source)
+    sql = f"""
+    SELECT
+      ARRAY_AGG(titre ORDER BY date_publication DESC LIMIT 1)[OFFSET(0)] AS titre,
+      COUNT(*) AS nb_offres,
+      MAX(date_publication) AS derniere_date,
+      ARRAY_AGG(source ORDER BY date_publication DESC LIMIT 1)[OFFSET(0)] AS source,
+      ARRAY_AGG(url_offre IGNORE NULLS ORDER BY date_publication DESC LIMIT 1)[SAFE_OFFSET(0)] AS url_offre
+    FROM {TABLE}
+    WHERE
+      date_publication >= DATE_SUB(CURRENT_DATE(), INTERVAL {days} DAY)
+      AND entreprise_nom = @entreprise
+      {src}
+      {Q11_FILTRE_TITRE}
+    GROUP BY LOWER(TRIM(titre))
+    ORDER BY derniere_date DESC, nb_offres DESC
+    """
+    logger.info(f"[MarketQueries] Détail Q11 — entreprise={entreprise} période={periode} source={source}")
+    return _run(sql, [bigquery.ScalarQueryParameter("entreprise", "STRING", entreprise)])
 
 
 _QUERIES = {

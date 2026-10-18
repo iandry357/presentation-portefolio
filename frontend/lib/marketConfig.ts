@@ -52,6 +52,14 @@ export interface ExcludedCompaniesResponse {
   total: number
 }
 
+export interface Q11Offre {
+  titre: string
+  nb_offres: number
+  derniere_date: string | null
+  source: string
+  url_offre: string | null
+}
+
 // ── Catalogue ─────────────────────────────────────────────────────────────────
 
 export const QUERIES: QueryMeta[] = [
@@ -170,6 +178,17 @@ export async function fetchMarketQuery(
   const res = await fetch(`${API}/market/${queryId}?${qs}`)
   if (!res.ok) throw new Error(`Erreur API : ${res.status}`)
   return res.json()
+}
+
+export async function fetchQ11Offres(
+  entreprise: string,
+  params: MarketQueryParams
+): Promise<Q11Offre[]> {
+  const qs = new URLSearchParams({ entreprise, periode: params.periode, source: params.source })
+  const res = await fetch(`${API}/market/Q11/offres?${qs}`)
+  if (!res.ok) throw new Error(`Erreur API : ${res.status}`)
+  const data = await res.json()
+  return data.lignes
 }
 
 export async function fetchExcludedCompanies(): Promise<ExcludedCompaniesResponse> {

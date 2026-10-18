@@ -12,7 +12,7 @@ from ..schemas.market import (
     ExcludedCompanyBatchAdd,
 )
 from ..services import excluded_companies as excl_svc
-from ..services.market_queries import CATALOGUE, execute_query
+from ..services.market_queries import CATALOGUE, execute_query, execute_q11_offres
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/market", tags=["market"])
@@ -59,6 +59,21 @@ def remove_excluded(nom: str):
         logger.error(f"[market] Erreur suppression entreprise exclue : {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Erreur lors de la mise à jour GCS")
     return ExcludedCompaniesResponse(entreprises=entreprises, total=len(entreprises))
+
+# ── Détail Q11 : intitulés d'une entreprise ───────────────────────────────────
+
+@router.get("/Q11/offres")
+def run_q11_offres(
+    entreprise: str = Query(min_length=1, max_length=200),
+    periode: PERIODES = Query(default="30j"),
+    source:  SOURCES  = Query(default="toutes"),
+):
+    try:
+        lignes = execute_q11_offres(entreprise, periode=periode, source=source)
+    except Exception as e:
+        logger.error(f"[market] Erreur détail Q11 ({entreprise}) : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lors de l'exécution de la requête")
+    return {"entreprise": entreprise, "lignes": lignes, "total": len(lignes)}
 
 # ── Exécution requête ─────────────────────────────────────────────────────────
 
