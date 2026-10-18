@@ -57,10 +57,11 @@ interface JobDetailProps {
   enriched: JobEnriched | null;
   onEnrichedUpdate: (enriched: JobEnriched) => void;
   isEnriching?: boolean;
+  onOfferUpdated?: (offer: JobOfferDetail) => void;   // offre renvoyée par le PATCH après « Modifier »
 }
 
 // export default function JobDetail({ offer, enriched, onEnrichedUpdate }: JobDetailProps) {
-export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnriching = false }: JobDetailProps) {
+export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnriching = false, onOfferUpdated }: JobDetailProps) {
   const [status, setStatus] = useState(offer.status);
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState<string | null>(null);
@@ -131,6 +132,9 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
       console.error(e);
     }
   };
+  
+  // Un brouillon doit être validé avant de pouvoir postuler
+  const brouillonNonValide = status === 'brouillon' && !enregistre;
 
   useEffect(() => {
     if (isEnriching) setFicheOpen(true);
@@ -185,8 +189,11 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
             {status !== 'postule' ? (
               <button
                 onClick={handlePostule}
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+                disabled={brouillonNonValide}
+                title={brouillonNonValide ? "Validez d'abord le brouillon" : undefined}
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
+
                 Postuler
               </button>
             ) : (
@@ -546,8 +553,9 @@ export default function JobDetail({ offer, enriched, onEnrichedUpdate, isEnrichi
               <ExternalJobForm
                 jobId={offer.id}
                 initialValues={editInitialValues}
-                onSuccess={() => {
+                onSuccess={(job) => {
                   setEditOpen(false);
+                  onOfferUpdated?.(job);   // la page charge l'offre côté client : router.refresh() ne la recharge pas
                   router.refresh();
                 }}
                 onCancel={() => setEditOpen(false)}

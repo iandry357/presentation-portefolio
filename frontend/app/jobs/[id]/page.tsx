@@ -104,6 +104,7 @@ export default function JobDetailPage() {
             offer={offer}
             enriched={enriched}
             onEnrichedUpdate={setEnriched}
+            onOfferUpdated={setOffer}
           />
         )}
       </div>
