@@ -514,3 +514,108 @@ export async function lockAccess(): Promise<void> {
     throw new Error(`HTTP ${response.status}`);
   }
 }
+
+
+// ============================================================================
+// Top Offres — API calls
+// ============================================================================
+
+import {
+  TopResponse,
+  TopStatsResponse,
+  TopDecisionType,
+  TopDecisionResponse,
+  TopTypeEntreprise,
+  TypeEntrepriseCorrigeable,
+} from '@/types';
+
+// Public
+export async function getTopStats(jours: number): Promise<TopStatsResponse> {
+  return request<TopStatsResponse>(`/top-offres/stats?jours=${jours}`);
+}
+
+// Privé : les deux listes (onglets) d'un coup, avec les compteurs
+export async function getTop(params: {
+  jours: number;
+  inclureExclues: boolean;
+}): Promise<TopResponse> {
+  const p = new URLSearchParams({
+    jours: String(params.jours),
+    inclure_exclues: String(params.inclureExclues),
+  });
+  return request<TopResponse>(`/top-offres/top?${p.toString()}`);
+}
+
+// « Intéressé » : un doublon détecté (resultat = 'doublon_detecte') ne crée rien ;
+// rappeler avec `confirmer` (créer quand même) ou `utiliser_job_offer_id` (rattacher à une offre existante).
+export async function createTopDecision(body: {
+  id_unique: string;
+  decision: TopDecisionType;
+  confirmer?: boolean;
+  utiliser_job_offer_id?: number;
+}): Promise<TopDecisionResponse> {
+  return request<TopDecisionResponse>('/top-offres/decisions', { method: 'POST', body });
+}
+
+// L'id_unique d'une alerte e-mail est un lien de suivi (« ? », « & », « / ») : paramètre de requête encodé
+export async function deleteTopDecision(idUnique: string): Promise<{ ok: boolean }> {
+  const p = new URLSearchParams({ id_unique: idUnique });
+  return request<{ ok: boolean }>(`/top-offres/decisions?${p.toString()}`, { method: 'DELETE' });
+}
+
+export async function setTypeEntreprise(
+  nomNormalise: string,
+  body: { type_entreprise: TypeEntrepriseCorrigeable; commentaire?: string | null }
+): Promise<TopTypeEntreprise> {
+  return request<TopTypeEntreprise>(
+    `/top-offres/types-entreprise/${encodeURIComponent(nomNormalise)}`,
+    { method: 'PUT', body }
+  );
+}
+
+// Supprime la correction : le type affiché redevient l'automatique
+export async function deleteTypeEntreprise(nomNormalise: string): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>(
+    `/top-offres/types-entreprise/${encodeURIComponent(nomNormalise)}`,
+    { method: 'DELETE' }
+  );
+}
+
+// ============================================================================
+// Top Offres — Entreprises
+// ============================================================================
+
+import { EntreprisesResponse, OffresEntrepriseResponse, OrdreTri, TriEntreprises } from '@/types';
+
+export async function getEntreprises(params: {
+  jours: number;
+  tri: TriEntreprises;
+  ordre: OrdreTri;
+  typeEntreprise?: string;
+  secteur?: string;
+  q?: string;
+  inclureExclues: boolean;
+  limite: number;
+}): Promise<EntreprisesResponse> {
+  const p = new URLSearchParams({
+    jours: String(params.jours),
+    tri: params.tri,
+    ordre: params.ordre,
+    inclure_exclues: String(params.inclureExclues),
+    limite: String(params.limite),
+  });
+  if (params.typeEntreprise) p.set('type_entreprise', params.typeEntreprise);
+  if (params.secteur) p.set('secteur', params.secteur);
+  if (params.q) p.set('q', params.q);
+  return request<EntreprisesResponse>(`/top-offres/entreprises?${p.toString()}`);
+}
+
+// Offres d'une entreprise, à la demande : la clé (nom normalisé) passe en paramètre de requête
+export async function getOffresEntreprise(
+  entreprise: string,
+  jours: number
+): Promise<OffresEntrepriseResponse> {
+  const p = new URLSearchParams({ entreprise, jours: String(jours) });
+  return request<OffresEntrepriseResponse>(`/top-offres/entreprises/offres?${p.toString()}`);
+}
+

@@ -332,3 +332,153 @@ export type UnlockResult =
       message: string;
       retryAfterSeconds?: number;
     };
+
+
+
+// ============================================================================
+// Top Offres
+// ============================================================================
+
+export type TopListe = 'a_lire' | 'zone_grise';
+
+// Types qu'on peut choisir pour corriger l'automatique (`non_identifie` n'est qu'un défaut)
+export type TypeEntrepriseCorrigeable =
+  | 'esn'
+  | 'conseil'
+  | 'esn_conseil'
+  | 'cabinet_recrutement'
+  | 'client_final';
+
+export interface TopOffre {
+  id_unique: string;
+  source: string | null;
+  titre: string;
+  entreprise_nom: string | null;
+  entreprise_normalise: string | null;
+  localisation_libelle: string | null;
+  type_contrat_libelle: string | null;
+  salaire_libelle: string | null;
+  url_offre: string | null;
+  date_publication: string | null;
+  date_collecte: string | null;
+  score: number | null;
+  categorie: string | null;
+  raison: string | null;
+  alertes: string[];
+  similarite: number | null;
+  liste: TopListe;
+  secteur: string | null;
+  type_entreprise: string;              // correction de l'utilisateur, sinon type automatique
+  type_entreprise_corrige: boolean;
+  entreprise_exclue: boolean;
+}
+
+export interface TopResponse {
+  jours: number;
+  a_lire: TopOffre[];
+  zone_grise: TopOffre[];
+  compteurs: { a_lire: number; zone_grise: number };
+}
+
+export interface TopStatLigne {
+  jour: string;
+  dimension: string;
+  valeur: string | null;
+  nb_offres: number;
+}
+
+export interface TopStatsResponse {
+  jours: number;
+  lignes: TopStatLigne[];
+  cibles: Record<string, string>;       // cible_id -> intitulé (vide si indisponible)
+}
+
+export type TopDecisionType = 'pas_interesse' | 'interesse';
+
+export interface TopOffreProche {
+  job_offer_id: number;
+  title: string;
+  company_name: string | null;
+  status: string;
+  critere: 'ft_id' | 'titre_entreprise';
+}
+
+export interface TopDecisionResponse {
+  resultat: 'decision_enregistree' | 'doublon_detecte';
+  decision: string | null;
+  job_offer_id: number | null;
+  doublons: TopOffreProche[];
+}
+
+export interface TopTypeEntreprise {
+  nom_normalise: string;
+  type_entreprise: string;
+  commentaire: string | null;
+  updated_at: string | null;
+}
+
+// ============================================================================
+// Top Offres — Entreprises (agrégat des offres scorées)
+// ============================================================================
+
+export type TriEntreprises =
+  | 'nom'
+  | 'secteur'
+  | 'type'
+  | 'offres'
+  | 'coeur'
+  | 'adjacent'
+  | 'hors_cible'
+  | 'a_lire'
+  | 'score_max'
+  | 'derniere_offre';
+
+export type OrdreTri = 'asc' | 'desc';
+
+export interface EntrepriseStat {
+  entreprise_normalise: string;
+  entreprise_nom: string | null;
+  secteur: string | null;
+  naf_libelle: string | null;
+  type_entreprise: string;              // correction de l'utilisateur, sinon type automatique
+  type_entreprise_corrige: boolean;
+  entreprise_exclue: boolean;
+  nb_offres: number;
+  nb_coeur: number;
+  nb_adjacent: number;
+  nb_hors_cible: number;
+  nb_a_lire: number;
+  nb_zone_grise: number;
+  score_max: number | null;
+  score_moyen: number | null;
+  derniere_offre: string | null;
+}
+
+export interface EntreprisesResponse {
+  jours: number;
+  total: number;                        // entreprises correspondant aux filtres, avant la limite
+  entreprises: EntrepriseStat[];
+  secteurs: string[];                   // suggestions du filtre secteur
+}
+
+export interface OffreEntreprise {
+  id_unique: string;
+  source: string | null;
+  titre: string;
+  localisation_libelle: string | null;
+  type_contrat_libelle: string | null;
+  salaire_libelle: string | null;
+  url_offre: string | null;
+  date_publication: string | null;
+  date_collecte: string | null;
+  score: number | null;
+  categorie: string | null;
+  liste: string;                        // a_lire, zone_grise ou masque
+  raison: string | null;
+}
+
+export interface OffresEntrepriseResponse {
+  entreprise_normalise: string;
+  jours: number;
+  offres: OffreEntreprise[];
+}
