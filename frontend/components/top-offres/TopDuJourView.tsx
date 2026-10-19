@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { RefreshCw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import {
   createTopDecision,
   deleteTopDecision,
@@ -18,6 +18,7 @@ import {
   TopOffre,
   TopOffreProche,
   TopResponse,
+  TopTri,
   TypeEntrepriseCorrigeable,
 } from '@/types';
 import TopOffreCard from './TopOffreCard';
@@ -27,6 +28,11 @@ import DoublonDialog from './DoublonDialog';
 const PERIODES = [3, 7, 14, 30];
 const JOURS_DEFAUT = 7;
 const DELAI_MESSAGE_MS = 8000;
+
+const TRIS: { id: TopTri; label: string }[] = [
+  { id: 'pertinence', label: 'Pertinence' },
+  { id: 'recent', label: 'Plus récentes' },
+];
 
 interface Message {
   texte: string;
@@ -44,6 +50,8 @@ export default function TopDuJourView() {
   const [jours, setJours] = useState(JOURS_DEFAUT);
   const [inclureExclues, setInclureExclues] = useState(false);
   const [onglet, setOnglet] = useState<TopListe>('a_lire');
+  const [page, setPage] = useState(1);
+  const [tri, setTri] = useState<TopTri>('pertinence');
   const [data, setData] = useState<TopResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,13 +64,14 @@ export default function TopDuJourView() {
     if (!silencieux) setLoading(true);
     setError(null);
     try {
-      setData(await getTop({ jours, inclureExclues }));
+      // Le serveur ramène à la dernière page si la demande la dépasse : l'affichage suit `data.page`
+      setData(await getTop({ jours, inclureExclues, liste: onglet, page, tri }));
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur de chargement');
     } finally {
       setLoading(false);
     }
-  }, [jours, inclureExclues]);
+  }, [jours, inclureExclues, onglet, page, tri]);
 
   useEffect(() => {
     load();
@@ -145,22 +154,45 @@ export default function TopDuJourView() {
     }
   };
 
-  const offres = data ? data[onglet] : [];
-  const total = data ? data.compteurs[onglet] : 0;
+  const offres = data && data.liste === onglet ? data.offres : [];
+  const total = data && data.liste === onglet ? data.total : 0;
   const annulerId = message?.annulerId;
+
+  // Barre de pagination : affichée en haut (barre fixe) et en bas de la liste
+  const pagination = data && data.liste === onglet && data.nb_pages > 1 ? (
+    <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+      <button
+        onClick={() => setPage(data.page - 1)}
+        disabled={loading || data.page <= 1}
+        className="inline-flex items-center gap-1 px-3 py-1.5 border rounded-lg bg-white hover:bg-gray-50 transition-colors disabled:opacity-50"
+      >
+        <ChevronLeft className="w-4 h-4" />
+        Précédent
+      </button>
+      <span>Page {data.page} / {data.nb_pages}</span>
+      <button
+        onClick={() => setPage(data.page + 1)}
+        disabled={loading || data.page >= data.nb_pages}
+        className="inline-flex items-center gap-1 px-3 py-1.5 border rounded-lg bg-white hover:bg-gray-50 transition-colors disabled:opacity-50"
+      >
+        Suivant
+        <ChevronRight className="w-4 h-4" />
+      </button>
+    </div>
+  ) : null;
 
   return (
     <div className="space-y-4">
 
-      {/* Onglets et réglages */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* Onglets, réglages et pagination : fixes sous l'en-tête du site (écran large) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 md:sticky md:top-16 z-40 bg-gray-50 py-2">
         <div role="tablist" className="inline-flex rounded-lg border bg-white p-1">
           {LISTES.map(({ id, label }) => (
             <button
               key={id}
               role="tab"
               aria-selected={onglet === id}
-              onClick={() => setOnglet(id)}
+              onClick={() => { setOnglet(id); setPage(1); }}
               className={cn(
                 'px-4 py-1.5 text-sm font-medium rounded-md transition-colors',
                 onglet === id ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50',
@@ -177,7 +209,7 @@ export default function TopDuJourView() {
             Période
             <select
               value={jours}
-              onChange={e => setJours(Number(e.target.value))}
+              onChange={e => { setJours(Number(e.target.value)); setPage(1); }}
               className="text-sm border border-gray-200 rounded px-2 py-1 bg-white text-gray-700"
             >
               {PERIODES.map(j => (
@@ -185,11 +217,23 @@ export default function TopDuJourView() {
               ))}
             </select>
           </label>
+          <label className="inline-flex items-center gap-2">
+            Tri
+            <select
+              value={tri}
+              onChange={e => { setTri(e.target.value as TopTri); setPage(1); }}
+              className="text-sm border border-gray-200 rounded px-2 py-1 bg-white text-gray-700"
+            >
+              {TRIS.map(({ id, label }) => (
+                <option key={id} value={id}>{label}</option>
+              ))}
+            </select>
+          </label>
           <label className="inline-flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={inclureExclues}
-              onChange={e => setInclureExclues(e.target.checked)}
+              onChange={e => { setInclureExclues(e.target.checked); setPage(1); }}
               className="w-4 h-4 rounded border-gray-300"
             />
             Inclure les entreprises exclues
@@ -203,6 +247,15 @@ export default function TopDuJourView() {
             <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
           </button>
         </div>
+
+        {data && offres.length > 0 && (
+          <div className="basis-full flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs text-gray-500">
+              Offres {(data.page - 1) * data.taille + 1} à {(data.page - 1) * data.taille + offres.length} sur {total}.
+            </p>
+            {pagination}
+          </div>
+        )}
       </div>
 
       {/* Message de résultat d'une action */}
@@ -246,13 +299,8 @@ export default function TopDuJourView() {
         </p>
       )}
 
-      {!loading && offres.length > 0 && (
+      {!loading && data && offres.length > 0 && (
         <>
-          {total > offres.length && (
-            <p className="text-xs text-gray-500">
-              Les {offres.length} meilleures sur {total}.
-            </p>
-          )}
           <div className="space-y-4">
             {offres.map(offre => (
               <TopOffreCard
@@ -264,6 +312,7 @@ export default function TopDuJourView() {
               />
             ))}
           </div>
+          {pagination && <div className="pt-2">{pagination}</div>}
         </>
       )}
 

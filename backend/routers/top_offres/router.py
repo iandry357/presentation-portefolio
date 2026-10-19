@@ -33,7 +33,7 @@ router = APIRouter(prefix="/top-offres", tags=["Top Offres"])
 # Paramètres
 JOURS_TOP_DEFAUT = 7
 JOURS_STATS_DEFAUT = 30
-TOP_N_DEFAUT = 20
+TOP_N_DEFAUT = 10
 JOURS_ENTREPRISES_DEFAUT = 30
 ENTREPRISES_N_DEFAUT = 50
 STATUTS_TRAITES = ["postule", "enregistre"]   # offres de job_offers déjà traitées par l'utilisateur
@@ -104,6 +104,9 @@ async def get_stats(jours: int = Query(default=JOURS_STATS_DEFAUT, ge=1, le=365)
 @router.get("/top", response_model=TopResponse, dependencies=[Depends(require_access)])
 async def get_top(
     db: AsyncSession = Depends(get_db),
+    liste: str = Query(default="a_lire", pattern="^(a_lire|zone_grise|masque)$"),
+    page: int = Query(default=1, ge=1),
+    tri: str = Query(default="pertinence", pattern="^(pertinence|recent)$"),
     jours: int = Query(default=JOURS_TOP_DEFAUT, ge=1, le=90),
     limite: int = Query(default=TOP_N_DEFAUT, ge=1, le=50),
     inclure_exclues: bool = Query(default=False),
@@ -119,10 +122,12 @@ async def get_top(
     traitees = await _cles_traitees(db)
     corriges = await _types_corriges(db)
 
-    listes: Dict[str, list] = {"a_lire": [], "zone_grise": []}
+    # Les trois listes sont filtrées en entier (compteurs, règle « une offre par entreprise » commune) ;
+    # seule la page demandée est convertie en TopOffre
+    listes: Dict[str, list] = {"a_lire": [], "zone_grise": [], "masque": []}
     groupes_vus: Set[str] = set()
 
-    # Les candidates arrivent triées score DESC, similarite DESC
+    # Les candidates arrivent triées score DESC, similarite DESC : une entreprise reste dans sa meilleure liste
     for c in candidates:
         if c["id_unique"] in decides:
             continue
@@ -133,9 +138,23 @@ async def get_top(
             if cle_groupe in groupes_vus:
                 continue
             groupes_vus.add(cle_groupe)
+        listes[c["liste"]].append(c)
 
+    # Tri « plus récentes » : jour de collecte décroissant ; le tri de Python est stable, donc à jour égal
+    # l'ordre score DESC, similarite DESC des candidates est conservé
+    if tri == "recent":
+        for items in listes.values():
+            items.sort(key=lambda c: (c.get("date_collecte") or "")[:10], reverse=True)
+
+    total = len(listes[liste])
+    nb_pages = max(1, -(-total // limite))
+    page = min(page, nb_pages)   # page au-delà de la dernière : dernière page
+    debut = (page - 1) * limite
+
+    offres: List[TopOffre] = []
+    for c in listes[liste][debut:debut + limite]:
         type_corrige = corriges.get(c.get("entreprise_normalise") or "")
-        listes[c["liste"]].append(TopOffre(**{
+        offres.append(TopOffre(**{
             **c,
             "alertes": c.get("alertes") or [],
             "type_entreprise": type_corrige or c.get("type_entreprise") or "non_identifie",
@@ -143,12 +162,15 @@ async def get_top(
             "entreprise_exclue": bool(c.get("entreprise_exclue")),
         }))
 
-    compteurs = TopCompteurs(a_lire=len(listes["a_lire"]), zone_grise=len(listes["zone_grise"]))
     return TopResponse(
         jours=jours,
-        a_lire=listes["a_lire"][:limite],
-        zone_grise=listes["zone_grise"][:limite],
-        compteurs=compteurs,
+        liste=liste,
+        page=page,
+        nb_pages=nb_pages,
+        taille=limite,
+        total=total,
+        offres=offres,
+        compteurs=TopCompteurs(**{nom: len(items) for nom, items in listes.items()}),
     )
 
 # ============================================================================

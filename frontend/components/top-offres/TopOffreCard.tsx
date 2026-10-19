@@ -6,6 +6,7 @@ import { TopDecisionType, TopOffre, TypeEntrepriseCorrigeable } from '@/types';
 import {
   LIBELLES_ALERTE,
   LIBELLES_CATEGORIE,
+  LIBELLES_MOTIF_MASQUE,
   LIBELLES_TYPE_ENTREPRISE,
   formatDateCourte,
   libelle,
@@ -14,6 +15,7 @@ import {
 } from '@/lib/topOffres';
 
 const AUTO = '__auto__';   // valeur du sélecteur : supprimer la correction
+const SEUIL_ANCIENNE_JOURS = 3;   // écart publication → collecte à partir duquel l'offre est signalée
 
 interface TopOffreCardProps {
   offre: TopOffre;
@@ -29,6 +31,14 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
     .filter(Boolean)
     .join(' · ');
   const secteur = offre.secteur && offre.secteur !== 'NON DETERMINE' ? offre.secteur : null;
+
+  // Âge de l'offre à sa collecte, en jours entiers (dates ISO lues en UTC) ; null si une date manque
+  const jourPublication = offre.date_publication?.slice(0, 10);
+  const jourCollecte = offre.date_collecte?.slice(0, 10);
+  const ageJours = jourPublication && jourCollecte
+    ? Math.round((Date.parse(jourCollecte) - Date.parse(jourPublication)) / 86_400_000)
+    : null;
+  const ancienne = ageJours !== null && ageJours >= SEUIL_ANCIENNE_JOURS;
 
   const handleType = (valeur: string) => {
     onTypeChange(offre, valeur === AUTO ? null : (valeur as TypeEntrepriseCorrigeable));
@@ -46,7 +56,9 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
         </div>
         <div className="shrink-0 text-right">
           <p className="text-2xl font-bold text-gray-900 leading-none">{offre.score ?? '—'}</p>
-          <p className="text-xs text-gray-500 mt-1">{libelle(LIBELLES_CATEGORIE, offre.categorie)}</p>
+          {offre.categorie && (
+            <p className="text-xs text-gray-500 mt-1">{libelle(LIBELLES_CATEGORIE, offre.categorie)}</p>
+          )}
         </div>
       </div>
 
@@ -56,7 +68,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
       )}
 
       {/* Alertes, secteur, entreprise exclue */}
-      {(offre.alertes.length > 0 || secteur || offre.entreprise_exclue) && (
+      {(offre.alertes.length > 0 || secteur || offre.entreprise_exclue || offre.motif_masque || ancienne) && (
         <div className="flex flex-wrap items-center gap-2">
           {offre.alertes.map(alerte => (
             <span key={alerte} className="inline-flex items-center gap-1 text-xs text-gray-600">
@@ -66,6 +78,16 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
           ))}
           {secteur && <Badge variant="outline" className="text-xs max-w-full h-auto whitespace-normal text-left">{secteur}</Badge>}
           {offre.entreprise_exclue && <Badge variant="secondary" className="text-xs">Entreprise exclue</Badge>}
+          {offre.motif_masque && (
+            <Badge variant="secondary" className="text-xs">
+              Écartée : {libelle(LIBELLES_MOTIF_MASQUE, offre.motif_masque)}
+            </Badge>
+          )}
+          {ancienne && (
+            <Badge variant="outline" className="text-xs border-amber-300 bg-amber-50 text-amber-800">
+              Publiée {ageJours} j avant la collecte
+            </Badge>
+          )}
         </div>
       )}
 
@@ -91,6 +113,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
       {/* Pied : date, lien, décisions */}
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 pt-3 border-t">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+          {offre.date_collecte && <span>Collectée le {formatDateCourte(offre.date_collecte)}</span>}
           {offre.date_publication && <span>Publiée le {formatDateCourte(offre.date_publication)}</span>}
           {lien ? (
             <a

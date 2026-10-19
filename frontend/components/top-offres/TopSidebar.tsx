@@ -20,7 +20,7 @@ const VIEWS: { id: TopView; label: string; icon: string; prive: boolean }[] = [
 
 export default function TopSidebar({ activeView, onViewChange, unlocked }: Props) {
   return (
-    <aside className="w-full md:w-64 shrink-0">
+    <aside className="w-full md:w-64 shrink-0 md:sticky md:top-[4.5rem]">
       <div className="border rounded-lg bg-white overflow-hidden">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-3 border-b">
           Vue

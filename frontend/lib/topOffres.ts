@@ -12,6 +12,7 @@ const PREFIXE_ID_FT = 'france_travail_api_';     // id_unique = préfixe + ident
 export const LISTES: { id: TopListe; label: string }[] = [
   { id: 'a_lire', label: 'À lire' },
   { id: 'zone_grise', label: 'Zone grise' },
+  { id: 'masque', label: 'Masquées' },
 ];
 
 export const LIBELLES_TYPE_ENTREPRISE: Record<string, string> = {
@@ -47,6 +48,14 @@ export const LIBELLES_ALERTE: Record<string, string> = {
   intermediaire: 'Intermédiaire',
   seniorite_incertaine: 'Séniorité incertaine',
   autre: 'Autre',
+};
+
+// Motifs d'une offre masquée (filtres durs du dbt, puis score sous le seuil) ; valeur inconnue : affichée telle quelle
+export const LIBELLES_MOTIF_MASQUE: Record<string, string> = {
+  stage: 'Stage',
+  alternance: 'Alternance',
+  hors_idf: 'Hors Île-de-France',
+  score_bas: 'Score bas',
 };
 
 export function libelle(table: Record<string, string>, valeur: string | null | undefined): string {

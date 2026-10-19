@@ -339,7 +339,9 @@ export type UnlockResult =
 // Top Offres
 // ============================================================================
 
-export type TopListe = 'a_lire' | 'zone_grise';
+export type TopListe = 'a_lire' | 'zone_grise' | 'masque';
+
+export type TopTri = 'pertinence' | 'recent';
 
 // Types qu'on peut choisir pour corriger l'automatique (`non_identifie` n'est qu'un défaut)
 export type TypeEntrepriseCorrigeable =
@@ -367,6 +369,7 @@ export interface TopOffre {
   alertes: string[];
   similarite: number | null;
   liste: TopListe;
+  motif_masque: string | null;          // filtre dur ou score_bas ; null hors masque
   secteur: string | null;
   type_entreprise: string;              // correction de l'utilisateur, sinon type automatique
   type_entreprise_corrige: boolean;
@@ -375,9 +378,13 @@ export interface TopOffre {
 
 export interface TopResponse {
   jours: number;
-  a_lire: TopOffre[];
-  zone_grise: TopOffre[];
-  compteurs: { a_lire: number; zone_grise: number };
+  liste: TopListe;
+  page: number;                         // page servie (ramenée à la dernière si la demande la dépasse)
+  nb_pages: number;
+  taille: number;                       // offres par page
+  total: number;                        // offres de la liste après filtres, avant découpe
+  offres: TopOffre[];
+  compteurs: Record<TopListe, number>;
 }
 
 export interface TopStatLigne {

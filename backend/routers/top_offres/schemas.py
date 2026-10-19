@@ -27,7 +27,8 @@ class TopOffre(BaseModel):
     raison: Optional[str] = None
     alertes: List[str] = []
     similarite: Optional[float] = None
-    liste: Literal["a_lire", "zone_grise"]
+    liste: Literal["a_lire", "zone_grise", "masque"]
+    motif_masque: Optional[str] = None   # filtre dur (stage, alternance...) ou score_bas ; null hors masque
     secteur: Optional[str] = None
     # Type affiché : la correction de l'utilisateur si elle existe, sinon l'automatique du mart
     type_entreprise: str
@@ -38,13 +39,18 @@ class TopOffre(BaseModel):
 class TopCompteurs(BaseModel):
     a_lire: int
     zone_grise: int
+    masque: int
 
 
 class TopResponse(BaseModel):
-    """Les deux listes (onglets) d'un coup, avec les compteurs pour les libellés d'onglets."""
+    """Une page d'une liste (onglet), avec les compteurs des trois listes pour les libellés d'onglets."""
     jours: int
-    a_lire: List[TopOffre]
-    zone_grise: List[TopOffre]
+    liste: Literal["a_lire", "zone_grise", "masque"]
+    page: int                     # page servie (ramenée à la dernière si la demande la dépasse)
+    nb_pages: int
+    taille: int                   # offres par page
+    total: int                    # offres de la liste après filtres, avant découpe
+    offres: List[TopOffre]
     compteurs: TopCompteurs
 
 

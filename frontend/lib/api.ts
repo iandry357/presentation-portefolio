@@ -522,6 +522,8 @@ export async function lockAccess(): Promise<void> {
 
 import {
   TopResponse,
+  TopListe,
+  TopTri,
   TopStatsResponse,
   TopDecisionType,
   TopDecisionResponse,
@@ -534,14 +536,20 @@ export async function getTopStats(jours: number): Promise<TopStatsResponse> {
   return request<TopStatsResponse>(`/top-offres/stats?jours=${jours}`);
 }
 
-// Privé : les deux listes (onglets) d'un coup, avec les compteurs
+// Privé : une page d'une liste (onglet), avec les compteurs des trois listes
 export async function getTop(params: {
   jours: number;
   inclureExclues: boolean;
+  liste: TopListe;
+  page: number;
+  tri: TopTri;
 }): Promise<TopResponse> {
   const p = new URLSearchParams({
     jours: String(params.jours),
     inclure_exclues: String(params.inclureExclues),
+    liste: params.liste,
+    page: String(params.page),
+    tri: params.tri,
   });
   return request<TopResponse>(`/top-offres/top?${p.toString()}`);
 }

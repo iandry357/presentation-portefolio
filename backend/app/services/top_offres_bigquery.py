@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Paramètres
 TABLE_STATS = "mart_stats"
-LISTES_TOP = ["a_lire", "zone_grise"]
+LISTES_TOP = ["a_lire", "zone_grise", "masque"]
 TABLE_CIBLES = "cibles"
 
 # Colonnes de mart_top_du_jour renvoyées au routeur
@@ -27,7 +27,7 @@ COLONNES_TOP = [
     "entreprise_nom", "entreprise_normalise", "localisation_libelle",
     "type_contrat_libelle", "salaire_libelle", "url_offre", "date_publication",
     "date_collecte", "score", "categorie", "raison", "alertes", "cible_proche",
-    "similarite", "liste", "date_run", "secteur", "type_entreprise",
+    "similarite", "liste", "motif_masque", "date_run", "secteur", "type_entreprise",
     "origine_entreprise", "entreprise_exclue",
 ]
 
@@ -73,7 +73,7 @@ def _serialiser(lignes) -> list[dict]:
 
 def fetch_top_candidates(jours: int, inclure_exclues: bool = False) -> list[dict]:
     """
-    Offres candidates au top du jour : listes a_lire et zone_grise de mart_top_du_jour,
+    Offres candidates au top du jour : listes a_lire, zone_grise et masque de mart_top_du_jour,
     collectées dans les `jours` derniers jours. Triées score DESC, similarite DESC.
     Le retrait des offres déjà traitées et la limite par entreprise sont faits par le routeur.
     """
