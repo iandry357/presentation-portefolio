@@ -35,7 +35,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
   };
 
   return (
-    <div className="border rounded-lg bg-white p-4 space-y-3">
+    <div className="border rounded-lg bg-white p-4 space-y-3 min-w-0">
 
       {/* En-tête : titre, entreprise, score */}
       <div className="flex items-start justify-between gap-3">
@@ -52,7 +52,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
 
       {/* Raison du score */}
       {offre.raison && (
-        <p className="text-sm text-gray-600 italic">« {offre.raison} »</p>
+        <p className="text-sm text-gray-600 italic break-words">« {offre.raison} »</p>
       )}
 
       {/* Alertes, secteur, entreprise exclue */}
@@ -64,7 +64,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
               {libelle(LIBELLES_ALERTE, alerte)}
             </span>
           ))}
-          {secteur && <Badge variant="outline" className="text-xs">{secteur}</Badge>}
+          {secteur && <Badge variant="outline" className="text-xs max-w-full h-auto whitespace-normal text-left">{secteur}</Badge>}
           {offre.entreprise_exclue && <Badge variant="secondary" className="text-xs">Entreprise exclue</Badge>}
         </div>
       )}
@@ -89,7 +89,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
       </label>
 
       {/* Pied : date, lien, décisions */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 pt-3 border-t">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
           {offre.date_publication && <span>Publiée le {formatDateCourte(offre.date_publication)}</span>}
           {lien ? (
@@ -106,7 +106,7 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
             <span className="text-gray-400">Lien indisponible</span>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <button
             onClick={() => onDecision(offre, 'pas_interesse')}
             disabled={busy}
