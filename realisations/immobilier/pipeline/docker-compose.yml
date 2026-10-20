@@ -1,0 +1,15 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    container_name: immobilier-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ../gcp_sa_immobilier.json:/app/gcp_sa_immobilier.json:ro
+      - immobilier_cache:/app/data
+    restart: "no"
+
+volumes:
+  immobilier_cache:
