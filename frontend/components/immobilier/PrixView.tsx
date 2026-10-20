@@ -11,7 +11,8 @@ import {
   formatPrixM2,
   libelleArrondissement,
 } from '@/lib/immobilier';
-import { BarresHorizontales, CarteGraphique, COULEURS, Colonnes, ModeAffichage, Point } from './ImmobilierCharts';
+import { BarresHorizontales, CarteGraphique, COULEURS, ChoixVueArrondissements, Colonnes, Explication, ModeAffichage, Point, VueArrondissements } from './ImmobilierCharts';
+import CarteParis from './CarteParis';
 
 // Paramètres
 const TYPES: { id: TypeLocal; label: string }[] = [
@@ -28,6 +29,7 @@ export default function PrixView() {
   const [arrondissement, setArrondissement] = useState<number | null>(null);
   const [anneeChoisie, setAnneeChoisie] = useState<number | null>(null);
   const [mode, setMode] = useState<ModeAffichage>('graphique');
+  const [vueArr, setVueArr] = useState<VueArrondissements>('carte');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -56,6 +58,7 @@ export default function PrixView() {
   const parArrondissement: Point[] = lignes
     .filter(l => l.annee === annee && l.arrondissement !== null)
     .map(l => ({
+      id: l.arrondissement as number,
       nom: libelleArrondissement(l.arrondissement),
       valeur: l.prix_m2_median as number,
       detail: `${formatEntier(l.nb_ventes)} ventes`,
@@ -75,9 +78,17 @@ export default function PrixView() {
             nom: String(l.annee),
             valeur: l.prix_m2_median as number,
             detail: `${formatEntier(l.nb_ventes)} ventes`,
+            couleur: l.annee === annee ? COULEURS.slot1 : COULEURS.axe,
           }));
 
   const libelleType = TYPES.find(t => t.id === typeLocal)?.label.toLowerCase() ?? '';
+
+  // Clic sur un graphique : même effet que les listes déroulantes ; un second clic sur l'arrondissement désélectionne
+  const choisirArrondissement = (nom: string) => {
+    const n = Number.parseInt(nom, 10);
+    setArrondissement(courant => (courant === n ? null : n));
+  };
+  const choisirAnnee = (nom: string) => setAnneeChoisie(Number(nom));
 
   return (
     <div className="space-y-6">
@@ -122,6 +133,7 @@ export default function PrixView() {
             ))}
           </select>
         </label>
+        {mode === 'graphique' && <ChoixVueArrondissements valeur={vueArr} onChange={setVueArr} />}
         <label className="inline-flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -156,18 +168,56 @@ export default function PrixView() {
               annee === null
                 ? 'Aucune donnée'
                 : arrondissement === null
-                  ? `Ventes de ${libelleType} en ${annee}`
+                  ? `Ventes de ${libelleType} en ${annee} · cliquez sur la carte ou sur une barre pour voir l’évolution`
                   : `Ventes de ${libelleType} en ${annee} · ${libelleArrondissement(arrondissement)} en bleu, les autres arrondissements en gris`
             }
           >
-            <BarresHorizontales
-              points={parArrondissement}
-              colonneNom="Arrondissement"
-              colonneValeur="Prix médian"
-              colonneDetail="Ventes"
-              formater={formatPrixM2}
-              mode={mode}
-            />
+            <Explication>
+              <p>
+                La médiane est la valeur du milieu : la moitié des ventes s’est faite en dessous de ce prix,
+                l’autre moitié au-dessus. Elle est moins faussée par une vente exceptionnelle qu’une moyenne.
+              </p>
+              <p>
+                Le prix au m² est le prix de vente divisé par la surface du logement, pour les ventes d’un seul
+                logement.
+              </p>
+              <p>
+                Sur la carte, plus la couleur est foncée, plus le prix est élevé ; les chiffres sont les
+                numéros d’arrondissement. Le bouton « Affichage » permet de passer de la carte aux barres, qui donnent le classement.
+              </p>
+              <p>
+                Cliquez sur une barre ou sur la carte pour voir l’évolution de cet arrondissement dans le
+                graphique du dessous.
+              </p>
+            </Explication>
+            {mode === 'tableau' ? (
+              <BarresHorizontales
+                points={parArrondissement}
+                colonneNom="Arrondissement"
+                colonneValeur="Prix médian"
+                colonneDetail="Ventes"
+                formater={formatPrixM2}
+                mode={mode}
+              />
+            ) : vueArr === 'carte' ? (
+              <CarteParis
+                points={parArrondissement}
+                selection={arrondissement}
+                onSelect={id => choisirArrondissement(String(id))}
+                formater={formatPrixM2}
+                legende="Prix médian au m²"
+              />
+            ) : (
+              <BarresHorizontales
+                points={parArrondissement}
+                colonneNom="Arrondissement"
+                colonneValeur="Prix médian"
+                colonneDetail="Ventes"
+                formater={formatPrixM2}
+                mode={mode}
+                onSelect={choisirArrondissement}
+              />
+            )}
           </CarteGraphique>
 
           <CarteGraphique
@@ -175,9 +225,16 @@ export default function PrixView() {
             sousTitre={
               arrondissement === null
                 ? 'Choisissez un arrondissement pour voir son évolution par année'
-                : `Ventes de ${libelleType} · ${libelleArrondissement(arrondissement)}`
+                : `Ventes de ${libelleType} · ${libelleArrondissement(arrondissement)} · cliquez sur une année pour l’afficher ci-dessus`
             }
           >
+            <Explication>
+              <p>
+                Chaque colonne est une année, pour l’arrondissement choisi. La hauteur est le prix médian au m²
+                de cette année-là ; l’infobulle indique le nombre de ventes.
+              </p>
+              <p>Cliquez sur une année pour l’afficher dans le graphique du dessus.</p>
+            </Explication>
             {arrondissement === null ? (
               <p className="text-sm text-gray-400 py-8 text-center">Aucun arrondissement choisi.</p>
             ) : (
@@ -188,6 +245,7 @@ export default function PrixView() {
                 colonneDetail="Ventes"
                 formater={formatPrixM2}
                 mode={mode}
+                onSelect={choisirAnnee}
               />
             )}
           </CarteGraphique>

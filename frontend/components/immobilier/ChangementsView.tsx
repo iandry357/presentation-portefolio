@@ -20,6 +20,7 @@ import {
   formatEntier,
   libelleArrondissement,
 } from '@/lib/immobilier';
+import { Explication } from './ImmobilierCharts';
 
 // Paramètres
 const TAILLE_PAGE = 20;
@@ -178,6 +179,22 @@ export default function ChangementsView() {
       {data && (
         // Pendant un rechargement, le contenu précédent reste affiché en atténué
         <div className={cn('space-y-4 transition-opacity', loading && 'opacity-60')}>
+
+          <Explication titre="Comment lire ce tableau">
+            <p>
+              Un DPE « refait » est un diagnostic qui en remplace un précédent pour le même logement. Chaque
+              ligne est un DPE refait, du plus récent au plus ancien.
+            </p>
+            <p>
+              L’étiquette précédente n’est pas disponible dans les données ouvertes : on sait donc qu’un DPE a
+              été refait, pas si l’étiquette a changé.
+            </p>
+            <p>
+              « Recalcul 2026 probable » : chauffage électrique et DPE établi depuis le 1er janvier 2026, date
+              du nouveau coefficient de l’électricité, qui peut améliorer l’étiquette d’une classe sans
+              travaux. Les autres sont simplement « refaits ».
+            </p>
+          </Explication>
 
           <p className="text-sm text-gray-600">
             <span className="font-semibold text-gray-900">{formatEntier(data.total)}</span> DPE refaits

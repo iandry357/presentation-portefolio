@@ -14,6 +14,7 @@ import {
 import { cn } from '@/lib/utils';
 import { COULEURS } from '@/components/top-offres/TopCharts';
 import type { ModeAffichage } from '@/components/top-offres/TopCharts';
+import type { ReactNode } from 'react';
 
 // Cartes, palette et mode d'affichage viennent de Top Offres : un seul point de dépendance
 export { CarteGraphique, COULEURS } from '@/components/top-offres/TopCharts';
@@ -31,6 +32,7 @@ export interface Point {
   valeur: number;
   detail?: string;             // précision affichée dans l'infobulle et dans le tableau
   couleur?: string;            // emphase : défaut COULEURS.slot1
+  id?: number;                 // numéro d'arrondissement : utilisé par la carte
 }
 
 interface Props {
@@ -40,6 +42,7 @@ interface Props {
   colonneDetail?: string;
   formater: (valeur: number) => string;
   mode: ModeAffichage;
+  onSelect?: (nom: string) => void;   // clic sur une marque : sélectionne ce point
 }
 
 // ============================================================================
@@ -89,6 +92,63 @@ function VueTableau({ points, colonneNom, colonneValeur, colonneDetail = 'Détai
   );
 }
 
+// Bloc dépliable (fermé par défaut) : ce que montre le graphique, les définitions, les interactions
+export function Explication({
+  titre = 'Comment lire ce graphique',
+  children,
+}: {
+  titre?: string;
+  children: ReactNode;
+}) {
+  return (
+    <details className="mb-3">
+      <summary className="cursor-pointer text-xs text-blue-700 hover:underline select-none">
+        {titre}
+      </summary>
+      <div className="mt-2 space-y-2 rounded-md border bg-gray-50 px-3 py-2 text-sm text-gray-600">
+        {children}
+      </div>
+    </details>
+  );
+}
+
+// Affichage du graphique par arrondissement : la carte ou les barres, jamais les deux
+export type VueArrondissements = 'carte' | 'barres';
+
+export function ChoixVueArrondissements({
+  valeur,
+  onChange,
+}: {
+  valeur: VueArrondissements;
+  onChange: (vue: VueArrondissements) => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-2">
+      Affichage
+      <div
+        className="inline-flex overflow-hidden rounded border border-gray-200"
+        role="group"
+        aria-label="Affichage par arrondissement"
+      >
+        {(['carte', 'barres'] as const).map(vue => (
+          <button
+            key={vue}
+            type="button"
+            onClick={() => onChange(vue)}
+            aria-pressed={valeur === vue}
+            className={cn(
+              'px-3 py-1 text-sm transition-colors',
+              valeur === vue ? 'bg-blue-50 text-blue-700' : 'bg-white text-gray-600 hover:bg-gray-50',
+            )}
+          >
+            {vue === 'carte' ? 'Carte' : 'Barres'}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // La valeur d'abord, le nom ensuite ; un trait court de la couleur de la marque
 function InfobullePoint({
   active,
@@ -121,7 +181,7 @@ function InfobullePoint({
 // ============================================================================
 
 export function Colonnes(props: Props) {
-  const { points, formater, mode } = props;
+  const { points, formater, mode, onSelect } = props;
   if (points.length === 0) return <Vide />;
   if (mode === 'tableau') return <VueTableau {...props} />;
 
@@ -147,7 +207,12 @@ export function Colonnes(props: Props) {
         <Tooltip cursor={{ fill: SURVOL }} content={<InfobullePoint formater={formater} />} />
         <Bar dataKey="valeur" radius={[4, 4, 0, 0]} maxBarSize={24}>
           {points.map(p => (
-            <Cell key={p.nom} fill={p.couleur ?? COULEUR_DEFAUT} />
+            <Cell
+              key={p.nom}
+              fill={p.couleur ?? COULEUR_DEFAUT}
+              style={onSelect ? { cursor: 'pointer' } : undefined}
+              onClick={onSelect ? () => onSelect(p.nom) : undefined}
+            />
           ))}
           <LabelList
             dataKey="valeur"
@@ -167,7 +232,7 @@ export function Colonnes(props: Props) {
 // ============================================================================
 
 export function BarresHorizontales(props: Props) {
-  const { points, formater, mode } = props;
+  const { points, formater, mode, onSelect } = props;
   if (points.length === 0) return <Vide />;
   if (mode === 'tableau') return <VueTableau {...props} />;
 
@@ -192,7 +257,12 @@ export function BarresHorizontales(props: Props) {
         <Tooltip cursor={{ fill: SURVOL }} content={<InfobullePoint formater={formater} />} />
         <Bar dataKey="valeur" radius={[0, 4, 4, 0]} maxBarSize={20}>
           {points.map(p => (
-            <Cell key={p.nom} fill={p.couleur ?? COULEUR_DEFAUT} />
+            <Cell
+              key={p.nom}
+              fill={p.couleur ?? COULEUR_DEFAUT}
+              style={onSelect ? { cursor: 'pointer' } : undefined}
+              onClick={onSelect ? () => onSelect(p.nom) : undefined}
+            />
           ))}
           <LabelList
             dataKey="valeur"
