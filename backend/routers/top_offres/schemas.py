@@ -132,13 +132,13 @@ class OffresEntrepriseResponse(BaseModel):
 
 class DecisionCreate(BaseModel):
     """
-    « pas_interesse » : enregistre la décision.
+    « pas_interesse » et « expire » : enregistrent la décision (l'offre sort du top).
     « interesse » : crée un brouillon dans job_offers, après contrôle de doublon.
     Un doublon détecté n'est jamais bloquant : confirmer=True crée quand même le brouillon,
     utiliser_job_offer_id rattache la décision à une offre déjà présente dans job_offers.
     """
     id_unique: str = Field(..., min_length=1)
-    decision: Literal["pas_interesse", "interesse"]
+    decision: Literal["pas_interesse", "interesse", "expire"]
     confirmer: bool = False
     utiliser_job_offer_id: Optional[int] = None
 

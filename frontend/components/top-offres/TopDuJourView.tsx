@@ -38,7 +38,7 @@ interface Message {
   texte: string;
   erreur?: boolean;
   lien?: { href: string; label: string };
-  annulerId?: string;   // id_unique d'une décision « pas intéressé » annulable
+  annulerId?: string;   // id_unique d'une décision « pas intéressé » ou « expirée » annulable
 }
 
 interface DoublonsEnAttente {
@@ -105,8 +105,11 @@ export default function TopDuJourView() {
       }
 
       setDoublons(null);
-      if (decision === 'pas_interesse') {
-        setMessage({ texte: 'Offre écartée.', annulerId: offre.id_unique });
+      if (decision === 'pas_interesse' || decision === 'expire') {
+        setMessage({
+          texte: decision === 'expire' ? 'Offre marquée expirée.' : 'Offre écartée.',
+          annulerId: offre.id_unique,
+        });
       } else {
         setMessage({
           texte: options.utiliserJobOfferId

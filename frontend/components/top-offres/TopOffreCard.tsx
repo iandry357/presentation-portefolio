@@ -138,6 +138,13 @@ export default function TopOffreCard({ offre, busy, onDecision, onTypeChange }: 
             Pas intéressé
           </button>
           <button
+            onClick={() => onDecision(offre, 'expire')}
+            disabled={busy}
+            className="px-3 py-1.5 text-sm border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            Expirée
+          </button>
+          <button
             onClick={() => onDecision(offre, 'interesse')}
             disabled={busy}
             className="px-3 py-1.5 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50"

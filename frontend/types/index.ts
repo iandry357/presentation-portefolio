@@ -400,7 +400,7 @@ export interface TopStatsResponse {
   cibles: Record<string, string>;       // cible_id -> intitulé (vide si indisponible)
 }
 
-export type TopDecisionType = 'pas_interesse' | 'interesse';
+export type TopDecisionType = 'pas_interesse' | 'interesse' | 'expire';
 
 export interface TopOffreProche {
   job_offer_id: number;

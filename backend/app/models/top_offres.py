@@ -19,7 +19,11 @@ class TopOffreDecision(Base):
 
     # Contrainte CHECK — alignée avec la migration SQL
     __table_args__ = (
-        CheckConstraint("decision IN ('pas_interesse', 'interesse')", name="top_offres_decisions_decision_check"),
+        CheckConstraint(
+            "decision IN ('pas_interesse', 'interesse', 'expire')",
+            name="top_offres_decisions_decision_check",
+        ),
+
     )
 
 
