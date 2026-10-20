@@ -1,6 +1,6 @@
 ---
 name: livraison
-description: Clôture une session de travail (mise à jour de STATUS.md et du cahier des charges de la feature) ou, avec l'argument "mvp", la livraison d'un MVP (STATUS.md + cahier des charges + CLAUDE.md + README.md). Lancé uniquement par l'utilisateur.
+description: Clôture une session de travail (mise à jour de STATUS.md, du dossier du projet dans _docs-local/projets/ et du cahier des charges de la feature) ou, avec l'argument "mvp", la livraison d'un MVP (en plus CLAUDE.md et README.md). Lancé uniquement par l'utilisateur.
 disable-model-invocation: true
 argument-hint: "[mvp]"
 ---
@@ -33,25 +33,37 @@ Règles valables pour tout le skill :
 Si la conversation est vide ou presque (session vidée par `/clear`), dis-le-moi et demande-moi
 ce qui a été fait au lieu de deviner.
 
-## Étape 2 — Lecture de STATUS.md
+## Étape 2 — Lecture de STATUS.md et du dossier du projet
 
-Lis `_docs-local/STATUS.md` (et le cahier des charges qu'il référence dans `_docs-local/specs/`)
-pour situer le bilan par rapport à l'objectif de la feature.
+Lis `_docs-local/STATUS.md` et repère le projet concerné dans le tableau « Projets » (si la session touche
+plusieurs projets, demande-moi lequel est le principal). Lis ensuite, dans `_docs-local/projets/<projet>/`,
+`avancement.md` et `backlog.md`, ainsi que le cahier des charges référencé dans `_docs-local/specs/`.
+`decisions.md` et `historique.md` ne se lisent pas : on y ajoute seulement. Si le projet n'a pas encore de
+dossier, donne-moi d'abord le script Cmder qui crée les 4 fichiers vides.
 
-## Étape 3 — Diff de STATUS.md
+## Étape 3 — Mise à jour de STATUS.md et du dossier du projet
 
-Propose le diff de `_docs-local/STATUS.md` en respectant ces règles :
-- « Avancement global » (cumulatif) : **mis à jour**, jamais vidé. Il contient un résumé de la
-  feature en 2 à 3 lignes (ce qu'elle fait concrètement), l'état par grand bloc (ex. backend /
-  frontend) et la liste des étapes du cahier des charges avec leur état (faite / à faire). On coche
-  les étapes terminées aujourd'hui ; on n'invente aucune étape absente du cahier des charges.
-  Objectif : qu'à la question « où en est-on ? », on lise d'abord le résumé, l'objectif et ce qui
-  est fait, puis seulement ce qui reste.
-- « Où je me suis arrêté » et « Prochaine étape » : **remplacés** par le bilan du jour.
-- « Points ouverts / à vérifier » : remplacé (on retire ce qui est résolu, on ajoute le nouveau).
-- « Décisions prises » : **cumulatif**, on ajoute les nouvelles décisions sans supprimer les anciennes.
-- « Historique » : **ajout** d'une ligne `- AAAA-MM-JJ : <résumé en une phrase>` (date du jour).
-- Ne touche pas à la ligne d'import du cahier des charges actif (sauf en mode MVP, étape 6).
+Un fichier à la fois, dans cet ordre, chacun avec son diff et ma validation :
+
+1. `_docs-local/STATUS.md` :
+   - « Feature en cours » : mise à jour si elle a changé ;
+   - ligne du projet dans le tableau « Projets » : statut mis à jour ;
+   - « Où je me suis arrêté » et « Prochaine étape » : **remplacés** par le bilan du jour ;
+   - aucun détail : chiffres, décisions, historique et points ouverts vont dans le dossier du projet.
+     Le fichier reste sous environ 60 lignes ;
+   - ne touche pas au commentaire d'en-tête du cahier actif (sauf en mode MVP, étape 6).
+2. `projets/<projet>/avancement.md` : **mis à jour**, jamais vidé. Résumé de la feature en 2 à 3 lignes,
+   objectif, état par grand bloc (ex. backend / frontend), étapes du cahier des charges avec leur état
+   (faite / à faire), résultats clés. On coche les étapes terminées aujourd'hui ; on n'invente aucune étape
+   absente du cahier des charges. Objectif : qu'à la question « où en est-on ? », on lise d'abord le résumé,
+   l'objectif et ce qui est fait, puis seulement ce qui reste.
+3. `projets/<projet>/decisions.md` : **cumulatif**, on ajoute les nouvelles décisions (regroupées par thème)
+   sans supprimer les anciennes ; une décision remplacée est signalée « remplacée par … ».
+4. `projets/<projet>/backlog.md` : **remplacé** (on retire ce qui est résolu, on ajoute le nouveau), chaque
+   item avec son statut (ouvert / à vérifier / reporté / accepté) ; y vont aussi les « points ouverts »
+   du bilan de l'étape 1.
+5. `projets/<projet>/historique.md` : **ajout** d'une ligne `- AAAA-MM-JJ : <résumé en une phrase>`
+   (date du jour).
 
 ## Étape 3 bis — Diff du cahier des charges de la feature
 
@@ -94,9 +106,9 @@ Propose le diff de `README.md` :
 - tableau OVH dans « Infrastructure » si un port a été ajouté ;
 - « Roadmap » : retire ce qui est livré, ajoute le backlog assumé du MVP.
 
-Puis le diff final de `_docs-local/STATUS.md` : feature marquée clôturée dans l'historique,
-et ligne d'import pointant vers le prochain cahier des charges (demande-moi lequel ; si aucun,
-mets la ligne d'import en commentaire).
+Puis le diff final de `_docs-local/STATUS.md` (ligne du projet du tableau « Projets » passée en clôturé,
+et commentaire d'en-tête pointant vers le prochain cahier des charges : demande-moi lequel ; si aucun,
+indique « aucun ») et celui de `projets/<projet>/historique.md` (feature marquée clôturée).
 
 ## Étape 7 — (mode MVP) Rappels
 

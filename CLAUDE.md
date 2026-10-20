@@ -65,7 +65,7 @@ Vue d'ensemble détaillée : `README.md` (à lire au besoin, section par section
 | `ovh/` | `orchestrator/` (wake-on-demand, port 8080) + `docker-compose.yml` |
 | `chromadb/` | Déploiement ChromaDB (OVH, port 8000) |
 | `.github/workflows/` | CI/CD : deploy backend, deploy frontend, Terraform |
-| `_docs-local/` | Docs locales non versionnées : `STATUS.md` (reprise), `specs/` (cahiers des charges) |
+| `_docs-local/` | Docs locales non versionnées : `STATUS.md` (reprise, seul fichier chargé automatiquement), `projets/<projet>/` (`avancement.md`, `decisions.md`, `backlog.md`, `historique.md`, lus à la demande), `specs/` (cahiers des charges) |
 
 ## Architecture
 
@@ -145,14 +145,20 @@ Métriques, datasets BigQuery et buckets : section « MVPs sectoriels » du `REA
 
 ## Reprise de session
 
-Le suivi d'avancement (feature en cours, où je me suis arrêté, prochaine étape) est dans
-`_docs-local/STATUS.md`, chargé automatiquement via `CLAUDE.local.md`. Commence toute nouvelle tâche
-en t'appuyant dessus.
+Le suivi de reprise (feature en cours, tableau des projets, où je me suis arrêté, prochaine étape) est dans
+`_docs-local/STATUS.md`, chargé automatiquement via `CLAUDE.local.md`. Commence toute nouvelle tâche en
+t'appuyant dessus. `STATUS.md` reste court (environ 50 lignes) : le détail est dans
+`_docs-local/projets/<projet>/`, à lire à la demande (jamais importé) :
+- `avancement.md` : résumé, objectif, étapes, résultats clés ;
+- `decisions.md` : décisions cumulatives ;
+- `backlog.md` : points ouverts, avec statut (ouvert / à vérifier / reporté / accepté) ;
+- `historique.md` : une ligne par session.
 
 Toute mise à jour de suivi passe par le skill `/livraison` (lancé par moi seul), jamais à la main :
-- fin de session (`/livraison`) : `STATUS.md` + cahier des charges de la feature (`_docs-local/specs/`) ;
+- fin de session (`/livraison`) : `STATUS.md` + les 4 fichiers du projet concerné + cahier des charges de la feature (`_docs-local/specs/`) ;
 - fin de MVP (`/livraison mvp`) : en plus `CLAUDE.md` et `README.md`.
 
 Quand je dis vouloir m'arrêter, rappelle-moi `/livraison` au lieu de mettre à jour ces fichiers toi-même.
-À la question « où en est-on ? », réponds dans l'ordre : résumé de la feature, objectif, ce qui est
-fait (section « Avancement global » de `STATUS.md`), puis seulement la suite.
+À la question « où en est-on ? », lis `STATUS.md` puis `avancement.md` du projet concerné, et réponds dans
+l'ordre : résumé de la feature, objectif, ce qui est fait, puis seulement la suite. Pour une question sur le
+backlog, lis `backlog.md` du projet.
