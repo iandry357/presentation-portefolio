@@ -256,3 +256,9 @@ variable "gcp_service_account_json_top_offres" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_service_account_json_immobilier" {
+  description = "GCP Service Account JSON Immobilier"
+  type        = string
+  sensitive   = true
+}

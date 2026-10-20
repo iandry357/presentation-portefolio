@@ -86,6 +86,8 @@ resource "scaleway_container" "backend" {
     GCP_SERVICE_ACCOUNT_JSON_BANQUE             = var.gcp_service_account_json_banque
     GCP_SERVICE_ACCOUNT_JSON_GESTION_PATRIMOINE = var.gcp_service_account_json_gestion_patrimoine
     GCP_SERVICE_ACCOUNT_JSON_TOP_OFFRES         = var.gcp_service_account_json_top_offres
+    GCP_SERVICE_ACCOUNT_JSON_IMMOBILIER         = var.gcp_service_account_json_immobilier
+
     ACCESS_CODE                                 = var.access_code
   }
 
