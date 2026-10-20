@@ -31,7 +31,7 @@ export function setForbiddenHandler(handler: (() => void) | null) {
 }
 
 // Appel JSON vers le backend (via le proxy). Corps vide ou 204 : renvoie undefined.
-async function request<T>(path: string, { method = 'GET', body }: RequestOptions = {}): Promise<T> {
+export async function request<T>(path: string, { method = 'GET', body }: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
     method,
     ...(body !== undefined && {
