@@ -15,10 +15,10 @@ const VENTES_X = [40, 80, 120, 160, 200, 240, 280, 320, 470];
 const MEDIANE_X = 200;
 const MOYENNE_X = 290;
 
-// Carte dépliée par défaut, repliable
+// Carte repliée par défaut : le visiteur l'ouvre au clic sur le titre
 function CarteRepere({ titre, children }: { titre: string; children: ReactNode }) {
   return (
-    <details open className="border rounded-lg bg-white p-4">
+    <details className="border rounded-lg bg-white p-4">
       <summary className="cursor-pointer select-none text-sm font-semibold text-gray-900">{titre}</summary>
       <div className="mt-3 space-y-3">{children}</div>
     </details>
@@ -122,6 +122,22 @@ function SchemaMediane() {
   );
 }
 
+// Exemple illustratif d'une ligne du DVF, avec le calcul du prix au m²
+function ExempleVente() {
+  return (
+    <div className="rounded-lg border bg-gray-50 p-3">
+      <p className="text-xs text-gray-500 mb-2">Une vente dans le DVF · exemple illustratif</p>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-900">
+        <span><span className="text-gray-500">Date </span>12 mars 2025</span>
+        <span><span className="text-gray-500">Bien </span>appartement</span>
+        <span><span className="text-gray-500">Surface </span>50 m²</span>
+        <span><span className="text-gray-500">Prix </span>500 000 €</span>
+        <span className="font-semibold">→ 10 000 €/m²</span>
+      </div>
+    </div>
+  );
+}
+
 export function ReperesPrix({
   paris,
   typeLocal,
@@ -145,7 +161,17 @@ export function ReperesPrix({
       : null;
 
   return (
-    <CarteRepere titre="Repère : comprendre la médiane">
+    <CarteRepere titre="Repère : le DVF et la médiane">
+      <p className="text-sm text-gray-600">
+        Le DVF (« demandes de valeurs foncières ») est la liste publique de toutes les ventes immobilières en
+        France, publiée par l’administration fiscale. Chaque vente indique la date, le prix, le type de bien,
+        la surface et la localisation approximative, jamais le nom de l’acheteur ni du vendeur.
+      </p>
+      <ExempleVente />
+      <p className="text-sm text-gray-600">
+        Le prix au m² est le prix de vente divisé par la surface du logement. Comme il varie beaucoup d’une
+        vente à l’autre, on résume un ensemble de ventes par sa médiane.
+      </p>
       <SchemaMediane />
       <p className="text-sm text-gray-600">
         La médiane est la valeur du milieu : la moitié des ventes est moins chère, l’autre moitié plus chère. La
