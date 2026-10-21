@@ -2,7 +2,7 @@
 
 S'exécute en LOCAL dans le venv scripts/venv-explore, PAS dans Docker (les données BDNB ne sont pas embarquées dans l'image).
 Depuis realisations/immobilier, venv activé :
-    python -m pipeline.bdnb.orchestrator [--tables t1 t2 ...] [--dry-run]
+    python -m pipeline.bdnb.orchestrator [--etape chargement|metadonnees|agregats|tout] [--tables t1 t2 ...] [--dry-run]
 Prérequis : pipeline/.env et gcp_sa_immobilier.json (réutilisés de la V1), Parquet produits par scripts/convert_bdnb_parquet.py.
 """
 import argparse
@@ -11,9 +11,12 @@ import time
 
 import polars as pl
 
+from pipeline.bdnb.aggregations import construire_agregats
 from pipeline.bdnb.config import TABLES
 from pipeline.bdnb.loader import charger_parquet
+from pipeline.bdnb.metadonnees import construire_metadonnees
 from pipeline.bdnb.selection import ecrire_parquet
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s : %(message)s")
 logger = logging.getLogger("orchestrator_bdnb")
@@ -58,12 +61,25 @@ def executer(table, dry_run):
 
 def main():
     parser = argparse.ArgumentParser(description="Chargement BDNB vers BigQuery")
-    parser.add_argument("--tables", nargs="+", choices=list(TABLES), default=list(TABLES), help="tables à traiter (défaut : toutes)")
-    parser.add_argument("--dry-run", action="store_true", help="sélection et contrôle, sans chargement BigQuery")
+    parser.add_argument(
+        "--etape", choices=["chargement", "metadonnees", "agregats", "tout"], default="chargement",
+        help="chargement des tables bdnb_* (défaut), métadonnées, agrégats agg_bdnb_*, ou les trois dans cet ordre",
+    )
+    parser.add_argument("--tables", nargs="+", choices=list(TABLES), default=list(TABLES), help="tables à charger (défaut : toutes)")
+    parser.add_argument("--dry-run", action="store_true", help="sélection et contrôle, sans écriture BigQuery")
     args = parser.parse_args()
 
-    for table in args.tables:
-        executer(table, args.dry_run)
+    if args.etape in ("chargement", "tout"):
+        for table in args.tables:
+            executer(table, args.dry_run)
+    if args.dry_run:
+        logger.info("--dry-run : métadonnées et agrégats non construits")
+        return
+    if args.etape in ("metadonnees", "tout"):
+        construire_metadonnees()
+    if args.etape in ("agregats", "tout"):
+        construire_agregats()
+
 
 
 if __name__ == "__main__":
