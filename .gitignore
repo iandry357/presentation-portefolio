@@ -168,6 +168,8 @@ gcp/top-offres/infra/tfplan
 realisations/immobilier/.env
 realisations/immobilier/gcp_sa_immobilier.json
 realisations/immobilier/key_b64.txt
+realisations/immobilier/scripts/venv-explore/
+realisations/immobilier/pipeline/data/bdnb/
 gcp/immobilier/infra/terraform.tfvars
 gcp/immobilier/infra/*.json
 gcp/immobilier/infra/key_b64.txt
