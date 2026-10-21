@@ -1,0 +1,6 @@
+# Chargement BDNB : s'execute en LOCAL dans scripts/venv-explore, PAS dans Docker.
+# Depuis realisations/immobilier : python -m pipeline.bdnb.orchestrator
+# Installation : scripts\venv-explore\Scripts\python.exe -m pip install -r pipeline\bdnb\requirements-bdnb.txt
+polars==2.0.0
+google-cloud-bigquery==3.46.2
+python-dotenv==1.2.4

@@ -145,6 +145,7 @@ CLAUDE.local.md
 _docs-local/
 .claude/settings.local.json
 
+__pycache__/
 
 # --- Top Offres ---
 realisations/top-offres/.env
