@@ -169,6 +169,48 @@ async def add_manual_job(
     detail.has_enriched = False
     return detail
 
+# Colonnes de job_offers remplies depuis France Travail quand elles sont vides (brouillon de Top Offres)
+CHAMPS_BROUILLON_A_COMPLETER = [
+    "description", "company_description", "company_url", "contract_label", "work_time",
+    "experience_code", "experience_label", "rome_code", "rome_libelle", "sector_label",
+    "naf_code", "location_postal_code", "location_lat", "location_lng", "ft_updated_at",
+]
+
+
+def _fusionner_raw_data(existant: dict, detail: dict) -> dict:
+    """Détail France Travail complété par les valeurs déjà saisies : une valeur non vide de `existant` l'emporte."""
+    fusion = dict(detail)
+    for cle, valeur in (existant or {}).items():
+        courant = fusion.get(cle)
+        if isinstance(valeur, dict) and isinstance(courant, dict):
+            fusion[cle] = _fusionner_raw_data(valeur, courant)
+        elif valeur not in ("", None, [], {}) or cle not in fusion:
+            fusion[cle] = valeur
+    return fusion
+
+
+async def _completer_brouillon(job: JobOffer) -> bool:
+    """Brouillon encore sans description et avec un ft_id : récupère le détail France Travail et remplit
+    les champs vides, sans jamais écraser une saisie. True si l'offre a changé ; une indisponibilité
+    de l'API n'est pas une erreur (l'offre reste telle quelle)."""
+    if job.status != "brouillon" or job.description or not job.ft_id:
+        return False
+    try:
+        detail = await get_offer_detail(job.ft_id)
+        if not detail:
+            return False
+        mappee = _map_offer_to_model(detail)
+    except Exception as e:
+        logger.warning(f"Complément du brouillon {job.id} impossible (ft_id={job.ft_id}) : {e}")
+        return False
+
+    for champ in CHAMPS_BROUILLON_A_COMPLETER:
+        if not getattr(job, champ) and getattr(mappee, champ):
+            setattr(job, champ, getattr(mappee, champ))
+    job.raw_data = _fusionner_raw_data(job.raw_data, detail)
+    return True
+
+
 # ============================================================================
 # GET /jobs/{id} — Détail offre + fiche enrichie
 # ============================================================================
@@ -198,6 +240,12 @@ async def get_job(
         if offer.status == "brouillon":
             raise HTTPException(status_code=404, detail="Offre introuvable")
         return JobOfferPublicDetail.model_validate(offer)
+
+    # Brouillon de Top Offres encore vide : complément depuis France Travail
+    if await _completer_brouillon(offer):
+        await db.commit()
+        await db.refresh(offer)
+
 
 
     # Marquer comme consultée si pas encore postulée
