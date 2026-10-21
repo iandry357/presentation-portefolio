@@ -21,6 +21,7 @@ import {
   libelleArrondissement,
 } from '@/lib/immobilier';
 import { Explication } from './ImmobilierCharts';
+import { ReperesChangements } from './Reperes';
 
 // Paramètres
 const TAILLE_PAGE = 20;
@@ -88,6 +89,8 @@ export default function ChangementsView() {
 
   return (
     <div className="space-y-4">
+
+      <ReperesChangements />
 
       {/* Filtres : une seule ligne, au-dessus de ce qu'ils portent */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">

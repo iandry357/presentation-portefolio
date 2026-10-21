@@ -13,6 +13,7 @@ import {
 } from '@/lib/immobilier';
 import { BarresHorizontales, CarteGraphique, COULEURS, ChoixVueArrondissements, Colonnes, Explication, ModeAffichage, Point, VueArrondissements } from './ImmobilierCharts';
 import CarteParis from './CarteParis';
+import { ReperesPrix } from './Reperes';
 
 // Paramètres
 const TYPES: { id: TypeLocal; label: string }[] = [
@@ -154,6 +155,8 @@ export default function PrixView() {
       {data && (
         // Pendant un rechargement, le contenu précédent reste affiché en atténué
         <div className={cn('space-y-6 transition-opacity', loading && 'opacity-60')}>
+
+          <ReperesPrix paris={data.paris} typeLocal={typeLocal} annee={annee} libelleType={libelleType} />
 
           {data.seuil_applique && data.nb_masquees > 0 && (
             <p className="text-sm text-gray-600 bg-gray-50 border rounded-lg px-4 py-3">

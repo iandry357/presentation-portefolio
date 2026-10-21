@@ -12,6 +12,7 @@ import {
 } from '@/lib/immobilier';
 import { BarresHorizontales, CarteGraphique, COULEURS, ChoixVueArrondissements, Colonnes, Explication, ModeAffichage, Point, VueArrondissements } from './ImmobilierCharts';
 import CarteParis from './CarteParis';
+import { ReperesDpe } from './Reperes';
 
 // Paramètres
 const ETIQUETTES_PASSOIRES: string[] = ['F', 'G'];
@@ -95,6 +96,8 @@ export default function DpeView() {
 
   return (
     <div className="space-y-6">
+
+      <ReperesDpe />
 
       {/* Filtres : une seule ligne, au-dessus de ce qu'ils portent */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">

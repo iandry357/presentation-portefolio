@@ -39,11 +39,19 @@ export interface PrixLigne {
   prix_m2_median: number | null;
 }
 
+export interface PrixParisLigne {
+  annee: number | null;
+  type_local: TypeLocal;
+  nb_ventes: number;
+  prix_m2_median: number | null;
+}
+
 export interface PrixResponse {
   seuil_applique: boolean;       // vrai si l'accès est verrouillé : cellules sous `seuil` ventes retirées
   seuil: number;
   nb_masquees: number;
   lignes: PrixLigne[];
+  paris: PrixParisLigne[];       // prix médian de Paris entier (toutes les ventes), par année et type
 }
 
 export interface ChangementLigne {
