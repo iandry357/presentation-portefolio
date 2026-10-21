@@ -44,11 +44,19 @@ class PrixLigne(BaseModel):
     prix_m2_median: Optional[float] = None
 
 
+class PrixParisLigne(BaseModel):
+    annee: Optional[int] = None
+    type_local: str
+    nb_ventes: int
+    prix_m2_median: Optional[float] = None
+
+
 class PrixResponse(BaseModel):
     seuil_applique: bool         # vrai si l'accès est verrouillé : cellules de moins de `seuil` ventes retirées
     seuil: int
     nb_masquees: int
     lignes: List[PrixLigne]
+    paris: List[PrixParisLigne]  # prix médian de Paris entier (toutes les ventes), par année et type
 
 
 # ============================================================================

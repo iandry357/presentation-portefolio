@@ -12,9 +12,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state, require_access
-from app.services.immobilier_bigquery import fetch_agg_dpe, fetch_agg_dvf, fetch_changements
+from app.services.immobilier_bigquery import fetch_agg_dpe, fetch_agg_dvf, fetch_agg_dvf_paris, fetch_changements
 from routers.immobilier.schemas import (
-    ChangementLigne, ChangementsResponse, DpeLigne, DpeResponse, PrixLigne, PrixResponse, StatsResponse,
+    ChangementLigne, ChangementsResponse, DpeLigne, DpeResponse, PrixLigne, PrixParisLigne, PrixResponse, StatsResponse,
 )
 
 
@@ -89,23 +89,26 @@ async def get_prix(
     type_local: Optional[Literal["Appartement", "Maison"]] = Query(default=None),
     deverrouille: bool = Depends(get_access_state),
 ):
-    (lignes,) = await _lire_agregats(fetch_agg_dvf)
+    lignes, paris = await _lire_agregats(fetch_agg_dvf, fetch_agg_dvf_paris)
     if arrondissement is not None:
         lignes = [l for l in lignes if l["arrondissement"] == arrondissement]
     if type_local:
         lignes = [l for l in lignes if l["type_local"] == type_local]
+        paris = [l for l in paris if l["type_local"] == type_local]
 
     nb_masquees = 0
     if not deverrouille:
         gardees = [l for l in lignes if l["nb_ventes"] >= SEUIL_VENTES]
         nb_masquees = len(lignes) - len(gardees)
         lignes = gardees
+        paris = [l for l in paris if l["nb_ventes"] >= SEUIL_VENTES]
 
     return PrixResponse(
         seuil_applique=not deverrouille,
         seuil=SEUIL_VENTES,
         nb_masquees=nb_masquees,
         lignes=[PrixLigne(**l) for l in lignes],
+        paris=[PrixParisLigne(**l) for l in paris],
     )
 
 

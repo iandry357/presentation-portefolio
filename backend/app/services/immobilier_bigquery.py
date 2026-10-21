@@ -2,7 +2,7 @@
 Lecture BigQuery du MVP Immobilier (dataset immobilier).
 Credentials lus depuis GCP_SERVICE_ACCOUNT_JSON_IMMOBILIER (compte pipeline-immobilier).
 Utilisé par le routeur backend/routers/immobilier.
-Pages publiques : tables agrégées (agg_dpe_parc, agg_dvf_prix), mises en cache.
+Pages publiques : tables agrégées (agg_dpe_parc, agg_dvf_prix, agg_dvf_paris), mises en cache.
 Liste des changements : dpe_logements (accès privé, sans cache).
 """
 
@@ -21,9 +21,11 @@ from app.core.config import settings
 logger = logging.getLogger(__name__)
 
 # Paramètres
-CACHE_TTL_SECONDES = 0     # 0 désactive le cache
+CACHE_TTL_SECONDES = 0 if settings.is_dev else 3600     # 0 désactive le cache (local) ; 1 h en production
+
 TABLE_AGG_DPE = "agg_dpe_parc"
 TABLE_AGG_DVF = "agg_dvf_prix"
+TABLE_AGG_DVF_PARIS = "agg_dvf_paris"
 TABLE_DPE = "dpe_logements"
 
 # Colonnes de dpe_logements renvoyées pour la liste des changements
@@ -111,6 +113,21 @@ def fetch_agg_dvf() -> list[dict]:
         return lignes
 
     return _avec_cache(TABLE_AGG_DVF, charger)
+
+
+def fetch_agg_dvf_paris() -> list[dict]:
+    """Table agg_dvf_paris entière (année x type de logement, Paris entier), en cache."""
+    def charger():
+        client = _get_bq_client()
+        query = f"""
+            SELECT annee, type_local, nb_ventes, prix_m2_median, date_maj
+            FROM {_table(TABLE_AGG_DVF_PARIS)}
+        """
+        lignes = _serialiser(client.query(query).result())
+        logger.info(f"[immobilier_bigquery] {len(lignes)} lignes {TABLE_AGG_DVF_PARIS} lues")
+        return lignes
+
+    return _avec_cache(TABLE_AGG_DVF_PARIS, charger)
 
 
 def fetch_changements(
