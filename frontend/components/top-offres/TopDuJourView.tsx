@@ -8,6 +8,7 @@ import {
   deleteTopDecision,
   deleteTypeEntreprise,
   getTop,
+  getTopStats,
   setTypeEntreprise,
 } from '@/lib/api';
 import { LISTES } from '@/lib/topOffres';
@@ -28,6 +29,7 @@ import DoublonDialog from './DoublonDialog';
 const PERIODES = [3, 7, 14, 30];
 const JOURS_DEFAUT = 7;
 const DELAI_MESSAGE_MS = 8000;
+const JOURS_CIBLES = 30;   // période demandée à /stats, uniquement pour récupérer les intitulés des cibles
 
 const TRIS: { id: TopTri; label: string }[] = [
   { id: 'pertinence', label: 'Pertinence' },
@@ -52,6 +54,8 @@ export default function TopDuJourView() {
   const [onglet, setOnglet] = useState<TopListe>('a_lire');
   const [page, setPage] = useState(1);
   const [tri, setTri] = useState<TopTri>('pertinence');
+  const [cible, setCible] = useState('');   // '' : tous les métiers
+  const [cibles, setCibles] = useState<Record<string, string>>({});
   const [data, setData] = useState<TopResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,17 +69,23 @@ export default function TopDuJourView() {
     setError(null);
     try {
       // Le serveur ramène à la dernière page si la demande la dépasse : l'affichage suit `data.page`
-      setData(await getTop({ jours, inclureExclues, liste: onglet, page, tri }));
+      setData(await getTop({ jours, inclureExclues, liste: onglet, page, tri, cible: cible || undefined }));
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur de chargement');
     } finally {
       setLoading(false);
     }
-  }, [jours, inclureExclues, onglet, page, tri]);
+  }, [jours, inclureExclues, onglet, page, tri, cible]);
+
 
   useEffect(() => {
     load();
   }, [load]);
+
+  // Intitulés des cibles pour le sélecteur ; une erreur laisse simplement le sélecteur vide
+  useEffect(() => {
+    getTopStats(JOURS_CIBLES).then(r => setCibles(r.cibles)).catch(() => {});
+  }, []);
 
   // Le message disparaît seul
   useEffect(() => {
@@ -229,6 +239,19 @@ export default function TopDuJourView() {
             >
               {TRIS.map(({ id, label }) => (
                 <option key={id} value={id}>{label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="inline-flex items-center gap-2">
+            Métier cible
+            <select
+              value={cible}
+              onChange={e => { setCible(e.target.value); setPage(1); }}
+              className="text-sm border border-gray-200 rounded px-2 py-1 bg-white text-gray-700"
+            >
+              <option value="">Tous</option>
+              {Object.entries(cibles).map(([id, intitule]) => (
+                <option key={id} value={id}>{intitule}</option>
               ))}
             </select>
           </label>

@@ -543,6 +543,7 @@ export async function getTop(params: {
   liste: TopListe;
   page: number;
   tri: TopTri;
+  cible?: string;
 }): Promise<TopResponse> {
   const p = new URLSearchParams({
     jours: String(params.jours),
@@ -551,6 +552,7 @@ export async function getTop(params: {
     page: String(params.page),
     tri: params.tri,
   });
+  if (params.cible) p.set('cible', params.cible);
   return request<TopResponse>(`/top-offres/top?${p.toString()}`);
 }
 

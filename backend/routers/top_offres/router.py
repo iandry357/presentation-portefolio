@@ -119,6 +119,7 @@ async def get_top(
     limite: int = Query(default=TOP_N_DEFAUT, ge=1, le=50),
     inclure_exclues: bool = Query(default=False),
     une_par_entreprise: bool = Query(default=True),
+    cible: Optional[str] = Query(default=None),
 ):
     try:
         candidates = await run_in_threadpool(fetch_top_candidates, jours, inclure_exclues)
@@ -144,6 +145,8 @@ async def get_top(
             continue
         ft_id = _ft_id_depuis_offre(c)
         if ft_id and ft_id in ft_ids_jobs:
+            continue
+        if cible and c.get("cible_proche") != cible:
             continue
         if une_par_entreprise:
             cle_groupe = c.get("entreprise_normalise") or c["groupe_doublon"]
