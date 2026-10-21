@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 # Paramètres
 TABLE_AGG_DPE = "agg_dpe_parc"
 TABLE_AGG_DVF = "agg_dvf_prix"
+TABLE_AGG_DVF_PARIS = "agg_dvf_paris"
 
 
 def _table(nom):
@@ -40,8 +41,9 @@ def construire_agg_dpe():
 
 
 def construire_agg_dvf():
-    """Prix DVF : arrondissement x année x type de logement (nombre de ventes et prix au m² médian)."""
-    return _creer_table(TABLE_AGG_DVF, f"""
+    """Prix DVF : par arrondissement, puis pour Paris entier
+    (une médiane de médianes n'est pas une médiane : Paris est calculé sur toutes les ventes)."""
+    _creer_table(TABLE_AGG_DVF, f"""
         SELECT
             arrondissement,
             annee,
@@ -51,4 +53,14 @@ def construire_agg_dvf():
             CURRENT_TIMESTAMP() AS date_maj
         FROM {_table(BQ_TABLE_DVF)}
         GROUP BY arrondissement, annee, type_local
+    """)
+    return _creer_table(TABLE_AGG_DVF_PARIS, f"""
+        SELECT
+            annee,
+            type_local,
+            COUNT(*) AS nb_ventes,
+            ROUND(APPROX_QUANTILES(prix_m2, 2)[OFFSET(1)], 0) AS prix_m2_median,
+            CURRENT_TIMESTAMP() AS date_maj
+        FROM {_table(BQ_TABLE_DVF)}
+        GROUP BY annee, type_local
     """)
