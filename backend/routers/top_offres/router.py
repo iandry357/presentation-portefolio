@@ -17,9 +17,11 @@ from app.core.database import get_db
 from app.core.normalisation import normaliser
 from app.models.job_offer import JobOffer
 from app.models.top_offres import TopOffreDecision, TopOffreTypeEntreprise
+from app.services.france_travail_client import get_offer_detail
 from app.services.top_offres_bigquery import (
     fetch_cibles, fetch_entreprises, fetch_offer, fetch_offres_entreprise, fetch_stats, fetch_top_candidates,
 )
+from scheduler.job_pipeline import _map_offer_to_model
 from routers.top_offres.schemas import (
     DecisionCreate, DecisionResponse, EntrepriseStat, EntreprisesResponse, OffreEntreprise, OffreProche,
     OffresEntrepriseResponse, StatLigne, StatsResponse, TopCompteurs, TopOffre, TopResponse,
@@ -65,6 +67,12 @@ async def _cles_traitees(db: AsyncSession) -> Set[Tuple[str, str]]:
         if cle[0] and cle[1]:
             cles.add(cle)
     return cles
+
+
+async def _ft_ids_jobs(db: AsyncSession) -> Set[str]:
+    """ft_id des offres déjà présentes dans job_offers, tous statuts confondus."""
+    result = await db.execute(select(JobOffer.ft_id).where(JobOffer.ft_id.is_not(None)))
+    return {row[0] for row in result.all()}
 
 
 async def _types_corriges(db: AsyncSession) -> Dict[str, str]:
@@ -121,6 +129,7 @@ async def get_top(
     decides = await _ids_decides(db)
     traitees = await _cles_traitees(db)
     corriges = await _types_corriges(db)
+    ft_ids_jobs = await _ft_ids_jobs(db)
 
     # Les trois listes sont filtrées en entier (compteurs, règle « une offre par entreprise » commune) ;
     # seule la page demandée est convertie en TopOffre
@@ -132,6 +141,9 @@ async def get_top(
         if c["id_unique"] in decides:
             continue
         if (c.get("titre_normalise") or "", c.get("entreprise_normalise") or "") in traitees:
+            continue
+        ft_id = _ft_id_depuis_offre(c)
+        if ft_id and ft_id in ft_ids_jobs:
             continue
         if une_par_entreprise:
             cle_groupe = c.get("entreprise_normalise") or c["groupe_doublon"]
@@ -300,6 +312,17 @@ def _ft_id_depuis_offre(offre: dict) -> Optional[str]:
     return id_unique[len(PREFIXE_ID_FT):] if id_unique.startswith(PREFIXE_ID_FT) else None
 
 
+async def _detail_france_travail(ft_id: Optional[str]) -> Optional[dict]:
+    """Détail de l'offre via l'API France Travail ; None si indisponible (le brouillon reste alors vide)."""
+    if not ft_id:
+        return None
+    try:
+        return await get_offer_detail(ft_id)
+    except Exception as e:
+        logger.warning(f"[top_offres] Détail France Travail indisponible pour {ft_id} : {e}")
+        return None
+
+
 async def _chercher_doublons(db: AsyncSession, offre: dict) -> List[OffreProche]:
     """Offres de job_offers proches de l'offre du top : même identifiant France Travail, sinon
     mêmes titre et entreprise normalisés (entreprise vide : pas de rapprochement)."""
@@ -351,9 +374,23 @@ def _date_publication(offre: dict) -> datetime:
     return datetime.now(timezone.utc)
 
 
-def _creer_brouillon(offre: dict, ft_id: Optional[str]) -> JobOffer:
-    """Ligne job_offers au statut brouillon : métadonnées du mart ; la description et la présentation
-    de l'entreprise sont saisies à la main ensuite (modale « Modifier »)."""
+def _creer_brouillon(offre: dict, ft_id: Optional[str], detail: Optional[dict] = None) -> JobOffer:
+    """Ligne job_offers au statut brouillon. Avec le détail France Travail : même mapping que /jobs/manual,
+    complété par les métadonnées du mart. Sans détail : métadonnées du mart seules ; la description et la
+    présentation de l'entreprise sont alors saisies à la main (modale « Modifier »)."""
+    if detail:
+        try:
+            job = _map_offer_to_model(detail)
+        except Exception as e:
+            logger.warning(f"[top_offres] Mapping France Travail impossible pour {ft_id} : {e}")
+        else:
+            job.source_offer = job.source_offer or SOURCE_FT_JOB_OFFERS
+            job.company_name = job.company_name or offre.get("entreprise_nom") or None
+            job.location_label = job.location_label or offre.get("localisation_libelle")
+            job.offer_url = job.offer_url or offre.get("url_offre")
+            job.status = "brouillon"
+            job.label = "basique"
+            return job
     source = offre.get("source") or "manuel"
     raw_data = {
         "intitule": offre["titre"],
@@ -417,17 +454,22 @@ async def create_decision(body: DecisionCreate, db: AsyncSession = Depends(get_d
                 raise HTTPException(status_code=404, detail="Offre de /jobs introuvable")
             job_offer_id = existante.id
         else:
-            doublons = await _chercher_doublons(db, offre)
-            if doublons and not body.confirmer:
-                return DecisionResponse(resultat="doublon_detecte", doublons=doublons)
             ft_id = _ft_id_depuis_offre(offre)
-            if any(d.critere == "ft_id" for d in doublons):
-                ft_id = None   # index unique sur job_offers.ft_id : le brouillon forcé n'en porte pas
-            brouillon = _creer_brouillon(offre, ft_id)
-            db.add(brouillon)
-            await db.flush()
-            job_offer_id = brouillon.id
-
+            existante_ft = None
+            if ft_id:
+                existante_ft = await db.scalar(select(JobOffer.id).where(JobOffer.ft_id == ft_id))
+            if existante_ft is not None:
+                # Offre déjà dans /jobs (page périmée) : pas de brouillon, la décision est liée à l'existante
+                job_offer_id = existante_ft
+            else:
+                doublons = await _chercher_doublons(db, offre)
+                if doublons and not body.confirmer:
+                    return DecisionResponse(resultat="doublon_detecte", doublons=doublons)
+                detail = await _detail_france_travail(ft_id)
+                brouillon = _creer_brouillon(offre, ft_id, detail)
+                db.add(brouillon)
+                await db.flush()
+                job_offer_id = brouillon.id
     if decision:
         decision.decision = body.decision
         decision.job_offer_id = job_offer_id
