@@ -67,6 +67,16 @@ const POCS: PocCard[] = [
     tags: ['LLM local', 'Ollama', 'Embeddings', 'dbt', 'BigQuery', 'Scoring', 'Docker', 'PostgreSQL'],
     status: 'live',
   },
+  {
+    href: '/realisations/immobilier',
+    title: 'Immobilier',
+    company: 'Veille immobilière Paris',
+    description:
+      "Veille sur le parc immobilier parisien à partir de données ouvertes : DPE de l'ADEME (près de 855 000 diagnostics), détection des DPE refaits (recalcul 2026 probable) et prix de vente au m² (DVF Etalab). Pipeline Python, agrégats BigQuery, API FastAPI à accès public et privé.",
+    tags: ['Open data', 'ETL', 'Pandas', 'BigQuery', 'FastAPI', 'Docker'],
+    status: 'live',
+  },
+
 ];
 
 

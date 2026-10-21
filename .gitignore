@@ -163,3 +163,16 @@ gcp/top-offres/infra/.terraform.lock.hcl
 gcp/top-offres/infra/*.tfstate
 gcp/top-offres/infra/*.tfstate.*
 gcp/top-offres/infra/tfplan
+
+# --- Immobilier ---
+realisations/immobilier/.env
+realisations/immobilier/gcp_sa_immobilier.json
+realisations/immobilier/key_b64.txt
+gcp/immobilier/infra/terraform.tfvars
+gcp/immobilier/infra/*.json
+gcp/immobilier/infra/key_b64.txt
+gcp/immobilier/infra/.terraform/
+gcp/immobilier/infra/.terraform.lock.hcl
+gcp/immobilier/infra/*.tfstate
+gcp/immobilier/infra/*.tfstate.*
+gcp/immobilier/infra/tfplan

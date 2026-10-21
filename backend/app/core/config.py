@@ -105,6 +105,11 @@ class Settings(BaseSettings):
     BQ_DATASET_TOP_OFFRES: str = "top_offres"
     BQ_TABLE_TOP_DU_JOUR: str = "mart_top_du_jour"
 
+    # ─── Immobilier ───────────────────────────────────────────
+    GCP_SERVICE_ACCOUNT_JSON_IMMOBILIER: Optional[str] = None
+    BQ_DATASET_IMMOBILIER: str = "immobilier"
+    
+
     VOYAGE_EMBEDDING_MODEL: str = "voyage-4"
     VOYAGE_EMBEDDING_DIMENSIONS: int = 1024
 
