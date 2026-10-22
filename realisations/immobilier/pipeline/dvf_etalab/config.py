@@ -43,7 +43,20 @@ TABLE_DVF = "dvf_etalab"
 TABLE_TRAVAIL = "dvf_etalab_travail"
 TABLE_LIVRAISONS = "dvf_etalab_livraisons"
 CLUSTER = ["livraison", "code_departement", "id_mutation"]
-
+# Rattachement vente <-> bâtiment BDNB (étape rattachement)
+TABLE_RATTACHEMENT = "dvf_etalab_rattachement"
+TABLE_RATTACHEMENT_TRAVAIL = "dvf_etalab_rattachement_travail"
+TABLE_QUALITE = "dvf_etalab_qualite"
+VUE_VENTES = "dvf_etalab_ventes_logement"
+VUE_VENTES_BATIMENT = "dvf_etalab_ventes_batiment"
+NATURE_VENTE = "Vente"
+TYPES_LOGEMENT = ["Appartement", "Maison"]  # règle V1 : une mutation = un seul logement, sans local commercial
+TYPE_LOCAL_COMMERCIAL = "Local industriel. commercial ou assimilé"
+# Tables BDNB lues (chargées par pipeline/bdnb, Paris seulement)
+BDNB_REL_PARCELLE = "bdnb_rel_batiment_parcelle"
+BDNB_REL_ADRESSE = "bdnb_rel_batiment_adresse"
+BDNB_DVF_REPRESENTATIF = "bdnb_dvf_representatif"
+SEUIL_PRECISION = 0.95  # précision globale attendue sur les ventes représentatives
 # Colonnes ajoutées à celles du fichier
 COLONNE_LIVRAISON = "livraison"
 COLONNE_FICHIER = "fichier_source"
