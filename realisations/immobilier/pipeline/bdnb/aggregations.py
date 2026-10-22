@@ -82,6 +82,9 @@ def construire_agg_prix_dpe():
             ROUND(APPROX_QUANTILES(IF(classe_dpe IN ('F', 'G'), prix_m2_local, NULL), 2)[OFFSET(1)], 0) AS prix_m2_median_fg,
             COUNTIF(classe_dpe = 'D') AS nb_d,
             ROUND(APPROX_QUANTILES(IF(classe_dpe = 'D', prix_m2_local, NULL), 2)[OFFSET(1)], 0) AS prix_m2_median_d,
+            DATE '{DATE_VENTE_MIN}' AS date_vente_min,
+            {PRIX_M2_MIN} AS prix_m2_min,
+            {PRIX_M2_MAX} AS prix_m2_max,            
             CURRENT_TIMESTAMP() AS date_maj
         FROM ventes_par_classe
     """)
