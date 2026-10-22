@@ -9,10 +9,21 @@ import ImmobilierStats from '@/components/immobilier/ImmobilierStats';
 import DpeView from '@/components/immobilier/DpeView';
 import PrixView from '@/components/immobilier/PrixView';
 import ChangementsView from '@/components/immobilier/ChangementsView';
+import BdnbOnglet from '@/components/immobilier/bdnb/BdnbOnglet';
+import { cn } from '@/lib/utils';
+
+const ONGLETS = [
+  { id: 'marche', label: 'Marché (DPE + DVF)' },
+  { id: 'bdnb', label: 'Bâtiments (BDNB)' },
+] as const;
+
+type Onglet = (typeof ONGLETS)[number]['id'];
+
 
 export default function ImmobilierPage() {
   const { state, unlocked } = useAccess();
   const [vue, setVue] = useState<ImmobilierView>('dpe');
+  const [onglet, setOnglet] = useState<Onglet>('marche');
   const verrouille = vue === 'changements' && !unlocked;
 
   return (
@@ -31,37 +42,64 @@ export default function ImmobilierPage() {
           Paris · DPE (ADEME) · Prix de vente (DVF) · Pipeline Python · BigQuery · FastAPI
         </p>
       </div>
-
-      <div className="mb-6">
-        <ImmobilierStats />
+      <div
+        className="mb-6 inline-flex overflow-hidden rounded border border-gray-200"
+        role="group"
+        aria-label="Source des données"
+      >
+        {ONGLETS.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setOnglet(id)}
+            aria-pressed={onglet === id}
+            className={cn(
+              'px-4 py-2 text-sm font-medium transition-colors',
+              onglet === id ? 'bg-blue-50 text-blue-700' : 'bg-white text-gray-600 hover:bg-gray-50',
+            )}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 items-stretch md:items-start">
-        <ImmobilierSidebar activeView={vue} onViewChange={setVue} unlocked={unlocked} />
+      {onglet === 'bdnb' && <BdnbOnglet />}
 
-        <div className="flex-1 min-w-0 w-full">
-          {/* Rien n'est monté tant que l'état d'accès n'est pas connu : évite des appels voués au 403 */}
-          {state === 'loading' && <div className="min-h-[40vh]" aria-busy="true" />}
+      {onglet === 'marche' && (
+        <>
+          <div className="mb-6">
+            <ImmobilierStats />
+          </div>
 
-          {state !== 'loading' && verrouille && (
-            <div className="px-4 py-16 text-center">
-              <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-900">Zone privée</h2>
-              <p className="mt-1 text-sm text-gray-500">
-                Utilisez le bouton « Déverrouiller » en haut de la page.
-              </p>
+          <div className="flex flex-col md:flex-row gap-6 items-stretch md:items-start">
+            <ImmobilierSidebar activeView={vue} onViewChange={setVue} unlocked={unlocked} />
+
+            <div className="flex-1 min-w-0 w-full">
+              {/* Rien n'est monté tant que l'état d'accès n'est pas connu : évite des appels voués au 403 */}
+              {state === 'loading' && <div className="min-h-[40vh]" aria-busy="true" />}
+
+              {state !== 'loading' && verrouille && (
+                <div className="px-4 py-16 text-center">
+                  <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
+                  <h2 className="text-lg font-semibold text-gray-900">Zone privée</h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Utilisez le bouton « Déverrouiller » en haut de la page.
+                  </p>
+                </div>
+              )}
+
+              {state !== 'loading' && !verrouille && (
+                <>
+                  {vue === 'dpe' && <DpeView />}
+                  {vue === 'prix' && <PrixView />}
+                  {vue === 'changements' && <ChangementsView />}
+                </>
+              )}
             </div>
-          )}
+          </div>
+        </>
+      )}
 
-          {state !== 'loading' && !verrouille && (
-            <>
-              {vue === 'dpe' && <DpeView />}
-              {vue === 'prix' && <PrixView />}
-              {vue === 'changements' && <ChangementsView />}
-            </>
-          )}
-        </div>
-      </div>
     </div>
   );
 }

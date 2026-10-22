@@ -1,0 +1,4 @@
+pipeline/data/
+pipeline/bdnb/
+scripts/venv-explore/
+**/__pycache__/
