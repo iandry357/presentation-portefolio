@@ -5,9 +5,13 @@ import { DeperditionLigne, ParcResponse, getBdnbParc } from '@/lib/immobilierBdn
 import {
   GROUPES_ETIQUETTE, LIBELLE_ENERGIE_AUTRES, POSTES, groupeEtiquette, libelleEnergie, libellePeriode, ordrePeriode,
 } from '@/lib/immobilierBdnb';
-import { formatEntier, formatPourcentage } from '@/lib/immobilier';
+import {
+  attentionDeperditions, attentionPeriodes, retenirDeperditions, retenirEnergies, retenirPeriodes,
+} from '@/lib/immobilierBdnbTextes';
+import { formatEntier } from '@/lib/immobilier';
 import { CarteGraphique, Explication, ModeAffichage } from '../ImmobilierCharts';
 import BarresEmpilees, { BarreEmpilee, SerieEmpilee } from './BarresEmpilees';
+import Lecture from './Lecture';
 
 // Paramètres
 const FIN_DE_LISTE = [LIBELLE_ENERGIE_AUTRES, 'Non renseigné'];   // en bas du classement des énergies
@@ -91,7 +95,6 @@ export default function ParcView() {
   ).sort((a, b) => rangFin(a.nom) - rangFin(b.nom) || totalBarre(b) - totalBarre(a));
 
   const deperditions = barresDeperditions(data.deperditions);
-  const couverture = data.nb_dpe ? formatPourcentage((100 * data.nb_logements_deperditions) / data.nb_dpe) : '—';
 
   return (
     <div className="space-y-6">
@@ -112,15 +115,16 @@ export default function ParcView() {
         titre="Étiquettes par période de construction"
         sousTitre={`${formatEntier(data.nb_dpe)} DPE retenus · chaque barre est ramenée à 100 %`}
       >
-        <Explication>
+        <Lecture
+          voir="Pour chaque époque de construction, la part des logements dans chaque note énergétique. Plus la couleur est foncée, plus les logements consomment."
+          retenir={retenirPeriodes(data)}
+          attention={attentionPeriodes(data)}
+        />
+        <Explication titre="Détails">
           <p>
-            Chaque barre est une période de construction. Ses segments donnent la répartition des étiquettes DPE
-            des logements de cette période, de A–B (très économes, teinte la plus claire) à F–G (passoires, teinte
-            la plus foncée).
-          </p>
-          <p>
-            Sous le nom de chaque barre figure le nombre de DPE de la période : un pourcentage calculé sur peu de
-            logements est fragile.
+            Les notes sont regroupées en cinq groupes (A–B, C, D, E, F–G) pour que les teintes restent
+            distinguables. Chaque barre est ramenée à 100 % : sa longueur ne dit rien du nombre de logements, qui
+            figure sous le nom de la période.
           </p>
         </Explication>
         <BarresEmpilees
@@ -137,16 +141,11 @@ export default function ParcView() {
         titre="Énergie de chauffage et étiquette"
         sousTitre="Répartition des étiquettes pour chaque énergie principale de chauffage"
       >
-        <Explication>
-          <p>
-            Chaque barre est une énergie principale de chauffage ; ses segments donnent la répartition des
-            étiquettes des logements qui l’utilisent, avec les mêmes couleurs que le graphique du dessus.
-          </p>
-          <p>
-            « Autres » regroupe le GPL, le bois, le solaire et le charbon, qui comptent très peu de logements à
-            eux quatre.
-          </p>
-        </Explication>
+        <Lecture
+          voir="Pour chaque mode de chauffage, la part des logements dans chaque note énergétique, avec les mêmes couleurs que le graphique du dessus."
+          retenir={retenirEnergies(data)}
+          attention="« Autres » regroupe le GPL, le bois, le solaire et le charbon, qui concernent très peu de logements. « Non renseigné » : le DPE n’indique pas le mode de chauffage."
+        />
         <BarresEmpilees
           barres={parEnergie}
           series={SERIES_ETIQUETTE}
@@ -159,22 +158,20 @@ export default function ParcView() {
 
       <CarteGraphique
         titre="Où le logement perd sa chaleur"
-        sousTitre={`Part moyenne de chaque poste, par période · ${couverture} des logements (${formatEntier(data.nb_logements_deperditions)} sur ${formatEntier(data.nb_dpe)}) ont leurs six postes renseignés`}
+        sousTitre="Part moyenne de chaque poste, par période de construction"
       >
-        <Explication>
+        <Lecture
+          voir="Par où s’échappe la chaleur : murs, fenêtres (baies vitrées), sol (plancher bas), toit (plancher haut), ponts thermiques (jonctions entre deux éléments, où la chaleur passe plus facilement) et portes. Chaque barre représente 100 % des pertes de chaleur d’un logement de l’époque."
+          retenir={retenirDeperditions(data)}
+          attention={attentionDeperditions(data)}
+        />
+        <Explication titre="Détails">
           <p>
-            Les déperditions mesurent la chaleur perdue par chaque élément de l’enveloppe du logement : murs,
-            baies vitrées, planchers bas et hauts, ponts thermiques et portes.
+            Pour chaque logement, on calcule la part de chaque poste dans le total de ses déperditions (exprimées
+            en watts par kelvin), puis on fait la moyenne de ces parts pour chaque période de construction. Les
+            six segments d’une barre totalisent donc 100 %.
           </p>
-          <p>
-            Pour chaque logement, on calcule la part de chaque poste dans le total de ses déperditions, puis on
-            fait la moyenne de ces parts pour chaque période de construction. Les six segments d’une barre
-            totalisent donc 100 %.
-          </p>
-          <p>
-            Seuls les logements dont les six postes sont renseignés sont comptés ; le nombre de logements de la
-            période figure sous son nom.
-          </p>
+          <p>Seuls les logements dont les six postes sont renseignés sont comptés.</p>
         </Explication>
         <BarresEmpilees
           barres={deperditions}

@@ -5,8 +5,10 @@ import { useAccess } from '@/components/AccessProvider';
 import { cn } from '@/lib/utils';
 import { PrixDpeResponse, getBdnbPrixDpe } from '@/lib/immobilierBdnbApi';
 import { CLASSES_DPE } from '@/lib/immobilierBdnb';
+import { SEUIL_VENTES_FIABLES, attentionPrix, retenirPrix } from '@/lib/immobilierBdnbTextes';
 import { formatDate, formatEntier, formatPourcentage } from '@/lib/immobilier';
 import { CarteGraphique, COULEURS, Colonnes, Explication, ModeAffichage, Point } from '../ImmobilierCharts';
+import Lecture from './Lecture';
 
 // Paramètres
 const CLASSES_PASSOIRES: string[] = ['F', 'G'];
@@ -19,6 +21,13 @@ function couleurClasse(classe: string): string {
   return COULEURS.axe;
 }
 
+// Une classe de moins de SEUIL_VENTES_FIABLES ventes est grisée en clair : sa hauteur ne dit rien de fiable
+const COULEUR_FRAGILE = COULEURS.grille;
+
+function estFragile(nbVentes: number): boolean {
+  return nbVentes < SEUIL_VENTES_FIABLES;
+}
+
 function formatEcart(pct: number): string {
   const signe = pct > 0 ? '+' : pct < 0 ? '−' : '';
   return `${signe}${formatPourcentage(Math.abs(pct))}`;
@@ -29,6 +38,11 @@ const LEGENDE = [
   { libelle: 'D (référence de l’écart)', couleur: COULEURS.slot2 },
   { libelle: 'Autres classes', couleur: COULEURS.axe },
 ];
+
+const ENTREE_FRAGILE = {
+  libelle: `Moins de ${SEUIL_VENTES_FIABLES} ventes : lecture fragile`,
+  couleur: COULEUR_FRAGILE,
+};
 
 export default function PrixDpeView() {
   const { unlocked } = useAccess();
@@ -61,10 +75,13 @@ export default function PrixDpeView() {
     return [{
       nom: classe,
       valeur: ligne.prix_m2_median,
-      detail: `${formatEntier(ligne.nb_ventes)} ventes`,
-      couleur: couleurClasse(classe),
+      detail: `${formatEntier(ligne.nb_ventes)} ventes${estFragile(ligne.nb_ventes) ? ' · lecture fragile' : ''}`,
+      couleur: estFragile(ligne.nb_ventes) ? COULEUR_FRAGILE : couleurClasse(classe),
     }];
   });
+
+  const avecClasseFragile = data?.classes.some(c => c.prix_m2_median !== null && estFragile(c.nb_ventes)) ?? false;
+  const legende = avecClasseFragile ? [...LEGENDE, ENTREE_FRAGILE] : LEGENDE;
 
   const ecart = data?.ecart ?? null;
 
@@ -101,10 +118,7 @@ export default function PrixDpeView() {
                 {formatEntier(ecart.prix_m2_median_fg)} €/m² pour F et G ({formatEntier(ecart.nb_fg)} ventes) contre{' '}
                 {formatEntier(ecart.prix_m2_median_d)} €/m² pour D ({formatEntier(ecart.nb_d)} ventes).
               </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Écart brut, non corrigé : il ne tient compte ni de l’arrondissement, ni de la surface, ni de
-                l’époque de construction.
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Écart brut, non corrigé.</p>
             </div>
           )}
 
@@ -124,27 +138,30 @@ export default function PrixDpeView() {
                 : undefined
             }
           >
-            <Explication>
+            <Lecture
+              voir="Le prix d’un mètre carré vendu à Paris, selon la note énergétique de l’immeuble, de A (très économe) à G (très énergivore). Les logements notés F ou G sont appelés « passoires thermiques »."
+              retenir={retenirPrix(data)}
+              attention={attentionPrix(data)}
+            />
+
+            <Explication titre="Détails de calcul">
               <p>
-                Chaque colonne est une classe du DPE, de A (très économe) à G (très énergivore). La hauteur est le
-                prix médian au m² des logements vendus dans des bâtiments de cette classe ; l’infobulle indique le
-                nombre de ventes.
+                Le prix médian est la valeur du milieu : la moitié des ventes s’est faite en dessous, l’autre moitié
+                au-dessus. Les médianes sont calculées par BigQuery de façon approchée : elles peuvent varier
+                d’environ 0,2 % d’un calcul à l’autre.
               </p>
               <p>
-                La classe d’un bâtiment est la classe médiane de ses DPE (arrêté 2021). Quand le nombre de DPE est
-                pair, on retient la meilleure des deux classes centrales.
+                La note d’un bâtiment est la note médiane de ses DPE (arrêté 2021). Quand le nombre de DPE est
+                pair, on retient la meilleure des deux notes centrales.
               </p>
               <p>
                 Chaque bâtiment compte une seule transaction : la transaction représentative de la BDNB. Le prix au
                 m² est celui du local vendu, pas celui de l’ensemble du bâtiment.
               </p>
-              <p>
-                Les classes A et B comptent très peu de ventes : à lire avec prudence.
-              </p>
             </Explication>
 
             <ul className="flex flex-wrap gap-x-4 gap-y-1 mb-3 text-xs text-gray-600" aria-label="Légende">
-              {LEGENDE.map(({ libelle, couleur }) => (
+              {legende.map(({ libelle, couleur }) => (
                 <li key={libelle} className="inline-flex items-center gap-1.5">
                   <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: couleur }} />
                   {libelle}

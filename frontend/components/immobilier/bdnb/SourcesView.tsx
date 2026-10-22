@@ -3,12 +3,29 @@
 import { useEffect, useState } from 'react';
 import { SourcesResponse, getBdnbSources } from '@/lib/immobilierBdnbApi';
 import { libelleAppariement, libelleFiabilite } from '@/lib/immobilierBdnb';
+import { retenirAppariement, retenirEntonnoir, retenirGeocodage } from '@/lib/immobilierBdnbTextes';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import { CarteGraphique, COULEURS, Explication } from '../ImmobilierCharts';
+import Lecture from './Lecture';
 
 // Paramètres
 const ORDRE_FIABILITE = ['très fiable', 'globalement fiable', 'fiable', 'non renseigné'];
 const PART_MAX_BARRE = 70;     // % de la largeur disponible pour la plus longue barre : le reste sert à la valeur
+
+const LEXIQUE: { terme: string; definition: string }[] = [
+  { terme: 'DPE', definition: 'Diagnostic de performance énergétique : une note de A (très économe) à G (très énergivore) attribuée à un logement.' },
+  { terme: 'Passoire thermique', definition: 'Logement noté F ou G.' },
+  { terme: 'Médiane', definition: 'Valeur du milieu : la moitié des ventes s’est faite en dessous de ce prix, l’autre moitié au-dessus.' },
+  { terme: 'DVF', definition: 'Demandes de valeurs foncières : la base publique des ventes immobilières.' },
+  { terme: 'BDNB', definition: 'Base de données nationale des bâtiments, publiée par le CSTB (Centre scientifique et technique du bâtiment).' },
+  { terme: 'RNB', definition: 'Référentiel national des bâtiments : un identifiant national pour chaque bâtiment.' },
+  { terme: 'RPLS', definition: 'Répertoire des logements locatifs des bailleurs sociaux.' },
+  { terme: 'Déperdition', definition: 'Chaleur qui s’échappe par un élément du logement (mur, fenêtre, sol, toit...), exprimée en watts par kelvin (W/K).' },
+  { terme: 'Pont thermique', definition: 'Jonction entre deux éléments du bâtiment (un mur et un plancher, par exemple) où la chaleur passe plus facilement.' },
+  { terme: 'Géocodage', definition: 'Opération qui transforme une adresse en position sur une carte.' },
+  { terme: 'Appariement', definition: 'Rattachement d’un DPE à un bâtiment.' },
+  { terme: '3CL', definition: 'Méthode de calcul réglementaire utilisée pour établir la plupart des DPE.' },
+];
 
 interface LigneBarre {
   nom: string;
@@ -103,6 +120,10 @@ export default function SourcesView() {
         titre="Sources et millésimes"
         sousTitre="Les données publiques assemblées par la BDNB, avec leur date"
       >
+        <Lecture
+          voir="D’où viennent les données, et jusqu’à quelle date."
+          retenir="Un chiffre ne vaut que pour la période couverte par sa source : voir la colonne « Couverture »."
+        />
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -129,7 +150,12 @@ export default function SourcesView() {
         titre="De la BDNB à la sélection retenue"
         sousTitre="Nombre de DPE après chaque filtre, en part des DPE de la BDNB pour Paris"
       >
-        <Explication>
+        <Lecture
+          voir="Combien de diagnostics (DPE) la base contient pour Paris, et combien il en reste après chaque filtre."
+          retenir={retenirEntonnoir(data)}
+          attention="Les DPE de l’ancienne réglementation (arrêté 2012) sont écartés : leur méthode de calcul diffère et ils n’ont pas de date d’établissement."
+        />
+        <Explication titre="Détails des filtres">
           <p>
             Chaque ligne applique un filtre de plus, dans cet ordre : DPE de l’arrêté 2021 (ceux de l’arrêté 2012
             sont écartés), logements (les DPE d’immeuble sont écartés), méthode 3CL, surface habitable renseignée.
@@ -143,12 +169,11 @@ export default function SourcesView() {
         titre="Fiabilité du géocodage"
         sousTitre={`${formatEntier(totalLiens)} liens entre un DPE et un bâtiment, pour ${formatEntier(nbRetenus)} DPE retenus : certains DPE sont reliés à plusieurs bâtiments`}
       >
-        <Explication>
-          <p>
-            La BDNB rattache chaque DPE à un bâtiment. Chaque barre compte les liens selon la fiabilité du
-            géocodage indiquée par la BDNB ; « non renseigné » regroupe les liens sans information.
-          </p>
-        </Explication>
+        <Lecture
+          voir="La base doit retrouver dans quel immeuble se trouve chaque logement diagnostiqué. Ces barres montrent la confiance qu’elle accorde à ce rattachement."
+          retenir={retenirGeocodage(data)}
+          attention="Le prix par note énergétique (vue « Prix et DPE ») repose sur ce rattachement. « Non renseigné » regroupe les liens sans information."
+        />
         <BarresListe lignes={fiabilite} />
       </CarteGraphique>
 
@@ -156,7 +181,11 @@ export default function SourcesView() {
         titre="Type d’appariement"
         sousTitre="Méthode utilisée par la BDNB pour associer un DPE à un bâtiment"
       >
-        <Explication>
+        <Lecture
+          voir="La méthode utilisée pour rattacher un logement à son immeuble : par son adresse, sa parcelle cadastrale, ou l’identifiant national du bâtiment (RNB)."
+          retenir={retenirAppariement(data)}
+        />
+        <Explication titre="Détails">
           <p>
             Un DPE peut être associé à un bâtiment par son adresse, sa parcelle, ou l’identifiant RNB lorsque
             celui-ci est renseigné par le diagnostiqueur ou via le RPLS. Quand plusieurs méthodes coïncident,
@@ -166,6 +195,18 @@ export default function SourcesView() {
         <BarresListe lignes={appariement} />
       </CarteGraphique>
 
+      <CarteGraphique titre="Lexique">
+        <Explication titre="Afficher les définitions">
+          <dl className="space-y-1">
+            {LEXIQUE.map(({ terme, definition }) => (
+              <div key={terme}>
+                <dt className="inline font-medium text-gray-900">{terme}</dt>
+                <dd className="inline"> : {definition}</dd>
+              </div>
+            ))}
+          </dl>
+        </Explication>
+      </CarteGraphique>
 
       <p className="text-xs text-gray-500">
         BDNB (CSTB), Licence Ouverte 2.0. DPE : ADEME. Transactions : DVF (Cerema). Adresses : BAN.
