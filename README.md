@@ -40,7 +40,7 @@ Plateforme full-stack d'intelligence de recherche d'emploi, construite en solo, 
 | **Observatoire Marché** | Analytics BigQuery temps réel sur le marché de l'emploi data/ML (Q01–Q11), désormais servi par une **couche de transformation dbt** (Q01–Q10 lisent des tables agrégées, Q11 reste en lecture directe) |
 | **Feedback** | Système de retour visiteur intégré sur toutes les pages |
 | **Accès public / privé** | Version publique des offres pour tout visiteur ; statut, notes, fiches, Explorer, Companies et actions d'écriture réservés derrière un code unique (session de 15 min glissantes, cookie httpOnly) |
-| **Réalisations** | 6 MVPs — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct), Top Offres (classement quotidien des offres par LLM local, dbt, BigQuery) |
+| **Réalisations** | 7 MVPs — Sanofi (Graph RAG + LLM fine-tuné), Savencia (NLP + Computer Vision), SG Assurances (YOLO + NER + QLoRA), Banque de France (Classification + RAG + Scoring EBA), Gestion Patrimoine (RAG juridique + function calling ReAct), Top Offres (classement quotidien des offres par LLM local, dbt, BigQuery), Immobilier (DPE + DVF + BDNB, Paris 75, BigQuery) |
 
 ---
 
@@ -94,6 +94,7 @@ OVH VPS (51.68.130.23) — Compute ML / VectorDB
     ├── Banque de France : ml-service (8007) — classification, topic modeling, scoring EBA
     └── Gestion Patrimoine : ml-service (8008, function calling ReAct), llama-server Qwen2.5-3B base (8009)
     (Top Offres : aucun service dédié ; réutilise l'Embedding Service 8004 via l'orchestrateur — le worker tourne en local)
+    (Immobilier : aucun service OVH ; pipeline local → BigQuery `immobilier`, lu par le backend avec un compte de service dédié)
 ```
 
 ---
@@ -171,6 +172,16 @@ Chaque MVP suit le même pattern structurel : **pipeline ETL → ML Service OVH 
 - Frontend : `/realisations/top-offres` — vue d'ensemble (graphiques), Top du jour, Entreprises (tableau triable, offres dépliables), Brouillons ; `/jobs` adapté au statut `brouillon`
 - Serving : aucun service dédié ; seul l'Embedding Service OVH (8004) est utilisé, via l'orchestrateur
 - Backlog assumé : clôture de l'évaluation (objectif de rappel, garde-fou GPU, revue du prompt), Planificateur de tâches Windows, groupes par mot-clé, bonus de mots-clés, signal de récurrence
+
+### Immobilier — ✅ En production (MVP non clos)
+*Veille immobilière Paris (75) sur données ouvertes : repérer qu'un bien s'est amélioré (DPE refait) et situer son prix — support d'échange avec un agent immobilier indépendant*
+
+- V1 (en production le 2026-10-20) : DPE ADEME (échantillon de 97 937 DPE chargé, 854 971 au total) et DVF Etalab 2021-2025 (145 128 ventes validées), pipeline Docker → BigQuery `immobilier`, agrégats, page avec carte des arrondissements et repères pédagogiques
+- BDNB CSTB (en production le 2026-10-22) : 6 tables `bdnb_*` (1,12 Go), agrégats, onglet « Bâtiments (BDNB) » à 3 vues (Prix et DPE, Profil du parc, Sources et qualité), textes pédagogiques calculés
+- Accès : agrégats publics (cellules de moins de 5 ventes masquées si verrouillé), liste des DPE refaits en privé
+- Serving : aucun service OVH, pas de ML ; le backend lit BigQuery avec un compte de service dédié
+- Backlog assumé : pipeline DPE complet, relecture des CGU DGFiP, phase 4 (fiche bien)
+- Détail et lancement : `realisations/immobilier/README.md`
 
 ### Mirakl — 🔜 Prochain MVP
 *E-commerce NLP/GenAI — analyse sentiment, détection d'anomalie prix, agent IA vendeur (BERT, PyTorch, LangChain + Mistral via LiteLLM)*
@@ -284,6 +295,7 @@ Infrastructure Scaleway et GCP gérées exclusivement via Terraform — aucune m
 | Cloud Storage `banque-de-france-models` | Corps d'embeddings + têtes k-NN classification griefs ACPR |
 | BigQuery `banque_de_france_veille` | Veille + décisions ACPR (colonne `source` distingue les deux) |
 | BigQuery `top_offres` | Cibles, cache des entreprises, scores et marts dbt du MVP Top Offres (compte de service `pipeline-top-offres`) |
+| BigQuery `immobilier` | Tables brutes (`dpe_logements`, `dvf_mutations`), `bdnb_*`, agrégats `agg_*` et métadonnées du MVP Immobilier (compte de service dédié) |
 | Artifact Registry `europe-west9` | Images Docker Cloud Run Jobs |
 
 ### OVH VPS
@@ -347,6 +359,7 @@ Toute l'infra est versionnée en **Terraform IaC**, déployée via **GitHub Acti
 | `/realisations/banque-de-france` | MVP Banque de France — Actualités, Ask AI, ML Insights (Topic Modeling, Scoring EBA, Classification) |
 | `/realisations/gestion-patrimoine` | MVP Gestion Patrimoine — génération de profil, assistant RAG juridique avec citation |
 | `/realisations/top-offres` | MVP Top Offres — vue d'ensemble (public : tuiles et graphiques) ; 🔒 Top du jour (décisions, brouillons), Entreprises (tableau triable), Brouillons |
+| `/realisations/immobilier` | MVP Immobilier (Paris 75) — onglet V1 : parc DPE, prix DVF, carte, 🔒 DPE refaits ; onglet Bâtiments (BDNB) : prix et DPE, profil du parc, sources et qualité |
 
 ---
 
@@ -450,6 +463,25 @@ docker-compose up -d
 ```bash
 cd realisations/gestion-patrimoine/pipeline
 docker-compose run --rm pipeline
+```
+
+### Top Offres (worker local)
+
+Prérequis : Docker Desktop, Ollama (`gemma4:e4b`), GPU. Détail : `realisations/top-offres/README.md`.
+
+```bash
+cd realisations/top-offres/pipeline
+docker-compose build pipeline
+docker-compose run --rm pipeline pipeline/orchestrator.py run --auto
+```
+
+### Immobilier (pipeline Docker + chargement BDNB local)
+
+Détail et prérequis : `realisations/immobilier/README.md`.
+
+```bash
+cd realisations/immobilier/pipeline
+docker-compose run --rm pipeline python pipeline/orchestrator.py --source dvf
 ```
 
 ---
@@ -564,7 +596,8 @@ presentation-portefolio/
 │   │   ├── sg/sg_assurances/        # router, ml.py, rag.py, schemas.py
 │   │   ├── banque_de_france/        # router, ml.py, rag.py, schemas.py
 │   │   ├── gestion_patrimoine/      # router.py, schemas.py, profil_agent.py (copie — exécution directe backend)
-│   │   └── top_offres/              # router.py, schemas.py (lectures BigQuery via services/top_offres_bigquery.py)
+│   │   ├── top_offres/              # router.py, schemas.py (lectures BigQuery via services/top_offres_bigquery.py)
+│   │   └── immobilier/              # router.py, bdnb_router.py, schemas (lectures BigQuery via services/immobilier_*_bigquery.py)
 │   ├── migrations/sql/              # Scripts SQL (001 → 021)
 │   ├── scheduler/                   # job_pipeline.py
 │   ├── scripts/                     # Scripts utilitaires manuels
@@ -585,6 +618,7 @@ presentation-portefolio/
 │   │   ├── entrypoint.sh
 │   │   ├── Dockerfile
 │   │   └── infra/                   # Terraform SA pipeline-dbt + IAM
+│   ├── immobilier/infra/            # Terraform dédié (dataset immobilier, comptes de service)
 │   └── infra/                       # Terraform GCP (sync job, scheduler, secrets)
 ├── ovh/
 │   ├── orchestrator/                # Orchestrateur wake-on-demand
@@ -614,11 +648,14 @@ presentation-portefolio/
 │   │   ├── agents/                   # profil_agent.py, assistant_agent.py, tools.py (function calling ReAct)
 │   │   ├── ml/                       # main.py (FastAPI /chat), config.py, Dockerfile, docker-compose.yml
 │   │   └── scripts/                  # check_data.py
-│   └── top-offres/
-│       ├── pipeline/                 # Worker local : collectors, transformation, validators, loaders, orchestrator.py
-│       ├── agents/                   # cibles_agent.py, scoring_agent.py, secteur_agent.py, prompts/
-│       ├── dbt/                      # Projet dbt dédié : int_offres_a_scorer, offres_scores, mart_top_du_jour, mart_stats
-│       └── scripts/                  # run_quotidien.bat, test_rappel.py, benchmark.py
+│   ├── top-offres/
+│   │   ├── pipeline/                 # Worker local : collectors, transformation, validators, loaders, orchestrator.py
+│   │   ├── agents/                   # cibles_agent.py, scoring_agent.py, secteur_agent.py, prompts/
+│   │   ├── dbt/                      # Projet dbt dédié : int_offres_a_scorer, offres_scores, mart_top_du_jour, mart_stats
+│   │   └── scripts/                  # run_quotidien.bat, test_rappel.py, benchmark.py
+│   └── immobilier/
+│       ├── pipeline/                 # V1 DPE ADEME + DVF Etalab (Docker) ; bdnb/ (chargement BDNB local)
+│       └── scripts/                  # check_sources.py, convert_bdnb_parquet.py, explore_bdnb.py
 ├── infra/                            # Terraform Scaleway
 └── frontend/
     ├── app/
@@ -629,11 +666,13 @@ presentation-portefolio/
     │       ├── sg/sg-assurances/
     │       ├── banque-de-france/
     │       ├── gestion-patrimoine/
-    │       └── top-offres/             # page.tsx, layout.tsx
+    │       ├── top-offres/             # page.tsx, layout.tsx
+    │       └── immobilier/             # page.tsx (V1 + bascule vers l'onglet BDNB)
     ├── components/
     │   ├── sanofi/ml/, savencia/ml/, sg/sg-assurances/ml/, banque-de-france/ml/
     │   ├── gestion-patrimoine/       # ProfilGenerator.tsx, ChatAssistant.tsx
     │   ├── top-offres/               # TopSidebar, OverviewView, TopCharts, TopDuJourView, EntreprisesView, BrouillonsView...
+    │   ├── immobilier/               # V1 : CarteParis, DpeView, PrixView, ChangementsView, Reperes… ; bdnb/ : onglet Bâtiments
     │   ├── AccessProvider.tsx, AccessCodeForm.tsx, PrivateSection.tsx   # accès public / privé
     │   └── ui/                       # shadcn/ui
     ├── lib/                          # api.ts (helper request, ApiError), access.ts, topOffres.ts, sanofiApi.ts, savenciaApi.ts, sgApi.ts, banqueApi.ts, gestionPatrimoineApi.ts
@@ -652,6 +691,7 @@ presentation-portefolio/
 - MVP Mirakl — E-commerce NLP/GenAI
 - Banque de France : Webstat (détection d'anomalies, série à fréquence adaptée à trouver) et NER (établissement, base légale) sur les décisions ACPR
 - Top Offres : clôturer l'évaluation (objectif de rappel, garde-fou si le modèle tourne sur CPU, revue du prompt de scoring), Planificateur de tâches Windows pour le run quotidien, recouvrement des 30 jours en tranches, groupes d'offres par mot-clé, bonus de mots-clés, signal de récurrence
+- Immobilier : pipeline DPE complet (854 971 diagnostics, la production affiche un échantillon), relecture des CGU DGFiP, puis phase 4 BDNB (fiche bien)
 
 ### Moyen terme
 - Automatisation Cloud Run Jobs pour les MVPs (refresh périodique des pipelines ML)
