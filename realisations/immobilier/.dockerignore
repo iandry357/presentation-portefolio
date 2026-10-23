@@ -1,5 +1,6 @@
 pipeline/data/
 pipeline/bdnb/
 pipeline/dvf_etalab/
+pipeline/analyse/
 scripts/venv-explore/
 **/__pycache__/
