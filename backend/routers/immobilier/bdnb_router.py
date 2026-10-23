@@ -4,19 +4,23 @@ Toutes publiques, sur des tables agrégées BigQuery mises en cache ; aucune don
 Prix : classes de moins de SEUIL_VENTES ventes masquées si l'accès est verrouillé.
 """
 import logging
-from typing import Optional
+from typing import List, Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state
+from app.services.immobilier_bdnb_analyse import (
+    DIMENSIONS, modalites, modalites_par_dimension, pivoter, recouvrement_typologie, resume,
+)
 from app.services.immobilier_bdnb_bigquery import (
-    fetch_deperditions, fetch_entonnoir, fetch_geocodage, fetch_parc_energie, fetch_parc_periode,
-    fetch_prix_dpe, fetch_prix_ecart, fetch_sources, fetch_stats,
+    fetch_analyse_dpe, fetch_analyse_ventes, fetch_deperditions, fetch_entonnoir, fetch_geocodage,
+    fetch_parc_energie, fetch_parc_periode, fetch_prix_dpe, fetch_prix_ecart, fetch_sources, fetch_stats,
 )
 from routers.immobilier.bdnb_schemas import (
-    BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne, GeocodageLigne, ParcEnergieLigne,
-    ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse, SourceLigne, SourcesResponse,
+    AnalyseCellule, AnalyseMeta, AnalyseResponse, BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne,
+    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse, SourceLigne,
+    SourcesResponse,
 )
 
 
@@ -26,6 +30,9 @@ router = APIRouter(prefix="/immobilier/bdnb", tags=["Immobilier BDNB"])
 # Paramètres
 SEUIL_VENTES = 5              # classes de moins de N ventes masquées si l'accès est verrouillé
 SOURCE_BDNB = "BDNB (CSTB)"   # libellé de la source BDNB dans SOURCES (pipeline/bdnb/config.py)
+SEUIL_ANALYSE = 5             # analyse : groupes de moins de N observations masqués si l'accès est verrouillé
+PRIX_M2_MIN = 2000            # bornes de prix du cube des ventes (pipeline/analyse/config.py)
+PRIX_M2_MAX = 30000
 
 
 async def _lire(*fetchers):
@@ -131,4 +138,67 @@ async def get_sources():
         entonnoir=[EntonnoirLigne(**l) for l in sorted(entonnoir, key=lambda l: l["etape"])],
         geocodage=[GeocodageLigne(**l) for l in sorted(geocodage, key=lambda l: -l["nb_liens"])],
         date_maj=max((l["date_maj"] for l in sources), default=None),
+    )
+
+
+# ============================================================================
+# GET /immobilier/bdnb/analyse — Cube ventes / DPE (public, seuil si verrouillé)
+# ============================================================================
+
+@router.get("/analyse", response_model=AnalyseResponse)
+async def get_analyse(
+    source: Literal["ventes", "dpe"],
+    axe: List[str] = Query(...),
+    trimestre: Optional[List[str]] = Query(None),
+    arrondissement: Optional[List[str]] = Query(None),
+    pieces: Optional[List[str]] = Query(None),
+    tranche_surface: Optional[List[str]] = Query(None),
+    etiquette: Optional[List[str]] = Query(None),
+    rattachee: Optional[List[str]] = Query(None),
+    deverrouille: bool = Depends(get_access_state),
+):
+    (lignes,) = await _lire(fetch_analyse_ventes if source == "ventes" else fetch_analyse_dpe)
+    if not lignes:
+        raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube d'analyse)")
+
+    dimensions = DIMENSIONS[source]
+    if not 1 <= len(axe) <= 2 or len(set(axe)) != len(axe) or any(a not in dimensions for a in axe):
+        raise HTTPException(
+            status_code=422, detail=f"Axes pour {source} : 1 ou 2 parmi {', '.join(dimensions)}, sans doublon",
+        )
+
+    filtres: dict[str, set[str]] = {}
+    demandes = {
+        "trimestre": trimestre, "arrondissement": arrondissement, "pieces": pieces,
+        "tranche_surface": tranche_surface, "etiquette": etiquette, "rattachee": rattachee,
+    }
+    for dimension, valeurs in demandes.items():
+        if not valeurs:
+            continue
+        if dimension not in dimensions:
+            raise HTTPException(status_code=422, detail=f"Filtre « {dimension} » indisponible pour {source}")
+        inconnues = set(valeurs) - modalites(lignes, dimension)
+        if inconnues:
+            raise HTTPException(status_code=422, detail=f"Valeurs inconnues pour {dimension} : {sorted(inconnues)}")
+        filtres[dimension] = set(valeurs)
+
+    cellules, nb_masquees = pivoter(lignes, source, axe, filtres, SEUIL_ANALYSE, masquer=not deverrouille)
+    recouvrement = None
+    if source == "dpe" and ("pieces" in axe or "pieces" in filtres):
+        recouvrement = recouvrement_typologie(lignes, filtres)
+
+    return AnalyseResponse(
+        meta=AnalyseMeta(
+            source=source,
+            axes=axe,
+            seuil_applique=not deverrouille,
+            seuil=SEUIL_ANALYSE,
+            nb_masquees=nb_masquees,
+            prix_m2_min=PRIX_M2_MIN if source == "ventes" else None,
+            prix_m2_max=PRIX_M2_MAX if source == "ventes" else None,
+            recouvrement_typologie=recouvrement,
+            modalites=modalites_par_dimension(lignes, dimensions),
+            **resume(lignes),
+        ),
+        cellules=[AnalyseCellule(**c) for c in cellules],
     )

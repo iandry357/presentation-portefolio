@@ -20,6 +20,8 @@ TABLE_DEPERDITIONS = "agg_bdnb_deperditions"
 TABLE_GEOCODAGE = "agg_bdnb_geocodage"
 TABLE_SOURCES = "bdnb_sources"
 TABLE_ENTONNOIR = "bdnb_entonnoir"
+TABLE_ANALYSE_VENTES = "agg_analyse_ventes"
+TABLE_ANALYSE_DPE = "agg_analyse_dpe"
 
 
 def _lire_table(nom: str, colonnes: str) -> list[dict]:
@@ -73,3 +75,19 @@ def fetch_sources() -> list[dict]:
 
 def fetch_entonnoir() -> list[dict]:
     return _lire_table(TABLE_ENTONNOIR, "etape, libelle, nb_dpe")
+
+
+def fetch_analyse_ventes() -> list[dict]:
+    """Cube des ventes : une ligne par cellule, avec la liste triée des prix au m² (en cache, ne pas modifier)."""
+    return _lire_table(
+        TABLE_ANALYSE_VENTES,
+        "trimestre, arrondissement, pieces, tranche_surface, etiquette, rattachee, nb_ventes, prix_m2, date_maj",
+    )
+
+
+def fetch_analyse_dpe() -> list[dict]:
+    """Cube des DPE : une ligne par cellule (en cache)."""
+    return _lire_table(
+        TABLE_ANALYSE_DPE,
+        "trimestre, arrondissement, pieces, tranche_surface, etiquette, nb_dpe, date_maj",
+    )

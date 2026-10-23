@@ -60,10 +60,10 @@ export default function BdnbStats() {
     <div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Tuile
-          label="Bâtiments"
+          label="Immeubles"
           valeur={stats.nb_batiments}
-          detail="groupes de bâtiments, Paris"
-          info="Groupes de bâtiments de la BDNB pour le département 75"
+          detail="groupes de bâtiments de la BDNB, Paris"
+          info="Groupes de bâtiments de la BDNB pour le département 75, appelés ici immeubles"
         />
         <Tuile
           label="DPE retenus"
@@ -71,17 +71,19 @@ export default function BdnbStats() {
           detail="arrêté 2021, logements"
           info="DPE de l'arrêté 2021, de type logement, méthode 3CL, surface habitable renseignée"
         />
-        <Tuile label="Adresses" valeur={stats.nb_adresses} detail="adresses rattachées à un bâtiment" />
+        <Tuile label="Adresses" valeur={stats.nb_adresses} detail="adresses reliées à un immeuble" />
         <Tuile
-          label="Transactions"
+          label="Ventes de référence"
           valeur={stats.nb_transactions}
-          detail="DVF, une par bâtiment"
-          info="Transaction représentative de chaque bâtiment (DVF open)"
+          detail="DVF, une vente par immeuble"
+          info="Vente représentative de chaque immeuble (DVF open)"
         />
       </div>
       <p className="text-xs text-gray-500 mt-2">
-        {stats.millesime ? `BDNB (CSTB), millésime ${stats.millesime}.` : 'BDNB (CSTB).'}
-        {dateMaj && ` Agrégats calculés le ${dateMaj}.`}
+        {stats.millesime ? `BDNB (CSTB), version ${stats.millesime}.` : 'BDNB (CSTB).'}
+        {dateMaj && ` Chiffres calculés le ${dateMaj}.`}
+        {' '}Une seule vente par immeuble est comptée ici : le nombre de ventes est donc inférieur à celui de
+        l’onglet « Marché », qui compte toutes les ventes de logement.
       </p>
     </div>
   );

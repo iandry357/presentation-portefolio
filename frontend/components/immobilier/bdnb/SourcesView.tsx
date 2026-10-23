@@ -12,21 +12,6 @@ import Lecture from './Lecture';
 const ORDRE_FIABILITE = ['très fiable', 'globalement fiable', 'fiable', 'non renseigné'];
 const PART_MAX_BARRE = 70;     // % de la largeur disponible pour la plus longue barre : le reste sert à la valeur
 
-const LEXIQUE: { terme: string; definition: string }[] = [
-  { terme: 'DPE', definition: 'Diagnostic de performance énergétique : une note de A (très économe) à G (très énergivore) attribuée à un logement.' },
-  { terme: 'Passoire thermique', definition: 'Logement noté F ou G.' },
-  { terme: 'Médiane', definition: 'Valeur du milieu : la moitié des ventes s’est faite en dessous de ce prix, l’autre moitié au-dessus.' },
-  { terme: 'DVF', definition: 'Demandes de valeurs foncières : la base publique des ventes immobilières.' },
-  { terme: 'BDNB', definition: 'Base de données nationale des bâtiments, publiée par le CSTB (Centre scientifique et technique du bâtiment).' },
-  { terme: 'RNB', definition: 'Référentiel national des bâtiments : un identifiant national pour chaque bâtiment.' },
-  { terme: 'RPLS', definition: 'Répertoire des logements locatifs des bailleurs sociaux.' },
-  { terme: 'Déperdition', definition: 'Chaleur qui s’échappe par un élément du logement (mur, fenêtre, sol, toit...), exprimée en watts par kelvin (W/K).' },
-  { terme: 'Pont thermique', definition: 'Jonction entre deux éléments du bâtiment (un mur et un plancher, par exemple) où la chaleur passe plus facilement.' },
-  { terme: 'Géocodage', definition: 'Opération qui transforme une adresse en position sur une carte.' },
-  { terme: 'Appariement', definition: 'Rattachement d’un DPE à un bâtiment.' },
-  { terme: '3CL', definition: 'Méthode de calcul réglementaire utilisée pour établir la plupart des DPE.' },
-];
-
 interface LigneBarre {
   nom: string;
   valeur: number;
@@ -129,7 +114,7 @@ export default function SourcesView() {
             <thead>
               <tr className="text-left text-xs text-gray-500 border-b">
                 <th className="py-1.5 font-medium">Source</th>
-                <th className="py-1.5 font-medium">Millésime</th>
+                <th className="py-1.5 font-medium">Version</th>
                 <th className="py-1.5 font-medium">Couverture</th>
               </tr>
             </thead>
@@ -166,8 +151,8 @@ export default function SourcesView() {
       </CarteGraphique>
 
       <CarteGraphique
-        titre="Fiabilité du géocodage"
-        sousTitre={`${formatEntier(totalLiens)} liens entre un DPE et un bâtiment, pour ${formatEntier(nbRetenus)} DPE retenus : certains DPE sont reliés à plusieurs bâtiments`}
+        titre="Fiabilité du rattachement des DPE aux immeubles"
+        sousTitre={`${formatEntier(totalLiens)} liens entre un DPE et un immeuble, pour ${formatEntier(nbRetenus)} DPE retenus : certains DPE sont reliés à plusieurs immeubles`}
       >
         <Lecture
           voir="La base doit retrouver dans quel immeuble se trouve chaque logement diagnostiqué. Ces barres montrent la confiance qu’elle accorde à ce rattachement."
@@ -178,8 +163,8 @@ export default function SourcesView() {
       </CarteGraphique>
 
       <CarteGraphique
-        titre="Type d’appariement"
-        sousTitre="Méthode utilisée par la BDNB pour associer un DPE à un bâtiment"
+        titre="Comment un DPE est relié à son immeuble"
+        sousTitre="Méthode utilisée par la BDNB pour associer un DPE à un immeuble"
       >
         <Lecture
           voir="La méthode utilisée pour rattacher un logement à son immeuble : par son adresse, sa parcelle cadastrale, ou l’identifiant national du bâtiment (RNB)."
@@ -193,19 +178,6 @@ export default function SourcesView() {
           </p>
         </Explication>
         <BarresListe lignes={appariement} />
-      </CarteGraphique>
-
-      <CarteGraphique titre="Lexique">
-        <Explication titre="Afficher les définitions">
-          <dl className="space-y-1">
-            {LEXIQUE.map(({ terme, definition }) => (
-              <div key={terme}>
-                <dt className="inline font-medium text-gray-900">{terme}</dt>
-                <dd className="inline"> : {definition}</dd>
-              </div>
-            ))}
-          </dl>
-        </Explication>
       </CarteGraphique>
 
       <p className="text-xs text-gray-500">

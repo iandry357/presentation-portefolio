@@ -70,6 +70,13 @@ TABLES = {
         "lignes": 48458,
         "colonnes": 18,
     },
+    "bdnb_rel_batiment_parcelle": {
+        "source": "rel_batiment_groupe_parcelle",
+        "cluster": ["parcelle_id"],
+        "dates": [],
+        "lignes": 76780,
+        "colonnes": 4,
+    },
 }
 
 

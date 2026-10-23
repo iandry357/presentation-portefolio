@@ -90,6 +90,40 @@ export interface SourcesResponse {
   date_maj: string | null;
 }
 
+// Analyse (cube ventes / DPE)
+export type SourceAnalyse = 'ventes' | 'dpe';
+export type DimensionAnalyse = 'trimestre' | 'arrondissement' | 'pieces' | 'tranche_surface' | 'etiquette' | 'rattachee';
+export type FiltresAnalyse = Partial<Record<DimensionAnalyse, string[]>>;
+
+export interface AnalyseCellule {
+  modalites: string[];           // une modalité par axe, dans l'ordre des axes demandés
+  n: number;                     // ventes ou DPE du groupe
+  mediane: number | null;        // ventes : prix au m² (€), médiane et quartiles des prix
+  q1: number | null;
+  q3: number | null;
+  part_pct: number | null;       // DPE : part du groupe, dans les groupes affichés
+}
+
+export interface AnalyseMeta {
+  source: SourceAnalyse;
+  axes: DimensionAnalyse[];
+  seuil_applique: boolean;       // vrai si l'accès est verrouillé : groupes sous `seuil` observations retirés
+  seuil: number;
+  nb_masquees: number;
+  prix_m2_min: number | null;    // ventes : bornes de prix appliquées
+  prix_m2_max: number | null;
+  trimestre_min: string | null;  // plage de trimestres couverte par le cube
+  trimestre_max: string | null;
+  date_maj: string | null;
+  recouvrement_typologie: number | null;  // DPE, si les pièces sont utilisées : % de DPE avec typologie
+  modalites: Partial<Record<DimensionAnalyse, string[]>>;  // valeurs présentes par dimension, hors filtres
+}
+
+export interface AnalyseResponse {
+  meta: AnalyseMeta;
+  cellules: AnalyseCellule[];
+}
+
 // ============================================================================
 // Appels (via le proxy /backend : le cookie d'accès est first-party)
 // ============================================================================
@@ -112,4 +146,18 @@ export async function getBdnbParc(): Promise<ParcResponse> {
 // Public
 export async function getBdnbSources(): Promise<SourcesResponse> {
   return request<SourcesResponse>('/immobilier/bdnb/sources');
+}
+
+// Public : si l'accès est verrouillé, les groupes de moins de `seuil` observations sont retirés par le backend
+export async function getBdnbAnalyse(
+  source: SourceAnalyse,
+  axes: DimensionAnalyse[],
+  filtres: FiltresAnalyse,
+): Promise<AnalyseResponse> {
+  const params = new URLSearchParams({ source });
+  axes.forEach(axe => params.append('axe', axe));
+  (Object.entries(filtres) as [DimensionAnalyse, string[] | undefined][]).forEach(([dimension, valeurs]) =>
+    valeurs?.forEach(valeur => params.append(dimension, valeur)),
+  );
+  return request<AnalyseResponse>(`/immobilier/bdnb/analyse?${params.toString()}`);
 }

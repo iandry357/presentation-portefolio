@@ -1,8 +1,12 @@
-import type { ParcResponse, PrixDpeResponse, SourcesResponse } from '@/lib/immobilierBdnbApi';
+import type {
+  AnalyseCellule, AnalyseResponse, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
+} from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
-  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, POSTES, libelleAppariement, libelleEnergie, libellePeriode, ordrePeriode,
+  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite,
+  libellePeriode, ordrePeriode, minuscule 
 } from '@/lib/immobilierBdnb';
+
 
 // Phrases « À retenir » et « Attention » calculées à partir des données affichées.
 // Chaque fonction renvoie null quand les données ne suffisent pas : mieux vaut ne rien écrire qu'une phrase fausse.
@@ -214,4 +218,99 @@ export function retenirAppariement(data: SourcesResponse): string | null {
   for (const l of data.geocodage) parMethode.set(l.appariement, (parMethode.get(l.appariement) ?? 0) + l.nb_liens);
   const [methode, nb] = [...parMethode.entries()].reduce((a, b) => (b[1] > a[1] ? b : a));
   return `La méthode la plus fréquente est « ${libelleAppariement(methode)} » (${formatPourcentage((100 * nb) / total)} des rattachements).`;
+}
+
+// ============================================================================
+// Analyse (cube ventes / DPE)
+// ============================================================================
+
+// Réforme du DPE : même explication que le repère de la vue Changements (Reperes.tsx).
+// L'effet exact sur l'ensemble des DPE n'est pas mesuré (suivi E4, 2026-10-23).
+export const ALERTE_REFORME_DPE =
+  'Réforme du DPE du 1er janvier 2026 : le coefficient de l’électricité passe de 2,3 à 1,9 dans le calcul. Certains logements chauffés à l’électricité gagnent une lettre sans travaux : les étiquettes d’avant et d’après ne se comparent donc pas strictement. L’effet exact sur l’ensemble des DPE reste à mesurer.';
+
+// Mesure de l'exploration du 2026-10-23 : 71 % des DPE avec typologie se trouvent dans les 13e et 15e arrondissements
+export function alertePieces(recouvrement: number): string {
+  return (
+    `Le nombre de pièces vient de la typologie (T1, T2, T3…) que le diagnostiqueur peut renseigner : elle n’est renseignée que pour ${formatPourcentage(recouvrement)} ` +
+    'des DPE, surtout dans les 13e et 15e arrondissements. Lisez ces chiffres comme un échantillon, pas comme l’ensemble des logements de Paris.'
+  );
+}
+
+// `axes` : libellés des axes choisis (« Nombre de pièces », « Étiquette de l’immeuble »)
+// comptage : DPE par trimestre, la barre donne le nombre de diagnostics et non une part
+export function voirAnalyse(source: SourceAnalyse, axes: string[], comptage = false): string {
+  const selon = axes.map(minuscule).join(' et ');
+  if (source === 'ventes') {
+    return `Le prix médian au m² des logements vendus à Paris, selon ${selon}. La moitié des ventes s’est faite en dessous de ce prix, l’autre moitié au-dessus.`;
+  }
+  return comptage
+    ? `Le nombre de logements diagnostiqués (DPE) à Paris, selon ${selon}.`
+    : `La répartition des logements diagnostiqués (DPE) à Paris, selon ${selon}. Chaque barre est la part de ces diagnostics.`;
+}
+
+// Modalités qui ne sont pas des valeurs à comparer (« inconnue » : vente sans immeuble ni DPE rattaché)
+const MODALITES_ECARTEES = [NON_RENSEIGNE, 'inconnue'];
+
+export function retenirAnalyse(data: AnalyseResponse): string | null {
+  if (data.meta.axes.length !== 1) return null;
+  const axe = data.meta.axes[0];
+  const nom = (c: AnalyseCellule) => libelleModalite(axe, c.modalites[0]);
+  const comparables = data.cellules.filter(c => !MODALITES_ECARTEES.includes(c.modalites[0]));
+
+  // DPE par trimestre : évolution du nombre de diagnostics entre le premier et le dernier trimestre
+  if (data.meta.source === 'dpe' && axe === 'trimestre') {
+    if (comparables.length < 2) return null;
+    const premier = comparables[0];
+    const dernier = comparables[comparables.length - 1];
+    const evolution = ((dernier.n - premier.n) / premier.n) * 100;
+    return (
+      `Le nombre de DPE passe de ${formatEntier(premier.n)} (${nom(premier)}) à ${formatEntier(dernier.n)} (${nom(dernier)}), ` +
+      `soit ${evolution > 0 ? '+' : evolution < 0 ? '−' : ''}${formatPourcentage(Math.abs(evolution))}.`
+    );
+  }
+
+  if (data.meta.source === 'ventes') {
+    const fiables = comparables.filter(c => c.n >= SEUIL_VENTES_FIABLES && c.mediane !== null);
+    if (fiables.length < 2) return null;
+    const bas = fiables.reduce((a, b) => ((b.mediane as number) < (a.mediane as number) ? b : a));
+    const haut = fiables.reduce((a, b) => ((b.mediane as number) > (a.mediane as number) ? b : a));
+    const ecart = ((haut.mediane as number) / (bas.mediane as number) - 1) * 100;
+    return (
+      `Le prix médian va de ${formatEntier(bas.mediane as number)} €/m² (${nom(bas)}) ` +
+      `à ${formatEntier(haut.mediane as number)} €/m² (${nom(haut)})${ecart < SEUIL_ECART_FAIBLE ? ', soit un écart faible' : ''}.`
+    );
+  }
+
+  const avecPart = comparables.filter(c => c.part_pct !== null);
+  if (avecPart.length < 2) return null;
+  const forte = avecPart.reduce((a, b) => ((b.part_pct as number) > (a.part_pct as number) ? b : a));
+  return `La part la plus forte est « ${nom(forte)} » (${formatPourcentage(forte.part_pct as number)}).`;
+}
+
+export function attentionAnalyse(data: AnalyseResponse): string | null {
+  if (data.meta.source === 'dpe') {
+    const { trimestre_min: debut, trimestre_max: fin } = data.meta;
+    if (!debut || !fin) return null;
+    const base =
+      `DPE établis de ${libelleModalite('trimestre', debut)} à ${libelleModalite('trimestre', fin)}, à la vente, ` +
+      'à la location ou pour un logement neuf : ce sont des logements diagnostiqués, pas l’ensemble du parc.';
+    return data.meta.axes.includes('trimestre')
+      ? `${base} Les derniers trimestres peuvent être incomplets : la BDNB reçoit les DPE avec un décalage.`
+      : base;
+  }
+
+  const base = 'Ces prix sont bruts : ils ne tiennent compte que des critères choisis, ni de l’état du bien, ni de son étage.';
+  const fragiles = data.cellules.filter(c => c.n < SEUIL_VENTES_FIABLES);
+  if (fragiles.length === 0) return base;
+  if (data.meta.axes.length === 1) {
+    const detail = fragiles
+      .map(c => `${libelleModalite(data.meta.axes[0], c.modalites[0])} (${formatEntier(c.n)} ventes)`)
+      .join(', ');
+    return `${base} Peu de ventes pour ${detail} : ces prix sont à lire avec prudence.`;
+  }
+  return (
+    `${base} ${fragiles.length} case${fragiles.length > 1 ? 's reposent' : ' repose'} sur moins de ` +
+    `${SEUIL_VENTES_FIABLES} ventes : leurs prix sont à lire avec prudence.`
+  );
 }

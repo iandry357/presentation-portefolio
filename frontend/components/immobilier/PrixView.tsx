@@ -14,6 +14,7 @@ import {
 import { BarresHorizontales, CarteGraphique, COULEURS, ChoixVueArrondissements, Colonnes, Explication, ModeAffichage, Point, VueArrondissements } from './ImmobilierCharts';
 import CarteParis from './CarteParis';
 import { ReperesPrix } from './Reperes';
+import Lecture from './bdnb/Lecture';
 
 // Paramètres
 const TYPES: { id: TypeLocal; label: string }[] = [
@@ -160,7 +161,7 @@ export default function PrixView() {
 
           {data.seuil_applique && data.nb_masquees > 0 && (
             <p className="text-sm text-gray-600 bg-gray-50 border rounded-lg px-4 py-3">
-              {formatEntier(data.nb_masquees)} combinaisons de moins de {data.seuil} ventes sont masquées.
+              {formatEntier(data.nb_masquees)} regroupements de moins de {data.seuil} ventes sont masqués.
               Déverrouillez avec le bouton en haut de la page pour tout voir.
             </p>
           )}
@@ -175,14 +176,18 @@ export default function PrixView() {
                   : `Ventes de ${libelleType} en ${annee} · ${libelleArrondissement(arrondissement)} en bleu, les autres arrondissements en gris`
             }
           >
+            <Lecture
+              voir="Le prix médian d’un mètre carré vendu dans chaque arrondissement de Paris, pour le type de bien et l’année choisis."
+              attention="Prix calculé sur la surface bâtie du DVF (et non la surface Carrez des annonces) ; il ne tient compte ni de l’état du bien, ni de son étage."
+            />
             <Explication>
               <p>
                 La médiane est la valeur du milieu : la moitié des ventes s’est faite en dessous de ce prix,
                 l’autre moitié au-dessus. Elle est moins faussée par une vente exceptionnelle qu’une moyenne.
               </p>
               <p>
-                Le prix au m² est le prix de vente divisé par la surface du logement, pour les ventes d’un seul
-                logement.
+                Le prix au m² est le prix de vente divisé par la surface bâtie indiquée dans le DVF (et non la
+                surface Carrez des annonces), pour les ventes d’un seul logement.
               </p>
               <p>
                 Sur la carte, plus la couleur est foncée, plus le prix est élevé ; les chiffres sont les
@@ -231,6 +236,10 @@ export default function PrixView() {
                 : `Ventes de ${libelleType} · ${libelleArrondissement(arrondissement)} · cliquez sur une année pour l’afficher ci-dessus`
             }
           >
+            <Lecture
+              voir="L’évolution, année après année, du prix médian au m² de l’arrondissement choisi."
+              attention="Une année avec peu de ventes donne un prix moins fiable : le nombre de ventes figure dans l’infobulle."
+            />
             <Explication>
               <p>
                 Chaque colonne est une année, pour l’arrondissement choisi. La hauteur est le prix médian au m²

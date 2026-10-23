@@ -64,17 +64,22 @@ export default function ImmobilierStats() {
   return (
     <div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Tuile label="DPE du parc" valeur={stats.nb_dpe} detail="logements existants, Paris" />
         <Tuile
-          label="Passoires F et G"
+          label="DPE établis"
+          valeur={stats.nb_dpe}
+          detail="logements existants, Paris, depuis juillet 2021"
+          info="Diagnostics établis à la vente, à la location ou pour un logement neuf : ce n'est pas l'ensemble du parc"
+        />
+        <Tuile
+          label="Passoires thermiques (F et G)"
           valeur={stats.nb_passoires}
-          detail={`${pct(stats.nb_passoires, stats.nb_dpe)} du parc`}
+          detail={`${pct(stats.nb_passoires, stats.nb_dpe)} des DPE`}
           info="DPE d'étiquette F ou G"
         />
         <Tuile
           label="DPE refaits"
           valeur={stats.nb_remplacants}
-          detail={`${pct(stats.nb_remplacants, stats.nb_dpe)} du parc`}
+          detail={`${pct(stats.nb_remplacants, stats.nb_dpe)} des DPE`}
           info="DPE qui en remplacent un autre"
         />
         <Tuile

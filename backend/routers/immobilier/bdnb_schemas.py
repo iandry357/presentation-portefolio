@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -103,3 +103,37 @@ class SourcesResponse(BaseModel):
     entonnoir: List[EntonnoirLigne]
     geocodage: List[GeocodageLigne]
     date_maj: Optional[str] = None
+
+
+# ============================================================================
+# Analyse (cube ventes / DPE)
+# ============================================================================
+
+class AnalyseCellule(BaseModel):
+    modalites: List[str]         # une modalité par axe, dans l'ordre des axes demandés
+    n: int                       # ventes ou DPE du groupe
+    mediane: Optional[int] = None   # ventes : prix au m² (€), médiane et quartiles des prix fusionnés
+    q1: Optional[int] = None
+    q3: Optional[int] = None
+    part_pct: Optional[float] = None  # DPE : part du groupe, dans les groupes affichés (par modalité du 1er axe si 2 axes)
+
+
+class AnalyseMeta(BaseModel):
+    source: str                  # ventes | dpe
+    axes: List[str]
+    seuil_applique: bool         # vrai si l'accès est verrouillé : groupes de moins de `seuil` observations retirés
+    seuil: int
+    nb_masquees: int
+    prix_m2_min: Optional[int] = None   # ventes : bornes de prix appliquées
+    prix_m2_max: Optional[int] = None
+    trimestre_min: Optional[str] = None  # plage de trimestres couverte par le cube
+    trimestre_max: Optional[str] = None
+    date_maj: Optional[str] = None
+    recouvrement_typologie: Optional[float] = None  # DPE, si l'axe ou un filtre porte sur les pièces : % de DPE avec typologie
+    modalites: Dict[str, List[str]]  # valeurs présentes dans le cube par dimension de la source, hors filtres (valeurs de filtre valides)
+
+
+
+class AnalyseResponse(BaseModel):
+    meta: AnalyseMeta
+    cellules: List[AnalyseCellule]
