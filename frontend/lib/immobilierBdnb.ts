@@ -1,3 +1,5 @@
+import type { DimensionAnalyse, SourceAnalyse } from '@/lib/immobilierBdnbApi';
+
 // ============================================================================
 // Classes DPE
 // ============================================================================
@@ -79,6 +81,11 @@ export const POSTES: { id: string; libelle: string; couleur: string }[] = [
 // Géocodage
 // ============================================================================
 
+// Première lettre en minuscule, le reste intact : « Classe DPE du bâtiment » devient « classe DPE du bâtiment »
+export function minuscule(texte: string): string {
+  return texte.charAt(0).toLowerCase() + texte.slice(1);
+}
+
 export function majuscule(texte: string): string {
   return texte.charAt(0).toUpperCase() + texte.slice(1);
 }
@@ -90,4 +97,55 @@ export function libelleFiabilite(fiabilite: string): string {
 // « rnb + parcelle + adresse » devient « RNB + parcelle + adresse »
 export function libelleAppariement(appariement: string): string {
   return majuscule(appariement.replace(/\brnb\b/g, 'RNB'));
+}
+
+// ============================================================================
+// Analyse (cube ventes / DPE) : libellés ; les valeurs proposées viennent de meta.modalites
+// ============================================================================
+
+export const NON_RENSEIGNE = 'non renseigné';   // valeur renvoyée par l'API
+export const PIECES_PLAFOND = 6;                // pipeline/analyse/config.py (PIECES_MAX) : 6 = « 6 et plus »
+
+export const SOURCES_ANALYSE: { id: SourceAnalyse; libelle: string }[] = [
+  { id: 'ventes', libelle: 'Ventes' },
+  { id: 'dpe', libelle: 'DPE' },
+];
+
+// Miroir de DIMENSIONS (backend/app/services/immobilier_bdnb_analyse.py), dans l'ordre des sélecteurs
+export const DIMENSIONS_ANALYSE: Record<SourceAnalyse, DimensionAnalyse[]> = {
+  ventes: ['pieces', 'etiquette', 'arrondissement', 'tranche_surface', 'trimestre', 'rattachee'],
+  dpe: ['pieces', 'etiquette', 'arrondissement', 'tranche_surface', 'trimestre'],
+};
+
+export function libelleDimension(dimension: DimensionAnalyse, source: SourceAnalyse): string {
+  switch (dimension) {
+    case 'trimestre': return 'Trimestre';
+    case 'arrondissement': return 'Arrondissement';
+    case 'pieces': return 'Nombre de pièces';
+    case 'tranche_surface': return 'Surface';
+    case 'etiquette': return source === 'dpe' ? 'Étiquette du logement' : 'Étiquette de l’immeuble';
+    case 'rattachee': return 'Immeuble identifié';
+  }
+}
+
+export function libelleModalite(dimension: DimensionAnalyse, valeur: string): string {
+  if (valeur === NON_RENSEIGNE) return majuscule(valeur);
+  switch (dimension) {
+    case 'pieces':
+      return Number(valeur) >= PIECES_PLAFOND ? `${valeur} pièces et plus` : `${valeur} pièce${valeur === '1' ? '' : 's'}`;
+    case 'arrondissement':
+      return valeur === '1' ? '1er' : `${valeur}e`;
+    case 'tranche_surface': {
+      const texte = majuscule(valeur.replace(/^\d\s+/, ''));   // rang de tri retiré
+      return texte.endsWith(' et plus') ? texte.replace(' et plus', ' m² et plus') : `${texte} m²`;
+    }
+    case 'trimestre': {
+      const [annee, trimestre] = valeur.split('-');
+      return `${trimestre} ${annee}`;
+    }
+    case 'rattachee':
+      return valeur === 'oui' ? 'Oui' : 'Non';   // axe « Immeuble identifié » : vente reliée ou non à un immeuble de la BDNB
+    case 'etiquette':
+      return majuscule(valeur);   // A à G, ou « inconnue »
+  }
 }

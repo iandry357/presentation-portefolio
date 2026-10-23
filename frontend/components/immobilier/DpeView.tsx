@@ -13,6 +13,7 @@ import {
 import { BarresHorizontales, CarteGraphique, COULEURS, ChoixVueArrondissements, Colonnes, Explication, ModeAffichage, Point, VueArrondissements } from './ImmobilierCharts';
 import CarteParis from './CarteParis';
 import { ReperesDpe } from './Reperes';
+import Lecture from './bdnb/Lecture';
 
 // Paramètres
 const ETIQUETTES_PASSOIRES: string[] = ['F', 'G'];
@@ -156,16 +157,11 @@ export default function DpeView() {
         titre="Répartition par étiquette"
         sousTitre={`${perimetre} · ${formatEntier(total)} DPE · cliquez sur une colonne`}
       >
-        <Explication>
-          <p>
-            Le DPE (diagnostic de performance énergétique) classe un logement de A (très économe) à G
-            (très énergivore). Chaque colonne compte les logements de Paris, ou de l’arrondissement choisi,
-            pour une étiquette.
-          </p>
-          <p>
-            F et G sont les « passoires énergétiques ». Ne sont comptés que les logements dont le DPE a été
-            établi depuis juillet 2021, pas l’ensemble du parc.
-          </p>
+        <Lecture
+          voir="Combien de logements de Paris, ou de l’arrondissement choisi, portent chaque étiquette du DPE, de A (très économe) à G (très énergivore). F et G sont les passoires thermiques."
+          attention="Ne sont comptés que les logements dont le DPE a été établi depuis juillet 2021, à la vente, à la location ou pour un logement neuf : ce n’est pas l’ensemble du parc parisien."
+        />
+        <Explication titre="Comment utiliser ce graphique">
           <p>
             Cliquez sur une colonne pour voir, dans le graphique du dessous, la part de cette étiquette dans
             chaque arrondissement ; cliquez de nouveau pour revenir à F et G.
@@ -194,12 +190,11 @@ export default function DpeView() {
             : `${baseCible} · ${perimetre} en bleu, les autres arrondissements en gris`
         }
       >
-        <Explication>
-          <p>
-            Pour chaque arrondissement, la part des DPE classés F ou G (ou de l’étiquette choisie dans le
-            graphique du dessus). Plus la barre est longue, plus l’arrondissement compte de logements très
-            énergivores parmi ses DPE.
-          </p>
+        <Lecture
+          voir="Dans chaque arrondissement, la part des DPE classés F ou G (ou de l’étiquette choisie dans le graphique du dessus). Plus la barre est longue, plus l’arrondissement compte de logements très énergivores parmi ses DPE."
+          attention="Une part élevée peut venir d’un parc ancien, ou d’un petit nombre de DPE : l’infobulle donne le nombre de DPE de chaque arrondissement."
+        />
+        <Explication titre="Comment utiliser ce graphique">
           <p>
             Sur la carte, plus la couleur est foncée, plus la part est élevée ; les chiffres sont les numéros
             d’arrondissement. Le bouton « Affichage » permet de passer de la carte aux barres, qui donnent le classement.

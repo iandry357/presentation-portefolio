@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { PrixParisLigne, TypeLocal } from '@/lib/immobilierApi';
-import { formatEntier, formatPourcentage, formatPrixM2 } from '@/lib/immobilier';
+import { LEXIQUE, formatEntier, formatPourcentage, formatPrixM2 } from '@/lib/immobilier';
 import { COULEURS } from './ImmobilierCharts';
 
 // Paramètres
@@ -169,8 +169,9 @@ export function ReperesPrix({
       </p>
       <ExempleVente />
       <p className="text-sm text-gray-600">
-        Le prix au m² est le prix de vente divisé par la surface du logement. Comme il varie beaucoup d’une
-        vente à l’autre, on résume un ensemble de ventes par sa médiane.
+        Le prix au m² est le prix de vente divisé par la surface bâtie indiquée dans le DVF (et non la surface
+        Carrez des annonces). Comme il varie beaucoup d’une vente à l’autre, on résume un ensemble de ventes par
+        sa médiane.
       </p>
       <SchemaMediane />
       <p className="text-sm text-gray-600">
@@ -234,6 +235,25 @@ export function ReperesChangements() {
           probable ».
         </span>
       </div>
+    </CarteRepere>
+  );
+}
+
+// ============================================================================
+// Lexique : accessible depuis toutes les vues (définitions dans lib/immobilier.ts)
+// ============================================================================
+
+export function Lexique() {
+  return (
+    <CarteRepere titre="Lexique : DPE, étiquette, médiane, DVF…">
+      <dl className="space-y-1 text-sm text-gray-600">
+        {LEXIQUE.map(({ terme, definition }) => (
+          <div key={terme}>
+            <dt className="inline font-medium text-gray-900">{terme}</dt>
+            <dd className="inline"> : {definition}</dd>
+          </div>
+        ))}
+      </dl>
     </CarteRepere>
   );
 }

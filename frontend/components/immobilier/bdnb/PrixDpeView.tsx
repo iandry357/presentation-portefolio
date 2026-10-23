@@ -131,7 +131,7 @@ export default function PrixDpeView() {
           )}
 
           <CarteGraphique
-            titre="Prix médian au m² selon la classe DPE du bâtiment"
+            titre="Prix médian au m² selon l’étiquette de l’immeuble"
             sousTitre={
               data.date_vente_min && data.prix_m2_min !== null && data.prix_m2_max !== null
                 ? `Ventes depuis le ${formatDate(data.date_vente_min)} · prix entre ${formatEntier(data.prix_m2_min)} et ${formatEntier(data.prix_m2_max)} €/m²`
@@ -147,16 +147,16 @@ export default function PrixDpeView() {
             <Explication titre="Détails de calcul">
               <p>
                 Le prix médian est la valeur du milieu : la moitié des ventes s’est faite en dessous, l’autre moitié
-                au-dessus. Les médianes sont calculées par BigQuery de façon approchée : elles peuvent varier
-                d’environ 0,2 % d’un calcul à l’autre.
+                au-dessus. Ces médianes sont des valeurs approchées : elles peuvent varier d’environ 0,2 % d’un
+                calcul à l’autre.
               </p>
               <p>
-                La note d’un bâtiment est la note médiane de ses DPE (arrêté 2021). Quand le nombre de DPE est
-                pair, on retient la meilleure des deux notes centrales.
+                La note d’un immeuble est la note médiane des DPE de ses logements (arrêté 2021). Quand le nombre de
+                DPE est pair, on retient la meilleure des deux notes centrales. Ce n’est pas la note du logement vendu.
               </p>
               <p>
-                Chaque bâtiment compte une seule transaction : la transaction représentative de la BDNB. Le prix au
-                m² est celui du local vendu, pas celui de l’ensemble du bâtiment.
+                Chaque immeuble compte pour une seule vente : la vente de référence retenue par la BDNB. Le prix au
+                m² est celui du logement vendu, pas celui de tout l’immeuble.
               </p>
             </Explication>
 
@@ -171,7 +171,7 @@ export default function PrixDpeView() {
 
             <Colonnes
               points={points}
-              colonneNom="Classe"
+              colonneNom="Étiquette"
               colonneValeur="Prix médian (€/m²)"
               colonneDetail="Ventes"
               formater={formatEntier}
@@ -180,8 +180,8 @@ export default function PrixDpeView() {
           </CarteGraphique>
 
           <p className="text-xs text-gray-500">
-            Prix : transaction DVF représentative de chaque bâtiment (BDNB, CSTB). Classes : DPE de l’arrêté 2021
-            (ADEME) rattachés au bâtiment.
+            Prix : vente de référence de chaque immeuble (DVF, via la BDNB du CSTB). Notes : DPE de l’arrêté 2021
+            (ADEME) reliés à l’immeuble.
           </p>
         </div>
       )}

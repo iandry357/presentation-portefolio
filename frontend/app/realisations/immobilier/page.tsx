@@ -10,6 +10,7 @@ import DpeView from '@/components/immobilier/DpeView';
 import PrixView from '@/components/immobilier/PrixView';
 import ChangementsView from '@/components/immobilier/ChangementsView';
 import BdnbOnglet from '@/components/immobilier/bdnb/BdnbOnglet';
+import { Lexique } from '@/components/immobilier/Reperes';
 import { cn } from '@/lib/utils';
 
 const ONGLETS = [
@@ -61,6 +62,10 @@ export default function ImmobilierPage() {
             {label}
           </button>
         ))}
+      </div>
+
+      <div className="mb-6">
+        <Lexique />
       </div>
 
       {onglet === 'bdnb' && <BdnbOnglet />}
