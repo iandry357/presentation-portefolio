@@ -28,6 +28,8 @@ TABLES = [
     "adresse",
     "proprietaire",
     "rel_batiment_groupe_proprietaire",
+    "rel_batiment_groupe_proprietaire",
+    "rel_batiment_groupe_parcelle",
 ]
 
 # Types OGR convertis ; tout le reste (String, WKT, Date, DateTime) reste en texte.
