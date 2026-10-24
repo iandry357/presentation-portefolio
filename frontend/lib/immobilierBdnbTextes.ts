@@ -1,9 +1,9 @@
 import type {
-  AnalyseCellule, AnalyseResponse, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
+  AnalyseCellule, AnalyseResponse, EcartPrix, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
 } from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
-  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite,
+  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite, libelleMethodeRattachement,
   libellePeriode, ordrePeriode, minuscule 
 } from '@/lib/immobilierBdnb';
 
@@ -59,6 +59,20 @@ function extremes(parts: PartPassoires[]): { forte: PartPassoires; faible: PartP
 // Prix et DPE
 // ============================================================================
 
+export const ATTENTION_ECART = 'Cet écart ne tient compte ni du quartier, ni de la surface, ni de l’époque de construction.';
+
+// « Sur cette période, le prix médian des logements F et G est supérieur de 0,9 % à celui des D, un écart faible. »
+export function phraseEcart(ecart: EcartPrix): string | null {
+  const pct = ecart.ecart_pct;
+  if (pct === null) return null;
+  const comparaison =
+    pct === 0
+      ? 'est le même que celui'
+      : `est ${pct < 0 ? 'inférieur' : 'supérieur'} de ${formatPourcentage(Math.abs(pct))} à celui`;
+  return `Sur cette période, le prix médian des logements F et G ${comparaison} des D${Math.abs(pct) < SEUIL_ECART_FAIBLE ? ', un écart faible' : ''}.`;
+}
+
+
 export function retenirPrix(data: PrixDpeResponse): string | null {
   const fiables = data.classes.filter(c => c.nb_ventes >= SEUIL_VENTES_FIABLES && c.prix_m2_median !== null);
   if (fiables.length < 2) return null;
@@ -67,19 +81,13 @@ export function retenirPrix(data: PrixDpeResponse): string | null {
     `Le prix médian va de ${formatEntier(Math.min(...prix))} à ${formatEntier(Math.max(...prix))} €/m² selon la note (${libelleNotes(fiables.map(c => c.classe_dpe))}).`,
   ];
 
-  const pct = data.ecart?.ecart_pct;
-  if (pct !== null && pct !== undefined) {
-    const comparaison =
-      pct === 0
-        ? 'se vendent au même prix que'
-        : `se vendent ${formatPourcentage(Math.abs(pct))} ${pct < 0 ? 'moins' : 'plus'} cher que`;
-    phrases.push(`Les logements F et G ${comparaison} les D${Math.abs(pct) < SEUIL_ECART_FAIBLE ? ', un écart faible' : ''}.`);
-  }
+  const ecart = data.ecart ? phraseEcart(data.ecart) : null;
+  if (ecart) phrases.push(ecart);
   return phrases.join(' ');
 }
 
 export function attentionPrix(data: PrixDpeResponse): string {
-  const base = 'Cet écart ne tient compte ni du quartier, ni de la surface, ni de l’époque de construction.';
+  const base = ATTENTION_ECART;
   const faibles = data.classes.filter(c => c.nb_ventes < SEUIL_VENTES_FIABLES);
   if (faibles.length === 0) return base;
   const detail = faibles.map(c => `${libelleNotes([c.classe_dpe])} (${formatEntier(c.nb_ventes)})`).join(', ');
@@ -218,6 +226,29 @@ export function retenirAppariement(data: SourcesResponse): string | null {
   for (const l of data.geocodage) parMethode.set(l.appariement, (parMethode.get(l.appariement) ?? 0) + l.nb_liens);
   const [methode, nb] = [...parMethode.entries()].reduce((a, b) => (b[1] > a[1] ? b : a));
   return `La méthode la plus fréquente est « ${libelleAppariement(methode)} » (${formatPourcentage((100 * nb) / total)} des rattachements).`;
+}
+
+export function retenirQualite(data: SourcesResponse): string | null {
+  const q = data.qualite;
+  if (!q || q.precision_pct === null) return null;
+  const phrase =
+    `${formatPourcentage(q.precision_pct)} des ventes de contrôle sont rattachées au bon immeuble ` +
+    `(${formatEntier(q.nb_ok)} sur ${formatEntier(q.nb_ok + q.nb_erreur)}).`;
+  const fiables = q.methodes.filter(m => m.precision_pct !== null && m.nb_ventes >= SEUIL_VENTES_FIABLES);
+  if (fiables.length < 2) return phrase;
+  const moins = fiables.reduce((a, b) => ((b.precision_pct as number) < (a.precision_pct as number) ? b : a));
+  return (
+    `${phrase} La méthode la moins sûre est « ${libelleMethodeRattachement(moins.methode)} » ` +
+    `(${formatPourcentage(moins.precision_pct as number)}, ${formatEntier(moins.nb_ventes)} ventes).`
+  );
+}
+
+export function attentionQualite(data: SourcesResponse): string | null {
+  if (!data.qualite) return null;
+  return (
+    'La mesure porte sur les ventes que la BDNB a elle-même retenues (une par immeuble) : elle ne vaut pas forcément ' +
+    'pour toutes les ventes. Les ventes non rattachées ne figurent dans aucun prix par étiquette.'
+  );
 }
 
 // ============================================================================

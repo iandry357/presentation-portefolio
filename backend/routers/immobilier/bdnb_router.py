@@ -6,21 +6,21 @@ Prix : classes de moins de SEUIL_VENTES ventes masquées si l'accès est verroui
 import logging
 from typing import List, Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state
 from app.services.immobilier_bdnb_analyse import (
-    DIMENSIONS, modalites, modalites_par_dimension, pivoter, recouvrement_typologie, resume,
+    DIMENSIONS, modalites, modalites_par_dimension, pivoter, prix_groupe, recouvrement_typologie, resume,
 )
 from app.services.immobilier_bdnb_bigquery import (
     fetch_analyse_dpe, fetch_analyse_ventes, fetch_deperditions, fetch_entonnoir, fetch_geocodage,
-    fetch_parc_energie, fetch_parc_periode, fetch_prix_dpe, fetch_prix_ecart, fetch_sources, fetch_stats,
+    fetch_parc_energie, fetch_parc_periode, fetch_qualite, fetch_sources, fetch_stats,
 )
 from routers.immobilier.bdnb_schemas import (
     AnalyseCellule, AnalyseMeta, AnalyseResponse, BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne,
-    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse, SourceLigne,
-    SourcesResponse,
+    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse,
+    QualiteMethode, QualiteRattachement, SourceLigne, SourcesResponse,
 )
 
 
@@ -33,7 +33,10 @@ SOURCE_BDNB = "BDNB (CSTB)"   # libellé de la source BDNB dans SOURCES (pipelin
 SEUIL_ANALYSE = 5             # analyse : groupes de moins de N observations masqués si l'accès est verrouillé
 PRIX_M2_MIN = 2000            # bornes de prix du cube des ventes (pipeline/analyse/config.py)
 PRIX_M2_MAX = 30000
-
+DEPARTEMENT_QUALITE = "75"    # département dont la validation du rattachement est affichée
+CLASSES_DPE = {"A", "B", "C", "D", "E", "F", "G"}   # étiquettes comparées (« inconnue » écartée)
+CLASSES_PASSOIRES = {"F", "G"}
+CLASSE_REFERENCE = {"D"}
 
 async def _lire(*fetchers):
     try:
@@ -57,15 +60,56 @@ def _ecart_pct(median_fg: Optional[float], median_d: Optional[float]) -> Optiona
     return round((median_fg / median_d - 1) * 100, 1)
 
 
+def _precision_pct(ok: int, erreur: int) -> Optional[float]:
+    """Rattachements corrects parmi les rattachements retenus, en %, arrondi à 0,1."""
+    return round(100 * ok / (ok + erreur), 1) if ok + erreur else None
+
+
+def _qualite(lignes: list[dict]) -> Optional[QualiteRattachement]:
+    """Validation du rattachement des ventes pour la dernière livraison du département ; colonne « confirmé » fusionnée."""
+    lignes = [l for l in lignes if l["code_departement"] == DEPARTEMENT_QUALITE]
+    if not lignes:
+        return None
+    livraison = max(l["livraison"] for l in lignes)
+    cumul: dict[str, dict[str, int]] = {}
+    for l in lignes:
+        if l["livraison"] != livraison:
+            continue
+        c = cumul.setdefault(l["methode"], {"nb_ventes": 0, "nb_ok": 0, "nb_erreur": 0})
+        c["nb_ventes"] += l["retrouvees"]
+        c["nb_ok"] += l["ok"]
+        c["nb_erreur"] += l["erreur"]
+    nb_ok = sum(c["nb_ok"] for c in cumul.values())
+    nb_erreur = sum(c["nb_erreur"] for c in cumul.values())
+    return QualiteRattachement(
+        livraison=livraison,
+        nb_controle=sum(c["nb_ventes"] for c in cumul.values()),
+        nb_ok=nb_ok,
+        nb_erreur=nb_erreur,
+        precision_pct=_precision_pct(nb_ok, nb_erreur),
+        methodes=[
+            QualiteMethode(methode=m, precision_pct=_precision_pct(c["nb_ok"], c["nb_erreur"]), **c)
+            for m, c in cumul.items()
+        ],
+    )
+
+
 # ============================================================================
 # GET /immobilier/bdnb/stats — Bandeau (public)
 # ============================================================================
 
 @router.get("/stats", response_model=BdnbStatsResponse)
 async def get_stats():
-    stats, sources = await _lire(fetch_stats, fetch_sources)
+    stats, sources, ventes = await _lire(fetch_stats, fetch_sources, fetch_analyse_ventes)
     millesime = next((s["millesime"] for s in sources if s["source"] == SOURCE_BDNB), None)
-    return BdnbStatsResponse(**_premiere_ligne(stats, "agg_bdnb_stats"), millesime=millesime)
+    periode = resume(ventes) or {}
+    return BdnbStatsResponse(
+        **_premiere_ligne(stats, "agg_bdnb_stats"),
+        nb_transactions=sum(l["nb_ventes"] for l in ventes),
+        trimestre_min=periode.get("trimestre_min"),
+        trimestre_max=periode.get("trimestre_max"),
+        millesime=millesime,
+    )
 
 
 # ============================================================================
@@ -74,34 +118,36 @@ async def get_stats():
 
 @router.get("/prix-dpe", response_model=PrixDpeResponse)
 async def get_prix_dpe(deverrouille: bool = Depends(get_access_state)):
-    classes, ecarts = await _lire(fetch_prix_dpe, fetch_prix_ecart)
-    ecart = _premiere_ligne(ecarts, "agg_bdnb_prix_ecart")
-    classes = sorted(classes, key=lambda l: l["classe_dpe"])
+    (lignes,) = await _lire(fetch_analyse_ventes)
+    periode = resume(lignes)
+    if periode is None:
+        raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube d'analyse)")
 
-    nb_masquees = 0
-    if not deverrouille:
-        gardees = [l for l in classes if l["nb_ventes"] >= SEUIL_VENTES]
-        nb_masquees = len(classes) - len(gardees)
-        classes = gardees
+    cellules, nb_masquees = pivoter(
+        lignes, "ventes", ["etiquette"], {"etiquette": CLASSES_DPE}, SEUIL_VENTES, masquer=not deverrouille,
+    )
 
     ecart_prix = None
-    if deverrouille or min(ecart["nb_fg"], ecart["nb_d"]) >= SEUIL_VENTES:
+    nb_fg, median_fg = prix_groupe(lignes, {"etiquette": CLASSES_PASSOIRES})
+    nb_d, median_d = prix_groupe(lignes, {"etiquette": CLASSE_REFERENCE})
+    if deverrouille or min(nb_fg, nb_d) >= SEUIL_VENTES:
         ecart_prix = EcartPrix(
-            nb_fg=ecart["nb_fg"],
-            prix_m2_median_fg=ecart["prix_m2_median_fg"],
-            nb_d=ecart["nb_d"],
-            prix_m2_median_d=ecart["prix_m2_median_d"],
-            ecart_pct=_ecart_pct(ecart["prix_m2_median_fg"], ecart["prix_m2_median_d"]),
+            nb_fg=nb_fg, prix_m2_median_fg=median_fg, nb_d=nb_d, prix_m2_median_d=median_d,
+            ecart_pct=_ecart_pct(median_fg, median_d),
         )
 
     return PrixDpeResponse(
         seuil_applique=not deverrouille,
         seuil=SEUIL_VENTES,
         nb_masquees=nb_masquees,
-        date_vente_min=ecart["date_vente_min"],
-        prix_m2_min=ecart["prix_m2_min"],
-        prix_m2_max=ecart["prix_m2_max"],
-        classes=[PrixDpeLigne(**l) for l in classes],
+        trimestre_min=periode["trimestre_min"],
+        trimestre_max=periode["trimestre_max"],
+        prix_m2_min=PRIX_M2_MIN,
+        prix_m2_max=PRIX_M2_MAX,
+        classes=[
+            PrixDpeLigne(classe_dpe=c["modalites"][0], nb_ventes=c["n"], prix_m2_median=c["mediane"])
+            for c in cellules
+        ],
         ecart=ecart_prix,
     )
 
@@ -132,13 +178,15 @@ async def get_parc():
 
 @router.get("/sources", response_model=SourcesResponse)
 async def get_sources():
-    sources, entonnoir, geocodage = await _lire(fetch_sources, fetch_entonnoir, fetch_geocodage)
+    sources, entonnoir, geocodage, qualite = await _lire(fetch_sources, fetch_entonnoir, fetch_geocodage, fetch_qualite)
     return SourcesResponse(
         sources=[SourceLigne(**l) for l in sorted(sources, key=lambda l: l["source"])],
         entonnoir=[EntonnoirLigne(**l) for l in sorted(entonnoir, key=lambda l: l["etape"])],
         geocodage=[GeocodageLigne(**l) for l in sorted(geocodage, key=lambda l: -l["nb_liens"])],
+        qualite=_qualite(qualite),
         date_maj=max((l["date_maj"] for l in sources), default=None),
     )
+
 
 
 # ============================================================================
@@ -147,6 +195,7 @@ async def get_sources():
 
 @router.get("/analyse", response_model=AnalyseResponse)
 async def get_analyse(
+    response: Response,
     source: Literal["ventes", "dpe"],
     axe: List[str] = Query(...),
     trimestre: Optional[List[str]] = Query(None),
@@ -157,6 +206,8 @@ async def get_analyse(
     rattachee: Optional[List[str]] = Query(None),
     deverrouille: bool = Depends(get_access_state),
 ):
+    response.headers["X-Robots-Tag"] = "noindex, nofollow"
+
     (lignes,) = await _lire(fetch_analyse_ventes if source == "ventes" else fetch_analyse_dpe)
     if not lignes:
         raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube d'analyse)")

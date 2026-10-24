@@ -149,3 +149,25 @@ export function libelleModalite(dimension: DimensionAnalyse, valeur: string): st
       return majuscule(valeur);   // A à G, ou « inconnue »
   }
 }
+
+
+// ============================================================================
+// Rattachement des ventes aux immeubles : méthodes de pipeline/dvf_etalab/rattachement.py
+// ============================================================================
+
+export const METHODES_NON_RATTACHEES = ['ambigue', 'aucune'];   // ventes laissées sans immeuble
+
+const LIBELLES_METHODE_RATTACHEMENT: Record<string, string> = {
+  concordent: 'Parcelle et adresse concordent',
+  'parcelle seule': 'Parcelle seule',
+  croisee: 'Parcelle et adresse croisées',
+  'adresse seule': 'Adresse seule',
+  divergent: 'Parcelle et adresse divergent (adresse retenue)',
+  ambigue: 'Ambiguë (non rattachée)',
+  aucune: 'Aucun candidat (non rattachée)',
+};
+
+export function libelleMethodeRattachement(methode: string): string {
+  return LIBELLES_METHODE_RATTACHEMENT[methode] ?? majuscule(methode);
+}
+

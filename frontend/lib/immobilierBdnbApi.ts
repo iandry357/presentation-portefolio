@@ -8,7 +8,9 @@ export interface BdnbStatsResponse {
   nb_batiments: number;
   nb_dpe: number;                // DPE retenus (arrêté 2021, logement, 3cl, surface > 0)
   nb_adresses: number;
-  nb_transactions: number;       // transactions DVF représentatives (une par bâtiment)
+  nb_transactions: number;       // ventes de logement du cube d'analyse (DVF Etalab, prix dans les bornes)
+  trimestre_min: string | null;  // plage de trimestres de ces ventes (AAAA-Tn)
+  trimestre_max: string | null;
   millesime: string | null;      // millésime de la BDNB
   date_maj: string | null;
 }
@@ -31,7 +33,8 @@ export interface PrixDpeResponse {
   seuil_applique: boolean;       // vrai si l'accès est verrouillé : classes sous `seuil` ventes retirées
   seuil: number;
   nb_masquees: number;
-  date_vente_min: string | null; // ventes retenues depuis cette date (AAAA-MM-JJ)
+  trimestre_min: string | null;  // plage de trimestres des ventes (AAAA-Tn)
+  trimestre_max: string | null;
   prix_m2_min: number | null;    // bornes de prix_m2_local appliquées
   prix_m2_max: number | null;
   classes: PrixDpeLigne[];
@@ -83,10 +86,28 @@ export interface GeocodageLigne {
   nb_liens: number;
 }
 
+export interface QualiteMethode {
+  methode: string;               // concordent, parcelle seule, adresse seule, divergent, croisee, ambigue, aucune
+  nb_ventes: number;             // ventes de contrôle retrouvées par cette méthode
+  nb_ok: number;
+  nb_erreur: number;
+  precision_pct: number | null;  // ok / (ok + erreur) ; null si aucun rattachement retenu
+}
+
+export interface QualiteRattachement {
+  livraison: string;
+  nb_controle: number;
+  nb_ok: number;
+  nb_erreur: number;
+  precision_pct: number | null;
+  methodes: QualiteMethode[];
+}
+
 export interface SourcesResponse {
   sources: SourceLigne[];
   entonnoir: EntonnoirLigne[];
   geocodage: GeocodageLigne[];
+  qualite: QualiteRattachement | null;
   date_maj: string | null;
 }
 

@@ -3,8 +3,8 @@ import logging
 from google.cloud import bigquery
 
 from pipeline.bdnb.config import (
-    AGG_DEPERDITIONS, AGG_GEOCODAGE, AGG_PARC_ENERGIE, AGG_PARC_PERIODE, AGG_PRIX_DPE, AGG_PRIX_ECART, AGG_STATS,
-    BQ_DATASET, DATE_VENTE_MIN, GCP_PROJECT_ID, GCP_SA_KEY_PATH, POSTES_DEPERDITION, PRIX_M2_MAX, PRIX_M2_MIN,
+    AGG_DEPERDITIONS, AGG_GEOCODAGE, AGG_PARC_ENERGIE, AGG_PARC_PERIODE, AGG_STATS,
+    BQ_DATASET, GCP_PROJECT_ID, GCP_SA_KEY_PATH, POSTES_DEPERDITION,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,65 +29,6 @@ def _creer_table(nom, requete):
     nb_lignes = client.get_table(f"{GCP_PROJECT_ID}.{BQ_DATASET}.{nom}").num_rows
     logger.info("Table agrégée %s : %d lignes", nom, nb_lignes)
     return nb_lignes
-
-
-def _ventes_par_classe():
-    """CTE : une ligne par vente retenue (depuis DATE_VENTE_MIN, prix dans les bornes) avec la classe médiane
-    des DPE de son bâtiment. Médiane basse : pour un nombre pair de DPE, la meilleure des deux classes centrales."""
-    return f"""
-        WITH classe_batiment AS (
-            SELECT r.batiment_groupe_id,
-                   ARRAY_AGG(d.classe_bilan_dpe ORDER BY d.classe_bilan_dpe) AS classes
-            FROM {_table("bdnb_rel_dpe_batiment")} r
-            JOIN {_table("bdnb_dpe_logement")} d USING (identifiant_dpe)
-            WHERE d.classe_bilan_dpe IS NOT NULL
-            GROUP BY r.batiment_groupe_id
-        ),
-        ventes_par_classe AS (
-            SELECT c.classes[OFFSET(DIV(ARRAY_LENGTH(c.classes) - 1, 2))] AS classe_dpe, v.prix_m2_local
-            FROM {_table("bdnb_dvf_representatif")} v
-            JOIN classe_batiment c USING (batiment_groupe_id)
-            WHERE v.date_mutation >= DATE '{DATE_VENTE_MIN}'
-              AND v.prix_m2_local BETWEEN {PRIX_M2_MIN} AND {PRIX_M2_MAX}
-        )
-    """
-
-
-def construire_agg_prix_dpe():
-    """Prix au m² par classe DPE du bâtiment, et écart F+G / D (médianes calculées sur toutes les ventes du groupe)."""
-    ligne = _une_ligne(f"""
-        SELECT COUNTIF(prix_m2_local BETWEEN {PRIX_M2_MIN} AND {PRIX_M2_MAX}) AS retenues,
-               COUNTIF(prix_m2_local IS NULL OR prix_m2_local NOT BETWEEN {PRIX_M2_MIN} AND {PRIX_M2_MAX}) AS ecartees
-        FROM {_table("bdnb_dvf_representatif")}
-        WHERE date_mutation >= DATE '{DATE_VENTE_MIN}'
-    """)
-    logger.info(
-        "Ventes depuis %s : retenues=%d écartées=%d (prix absent ou hors %d-%d €/m²)",
-        DATE_VENTE_MIN, ligne["retenues"], ligne["ecartees"], PRIX_M2_MIN, PRIX_M2_MAX,
-    )
-
-    cte = _ventes_par_classe()
-    _creer_table(AGG_PRIX_DPE, f"""{cte}
-        SELECT
-            classe_dpe,
-            COUNT(*) AS nb_ventes,
-            ROUND(APPROX_QUANTILES(prix_m2_local, 2)[OFFSET(1)], 0) AS prix_m2_median,
-            CURRENT_TIMESTAMP() AS date_maj
-        FROM ventes_par_classe
-        GROUP BY classe_dpe
-    """)
-    return _creer_table(AGG_PRIX_ECART, f"""{cte}
-        SELECT
-            COUNTIF(classe_dpe IN ('F', 'G')) AS nb_fg,
-            ROUND(APPROX_QUANTILES(IF(classe_dpe IN ('F', 'G'), prix_m2_local, NULL), 2)[OFFSET(1)], 0) AS prix_m2_median_fg,
-            COUNTIF(classe_dpe = 'D') AS nb_d,
-            ROUND(APPROX_QUANTILES(IF(classe_dpe = 'D', prix_m2_local, NULL), 2)[OFFSET(1)], 0) AS prix_m2_median_d,
-            DATE '{DATE_VENTE_MIN}' AS date_vente_min,
-            {PRIX_M2_MIN} AS prix_m2_min,
-            {PRIX_M2_MAX} AS prix_m2_max,            
-            CURRENT_TIMESTAMP() AS date_maj
-        FROM ventes_par_classe
-    """)
 
 
 def construire_agg_parc():
@@ -156,12 +97,10 @@ def construire_agg_stats():
             (SELECT COUNT(*) FROM {_table("bdnb_batiment_groupe")}) AS nb_batiments,
             (SELECT COUNT(*) FROM {_table("bdnb_dpe_logement")}) AS nb_dpe,
             (SELECT COUNT(*) FROM {_table("bdnb_adresse")}) AS nb_adresses,
-            (SELECT COUNT(*) FROM {_table("bdnb_dvf_representatif")}) AS nb_transactions,
             CURRENT_TIMESTAMP() AS date_maj
     """)
 
 
 def construire_agregats():
-    construire_agg_prix_dpe()
     construire_agg_parc()
     construire_agg_stats()

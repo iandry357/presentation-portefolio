@@ -80,11 +80,6 @@ TABLES = {
 }
 
 
-# Agrégats (phase 3)
-DATE_VENTE_MIN = "2021-07-01"  # premiers DPE de l'arrêté 2021 : fin juin 2021
-PRIX_M2_MIN = 2000  # bornes de prix_m2_local, identiques à la V1
-PRIX_M2_MAX = 30000
-
 # Postes de déperdition (clé : nom du poste dans l'agrégat, valeur : colonne de bdnb_dpe_logement)
 POSTES_DEPERDITION = {
     "murs": "deperdition_mur",
@@ -95,8 +90,6 @@ POSTES_DEPERDITION = {
     "portes": "deperdition_porte",
 }
 
-AGG_PRIX_DPE = "agg_bdnb_prix_dpe"
-AGG_PRIX_ECART = "agg_bdnb_prix_ecart"
 AGG_PARC_PERIODE = "agg_bdnb_parc_periode"
 AGG_PARC_ENERGIE = "agg_bdnb_parc_energie"
 AGG_DEPERDITIONS = "agg_bdnb_deperditions"
@@ -107,12 +100,13 @@ AGG_STATS = "agg_bdnb_stats"
 TABLE_SOURCES = "bdnb_sources"
 TABLE_ENTONNOIR = "bdnb_entonnoir"
 
-# Sources de la BDNB, millésimes vérifiés le 2026-10-22 (cahier immobilier-bdnb.md, section 3).
+# Sources de la BDNB, millésimes vérifiés le 2026-10-24 (cahier immobilier-bdnb.md, section 3).
 # À mettre à jour à chaque nouveau millésime chargé.
 SOURCES = [
     {"source": "BDNB (CSTB)", "millesime": "2026-02.b (v0.7.12)", "couverture": "Paris (75), publié le 2026-10-07"},
     {"source": "DPE ADEME (arrêté 2021)", "millesime": "2026-09", "couverture": "du 2021-06-30 au 2026-09-13"},
-    {"source": "DVF open (Cerema)", "millesime": "2025-10-14", "couverture": "mutations du 2014-01-02 au 2025-06-30"},
+    {"source": "DVF open (Cerema)", "millesime": "2025-10-14", "couverture": "ventes de référence de la BDNB (une par immeuble), utilisées pour contrôler le rattachement ; mutations du 2014-01-02 au 2025-06-30"},
+    {"source": "DVF Etalab (géolocalisé)", "millesime": "2026-10", "couverture": "mutations du 2021-07-01 au 2026-06-30, publié le 2026-10-20"},
     {"source": "BAN (adresses)", "millesime": "2026T1", "couverture": None},
     {"source": "Fichiers fonciers", "millesime": "2025-12-31", "couverture": None},
 ]
