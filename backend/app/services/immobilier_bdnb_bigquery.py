@@ -22,6 +22,7 @@ TABLE_SOURCES = "bdnb_sources"
 TABLE_ENTONNOIR = "bdnb_entonnoir"
 TABLE_ANALYSE_VENTES = "agg_analyse_ventes"
 TABLE_ANALYSE_DPE = "agg_analyse_dpe"
+TABLE_QUALITE = "dvf_etalab_qualite"
 
 
 def _lire_table(nom: str, colonnes: str) -> list[dict]:
@@ -75,6 +76,14 @@ def fetch_sources() -> list[dict]:
 
 def fetch_entonnoir() -> list[dict]:
     return _lire_table(TABLE_ENTONNOIR, "etape, libelle, nb_dpe")
+
+
+def fetch_qualite() -> list[dict]:
+    """Validation du rattachement des ventes aux bâtiments : une ligne par (livraison, département, méthode, confirmé)."""
+    return _lire_table(
+        TABLE_QUALITE,
+        "livraison, code_departement, methode, retrouvees, ok, erreur",
+    )
 
 
 def fetch_analyse_ventes() -> list[dict]:

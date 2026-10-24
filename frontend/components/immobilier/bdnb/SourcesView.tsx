@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { SourcesResponse, getBdnbSources } from '@/lib/immobilierBdnbApi';
-import { libelleAppariement, libelleFiabilite } from '@/lib/immobilierBdnb';
-import { retenirAppariement, retenirEntonnoir, retenirGeocodage } from '@/lib/immobilierBdnbTextes';
+import { METHODES_NON_RATTACHEES, libelleAppariement, libelleFiabilite, libelleMethodeRattachement } from '@/lib/immobilierBdnb';
+import { attentionQualite, retenirAppariement, retenirEntonnoir, retenirGeocodage, retenirQualite } from '@/lib/immobilierBdnbTextes';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import { CarteGraphique, COULEURS, Explication } from '../ImmobilierCharts';
 import Lecture from './Lecture';
@@ -98,6 +98,13 @@ export default function SourcesView() {
     .sort(([, a], [, b]) => b - a)
     .map(([cle, nb]) => ({ nom: libelleAppariement(cle), valeur: nb, detail: part(nb) }));
 
+    // Qualité du rattachement des ventes : les ventes non rattachées en dernier, les autres par nombre de ventes
+  const methodes = [...(data.qualite?.methodes ?? [])].sort(
+    (a, b) =>
+      Number(METHODES_NON_RATTACHEES.includes(a.methode)) - Number(METHODES_NON_RATTACHEES.includes(b.methode)) ||
+      b.nb_ventes - a.nb_ventes,
+  );
+
   return (
     <div className="space-y-6">
 
@@ -180,8 +187,64 @@ export default function SourcesView() {
         <BarresListe lignes={appariement} />
       </CarteGraphique>
 
+            {data.qualite && (
+        <CarteGraphique
+          titre="Rattachement des ventes aux immeubles"
+          sousTitre={`Ventes du DVF Etalab (livraison ${data.qualite.livraison}) reliées à un immeuble de la BDNB, contrôlées sur ${formatEntier(data.qualite.nb_controle)} ventes`}
+        >
+          <Lecture
+            voir="Chaque vente est reliée à l’immeuble où elle a eu lieu, par sa parcelle cadastrale et par son adresse. Ce tableau compare ce rattachement à celui de la BDNB sur ses propres ventes."
+            retenir={retenirQualite(data)}
+            attention={attentionQualite(data)}
+          />
+          <Explication titre="Détails des méthodes">
+            <p>
+              « Concordent » : la parcelle et l’adresse désignent le même immeuble. « Parcelle seule » et « adresse
+              seule » : un seul des deux critères désigne un immeuble. « Divergent » : les deux critères désignent deux
+              immeubles différents, on retient l’adresse. « Croisées » : aucun critère ne suffit seul, mais un seul
+              immeuble figure dans les deux listes. « Ambiguë » : plusieurs immeubles possibles, la vente n’est
+              rattachée à aucun.
+            </p>
+          </Explication>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-gray-500 border-b">
+                  <th className="py-1.5 font-medium">Méthode</th>
+                  <th className="py-1.5 font-medium text-right">Ventes</th>
+                  <th className="py-1.5 pl-4 font-medium">Précision</th>
+                </tr>
+              </thead>
+              <tbody>
+                {methodes.map(m => (
+                  <tr key={m.methode} className="border-b last:border-0">
+                    <td className="py-1.5 text-gray-700">{libelleMethodeRattachement(m.methode)}</td>
+                    <td className="py-1.5 text-gray-700 text-right">{formatEntier(m.nb_ventes)}</td>
+                    <td className="py-1.5 pl-4">
+                      {m.precision_pct === null ? (
+                        <span className="text-xs text-gray-500">Non rattachée</span>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <div className="w-24 h-3 bg-gray-100 rounded-r">
+                            <div
+                              className="h-3 rounded-r"
+                              style={{ width: `${m.precision_pct}%`, backgroundColor: COULEURS.slot1 }}
+                            />
+                          </div>
+                          <span className="text-xs text-gray-600 whitespace-nowrap">{formatPourcentage(m.precision_pct)}</span>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CarteGraphique>
+      )}
+
       <p className="text-xs text-gray-500">
-        BDNB (CSTB), Licence Ouverte 2.0. DPE : ADEME. Transactions : DVF (Cerema). Adresses : BAN.
+        BDNB (CSTB), Licence Ouverte 2.0. DPE : ADEME. Transactions : DVF (Cerema, Etalab). Adresses : BAN.
       </p>
     </div>
   );

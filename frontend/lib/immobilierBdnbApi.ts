@@ -83,10 +83,28 @@ export interface GeocodageLigne {
   nb_liens: number;
 }
 
+export interface QualiteMethode {
+  methode: string;               // concordent, parcelle seule, adresse seule, divergent, croisee, ambigue, aucune
+  nb_ventes: number;             // ventes de contrôle retrouvées par cette méthode
+  nb_ok: number;
+  nb_erreur: number;
+  precision_pct: number | null;  // ok / (ok + erreur) ; null si aucun rattachement retenu
+}
+
+export interface QualiteRattachement {
+  livraison: string;
+  nb_controle: number;
+  nb_ok: number;
+  nb_erreur: number;
+  precision_pct: number | null;
+  methodes: QualiteMethode[];
+}
+
 export interface SourcesResponse {
   sources: SourceLigne[];
   entonnoir: EntonnoirLigne[];
   geocodage: GeocodageLigne[];
+  qualite: QualiteRattachement | null;
   date_maj: string | null;
 }
 

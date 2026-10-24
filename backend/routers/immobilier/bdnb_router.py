@@ -15,12 +15,12 @@ from app.services.immobilier_bdnb_analyse import (
 )
 from app.services.immobilier_bdnb_bigquery import (
     fetch_analyse_dpe, fetch_analyse_ventes, fetch_deperditions, fetch_entonnoir, fetch_geocodage,
-    fetch_parc_energie, fetch_parc_periode, fetch_prix_dpe, fetch_prix_ecart, fetch_sources, fetch_stats,
+    fetch_parc_energie, fetch_parc_periode, fetch_prix_dpe, fetch_prix_ecart, fetch_qualite, fetch_sources, fetch_stats,
 )
 from routers.immobilier.bdnb_schemas import (
     AnalyseCellule, AnalyseMeta, AnalyseResponse, BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne,
-    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse, SourceLigne,
-    SourcesResponse,
+    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse,
+    QualiteMethode, QualiteRattachement, SourceLigne, SourcesResponse,
 )
 
 
@@ -33,6 +33,7 @@ SOURCE_BDNB = "BDNB (CSTB)"   # libellé de la source BDNB dans SOURCES (pipelin
 SEUIL_ANALYSE = 5             # analyse : groupes de moins de N observations masqués si l'accès est verrouillé
 PRIX_M2_MIN = 2000            # bornes de prix du cube des ventes (pipeline/analyse/config.py)
 PRIX_M2_MAX = 30000
+DEPARTEMENT_QUALITE = "75"    # département dont la validation du rattachement est affichée
 
 
 async def _lire(*fetchers):
@@ -55,6 +56,40 @@ def _ecart_pct(median_fg: Optional[float], median_d: Optional[float]) -> Optiona
     if median_fg is None or not median_d:
         return None
     return round((median_fg / median_d - 1) * 100, 1)
+
+
+def _precision_pct(ok: int, erreur: int) -> Optional[float]:
+    """Rattachements corrects parmi les rattachements retenus, en %, arrondi à 0,1."""
+    return round(100 * ok / (ok + erreur), 1) if ok + erreur else None
+
+
+def _qualite(lignes: list[dict]) -> Optional[QualiteRattachement]:
+    """Validation du rattachement des ventes pour la dernière livraison du département ; colonne « confirmé » fusionnée."""
+    lignes = [l for l in lignes if l["code_departement"] == DEPARTEMENT_QUALITE]
+    if not lignes:
+        return None
+    livraison = max(l["livraison"] for l in lignes)
+    cumul: dict[str, dict[str, int]] = {}
+    for l in lignes:
+        if l["livraison"] != livraison:
+            continue
+        c = cumul.setdefault(l["methode"], {"nb_ventes": 0, "nb_ok": 0, "nb_erreur": 0})
+        c["nb_ventes"] += l["retrouvees"]
+        c["nb_ok"] += l["ok"]
+        c["nb_erreur"] += l["erreur"]
+    nb_ok = sum(c["nb_ok"] for c in cumul.values())
+    nb_erreur = sum(c["nb_erreur"] for c in cumul.values())
+    return QualiteRattachement(
+        livraison=livraison,
+        nb_controle=sum(c["nb_ventes"] for c in cumul.values()),
+        nb_ok=nb_ok,
+        nb_erreur=nb_erreur,
+        precision_pct=_precision_pct(nb_ok, nb_erreur),
+        methodes=[
+            QualiteMethode(methode=m, precision_pct=_precision_pct(c["nb_ok"], c["nb_erreur"]), **c)
+            for m, c in cumul.items()
+        ],
+    )
 
 
 # ============================================================================
@@ -132,13 +167,15 @@ async def get_parc():
 
 @router.get("/sources", response_model=SourcesResponse)
 async def get_sources():
-    sources, entonnoir, geocodage = await _lire(fetch_sources, fetch_entonnoir, fetch_geocodage)
+    sources, entonnoir, geocodage, qualite = await _lire(fetch_sources, fetch_entonnoir, fetch_geocodage, fetch_qualite)
     return SourcesResponse(
         sources=[SourceLigne(**l) for l in sorted(sources, key=lambda l: l["source"])],
         entonnoir=[EntonnoirLigne(**l) for l in sorted(entonnoir, key=lambda l: l["etape"])],
         geocodage=[GeocodageLigne(**l) for l in sorted(geocodage, key=lambda l: -l["nb_liens"])],
+        qualite=_qualite(qualite),
         date_maj=max((l["date_maj"] for l in sources), default=None),
     )
+
 
 
 # ============================================================================

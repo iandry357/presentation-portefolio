@@ -3,7 +3,7 @@ import type {
 } from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
-  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite,
+  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite, libelleMethodeRattachement,
   libellePeriode, ordrePeriode, minuscule 
 } from '@/lib/immobilierBdnb';
 
@@ -218,6 +218,29 @@ export function retenirAppariement(data: SourcesResponse): string | null {
   for (const l of data.geocodage) parMethode.set(l.appariement, (parMethode.get(l.appariement) ?? 0) + l.nb_liens);
   const [methode, nb] = [...parMethode.entries()].reduce((a, b) => (b[1] > a[1] ? b : a));
   return `La méthode la plus fréquente est « ${libelleAppariement(methode)} » (${formatPourcentage((100 * nb) / total)} des rattachements).`;
+}
+
+export function retenirQualite(data: SourcesResponse): string | null {
+  const q = data.qualite;
+  if (!q || q.precision_pct === null) return null;
+  const phrase =
+    `${formatPourcentage(q.precision_pct)} des ventes de contrôle sont rattachées au bon immeuble ` +
+    `(${formatEntier(q.nb_ok)} sur ${formatEntier(q.nb_ok + q.nb_erreur)}).`;
+  const fiables = q.methodes.filter(m => m.precision_pct !== null && m.nb_ventes >= SEUIL_VENTES_FIABLES);
+  if (fiables.length < 2) return phrase;
+  const moins = fiables.reduce((a, b) => ((b.precision_pct as number) < (a.precision_pct as number) ? b : a));
+  return (
+    `${phrase} La méthode la moins sûre est « ${libelleMethodeRattachement(moins.methode)} » ` +
+    `(${formatPourcentage(moins.precision_pct as number)}, ${formatEntier(moins.nb_ventes)} ventes).`
+  );
+}
+
+export function attentionQualite(data: SourcesResponse): string | null {
+  if (!data.qualite) return null;
+  return (
+    'La mesure porte sur les ventes que la BDNB a elle-même retenues (une par immeuble) : elle ne vaut pas forcément ' +
+    'pour toutes les ventes. Les ventes non rattachées ne figurent dans aucun prix par étiquette.'
+  );
 }
 
 // ============================================================================

@@ -96,12 +96,30 @@ class GeocodageLigne(BaseModel):
     fiabilite: str
     appariement: str
     nb_liens: int
+    
+    
+class QualiteMethode(BaseModel):
+    methode: str                 # concordent, parcelle seule, adresse seule, divergent, croisee, ambigue, aucune
+    nb_ventes: int               # ventes de contrôle retrouvées par cette méthode
+    nb_ok: int                   # bâtiment retenu = bâtiment de la BDNB
+    nb_erreur: int
+    precision_pct: Optional[float] = None   # ok / (ok + erreur) x 100, arrondi à 0,1 ; absent si aucun rattachement retenu
+
+
+class QualiteRattachement(BaseModel):
+    livraison: str               # livraison DVF Etalab contrôlée
+    nb_controle: int             # ventes représentatives de la BDNB retrouvées (date et prix)
+    nb_ok: int
+    nb_erreur: int
+    precision_pct: Optional[float] = None
+    methodes: List[QualiteMethode]
 
 
 class SourcesResponse(BaseModel):
     sources: List[SourceLigne]
     entonnoir: List[EntonnoirLigne]
     geocodage: List[GeocodageLigne]
+    qualite: Optional[QualiteRattachement] = None
     date_maj: Optional[str] = None
 
 
