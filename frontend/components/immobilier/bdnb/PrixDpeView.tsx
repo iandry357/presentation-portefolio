@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAccess } from '@/components/AccessProvider';
 import { cn } from '@/lib/utils';
 import { PrixDpeResponse, getBdnbPrixDpe } from '@/lib/immobilierBdnbApi';
-import { CLASSES_DPE } from '@/lib/immobilierBdnb';
-import { SEUIL_VENTES_FIABLES, attentionPrix, retenirPrix } from '@/lib/immobilierBdnbTextes';
-import { formatDate, formatEntier, formatPourcentage } from '@/lib/immobilier';
+import { CLASSES_DPE, libelleModalite } from '@/lib/immobilierBdnb';
+import { ATTENTION_ECART, SEUIL_VENTES_FIABLES, attentionPrix, phraseEcart, retenirPrix } from '@/lib/immobilierBdnbTextes';
+import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import { CarteGraphique, COULEURS, Colonnes, Explication, ModeAffichage, Point } from '../ImmobilierCharts';
 import Lecture from './Lecture';
 
@@ -84,6 +84,10 @@ export default function PrixDpeView() {
   const legende = avecClasseFragile ? [...LEGENDE, ENTREE_FRAGILE] : LEGENDE;
 
   const ecart = data?.ecart ?? null;
+  const periode =
+    data?.trimestre_min && data?.trimestre_max
+      ? `${libelleModalite('trimestre', data.trimestre_min)} à ${libelleModalite('trimestre', data.trimestre_max)}`
+      : null;
 
   return (
     <div className="space-y-6">
@@ -112,13 +116,16 @@ export default function PrixDpeView() {
 
           {ecart && ecart.ecart_pct !== null && ecart.prix_m2_median_fg !== null && ecart.prix_m2_median_d !== null && (
             <div className="border rounded-lg bg-white p-4">
-              <p className="text-sm text-gray-500">Écart de prix : F et G par rapport à D</p>
+              <p className="text-sm text-gray-500">
+                Écart de prix : F et G par rapport à D{periode && ` (${periode} · DVF Etalab)`}
+              </p>
               <p className="text-3xl font-semibold text-gray-900 mt-1">{formatEcart(ecart.ecart_pct)}</p>
+              <p className="text-sm text-gray-700 mt-1">{phraseEcart(ecart)}</p>
               <p className="text-xs text-gray-500 mt-1">
                 {formatEntier(ecart.prix_m2_median_fg)} €/m² pour F et G ({formatEntier(ecart.nb_fg)} ventes) contre{' '}
                 {formatEntier(ecart.prix_m2_median_d)} €/m² pour D ({formatEntier(ecart.nb_d)} ventes).
               </p>
-              <p className="text-xs text-gray-500 mt-1">Écart brut, non corrigé.</p>
+              <p className="text-xs text-gray-500 mt-1">{ATTENTION_ECART}</p>
             </div>
           )}
 
@@ -133,8 +140,8 @@ export default function PrixDpeView() {
           <CarteGraphique
             titre="Prix médian au m² selon l’étiquette de l’immeuble"
             sousTitre={
-              data.date_vente_min && data.prix_m2_min !== null && data.prix_m2_max !== null
-                ? `Ventes depuis le ${formatDate(data.date_vente_min)} · prix entre ${formatEntier(data.prix_m2_min)} et ${formatEntier(data.prix_m2_max)} €/m²`
+              periode && data.prix_m2_min !== null && data.prix_m2_max !== null
+                ? `Ventes de ${periode} (DVF Etalab) · prix entre ${formatEntier(data.prix_m2_min)} et ${formatEntier(data.prix_m2_max)} €/m²`
                 : undefined
             }
           >
@@ -147,18 +154,20 @@ export default function PrixDpeView() {
             <Explication titre="Détails de calcul">
               <p>
                 Le prix médian est la valeur du milieu : la moitié des ventes s’est faite en dessous, l’autre moitié
-                au-dessus. Ces médianes sont des valeurs approchées : elles peuvent varier d’environ 0,2 % d’un
-                calcul à l’autre.
+                au-dessus.
               </p>
               <p>
                 La note d’un immeuble est la note médiane des DPE de ses logements (arrêté 2021). Quand le nombre de
                 DPE est pair, on retient la meilleure des deux notes centrales. Ce n’est pas la note du logement vendu.
               </p>
               <p>
-                Chaque immeuble compte pour une seule vente : la vente de référence retenue par la BDNB. Le prix au
-                m² est celui du logement vendu, pas celui de tout l’immeuble.
+                Chaque vente de logement de la période est rattachée à son immeuble, par sa parcelle et par son
+                adresse (voir « Sources et qualité » pour la précision de ce rattachement). Les ventes sans immeuble
+                identifié, ou dont l’immeuble n’a pas de DPE, ne figurent pas ici. Le prix au m² est celui du
+                logement vendu, pas celui de tout l’immeuble.
               </p>
             </Explication>
+
 
             <ul className="flex flex-wrap gap-x-4 gap-y-1 mb-3 text-xs text-gray-600" aria-label="Légende">
               {legende.map(({ libelle, couleur }) => (
@@ -180,8 +189,8 @@ export default function PrixDpeView() {
           </CarteGraphique>
 
           <p className="text-xs text-gray-500">
-            Prix : vente de référence de chaque immeuble (DVF, via la BDNB du CSTB). Notes : DPE de l’arrêté 2021
-            (ADEME) reliés à l’immeuble.
+            Prix : ventes de logement du DVF (Etalab), rattachées à leur immeuble. Notes : DPE de l’arrêté 2021
+            (ADEME) reliés à l’immeuble. Mêmes données que la vue « Analyse ».
           </p>
         </div>
       )}

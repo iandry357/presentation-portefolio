@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { BdnbStatsResponse, getBdnbStats } from '@/lib/immobilierBdnbApi';
+import { libelleModalite } from '@/lib/immobilierBdnb';
 
 function formatDateLongue(iso: string | null): string {
   if (!iso) return '';
@@ -55,6 +56,10 @@ export default function BdnbStats() {
   }
 
   const dateMaj = formatDateLongue(stats.date_maj);
+  const periode =
+    stats.trimestre_min && stats.trimestre_max
+      ? `${libelleModalite('trimestre', stats.trimestre_min)} à ${libelleModalite('trimestre', stats.trimestre_max)}`
+      : null;
 
   return (
     <div>
@@ -73,17 +78,17 @@ export default function BdnbStats() {
         />
         <Tuile label="Adresses" valeur={stats.nb_adresses} detail="adresses reliées à un immeuble" />
         <Tuile
-          label="Ventes de référence"
+          label="Ventes analysées"
           valeur={stats.nb_transactions}
-          detail="DVF, une vente par immeuble"
-          info="Vente représentative de chaque immeuble (DVF open)"
+          detail={periode ? `DVF Etalab, ${periode}` : 'DVF Etalab'}
+          info="Ventes de logement du DVF Etalab sur la période de l'analyse, prix au m² dans les bornes de l'analyse"
         />
       </div>
       <p className="text-xs text-gray-500 mt-2">
         {stats.millesime ? `BDNB (CSTB), version ${stats.millesime}.` : 'BDNB (CSTB).'}
         {dateMaj && ` Chiffres calculés le ${dateMaj}.`}
-        {' '}Une seule vente par immeuble est comptée ici : le nombre de ventes est donc inférieur à celui de
-        l’onglet « Marché », qui compte toutes les ventes de logement.
+        {' '}Ces ventes sont celles de logement de la période affichée : leur nombre diffère de celui de l’onglet
+        « Marché », qui couvre une autre période.
       </p>
     </div>
   );

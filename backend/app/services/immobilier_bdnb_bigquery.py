@@ -12,8 +12,6 @@ from app.services.immobilier_bigquery import _avec_cache, _get_bq_client, _seria
 logger = logging.getLogger(__name__)
 
 TABLE_STATS = "agg_bdnb_stats"
-TABLE_PRIX_DPE = "agg_bdnb_prix_dpe"
-TABLE_PRIX_ECART = "agg_bdnb_prix_ecart"
 TABLE_PARC_PERIODE = "agg_bdnb_parc_periode"
 TABLE_PARC_ENERGIE = "agg_bdnb_parc_energie"
 TABLE_DEPERDITIONS = "agg_bdnb_deperditions"
@@ -38,20 +36,7 @@ def _lire_table(nom: str, colonnes: str) -> list[dict]:
 
 def fetch_stats() -> list[dict]:
     """Compteurs du bandeau (une ligne)."""
-    return _lire_table(TABLE_STATS, "nb_batiments, nb_dpe, nb_adresses, nb_transactions, date_maj")
-
-
-def fetch_prix_dpe() -> list[dict]:
-    """Prix au m² médian et nombre de ventes par classe DPE du bâtiment."""
-    return _lire_table(TABLE_PRIX_DPE, "classe_dpe, nb_ventes, prix_m2_median")
-
-
-def fetch_prix_ecart() -> list[dict]:
-    """Médianes F+G et D, et paramètres de la sélection des ventes (une ligne)."""
-    return _lire_table(
-        TABLE_PRIX_ECART,
-        "nb_fg, prix_m2_median_fg, nb_d, prix_m2_median_d, date_vente_min, prix_m2_min, prix_m2_max",
-    )
+    return _lire_table(TABLE_STATS, "nb_batiments, nb_dpe, nb_adresses, date_maj")
 
 
 def fetch_parc_periode() -> list[dict]:

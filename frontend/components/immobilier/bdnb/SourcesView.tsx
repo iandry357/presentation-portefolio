@@ -244,7 +244,7 @@ export default function SourcesView() {
       )}
 
       <p className="text-xs text-gray-500">
-        BDNB (CSTB), Licence Ouverte 2.0. DPE : ADEME. Transactions : DVF (Cerema, Etalab). Adresses : BAN.
+        BDNB (CSTB), Licence Ouverte 2.0. DPE : ADEME. Transactions : DVF (Etalab ; Cerema pour le contrôle du rattachement). Adresses : BAN.
       </p>
     </div>
   );

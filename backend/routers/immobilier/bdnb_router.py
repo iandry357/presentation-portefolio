@@ -11,11 +11,11 @@ from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state
 from app.services.immobilier_bdnb_analyse import (
-    DIMENSIONS, modalites, modalites_par_dimension, pivoter, recouvrement_typologie, resume,
+    DIMENSIONS, modalites, modalites_par_dimension, pivoter, prix_groupe, recouvrement_typologie, resume,
 )
 from app.services.immobilier_bdnb_bigquery import (
     fetch_analyse_dpe, fetch_analyse_ventes, fetch_deperditions, fetch_entonnoir, fetch_geocodage,
-    fetch_parc_energie, fetch_parc_periode, fetch_prix_dpe, fetch_prix_ecart, fetch_qualite, fetch_sources, fetch_stats,
+    fetch_parc_energie, fetch_parc_periode, fetch_qualite, fetch_sources, fetch_stats,
 )
 from routers.immobilier.bdnb_schemas import (
     AnalyseCellule, AnalyseMeta, AnalyseResponse, BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne,
@@ -34,7 +34,9 @@ SEUIL_ANALYSE = 5             # analyse : groupes de moins de N observations mas
 PRIX_M2_MIN = 2000            # bornes de prix du cube des ventes (pipeline/analyse/config.py)
 PRIX_M2_MAX = 30000
 DEPARTEMENT_QUALITE = "75"    # département dont la validation du rattachement est affichée
-
+CLASSES_DPE = {"A", "B", "C", "D", "E", "F", "G"}   # étiquettes comparées (« inconnue » écartée)
+CLASSES_PASSOIRES = {"F", "G"}
+CLASSE_REFERENCE = {"D"}
 
 async def _lire(*fetchers):
     try:
@@ -98,9 +100,16 @@ def _qualite(lignes: list[dict]) -> Optional[QualiteRattachement]:
 
 @router.get("/stats", response_model=BdnbStatsResponse)
 async def get_stats():
-    stats, sources = await _lire(fetch_stats, fetch_sources)
+    stats, sources, ventes = await _lire(fetch_stats, fetch_sources, fetch_analyse_ventes)
     millesime = next((s["millesime"] for s in sources if s["source"] == SOURCE_BDNB), None)
-    return BdnbStatsResponse(**_premiere_ligne(stats, "agg_bdnb_stats"), millesime=millesime)
+    periode = resume(ventes) or {}
+    return BdnbStatsResponse(
+        **_premiere_ligne(stats, "agg_bdnb_stats"),
+        nb_transactions=sum(l["nb_ventes"] for l in ventes),
+        trimestre_min=periode.get("trimestre_min"),
+        trimestre_max=periode.get("trimestre_max"),
+        millesime=millesime,
+    )
 
 
 # ============================================================================
@@ -109,34 +118,36 @@ async def get_stats():
 
 @router.get("/prix-dpe", response_model=PrixDpeResponse)
 async def get_prix_dpe(deverrouille: bool = Depends(get_access_state)):
-    classes, ecarts = await _lire(fetch_prix_dpe, fetch_prix_ecart)
-    ecart = _premiere_ligne(ecarts, "agg_bdnb_prix_ecart")
-    classes = sorted(classes, key=lambda l: l["classe_dpe"])
+    (lignes,) = await _lire(fetch_analyse_ventes)
+    periode = resume(lignes)
+    if periode is None:
+        raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube d'analyse)")
 
-    nb_masquees = 0
-    if not deverrouille:
-        gardees = [l for l in classes if l["nb_ventes"] >= SEUIL_VENTES]
-        nb_masquees = len(classes) - len(gardees)
-        classes = gardees
+    cellules, nb_masquees = pivoter(
+        lignes, "ventes", ["etiquette"], {"etiquette": CLASSES_DPE}, SEUIL_VENTES, masquer=not deverrouille,
+    )
 
     ecart_prix = None
-    if deverrouille or min(ecart["nb_fg"], ecart["nb_d"]) >= SEUIL_VENTES:
+    nb_fg, median_fg = prix_groupe(lignes, {"etiquette": CLASSES_PASSOIRES})
+    nb_d, median_d = prix_groupe(lignes, {"etiquette": CLASSE_REFERENCE})
+    if deverrouille or min(nb_fg, nb_d) >= SEUIL_VENTES:
         ecart_prix = EcartPrix(
-            nb_fg=ecart["nb_fg"],
-            prix_m2_median_fg=ecart["prix_m2_median_fg"],
-            nb_d=ecart["nb_d"],
-            prix_m2_median_d=ecart["prix_m2_median_d"],
-            ecart_pct=_ecart_pct(ecart["prix_m2_median_fg"], ecart["prix_m2_median_d"]),
+            nb_fg=nb_fg, prix_m2_median_fg=median_fg, nb_d=nb_d, prix_m2_median_d=median_d,
+            ecart_pct=_ecart_pct(median_fg, median_d),
         )
 
     return PrixDpeResponse(
         seuil_applique=not deverrouille,
         seuil=SEUIL_VENTES,
         nb_masquees=nb_masquees,
-        date_vente_min=ecart["date_vente_min"],
-        prix_m2_min=ecart["prix_m2_min"],
-        prix_m2_max=ecart["prix_m2_max"],
-        classes=[PrixDpeLigne(**l) for l in classes],
+        trimestre_min=periode["trimestre_min"],
+        trimestre_max=periode["trimestre_max"],
+        prix_m2_min=PRIX_M2_MIN,
+        prix_m2_max=PRIX_M2_MAX,
+        classes=[
+            PrixDpeLigne(classe_dpe=c["modalites"][0], nb_ventes=c["n"], prix_m2_median=c["mediane"])
+            for c in cellules
+        ],
         ecart=ecart_prix,
     )
 

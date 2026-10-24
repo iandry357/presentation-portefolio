@@ -1,5 +1,5 @@
 import type {
-  AnalyseCellule, AnalyseResponse, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
+  AnalyseCellule, AnalyseResponse, EcartPrix, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
 } from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
@@ -59,6 +59,20 @@ function extremes(parts: PartPassoires[]): { forte: PartPassoires; faible: PartP
 // Prix et DPE
 // ============================================================================
 
+export const ATTENTION_ECART = 'Cet écart ne tient compte ni du quartier, ni de la surface, ni de l’époque de construction.';
+
+// « Sur cette période, le prix médian des logements F et G est supérieur de 0,9 % à celui des D, un écart faible. »
+export function phraseEcart(ecart: EcartPrix): string | null {
+  const pct = ecart.ecart_pct;
+  if (pct === null) return null;
+  const comparaison =
+    pct === 0
+      ? 'est le même que celui'
+      : `est ${pct < 0 ? 'inférieur' : 'supérieur'} de ${formatPourcentage(Math.abs(pct))} à celui`;
+  return `Sur cette période, le prix médian des logements F et G ${comparaison} des D${Math.abs(pct) < SEUIL_ECART_FAIBLE ? ', un écart faible' : ''}.`;
+}
+
+
 export function retenirPrix(data: PrixDpeResponse): string | null {
   const fiables = data.classes.filter(c => c.nb_ventes >= SEUIL_VENTES_FIABLES && c.prix_m2_median !== null);
   if (fiables.length < 2) return null;
@@ -67,19 +81,13 @@ export function retenirPrix(data: PrixDpeResponse): string | null {
     `Le prix médian va de ${formatEntier(Math.min(...prix))} à ${formatEntier(Math.max(...prix))} €/m² selon la note (${libelleNotes(fiables.map(c => c.classe_dpe))}).`,
   ];
 
-  const pct = data.ecart?.ecart_pct;
-  if (pct !== null && pct !== undefined) {
-    const comparaison =
-      pct === 0
-        ? 'se vendent au même prix que'
-        : `se vendent ${formatPourcentage(Math.abs(pct))} ${pct < 0 ? 'moins' : 'plus'} cher que`;
-    phrases.push(`Les logements F et G ${comparaison} les D${Math.abs(pct) < SEUIL_ECART_FAIBLE ? ', un écart faible' : ''}.`);
-  }
+  const ecart = data.ecart ? phraseEcart(data.ecart) : null;
+  if (ecart) phrases.push(ecart);
   return phrases.join(' ');
 }
 
 export function attentionPrix(data: PrixDpeResponse): string {
-  const base = 'Cet écart ne tient compte ni du quartier, ni de la surface, ni de l’époque de construction.';
+  const base = ATTENTION_ECART;
   const faibles = data.classes.filter(c => c.nb_ventes < SEUIL_VENTES_FIABLES);
   if (faibles.length === 0) return base;
   const detail = faibles.map(c => `${libelleNotes([c.classe_dpe])} (${formatEntier(c.nb_ventes)})`).join(', ');

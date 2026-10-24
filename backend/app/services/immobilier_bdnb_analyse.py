@@ -97,6 +97,18 @@ def pivoter(lignes: list[dict], source: str, axes: list[str], filtres: dict[str,
     return cellules, nb_masquees
 
 
+def prix_groupe(lignes: list[dict], filtres: dict[str, set[str]]) -> tuple[int, int | None]:
+    """Nombre de ventes et prix médian au m² (exact) des cellules retenues par les filtres, listes de prix fusionnées.
+    Sert à comparer des groupes que pivoter() garde séparés (F et G ensemble, par exemple)."""
+    n = 0
+    prix: list[float] = []
+    for ligne in lignes:
+        if _retenue(ligne, filtres):
+            n += ligne["nb_ventes"]
+            prix.extend(ligne["prix_m2"])
+    return n, (round(_quantile(sorted(prix), 0.5)) if prix else None)
+
+
 def recouvrement_typologie(lignes: list[dict], filtres: dict[str, set[str]]) -> float | None:
     """Part en % des DPE avec une typologie (pièces renseignées), hors filtre sur les pièces. None si aucun DPE."""
     autres = {dimension: valeurs for dimension, valeurs in filtres.items() if dimension != "pieces"}

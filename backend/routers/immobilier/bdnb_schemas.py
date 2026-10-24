@@ -11,7 +11,9 @@ class BdnbStatsResponse(BaseModel):
     nb_batiments: int
     nb_dpe: int                  # DPE retenus (arrêté 2021, logement, 3cl, surface > 0)
     nb_adresses: int
-    nb_transactions: int         # transactions DVF représentatives (une par bâtiment)
+    nb_transactions: int         # ventes de logement du cube d'analyse (DVF Etalab, prix dans les bornes)
+    trimestre_min: Optional[str] = None   # plage de trimestres de ces ventes (AAAA-Tn)
+    trimestre_max: Optional[str] = None
     millesime: Optional[str] = None   # millésime de la BDNB (table bdnb_sources)
     date_maj: Optional[str] = None
 
@@ -38,7 +40,8 @@ class PrixDpeResponse(BaseModel):
     seuil_applique: bool         # vrai si l'accès est verrouillé : classes de moins de `seuil` ventes retirées
     seuil: int
     nb_masquees: int
-    date_vente_min: Optional[str] = None   # ventes retenues depuis cette date
+    trimestre_min: Optional[str] = None    # plage de trimestres des ventes (AAAA-Tn)
+    trimestre_max: Optional[str] = None
     prix_m2_min: Optional[int] = None      # bornes de prix_m2_local appliquées
     prix_m2_max: Optional[int] = None
     classes: List[PrixDpeLigne]
