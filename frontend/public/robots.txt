@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /jobs
+Disallow: /realisations/immobilier
 
 Sitemap: https://portfoliocvcy2iktuv-portfolio-cv-frontend.functions.fnc.fr-par.scw.cloud/sitemap.xml

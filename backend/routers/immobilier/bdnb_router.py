@@ -6,7 +6,7 @@ Prix : classes de moins de SEUIL_VENTES ventes masquées si l'accès est verroui
 import logging
 from typing import List, Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state
@@ -147,6 +147,7 @@ async def get_sources():
 
 @router.get("/analyse", response_model=AnalyseResponse)
 async def get_analyse(
+    response: Response,
     source: Literal["ventes", "dpe"],
     axe: List[str] = Query(...),
     trimestre: Optional[List[str]] = Query(None),
@@ -157,6 +158,8 @@ async def get_analyse(
     rattachee: Optional[List[str]] = Query(None),
     deverrouille: bool = Depends(get_access_state),
 ):
+    response.headers["X-Robots-Tag"] = "noindex, nofollow"
+
     (lignes,) = await _lire(fetch_analyse_ventes if source == "ventes" else fetch_analyse_dpe)
     if not lignes:
         raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube d'analyse)")
