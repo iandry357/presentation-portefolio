@@ -154,7 +154,45 @@ class AnalyseMeta(BaseModel):
     modalites: Dict[str, List[str]]  # valeurs présentes dans le cube par dimension de la source, hors filtres (valeurs de filtre valides)
 
 
-
 class AnalyseResponse(BaseModel):
     meta: AnalyseMeta
     cellules: List[AnalyseCellule]
+
+
+# ============================================================================
+# Loyers (cube ventes avec loyers de référence)
+# ============================================================================
+
+class LoyersCellule(BaseModel):
+    modalites: List[str]         # une modalité par axe, dans l'ordre des axes demandés
+    n: int                       # ventes du groupe
+    prix_m2_median: Optional[int] = None
+    loyer_reference: Optional[float] = None   # €/m² par mois, médiane pondérée par les ventes (valeur centrale)
+    loyer_majore: Optional[float] = None
+    loyer_minore: Optional[float] = None
+    rendement_reference_pct: Optional[float] = None   # loyer de référence x surface x 12 / prix, médiane en %
+    rendement_majore_pct: Optional[float] = None      # idem avec le loyer majoré (borne haute)
+    part_epoque_ambigue_pct: float       # ventes dont l'époque de construction est ambiguë (parc ancien)
+    part_periode_heterogene_pct: float   # ventes dont les DPE du bâtiment divergent sur la période de construction
+
+
+class LoyersMeta(BaseModel):
+    axes: List[str]
+    meuble: bool                 # statut meublé des loyers et rendements (chaque vente existe dans les deux statuts)
+    seuil_applique: bool         # vrai si l'accès est verrouillé : groupes de moins de `seuil` ventes retirés
+    seuil: int
+    nb_masquees: int
+    prix_m2_min: int             # bornes de prix appliquées
+    prix_m2_max: int
+    trimestre_min: Optional[str] = None  # plage de trimestres des ventes
+    trimestre_max: Optional[str] = None
+    annees_loyer: List[int]      # millésimes de loyers utilisés (le dernier arrêté disponible s'applique aux ventes plus récentes)
+    source_loyers: str
+    licence_loyers: str
+    date_maj: Optional[str] = None
+    modalites: Dict[str, List[str]]  # valeurs présentes dans le cube par dimension, hors filtres
+
+
+class LoyersResponse(BaseModel):
+    meta: LoyersMeta
+    cellules: List[LoyersCellule]

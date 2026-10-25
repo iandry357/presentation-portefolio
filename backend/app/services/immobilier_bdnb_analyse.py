@@ -12,7 +12,8 @@ DIMENSIONS = {
     "dpe": ["trimestre", "arrondissement", "pieces", "tranche_surface", "etiquette"],
 }
 COMPTE = {"ventes": "nb_ventes", "dpe": "nb_dpe"}
-
+# Dimensions du cube des loyers (le quartier s'ajoutera ici : id_quartier / nom_quartier sont déjà dans le cube)
+DIMENSIONS_LOYERS = ["trimestre", "annee_loyer", "arrondissement", "pieces", "epoque"]
 
 def _texte(valeur) -> str:
     """Modalité sous forme de texte : valeur absente -> NON_RENSEIGNE, booléen -> oui / non."""
@@ -107,6 +108,68 @@ def prix_groupe(lignes: list[dict], filtres: dict[str, set[str]]) -> tuple[int, 
             n += ligne["nb_ventes"]
             prix.extend(ligne["prix_m2"])
     return n, (round(_quantile(sorted(prix), 0.5)) if prix else None)
+
+
+
+def _mediane_ponderee(couples: list[tuple[float, int]]) -> float:
+    """Médiane (basse) de valeurs pondérées par un effectif : couples (valeur, effectif)."""
+    couples = sorted(couples)
+    moitie = sum(n for _, n in couples) / 2
+    cumul = 0
+    for valeur, n in couples:
+        cumul += n
+        if cumul >= moitie:
+            return valeur
+
+
+def _mediane_ou_none(valeurs: list[float], decimales: int, facteur: float = 1) -> float | None:
+    return round(_quantile(sorted(valeurs), 0.5) * facteur, decimales) if valeurs else None
+
+
+def pivoter_loyers(lignes: list[dict], axes: list[str], filtres: dict[str, set[str]],
+                   seuil: int, masquer: bool) -> tuple[list[dict], int]:
+    """Regroupe les cellules du cube des loyers selon 1 ou 2 axes, après filtres. Les lignes d'un seul statut meublé
+    sont attendues (sinon chaque vente serait comptée deux fois). Par groupe : effectif, prix au m² médian, loyers
+    médians (pondérés par les ventes), rendements médians en %, parts de ventes en époque ambiguë et en période hétérogène.
+    masquer : les groupes de moins de `seuil` ventes sont écartés (accès verrouillé), comptés à part."""
+    groupes: dict[tuple, dict] = {}
+    for ligne in lignes:
+        if not _retenue(ligne, filtres):
+            continue
+        g = groupes.setdefault(tuple(_texte(ligne[axe]) for axe in axes), {
+            "n": 0, "ambigues": 0, "heterogenes": 0, "prix": [], "rendement_reference": [], "rendement_majore": [],
+            "loyer_reference": [], "loyer_majore": [], "loyer_minore": [],
+        })
+        n = ligne["nb_ventes"]
+        g["n"] += n
+        g["ambigues"] += n if ligne["epoque_ambigue"] else 0
+        g["heterogenes"] += n if ligne["periode_heterogene"] else 0
+        g["prix"].extend(ligne["prix_m2"])
+        g["rendement_reference"].extend(ligne["rendement_reference"])
+        g["rendement_majore"].extend(ligne["rendement_majore"])
+        for loyer in ("loyer_reference", "loyer_majore", "loyer_minore"):
+            if ligne[loyer] is not None:
+                g[loyer].append((ligne[loyer], n))
+
+    cellules, nb_masquees = [], 0
+    for modalites, g in groupes.items():
+        if masquer and g["n"] < seuil:
+            nb_masquees += 1
+            continue
+        cellules.append({
+            "modalites": list(modalites),
+            "n": g["n"],
+            "prix_m2_median": _mediane_ou_none(g["prix"], 0),
+            "loyer_reference": round(_mediane_ponderee(g["loyer_reference"]), 1) if g["loyer_reference"] else None,
+            "loyer_majore": round(_mediane_ponderee(g["loyer_majore"]), 1) if g["loyer_majore"] else None,
+            "loyer_minore": round(_mediane_ponderee(g["loyer_minore"]), 1) if g["loyer_minore"] else None,
+            "rendement_reference_pct": _mediane_ou_none(g["rendement_reference"], 1, 100),
+            "rendement_majore_pct": _mediane_ou_none(g["rendement_majore"], 1, 100),
+            "part_epoque_ambigue_pct": round(g["ambigues"] / g["n"] * 100, 1),
+            "part_periode_heterogene_pct": round(g["heterogenes"] / g["n"] * 100, 1),
+        })
+    cellules.sort(key=lambda c: [_cle_tri(m) for m in c["modalites"]])
+    return cellules, nb_masquees
 
 
 def recouvrement_typologie(lignes: list[dict], filtres: dict[str, set[str]]) -> float | None:

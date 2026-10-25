@@ -1,10 +1,10 @@
 import type {
-  AnalyseCellule, AnalyseResponse, EcartPrix, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
+  AnalyseCellule, AnalyseResponse, EcartPrix, LoyersResponse, ParcResponse, PrixDpeResponse, SourceAnalyse, SourcesResponse,
 } from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
-  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, libelleAppariement, libelleEnergie, libelleModalite, libelleMethodeRattachement,
-  libellePeriode, ordrePeriode, minuscule 
+  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, MesureLoyers, formatLoyer, libelleAppariement, libelleEnergie,
+  libelleModalite, libelleModaliteLoyers, libelleMethodeRattachement, libellePeriode, ordrePeriode, minuscule,
 } from '@/lib/immobilierBdnb';
 
 
@@ -344,4 +344,65 @@ export function attentionAnalyse(data: AnalyseResponse): string | null {
     `${base} ${fragiles.length} case${fragiles.length > 1 ? 's reposent' : ' repose'} sur moins de ` +
     `${SEUIL_VENTES_FIABLES} ventes : leurs prix sont à lire avec prudence.`
   );
+}
+
+// ============================================================================
+// Loyers (cube ventes avec loyers de référence)
+// ============================================================================
+
+// Part des ventes à l'époque ambiguë, pondérée par les ventes des groupes affichés
+export function partEpoqueAmbigue(data: LoyersResponse): number | null {
+  const total = data.cellules.reduce((somme, c) => somme + c.n, 0);
+  if (!total) return null;
+  return data.cellules.reduce((somme, c) => somme + c.n * c.part_epoque_ambigue_pct, 0) / total;
+}
+
+export function alerteEpoque(part: number): string {
+  return (
+    `Pour ${formatPourcentage(part)} de ces ventes, l’époque de construction du logement est incertaine : elle se déduit des DPE ` +
+    'de l’immeuble, dont les périodes ne coïncident pas avec celles de l’encadrement des loyers (surtout dans le parc ancien). ' +
+    'Le loyer de référence est donc un ordre de grandeur pour l’immeuble, pas la valeur exacte du logement vendu.'
+  );
+}
+
+export function alerteMillesimes(annees: number[]): string {
+  return (
+    `Chaque vente est comparée au loyer de l’arrêté en vigueur à sa date : les arrêtés ${Math.min(...annees)} à ${Math.max(...annees)} ` +
+    'sont ici mélangés. Les loyers de référence ont évolué : choisissez un arrêté pour une lecture à une date donnée.'
+  );
+}
+
+export function voirLoyers(mesure: MesureLoyers, axe: string, meuble: boolean): string {
+  const statut = meuble ? 'meublés' : 'non meublés';
+  return mesure === 'loyer'
+    ? `Le loyer de référence de l’encadrement des loyers de Paris (€ par m² et par mois, logements ${statut}), selon ${minuscule(axe)}, pour les logements vendus. ` +
+      'Ce n’est pas un loyer constaté : c’est le repère fixé par l’arrêté pour le quartier, le nombre de pièces et l’époque.'
+    : `Le rendement brut théorique d’un achat loué au loyer de référence (logements ${statut}) : loyer × surface × 12 ÷ prix d’achat, ` +
+      `médiane des ventes, selon ${minuscule(axe)}.`;
+}
+
+export function retenirLoyers(data: LoyersResponse, mesure: MesureLoyers): string | null {
+  if (data.meta.axes.length !== 1) return null;
+  const axe = data.meta.axes[0];
+  const valeur = (c: LoyersResponse['cellules'][number]) => (mesure === 'loyer' ? c.loyer_reference : c.rendement_reference_pct);
+  const fiables = data.cellules.filter(c => c.n >= SEUIL_VENTES_FIABLES && valeur(c) !== null);
+  if (fiables.length < 2) return null;
+  const bas = fiables.reduce((a, b) => ((valeur(b) as number) < (valeur(a) as number) ? b : a));
+  const haut = fiables.reduce((a, b) => ((valeur(b) as number) > (valeur(a) as number) ? b : a));
+  const nom = (c: LoyersResponse['cellules'][number]) => libelleModaliteLoyers(axe, c.modalites[0]);
+  return mesure === 'loyer'
+    ? `Le loyer de référence va de ${formatLoyer(valeur(bas) as number)} (${nom(bas)}) à ${formatLoyer(valeur(haut) as number)} (${nom(haut)}) par mois.`
+    : `Le rendement brut central va de ${formatPourcentage(valeur(bas) as number)} (${nom(bas)}) à ${formatPourcentage(valeur(haut) as number)} (${nom(haut)}).`;
+}
+
+export function attentionLoyers(data: LoyersResponse, mesure: MesureLoyers): string {
+  const base =
+    mesure === 'rendement'
+      ? 'Ce rendement est brut et théorique : il ne tient compte ni des charges, ni de la vacance, ni de la taxe foncière, ni des travaux. La borne haute suppose un loyer au plafond (loyer majoré).'
+      : 'Le loyer de référence est un repère de l’encadrement, pas un loyer constaté ; le plafond légal est le loyer majoré (+20 %).';
+  const fragiles = data.cellules.filter(c => c.n < SEUIL_VENTES_FIABLES);
+  if (fragiles.length === 0) return base;
+  const axe = data.meta.axes[0];
+  const detail = fragiles.map(c => `${libelleModaliteLoyers(axe, c.modalites[0])} (${formatEntier(c.n)} ventes)`).join(', ');
+  return `${base} Peu de ventes pour ${detail} : à lire avec prudence.`;
 }

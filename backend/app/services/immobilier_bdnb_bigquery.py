@@ -21,6 +21,7 @@ TABLE_ENTONNOIR = "bdnb_entonnoir"
 TABLE_ANALYSE_VENTES = "agg_analyse_ventes"
 TABLE_ANALYSE_DPE = "agg_analyse_dpe"
 TABLE_QUALITE = "dvf_etalab_qualite"
+TABLE_LOYERS_VENTES = "agg_loyers_ventes"
 
 
 def _lire_table(nom: str, colonnes: str) -> list[dict]:
@@ -84,4 +85,15 @@ def fetch_analyse_dpe() -> list[dict]:
     return _lire_table(
         TABLE_ANALYSE_DPE,
         "trimestre, arrondissement, pieces, tranche_surface, etiquette, nb_dpe, date_maj",
+    )
+
+
+def fetch_loyers_ventes() -> list[dict]:
+    """Cube des ventes avec loyers : une ligne par cellule (quartier), listes triées de prix et de rendements,
+    loyers uniques par cellule (en cache, ne pas modifier)."""
+    return _lire_table(
+        TABLE_LOYERS_VENTES,
+        "trimestre, annee_loyer, arrondissement, id_quartier, nom_quartier, pieces, epoque, epoque_ambigue, "
+        "periode_heterogene, meuble, nb_ventes, prix_m2, loyer_reference, loyer_majore, loyer_minore, "
+        "rendement_reference, rendement_majore, date_maj",
     )

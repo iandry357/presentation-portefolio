@@ -1,4 +1,4 @@
-import type { DimensionAnalyse, SourceAnalyse } from '@/lib/immobilierBdnbApi';
+import type { DimensionAnalyse, DimensionLoyers, SourceAnalyse } from '@/lib/immobilierBdnbApi';
 
 // ============================================================================
 // Classes DPE
@@ -169,5 +169,57 @@ const LIBELLES_METHODE_RATTACHEMENT: Record<string, string> = {
 
 export function libelleMethodeRattachement(methode: string): string {
   return LIBELLES_METHODE_RATTACHEMENT[methode] ?? majuscule(methode);
+}
+
+// ============================================================================
+// Loyers (encadrement des loyers de Paris croisé avec les ventes)
+// ============================================================================
+
+export type MesureLoyers = 'loyer' | 'rendement';
+
+export const PIECES_PLAFOND_LOYERS = 4;   // pipeline/loyers/config.py (PIECES_MAX) : 4 = « 4 pièces et plus »
+
+// Axes proposés (le cube accepte aussi trimestre et annee_loyer) ; le quartier s'ajoutera ici
+export const AXES_LOYERS: DimensionLoyers[] = ['arrondissement', 'pieces', 'epoque'];
+
+// Époques de l'encadrement dans l'ordre chronologique (l'API les renvoie par ordre alphabétique)
+export const EPOQUES = ['Avant 1946', '1946-1970', '1971-1990', 'Apres 1990'];
+
+export function ordreEpoque(epoque: string): number {
+  const rang = EPOQUES.indexOf(epoque);
+  return rang === -1 ? EPOQUES.length : rang;
+}
+
+const DECIMAL = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+export function formatDecimal(valeur: number): string {
+  return DECIMAL.format(valeur);
+}
+
+export function formatLoyer(valeur: number): string {
+  return `${formatDecimal(valeur)} €/m²`;
+}
+
+export function libelleDimensionLoyers(dimension: DimensionLoyers): string {
+  switch (dimension) {
+    case 'arrondissement': return 'Arrondissement';
+    case 'pieces': return 'Nombre de pièces';
+    case 'epoque': return 'Époque de construction';
+    case 'trimestre': return 'Trimestre';
+    case 'annee_loyer': return 'Arrêté de loyers';
+  }
+}
+
+export function libelleModaliteLoyers(dimension: DimensionLoyers, valeur: string): string {
+  switch (dimension) {
+    case 'pieces':
+      return Number(valeur) >= PIECES_PLAFOND_LOYERS ? `${valeur} pièces et plus` : `${valeur} pièce${valeur === '1' ? '' : 's'}`;
+    case 'epoque':
+      return valeur.replace('Apres', 'Après');
+    case 'annee_loyer':
+      return valeur;
+    default:
+      return libelleModalite(dimension, valeur);
+  }
 }
 

@@ -145,6 +145,45 @@ export interface AnalyseResponse {
   cellules: AnalyseCellule[];
 }
 
+// Loyers (cube ventes avec loyers de référence)
+export type DimensionLoyers = 'trimestre' | 'annee_loyer' | 'arrondissement' | 'pieces' | 'epoque';
+export type FiltresLoyers = Partial<Record<DimensionLoyers, string[]>>;
+
+export interface LoyersCellule {
+  modalites: string[];                 // une modalité par axe, dans l'ordre des axes demandés
+  n: number;                           // ventes du groupe
+  prix_m2_median: number | null;
+  loyer_reference: number | null;      // €/m² par mois, médiane pondérée par les ventes (valeur centrale)
+  loyer_majore: number | null;
+  loyer_minore: number | null;
+  rendement_reference_pct: number | null;  // loyer de référence x surface x 12 / prix, médiane en %
+  rendement_majore_pct: number | null;     // idem avec le loyer majoré (borne haute)
+  part_epoque_ambigue_pct: number;     // ventes dont l'époque de construction est ambiguë
+  part_periode_heterogene_pct: number; // ventes dont les DPE de l'immeuble divergent sur la période
+}
+
+export interface LoyersMeta {
+  axes: DimensionLoyers[];
+  meuble: boolean;
+  seuil_applique: boolean;             // vrai si l'accès est verrouillé : groupes sous `seuil` ventes retirés
+  seuil: number;
+  nb_masquees: number;
+  prix_m2_min: number;
+  prix_m2_max: number;
+  trimestre_min: string | null;        // plage de trimestres de toutes les ventes du cube
+  trimestre_max: string | null;
+  annees_loyer: number[];              // arrêtés présents dans le cube
+  source_loyers: string;
+  licence_loyers: string;
+  date_maj: string | null;
+  modalites: Partial<Record<DimensionLoyers, string[]>>;  // valeurs présentes par dimension, hors filtres
+}
+
+export interface LoyersResponse {
+  meta: LoyersMeta;
+  cellules: LoyersCellule[];
+}
+
 // ============================================================================
 // Appels (via le proxy /backend : le cookie d'accès est first-party)
 // ============================================================================
@@ -181,4 +220,18 @@ export async function getBdnbAnalyse(
     valeurs?.forEach(valeur => params.append(dimension, valeur)),
   );
   return request<AnalyseResponse>(`/immobilier/bdnb/analyse?${params.toString()}`);
+}
+
+// Public : si l'accès est verrouillé, les groupes de moins de `seuil` ventes sont retirés par le backend
+export async function getBdnbLoyers(
+  axes: DimensionLoyers[],
+  meuble: boolean,
+  filtres: FiltresLoyers,
+): Promise<LoyersResponse> {
+  const params = new URLSearchParams({ meuble: String(meuble) });
+  axes.forEach(axe => params.append('axe', axe));
+  (Object.entries(filtres) as [DimensionLoyers, string[] | undefined][]).forEach(([dimension, valeurs]) =>
+    valeurs?.forEach(valeur => params.append(dimension, valeur)),
+  );
+  return request<LoyersResponse>(`/immobilier/bdnb/loyers?${params.toString()}`);
 }

@@ -157,6 +157,10 @@ t'appuyant dessus. `STATUS.md` reste court (environ 50 lignes) : le détail est 
 Toute mise à jour de suivi passe par le skill `/livraison` (lancé par moi seul), jamais à la main :
 - fin de session (`/livraison`) : `STATUS.md` + les 4 fichiers du projet concerné + cahier des charges de la feature (`_docs-local/specs/`) ;
 - fin de MVP (`/livraison mvp`) : en plus `CLAUDE.md` et `README.md`.
+- Le skill modifie les fichiers de suivi (`STATUS.md`, `projets/<projet>/`, cahier des charges de la feature)
+  **sans validation préalable** : il donne d'abord un résumé de ce qui va changer, puis écrit. Exception à la
+  règle « jamais de code sans validation », limitée à ces fichiers ; `CLAUDE.md` et `README.md` (mode `mvp`)
+  restent soumis à validation sur diff.
 
 Quand je dis vouloir m'arrêter, rappelle-moi `/livraison` au lieu de mettre à jour ces fichiers toi-même.
 À la question « où en est-on ? », lis `STATUS.md` puis `avancement.md` du projet concerné, et réponds dans

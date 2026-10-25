@@ -4,6 +4,7 @@ import { useState } from 'react';
 import BdnbSidebar, { BdnbView } from './BdnbSidebar';
 import AnalyseView from './AnalyseView';
 import BdnbStats from './BdnbStats';
+import LoyersView from './LoyersView';
 import ParcView from './ParcView';
 import PrixDpeView from './PrixDpeView';
 import SourcesView from './SourcesView';
@@ -22,9 +23,10 @@ export default function BdnbOnglet() {
 
         <div className="flex-1 min-w-0 w-full">
           {vue === 'prix' && <PrixDpeView />}
-          {vue === 'analyse' && <AnalyseView />}
           {vue === 'parc' && <ParcView />}
           {vue === 'sources' && <SourcesView />}
+          {vue === 'analyse' && <AnalyseView />}
+          {vue === 'loyers' && <LoyersView />}
         </div>
       </div>
     </>
