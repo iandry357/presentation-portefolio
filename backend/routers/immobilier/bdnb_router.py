@@ -11,16 +11,17 @@ from fastapi.concurrency import run_in_threadpool
 
 from app.core.access_control import get_access_state
 from app.services.immobilier_bdnb_analyse import (
-    DIMENSIONS, modalites, modalites_par_dimension, pivoter, prix_groupe, recouvrement_typologie, resume,
+    DIMENSIONS, DIMENSIONS_LOYERS, modalites, modalites_par_dimension, pivoter, pivoter_loyers, prix_groupe,
+    recouvrement_typologie, resume,
 )
 from app.services.immobilier_bdnb_bigquery import (
     fetch_analyse_dpe, fetch_analyse_ventes, fetch_deperditions, fetch_entonnoir, fetch_geocodage,
-    fetch_parc_energie, fetch_parc_periode, fetch_qualite, fetch_sources, fetch_stats,
+    fetch_loyers_ventes, fetch_parc_energie, fetch_parc_periode, fetch_qualite, fetch_sources, fetch_stats,
 )
 from routers.immobilier.bdnb_schemas import (
     AnalyseCellule, AnalyseMeta, AnalyseResponse, BdnbStatsResponse, DeperditionLigne, EcartPrix, EntonnoirLigne,
-    GeocodageLigne, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse, PrixDpeLigne, PrixDpeResponse,
-    QualiteMethode, QualiteRattachement, SourceLigne, SourcesResponse,
+    GeocodageLigne, LoyersCellule, LoyersMeta, LoyersResponse, ParcEnergieLigne, ParcPeriodeLigne, ParcResponse,
+    PrixDpeLigne, PrixDpeResponse, QualiteMethode, QualiteRattachement, SourceLigne, SourcesResponse,
 )
 
 
@@ -37,6 +38,9 @@ DEPARTEMENT_QUALITE = "75"    # département dont la validation du rattachement 
 CLASSES_DPE = {"A", "B", "C", "D", "E", "F", "G"}   # étiquettes comparées (« inconnue » écartée)
 CLASSES_PASSOIRES = {"F", "G"}
 CLASSE_REFERENCE = {"D"}
+SEUIL_LOYERS = 5              # loyers : groupes de moins de N ventes masqués si l'accès est verrouillé
+SOURCE_LOYERS = "Ville de Paris, Direction du Logement et de l'Habitat (encadrement des loyers)"
+LICENCE_LOYERS = "ODbL"
 
 async def _lire(*fetchers):
     try:
@@ -252,4 +256,66 @@ async def get_analyse(
             **resume(lignes),
         ),
         cellules=[AnalyseCellule(**c) for c in cellules],
+    )
+
+
+# ============================================================================
+# GET /immobilier/bdnb/loyers — Ventes et loyers de référence (public, seuil si verrouillé)
+# ============================================================================
+
+@router.get("/loyers", response_model=LoyersResponse)
+async def get_loyers(
+    response: Response,
+    axe: List[str] = Query(...),
+    meuble: bool = False,
+    trimestre: Optional[List[str]] = Query(None),
+    annee_loyer: Optional[List[str]] = Query(None),
+    arrondissement: Optional[List[str]] = Query(None),
+    pieces: Optional[List[str]] = Query(None),
+    epoque: Optional[List[str]] = Query(None),
+    deverrouille: bool = Depends(get_access_state),
+):
+    response.headers["X-Robots-Tag"] = "noindex, nofollow"
+
+    (cube,) = await _lire(fetch_loyers_ventes)
+    if not cube:
+        raise HTTPException(status_code=503, detail="Données BDNB indisponibles (cube des loyers)")
+    # Chaque vente figure une fois par statut meublé : un seul statut par requête, sinon les ventes seraient comptées deux fois
+    lignes = [l for l in cube if l["meuble"] == meuble]
+
+    if not 1 <= len(axe) <= 2 or len(set(axe)) != len(axe) or any(a not in DIMENSIONS_LOYERS for a in axe):
+        raise HTTPException(
+            status_code=422, detail=f"Axes des loyers : 1 ou 2 parmi {', '.join(DIMENSIONS_LOYERS)}, sans doublon",
+        )
+
+    filtres: dict[str, set[str]] = {}
+    demandes = {
+        "trimestre": trimestre, "annee_loyer": annee_loyer, "arrondissement": arrondissement,
+        "pieces": pieces, "epoque": epoque,
+    }
+    for dimension, valeurs in demandes.items():
+        if not valeurs:
+            continue
+        inconnues = set(valeurs) - modalites(lignes, dimension)
+        if inconnues:
+            raise HTTPException(status_code=422, detail=f"Valeurs inconnues pour {dimension} : {sorted(inconnues)}")
+        filtres[dimension] = set(valeurs)
+
+    cellules, nb_masquees = pivoter_loyers(lignes, axe, filtres, SEUIL_LOYERS, masquer=not deverrouille)
+    return LoyersResponse(
+        meta=LoyersMeta(
+            axes=axe,
+            meuble=meuble,
+            seuil_applique=not deverrouille,
+            seuil=SEUIL_LOYERS,
+            nb_masquees=nb_masquees,
+            prix_m2_min=PRIX_M2_MIN,
+            prix_m2_max=PRIX_M2_MAX,
+            annees_loyer=sorted({l["annee_loyer"] for l in lignes}),
+            source_loyers=SOURCE_LOYERS,
+            licence_loyers=LICENCE_LOYERS,
+            modalites=modalites_par_dimension(lignes, DIMENSIONS_LOYERS),
+            **resume(lignes),
+        ),
+        cellules=[LoyersCellule(**c) for c in cellules],
     )

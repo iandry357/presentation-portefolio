@@ -3,20 +3,17 @@
 S'exécute en LOCAL dans le venv scripts/venv-explore, PAS dans Docker (les données ne sont pas embarquées dans l'image).
 Depuis realisations/immobilier, venv activé :
     python -m pipeline.loyers.orchestrator [--livraison 2026-10] [--departement 75]
-                                           [--etape telechargement|chargement|rattachement|tout] [--dry-run] [--force]
+                                           [--etape telechargement|chargement|rattachement|agregat|tout] [--dry-run] [--force]
 Prérequis : pipeline/.env et gcp_sa_immobilier.json (réutilisés de la V1).
 """
 import argparse
 import logging
 import time
 
-from pipeline.loyers.config import TABLE_REFERENCE
 from pipeline.loyers.config import DEPARTEMENT, LIVRAISON, TABLE_REFERENCE
+from pipeline.loyers.cube import construire_agregat
 from pipeline.loyers.loader import charger
 from pipeline.loyers.rattachement import rattacher, valider
-from pipeline.loyers.telechargement import preparer
-from pipeline.loyers.transformation import construire_parquet
-from pipeline.loyers.loader import charger
 from pipeline.loyers.telechargement import preparer
 from pipeline.loyers.transformation import construire_parquet
 
@@ -29,9 +26,9 @@ def main():
     parser.add_argument("--livraison", default=LIVRAISON, help="livraison DVF Etalab à rattacher (défaut : config.py)")
     parser.add_argument("--departement", default=DEPARTEMENT, help="code du département (défaut : config.py)")
     parser.add_argument(
-        "--etape", choices=["telechargement", "chargement", "rattachement", "tout"], default="tout",
+        "--etape", choices=["telechargement", "chargement", "rattachement", "agregat", "tout"], default="tout",
         help="téléchargement et contrôle du CSV seuls ; chargement des loyers ; rattachement des ventes et validation ; "
-             "ou chargement puis rattachement (défaut)",
+             "agrégat des ventes avec loyers (la vue loyers_ventes doit exister) ; ou les trois derniers (défaut)",
     )
     parser.add_argument("--dry-run", action="store_true", help="téléchargement, typage et contrôles, sans écriture BigQuery")
     parser.add_argument("--force", action="store_true", help="retélécharger le CSV même s'il existe")
@@ -63,6 +60,14 @@ def main():
         rattacher(args.livraison, args.departement)
         valider(args.livraison, args.departement)
         logger.info("Rattachement et validation terminés (%.0f s)", time.time() - debut)
+
+    if args.etape in ("agregat", "tout"):
+        if args.dry_run:
+            logger.info("--dry-run : agrégat ignoré")
+            return
+        construire_agregat(args.livraison, args.departement)
+        logger.info("Agrégat terminé (%.0f s)", time.time() - debut)
+
 
 
 

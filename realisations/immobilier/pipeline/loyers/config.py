@@ -56,7 +56,7 @@ TABLE_QUARTIERS_TRAVAIL = "loyers_quartiers_travail"
 # Rattachement des ventes DVF aux quartiers (étape rattachement)
 TABLE_RATTACHEMENT = "loyers_rattachement"
 VUE_VENTES_LOYER = "loyers_ventes"
-
+TABLE_AGREGAT = "agg_loyers_ventes"  # cube des ventes avec loyers (étape agregat), recréé à chaque exécution
 
 # --- Rattachement des ventes (R1b) ---
 LIVRAISON = "2026-10"  # livraison DVF Etalab lue (table dvf_etalab) ; surchargée par --livraison
