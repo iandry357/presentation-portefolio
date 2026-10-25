@@ -8,6 +8,7 @@ Bloc 0 : environnement, accès PISTE (jeton, table des matières du CGI, version
 Bloc 1 : jeu « Logement - Encadrement des loyers » (téléchargé s'il est absent ; --force : retélécharger).
 Bloc 2 : année et période de construction dans la BDNB, au regard des époques de l'encadrement.
 Bloc 3 : champs, valeurs et recherche plein texte des jeux BOFiP (data.economie.gouv.fr).
+Bloc 5 : lois de finances modifiant les articles cibles du CGI (PISTE) : lois modificatrices, articles qui les citent, contenu exploitable.
 """
 import argparse
 import importlib.util
@@ -18,6 +19,7 @@ from pathlib import Path
 import polars as pl
 import requests
 import json
+import re
 
 # --- Paramètres ---
 RACINE = Path(__file__).resolve().parent.parent  # realisations/immobilier
@@ -67,6 +69,14 @@ MAX_ARTICLES_TEXTE = 150
 DELAI_APPELS = 0.5  # pause entre deux appels getArticle
 CCH_MOTS = ["construction", "habitation"]  # mots du titre du code dans /list/code
 THEMES_CCH = ["diagnostic de performance énergétique", "audit énergétique"]  # titres de sections retenus (bloc 4c)
+ARTICLES_CGI_CIBLES = ["156", "31", "32", "50-0", "39 C", "35", "155", "150 U"]  # articles du CGI suivis pour les lois de finances (bloc 5)
+ANNEE_LF_MIN = 2022  # versions d'article lues à partir de cette année (bloc 5a)
+ARTICLE_A_CONFIRMER = ("2026-103", "47")  # (numéro de loi, numéro d'article) relu au bloc 5d
+TEXTES_JORF = {  # lois de finances dont on relit l'article au JORF (bloc 5e) : numéro -> (identifiant JORFTEXT, numéro d'article)
+    "2026-103": ("JORFTEXT000053508155", "47"),
+    "2025-127": ("JORFTEXT000051168007", "110"),
+    "2023-1322": ("JORFTEXT000048727345", "110"),
+}
 SEUIL_VALEURS = 100  # colonne à moins de valeurs distinctes : listée valeur par valeur (bloc 1b)
 RATIO_MAJORE, RATIO_MINORE = 1.2, 0.7  # majoré = 1,2 × référence, minoré = 0,7 × référence (bloc 1d)
 TOLERANCE_RATIO = 0.005
@@ -869,6 +879,145 @@ def bloc4_legifrance(sortie, args):
     sortie.texte("  Article D126-19 présent : " + str(any(str(a.get("num")).strip() == "D126-19" for _, arts in resultats for a in arts)))
 
 
+# --- Bloc 5 : lois de finances (PISTE) ---
+# --- Bloc 5 : lois de finances (PISTE) ---
+def titre_loi(titre):
+    """Titre du texte sans la mention d'article qui le suit (« … - art. 47 »)."""
+    return re.split(r"\s*[-–(,]?\s*art(?:icle|\.)\s*\d", titre or "", maxsplit=1, flags=re.I)[0].strip() or None
+
+
+def liens_modification(article):
+    """Une ligne par texte modificateur (lienModifications) d'une version d'article du CGI."""
+    return [
+        {
+            "lien": lien.get("linkType"), "orientation": lien.get("linkOrientation"), "nature": lien.get("natureText"),
+            "loi": titre_loi(lien.get("textTitle")), "article_loi": lien.get("articleNum"), "id_article_loi": lien.get("articleId"),
+            "publiee": lien.get("datePubliTexte"), "effet": lien.get("dateDebutCible"),
+        }
+        for lien in article.get("lienModifications") or []
+    ]
+
+
+def bloc5a_modifications(sortie, session):
+    """Textes modificateurs des versions récentes des articles cibles du CGI ; renvoie les articles de lois de finances (dicts)."""
+    sortie.titre("5a. Textes modificateurs des articles cibles du CGI")
+    arbre = appeler_piste(sortie, session, "/consult/code/tableMatieres", {"date": maintenant_ms(), "sctId": "", "textId": CGI_TEXT_ID})
+    noeuds = articles_de(arbre) if arbre else []
+    minimum, lignes = f"{ANNEE_LF_MIN}-01-01", []
+    for num in ARTICLES_CGI_CIBLES:
+        vigueur = [n for n in noeuds if str(n.get("num", "")).strip() == num and n.get("etat") == "VIGUEUR"]
+        sortie.texte(f"  Article {num} : {len(vigueur)} nœud(s) en vigueur")
+        if not vigueur:
+            continue
+        reponse = appeler_piste(sortie, session, "/consult/getArticle", {"id": vigueur[0]["id"]})
+        if not reponse:
+            continue
+        article = reponse.get("article", reponse)
+        id_actuel = article.get("id") or vigueur[0]["id"]
+        versions = {v["id"]: en_date(v.get("dateDebut")) for v in article.get("articleVersions") or [] if v.get("id")}
+        versions[id_actuel] = en_date(article.get("dateDebut"))
+        recentes = {i: d for i, d in versions.items() if d and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) and d >= minimum}
+        sortie.texte(f"    {len(recentes)} version(s) depuis {minimum}")
+        for id_version, debut in sorted(recentes.items(), key=lambda kv: kv[1]):
+            detail = reponse if id_version == id_actuel else appeler_piste(sortie, session, "/consult/getArticle", {"id": id_version})
+            time.sleep(DELAI_APPELS)
+            if detail:
+                lignes += [{"article": num, "debut": debut} | lien for lien in liens_modification(detail.get("article", detail))]
+    if not lignes:
+        sortie.texte("  Aucun lien de modification trouvé")
+        return []
+    colonnes = ("lien", "orientation", "nature", "loi", "article_loi", "id_article_loi", "publiee", "effet")
+    df = pl.DataFrame(lignes, schema_overrides={c: pl.Utf8 for c in colonnes})
+    sortie.tableau(df.sort("article", "debut"))
+    sortie.texte("\n  Par nature de texte modificateur :")
+    sortie.tableau(df.group_by("nature").agg(pl.len().alias("liens"), pl.col("loi").n_unique().alias("textes")).sort("liens", descending=True))
+    lf = (
+        df.filter((pl.col("nature") == "LOI") & pl.col("id_article_loi").is_not_null())
+        .group_by("id_article_loi").agg(
+            pl.col("loi").first(), pl.col("article_loi").first(), pl.col("publiee").first(),
+            pl.col("article").unique().sort().str.join(", ").alias("articles_cgi"),
+        ).sort("publiee")
+    )
+    sortie.texte(f"\n  {lf.height} article(s) de loi qui modifient les articles cibles :")
+    sortie.tableau(lf)
+    return lf.to_dicts()
+
+
+def afficher_article(sortie, b):
+    a = b["article"]
+    sortie.texte(f"\n  {b['loi'][:80]} · article {b['num']} · clés : {sorted(a.keys())}")
+    for cle in sorted(a):
+        if any(m in cle.lower() for m in ("date", "nota", "url", "lien", "modificator", "etat")):
+            sortie.texte(f"    {cle} : {str(a[cle])[:200]}")
+    sortie.texte(f"    texte : {str(a.get('texte') or a.get('content') or '')[:600]}")
+
+
+def bloc5_lois_finances(sortie, args):
+    sortie.titre("5. Session PISTE")
+    session = ouvrir_piste(sortie, args.piste_env)
+    if not session:
+        return
+    articles_lf = bloc5a_modifications(sortie, session)
+    sortie.titre("5b. Articles de loi lus dans PISTE (lois de finances repérées par l'intitulé complet)")
+    lignes, retenus = [], []
+    for lf in articles_lf:
+        reponse = appeler_piste(sortie, session, "/consult/getArticle", {"id": lf["id_article_loi"]})
+        time.sleep(DELAI_APPELS)
+        if not reponse:
+            continue
+        article = reponse.get("article", reponse)
+        intitules = str(article.get("textTitles") or "")
+        mots = len(str(article.get("texte") or article.get("content") or "").split())
+        lignes.append({
+            "loi": lf["loi"][:70], "article_loi": lf["article_loi"], "articles_cgi": lf["articles_cgi"], "publiee": lf["publiee"],
+            "finances": "de finances" in intitules.lower(), "etat": article.get("etat"), "debut": en_date(article.get("dateDebut")),
+            "mots": mots, "nota": bool(article.get("nota")), "intitule": intitules[:120],
+        })
+        retenus.append({"loi": lf["loi"], "num": lf["article_loi"], "mots": mots, "finances": lignes[-1]["finances"], "article": article})
+    if lignes:
+        df = pl.DataFrame(lignes)
+        sortie.tableau(df)
+        lois_finances = df.filter(pl.col("finances"))
+        total = int(lois_finances["mots"].sum() or 0)
+        sortie.texte(f"\n  {lois_finances.height} article(s) de lois de finances sur {df.height}, {total} mots, soit environ {-(-total // MOTS_PAR_CHUNK)} chunks")
+    sortie.titre("5c. Contenu exploitable d'articles de lois de finances")
+    a_confirmer = [b for b in retenus if ARTICLE_A_CONFIRMER[0] in b["loi"] and str(b["num"]).strip() == ARTICLE_A_CONFIRMER[1]]
+    sortie.texte(f"  Article {ARTICLE_A_CONFIRMER[1]} de la loi {ARTICLE_A_CONFIRMER[0]} : " + ("trouvé" if a_confirmer else "non trouvé"))
+    for b in a_confirmer[:1] + sorted([b for b in retenus if b["finances"]], key=lambda b: -b["mots"])[:1]:
+        afficher_article(sortie, b)
+        
+        
+def bloc5e_jorf(sortie, args):
+    sortie.titre("5e. Texte d'origine au JORF des articles de lois de finances")
+    session = ouvrir_piste(sortie, args.piste_env)
+    if not session:
+        return
+    for loi, (cid, num_article) in TEXTES_JORF.items():
+        sortie.texte(f"\n  Loi {loi} ({cid}), article {num_article}")
+        arbre = None
+        for chemin, payload in (("/consult/jorf", {"textCid": cid}), ("/consult/lawDecree", {"textId": cid, "date": maintenant_ms()})):
+            arbre = appeler_piste(sortie, session, chemin, payload)
+            if arbre:
+                sortie.texte(f"  {chemin} : clés {sorted(arbre.keys())}")
+                break
+        if not arbre:
+            continue
+        articles = articles_de(arbre)
+        sortie.texte(f"  {len(articles)} articles dans la structure ; clés d'un nœud : {sorted(articles[0].keys()) if articles else []}")
+        noeud = next((a for a in articles if str(a.get("num", "")).strip() == num_article), None)
+        if not noeud:
+            sortie.texte(f"  Article {num_article} absent de la structure")
+            continue
+        reponse = appeler_piste(sortie, session, "/consult/getArticle", {"id": noeud.get("id")})
+        time.sleep(DELAI_APPELS)
+        if not reponse:
+            continue
+        article = reponse.get("article", reponse)
+        texte = str(article.get("texte") or article.get("content") or "")
+        sortie.texte(f"  id {noeud.get('id')} · clés : {sorted(article.keys())}")
+        sortie.texte(f"  texte ({len(texte.split())} mots) : {texte[:1500]}")
+
+
 def bloc3_titres(sortie, args):
     sortie.titre("3d. Documents BOFiP contenant les termes ciblés")
     chemin = DOSSIER_BOFIP / FICHIER_BOFIP
@@ -911,7 +1060,7 @@ def bloc3_prefixes(sortie, args):
         )
 
 
-BLOCS = {"0": bloc0, "1": bloc1, "2": bloc2, "3": bloc3_bofip, "3c": bloc3_volumes, "3d": bloc3_titres, "3e": bloc3_prefixes, "4": bloc4_legifrance}
+BLOCS = {"0": bloc0, "1": bloc1, "2": bloc2, "3": bloc3_bofip, "3c": bloc3_volumes, "3d": bloc3_titres, "3e": bloc3_prefixes, "4": bloc4_legifrance, "5": bloc5_lois_finances, "5e": bloc5e_jorf}
 
 
 
