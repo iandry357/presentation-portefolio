@@ -13,8 +13,11 @@ Argument reçu : `$ARGUMENTS`
 - Argument `mvp` → **mode FIN DE MVP** (étapes 1 à 3 bis, puis 4 à 7).
 
 Règles valables pour tout le skill :
-- Tu proposes chaque modification sous forme de diff ciblé, **un fichier à la fois**, et tu attends ma
-  validation avant de passer au suivant. Jamais de réécriture complète d'un fichier.
+- Tu modifies toi-même les fichiers de suivi (`STATUS.md`, dossier `projets/<projet>/`, cahier des charges
+  de la feature) **sans demander de validation** : tu donnes d'abord un résumé de ce qui va être modifié,
+  fichier par fichier (une ou deux lignes chacun), puis tu écris. Jamais de réécriture complète d'un
+  fichier (sauf `backlog.md`, qui est remplacé). `CLAUDE.md` et `README.md` (mode `mvp`) restent soumis
+  à ma validation, sur diff.
 - Tu n'inventes rien : tout ce que tu écris doit venir de la conversation en cours ou des fichiers que
   tu as lus. Si une information manque (statut de déploiement, métrique, port), demande-la-moi.
 - Tu n'exécutes rien (pas de shell). Les commandes à lancer, tu me les donnes pour Cmder.
@@ -43,7 +46,7 @@ dossier, donne-moi d'abord le script Cmder qui crée les 4 fichiers vides.
 
 ## Étape 3 — Mise à jour de STATUS.md et du dossier du projet
 
-Un fichier à la fois, dans cet ordre, chacun avec son diff et ma validation :
+Un fichier à la fois, dans cet ordre, appliqués directement après le résumé des modifications :
 
 1. `_docs-local/STATUS.md` :
    - « Feature en cours » : mise à jour si elle a changé ;
@@ -67,7 +70,7 @@ Un fichier à la fois, dans cet ordre, chacun avec son diff et ma validation :
 
 ## Étape 3 bis — Diff du cahier des charges de la feature
 
-Après validation du diff de STATUS.md, propose le diff du cahier des charges actif
+Après STATUS.md et le dossier du projet, applique les modifications du cahier des charges actif
 (`_docs-local/specs/<feature>.md`), **uniquement pour ce que la session a changé** :
 - en-tête « Statut / Implémentation » : étapes faites et date ;
 - tableau des écarts (« Écarts et ajouts constatés à l'implémentation ») : une ligne par écart
@@ -106,9 +109,9 @@ Propose le diff de `README.md` :
 - tableau OVH dans « Infrastructure » si un port a été ajouté ;
 - « Roadmap » : retire ce qui est livré, ajoute le backlog assumé du MVP.
 
-Puis le diff final de `_docs-local/STATUS.md` (ligne du projet du tableau « Projets » passée en clôturé,
+Puis, sans validation, la modification finale de `_docs-local/STATUS.md` (ligne du projet du tableau « Projets » passée en clôturé,
 et commentaire d'en-tête pointant vers le prochain cahier des charges : demande-moi lequel ; si aucun,
-indique « aucun ») et celui de `projets/<projet>/historique.md` (feature marquée clôturée).
+indique « aucun ») et de `projets/<projet>/historique.md` (feature marquée clôturée).
 
 ## Étape 7 — (mode MVP) Rappels
 
