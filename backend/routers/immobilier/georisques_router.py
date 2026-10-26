@@ -16,12 +16,16 @@ router = APIRouter(prefix="/immobilier/georisques", tags=["Immobilier Géorisque
 
 # Paramètres
 URL_RAPPORT = "https://georisques.gouv.fr/api/v1/resultats_rapport_risque"
-# Géorisques coupe la connexion aux User-Agent inconnus, dont celui de httpx (vérifié par sonde)
-EN_TETES = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"}
+# Géorisques coupe la connexion aux User-Agent inconnus et aux réponses compressées demandées par httpx (vérifié par sonde)
+EN_TETES = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+    "Accept-Encoding": "identity",
+}
+
 
 DELAI_SEC = 10
-NB_TENTATIVES = 5                    # Géorisques coupe des connexions au hasard (mesuré : environ 45 % de réussite)
-PAUSE_TENTATIVE_SEC = 0.5
+NB_TENTATIVES = 5                   # Géorisques coupe des connexions au hasard (mesuré : environ 45 % de réussite)
+PAUSE_TENTATIVE_SEC = 1
 LAT_MIN, LAT_MAX = 48.80, 48.92      # emprise de Paris
 LON_MIN, LON_MAX = 2.20, 2.50
 
@@ -45,7 +49,7 @@ async def georisques(
     lon: float = Query(ge=LON_MIN, le=LON_MAX),
 ):
     data = None
-    async with httpx.AsyncClient(timeout=DELAI_SEC) as client:
+    async with httpx.AsyncClient(timeout=DELAI_SEC, headers=EN_TETES) as client:
         for tentative in range(1, NB_TENTATIVES + 1):
             try:
                 r = await client.get(URL_RAPPORT, params={"latlon": f"{lon},{lat}"})
