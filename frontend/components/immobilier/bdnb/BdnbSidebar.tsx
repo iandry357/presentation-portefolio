@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-export type BdnbView = 'prix' | 'parc' | 'analyse' | 'loyers' | 'sources';
+export type BdnbView = 'prix' | 'parc' | 'analyse' | 'loyers' | 'assistant' | 'risques' | 'sources';
 
 interface Props {
   activeView: BdnbView;
@@ -14,6 +14,8 @@ const VIEWS: { id: BdnbView; label: string; icon: string }[] = [
   { id: 'parc', label: 'Profil du parc', icon: '🏢' },
   { id: 'analyse', label: 'Analyse', icon: '🔎' },
   { id: 'loyers', label: 'Loyers', icon: '🏠' },
+  { id: 'assistant', label: 'Assistant immobilier', icon: '⚖️' },
+  { id: 'risques', label: 'Risques', icon: '🌊' },
   { id: 'sources', label: 'Sources et qualité', icon: '🧾' },
 ];
 

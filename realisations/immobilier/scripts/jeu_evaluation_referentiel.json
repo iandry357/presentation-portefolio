@@ -1,0 +1,139 @@
+{
+  "version": "2026-10-26",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle est la classe énergétique minimale pour louer un logement en 2025 ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000047983547", "LEGIARTI000043977105"]
+    },
+    {
+      "id": 2,
+      "question": "Puis-je louer un logement classé G ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000043977105", "LEGIARTI000047983547"]
+    },
+    {
+      "id": 3,
+      "question": "Comment fonctionne le déficit foncier ?",
+      "themes": ["revenus_fonciers"],
+      "attendus": ["BOI-RFPI-BASE-30*", "LEGIARTI000054373682"]
+    },
+    {
+      "id": 4,
+      "question": "Jusqu'à quel montant de loyers le micro-foncier s'applique-t-il ?",
+      "themes": ["revenus_fonciers"],
+      "attendus": ["LEGIARTI000053544766", "BOI-RFPI-DECLA-10*"]
+    },
+    {
+      "id": 5,
+      "question": "Quel régime fiscal s'applique à un loueur en meublé non professionnel ?",
+      "themes": ["lmnp"],
+      "attendus": ["LEGIARTI000033817773", "LEGIARTI000054373853", "BOI-BIC-CHAMP-40*"]
+    },
+    {
+      "id": 6,
+      "question": "Mon loyer peut-il être révisé si le logement est classé F ou G ?",
+      "themes": ["gel_loyers"],
+      "attendus": ["LEGIARTI000043977085"]
+    },
+    {
+      "id": 7,
+      "question": "Quelles aides existent pour financer des travaux de rénovation énergétique ?",
+      "themes": ["aides"],
+      "attendus": ["LEGIARTI000054751685", "LEGIARTI000054751826", "LEGIARTI000054751928", "LEGIARTI000054752209"]
+    },
+    {
+      "id": 8,
+      "question": "Un audit énergétique est-il obligatoire pour vendre un logement ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000043977059", "LEGIARTI000043967365"]
+    },
+    {
+      "id": 9,
+      "question": "Combien de temps un diagnostic de performance énergétique est-il valable ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000043818603", "LEGIARTI000045543584", "LEGIARTI000045543575", "LEGIARTI000046825228", "LEGIARTI000046825224", "LEGIARTI000046825220"]
+    },
+    {
+      "id": 10,
+      "question": "Comment est imposée la plus-value de vente d'un bien immobilier ?",
+      "themes": ["plus_values"],
+      "attendus": ["LEGIARTI000053544910"]
+    },
+    {
+      "id": 11,
+      "question": "Puis-je amortir un bien loué en meublé ?",
+      "themes": ["lmnp"],
+      "attendus": ["LEGIARTI000029355753", "BOI-BIC-DEF*"]
+    },
+    {
+      "id": 12,
+      "question": "Quel préavis dois-je respecter pour donner congé à mon locataire ?",
+      "themes": [],
+      "attendus": [],
+      "hors_corpus": true
+    },
+    {
+      "id": 13,
+      "question": "Quelle est la valeur du marché locatif à Lyon ?",
+      "themes": [],
+      "attendus": [],
+      "hors_corpus": true
+    },
+    {
+      "id": 14,
+      "question": "Qu'est-ce qui change pour le déficit foncier en cas de rénovation énergétique ?",
+      "themes": ["revenus_fonciers", "changements_recents"],
+      "attendus": ["JORFARTI000053508409", "LEGIARTI000054373682"]
+    },
+    {
+      "id": 15,
+      "question": "Mon appartement est classé F, est-ce que je peux encore le louer ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000047983547", "LEGIARTI000043977105"]
+    },
+    {
+      "id": 16,
+      "question": "À partir de quand ne pourra-t-on plus louer un logement classé E ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000047983547"]
+    },
+    {
+      "id": 17,
+      "question": "Est-ce que je peux augmenter le loyer de mon locataire cette année ?",
+      "themes": ["gel_loyers"],
+      "attendus": ["LEGIARTI000043977085", "LEGIARTI000043977087", "LEGIARTI000043977083"]
+    },
+    {
+      "id": 18,
+      "question": "Je fais des travaux d'isolation dans mon logement loué, puis-je les déduire de mes impôts ?",
+      "themes": ["revenus_fonciers", "changements_recents"],
+      "attendus": ["LEGIARTI000053544761", "BOI-RFPI-BASE-20*", "JORFARTI000053508409"]
+    },
+    {
+      "id": 19,
+      "question": "Je loue en meublé, sur quoi est-ce que je paie des impôts ?",
+      "themes": ["lmnp"],
+      "attendus": ["LEGIARTI000033817773", "LEGIARTI000054373853", "BOI-BIC-CHAMP-40*"]
+    },
+    {
+      "id": 20,
+      "question": "Mon diagnostic énergétique est périmé, qu'est-ce que je risque ?",
+      "themes": ["decence"],
+      "attendus": ["LEGIARTI000043818603", "LEGIARTI000045543584", "LEGIARTI000045543575", "LEGIARTI000046825228", "LEGIARTI000046825224", "LEGIARTI000046825220"]
+    },
+    {
+      "id": 21,
+      "question": "J'ai vendu mon bien locatif, comment est calculée la plus-value que je dois payer ?",
+      "themes": ["plus_values"],
+      "attendus": ["LEGIARTI000053544910"]
+    },
+    {
+      "id": 22,
+      "question": "Y a-t-il des aides de l'État pour isoler un logement avant de le mettre en location ?",
+      "themes": ["aides"],
+      "attendus": ["LEGIARTI000054751685", "LEGIARTI000054751826", "LEGIARTI000054751928", "LEGIARTI000054752209"]
+    }
+  ]
+}

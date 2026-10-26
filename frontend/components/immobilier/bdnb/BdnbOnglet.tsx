@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import BdnbSidebar, { BdnbView } from './BdnbSidebar';
 import AnalyseView from './AnalyseView';
+import AssistantView from './AssistantView';
 import BdnbStats from './BdnbStats';
 import LoyersView from './LoyersView';
 import ParcView from './ParcView';
 import PrixDpeView from './PrixDpeView';
+import RisquesView from './RisquesView';
 import SourcesView from './SourcesView';
 
 export default function BdnbOnglet() {
@@ -27,6 +29,8 @@ export default function BdnbOnglet() {
           {vue === 'sources' && <SourcesView />}
           {vue === 'analyse' && <AnalyseView />}
           {vue === 'loyers' && <LoyersView />}
+          {vue === 'risques' && <RisquesView />}
+          {vue === 'assistant' && <AssistantView />}
         </div>
       </div>
     </>

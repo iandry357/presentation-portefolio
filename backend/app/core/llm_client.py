@@ -66,6 +66,7 @@ async def generate_with_fallback(
     _all_models = {
         "gemini": ("gemini/gemini-2.5-flash", settings.GEMINI_API_KEY),
         "mistral": ("mistral/mistral-small-latest", settings.MISTRAL_API_KEY),
+        "mistral-medium": ("mistral/mistral-medium-latest", settings.MISTRAL_API_KEY),
         "groq": ("groq/openai/gpt-oss-20b", settings.GROQ_API_KEY),
     }
     _default_order = ["gemini", "mistral", "groq"]

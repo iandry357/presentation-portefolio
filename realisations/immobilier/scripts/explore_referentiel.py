@@ -9,6 +9,7 @@ Bloc 1 : jeu « Logement - Encadrement des loyers » (téléchargé s'il est abs
 Bloc 2 : année et période de construction dans la BDNB, au regard des époques de l'encadrement.
 Bloc 3 : champs, valeurs et recherche plein texte des jeux BOFiP (data.economie.gouv.fr).
 Bloc 5 : lois de finances modifiant les articles cibles du CGI (PISTE) : lois modificatrices, articles qui les citent, contenu exploitable.
+Bloc 6 : compléments à valider avant R2 : article 20-1 de la loi 89-462, articles du décret 2002-120 (3 ter, 6 ter), recherche des textes MaPrimeRénov' (PISTE).
 """
 import argparse
 import importlib.util
@@ -77,6 +78,9 @@ TEXTES_JORF = {  # lois de finances dont on relit l'article au JORF (bloc 5e) : 
     "2025-127": ("JORFTEXT000051168007", "110"),
     "2023-1322": ("JORFTEXT000048727345", "110"),
 }
+ARTICLES_A_LIRE = {"loi 89-462": ["17", "17-1", "17-2"], "décret 2002-120": ["2", "3", "3 bis", "4", "6 bis", "6 quater"]}  # articles dont on lit le texte (bloc 6b)
+RECHERCHES_MPR = ["2020-26", "14 janvier 2020 prime de transition énergétique", "17 novembre 2020 caractéristiques techniques"]  # recherche des textes MaPrimeRénov' (bloc 6c)
+LONGUEUR_EXTRAIT = 1500  # caractères affichés par article lu (bloc 6b)
 SEUIL_VALEURS = 100  # colonne à moins de valeurs distinctes : listée valeur par valeur (bloc 1b)
 RATIO_MAJORE, RATIO_MINORE = 1.2, 0.7  # majoré = 1,2 × référence, minoré = 0,7 × référence (bloc 1d)
 TOLERANCE_RATIO = 0.005
@@ -1016,6 +1020,61 @@ def bloc5e_jorf(sortie, args):
         texte = str(article.get("texte") or article.get("content") or "")
         sortie.texte(f"  id {noeud.get('id')} · clés : {sorted(article.keys())}")
         sortie.texte(f"  texte ({len(texte.split())} mots) : {texte[:1500]}")
+        
+        
+def lire_texte_article(sortie, session, noeud):
+    reponse = appeler_piste(sortie, session, "/consult/getArticle", {"id": noeud.get("id")})
+    time.sleep(DELAI_APPELS)
+    if not reponse:
+        return
+    article = reponse.get("article", reponse)
+    texte = str(article.get("texte") or article.get("content") or "")
+    sortie.texte(f"\n  Article {noeud.get('num')} · {article.get('etat')} · {en_date(article.get('dateDebut'))} → {en_date(article.get('dateFin'))} · {len(texte.split())} mots")
+    sortie.texte(f"    {texte[:LONGUEUR_EXTRAIT]}")
+
+
+def bloc6_complements(sortie, args):
+    sortie.titre("6a. Session PISTE")
+    session = ouvrir_piste(sortie, args.piste_env)
+    if not session:
+        return
+    for nom, cfg in TEXTES_LEGI.items():
+        sortie.titre(f"6b. {nom} : articles de la structure")
+        texte_id = chercher_texte(sortie, session, nom, cfg)
+        if not texte_id:
+            continue
+        arbre = structure_texte(sortie, session, texte_id, cfg["nature"])
+        articles = articles_de(arbre) if arbre else []
+        sortie.texte(f"  {len(articles)} articles dans la structure")
+        if not articles:
+            continue
+        sortie.tableau(pl.DataFrame([{"num": a.get("num"), "etat": a.get("etat"), "id": a.get("id")} for a in articles]))
+        for noeud in articles:
+            if str(noeud.get("num", "")).strip() in ARTICLES_A_LIRE.get(nom, []):
+                lire_texte_article(sortie, session, noeud)
+    sortie.titre("6c. MaPrimeRénov' (textes du fond LODA_DATE)")
+    lignes = []
+    for requete in RECHERCHES_MPR:
+        payload = {
+            "fond": "LODA_DATE",
+            "recherche": {
+                "champs": [{"typeChamp": "TITLE", "criteres": [{"typeRecherche": "TOUS_LES_MOTS_DANS_UN_CHAMP", "valeur": requete, "operateur": "ET"}], "operateur": "ET"}],
+                "filtres": [], "pageNumber": 1, "pageSize": 100, "operateur": "ET", "sort": "PERTINENCE", "typePagination": "DEFAUT",
+            },
+        }
+        reponse = appeler_piste(sortie, session, "/search", payload)
+        if not reponse:
+            continue
+        resultats = reponse.get("results") or []
+        sortie.texte(f"  « {requete} » : {reponse.get('totalResultNumber')} résultats")
+        lignes += [
+            {"requete": requete, "cid": t.get("cid"), "date": en_date(res.get("date")), "nature": res.get("nature"), "etat": res.get("etat"), "titre": (t.get("title") or "")[:120]}
+            for res in resultats for t in res.get("titles") or []
+        ]
+    if not lignes:
+        sortie.texte("  Aucun texte trouvé")
+        return
+    sortie.tableau(pl.DataFrame(lignes).unique(subset="cid", keep="first", maintain_order=True).sort("date", descending=True, nulls_last=True))
 
 
 def bloc3_titres(sortie, args):
@@ -1060,7 +1119,7 @@ def bloc3_prefixes(sortie, args):
         )
 
 
-BLOCS = {"0": bloc0, "1": bloc1, "2": bloc2, "3": bloc3_bofip, "3c": bloc3_volumes, "3d": bloc3_titres, "3e": bloc3_prefixes, "4": bloc4_legifrance, "5": bloc5_lois_finances, "5e": bloc5e_jorf}
+BLOCS = {"0": bloc0, "1": bloc1, "2": bloc2, "3": bloc3_bofip, "3c": bloc3_volumes, "3d": bloc3_titres, "3e": bloc3_prefixes, "4": bloc4_legifrance, "5": bloc5_lois_finances, "5e": bloc5e_jorf, "6": bloc6_complements}
 
 
 
