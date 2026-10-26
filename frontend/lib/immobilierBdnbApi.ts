@@ -205,6 +205,21 @@ export interface AssistantReponse {
   modele: string | null;
 }
 
+// Géorisques (miroir de backend/routers/immobilier/georisques_router.py)
+export interface Risque {
+  famille: 'naturel' | 'technologique';
+  libelle: string;
+  statut_commune: string | null;   // tel que renvoyé par Géorisques, ex. « Risque Existant - faible »
+  statut_adresse: string | null;   // « Risque non Connu » / « Risque non Concerne » : rien d'identifié à ce point
+}
+
+export interface GeorisquesReponse {
+  adresse: string | null;          // adresse la plus proche du point cliqué
+  url_rapport: string | null;
+  risques: Risque[];
+}
+
+
 // ============================================================================
 // Appels (via le proxy /backend : le cookie d'accès est first-party)
 // ============================================================================
@@ -260,4 +275,9 @@ export async function getBdnbLoyers(
 // Assistant bailleur : public, avec limite de débit par visiteur côté backend ; les sources sont construites par le serveur
 export async function postAssistantChat(question: string, historique: MessageHistorique[]): Promise<AssistantReponse> {
   return request<AssistantReponse>('/immobilier/assistant/chat', { method: 'POST', body: { question, historique } });
+}
+
+// Géorisques : public, relaie l'API ouverte du ministère ; 422 hors de Paris
+export async function getGeorisques(lat: number, lon: number): Promise<GeorisquesReponse> {
+  return request<GeorisquesReponse>(`/immobilier/georisques?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}`);
 }
