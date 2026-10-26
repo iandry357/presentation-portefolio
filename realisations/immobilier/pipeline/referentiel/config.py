@@ -125,5 +125,11 @@ EMBEDDING_SERVICE_URL = os.getenv("EMBEDDING_SERVICE_URL")
 EMBEDDING_SERVICE_KEY = "embedding-service"  # clé du registry.yaml de l'orchestrateur
 WAKE_TIMEOUT_SEC = 120
 WAKE_POLL_INTERVAL_SEC = 3
-TAILLE_LOT_EMBEDDING = 64
+TAILLE_LOT_EMBEDDING = 8  # mistral-embed : limite de tokens par requête non documentée (16 384 en 2024 d'après un cookbook)
 COLLECTION_CHROMA_TRAVAIL = f"{COLLECTION_CHROMA}_travail"  # remplie puis renommée : l'ancienne collection reste intacte en cas d'échec
+
+# --- Embeddings Mistral (remplacent l'embedding-service partagé, jugé insuffisant par la mesure : backlog 40) ---
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+MISTRAL_URL_EMBEDDINGS = "https://api.mistral.ai/v1/embeddings"
+MISTRAL_MODELE_EMBEDDING = "mistral-embed"
+MISTRAL_ESSAIS = 5  # tentatives après une limite de débit (429), pause de 1 s, 2 s, 4 s...

@@ -1,6 +1,6 @@
 """Chargement du corpus : ChromaDB (OVH) puis table de traçabilité BigQuery. Lit chunks.json (après validation).
 
-ChromaDB : les embeddings viennent de l'embedding-service partagé (réveillé via l'orchestrateur OVH). La collection est remplie
+ChromaDB : les embeddings viennent de l'API Mistral (mistral-embed, 1 024 dimensions). La collection est remplie
 sous un nom de travail puis renommée, l'ancienne collection étant supprimée juste avant : en cas d'échec, elle reste intacte.
 BigQuery : la table de traçabilité est remplacée en un seul job. Tout échec d'un lot arrête le chargement.
 """
@@ -16,8 +16,8 @@ from google.cloud import bigquery
 
 from pipeline.referentiel.config import (
     BQ_DATASET, CHROMA_HOST, CHROMA_PASSWORD, CHROMA_PORT, CHROMA_USER, COLLECTION_CHROMA, COLLECTION_CHROMA_TRAVAIL,
-    DOSSIER_CORPUS, EMBEDDING_SERVICE_KEY, EMBEDDING_SERVICE_URL, FICHIER_CHUNKS, GCP_PROJECT_ID, GCP_SA_KEY_PATH,
-    OVH_ORCHESTRATOR_URL, TABLE_CORPUS, TAILLE_LOT_EMBEDDING, WAKE_POLL_INTERVAL_SEC, WAKE_TIMEOUT_SEC,
+    DOSSIER_CORPUS, FICHIER_CHUNKS, GCP_PROJECT_ID, GCP_SA_KEY_PATH, MISTRAL_API_KEY, MISTRAL_ESSAIS,
+    MISTRAL_MODELE_EMBEDDING, MISTRAL_URL_EMBEDDINGS, TABLE_CORPUS, TAILLE_LOT_EMBEDDING,
 )
 
 logger = logging.getLogger(__name__)
@@ -38,37 +38,25 @@ SCHEMA_CORPUS = [
 
 def _verifier_configuration():
     variables = {
-        "CHROMA_HOST": CHROMA_HOST, "CHROMA_USER": CHROMA_USER, "CHROMA_PASSWORD": CHROMA_PASSWORD,
-        "OVH_ORCHESTRATOR_URL": OVH_ORCHESTRATOR_URL, "EMBEDDING_SERVICE_URL": EMBEDDING_SERVICE_URL,
+        "CHROMA_HOST": CHROMA_HOST, "CHROMA_USER": CHROMA_USER, "CHROMA_PASSWORD": CHROMA_PASSWORD, "MISTRAL_API_KEY": MISTRAL_API_KEY,
     }
     manquantes = [nom for nom, valeur in variables.items() if not valeur]
     if manquantes:
         raise ValueError("Variables à définir dans pipeline/.env : " + ", ".join(manquantes))
 
 
-def _reveiller_embedding():
-    """Démarre l'embedding-service via l'orchestrateur OVH puis attend son /health."""
-    try:
-        requests.post(f"{OVH_ORCHESTRATOR_URL}/wake/{EMBEDDING_SERVICE_KEY}", timeout=10)
-    except requests.exceptions.RequestException as e:
-        logger.warning("Réveil de %s non confirmé : %s", EMBEDDING_SERVICE_KEY, e)
-    attente = 0
-    while attente < WAKE_TIMEOUT_SEC:
-        try:
-            if requests.get(f"{EMBEDDING_SERVICE_URL}/health", timeout=5).status_code == 200:
-                logger.info("%s prêt", EMBEDDING_SERVICE_KEY)
-                return
-        except requests.exceptions.RequestException:
-            pass
-        time.sleep(WAKE_POLL_INTERVAL_SEC)
-        attente += WAKE_POLL_INTERVAL_SEC
-    raise TimeoutError(f"{EMBEDDING_SERVICE_KEY} indisponible après {WAKE_TIMEOUT_SEC} s")
-
-
 def _embeddings(textes):
-    r = requests.post(f"{EMBEDDING_SERVICE_URL}/embed", json={"texts": textes}, timeout=120)
+    """Vecteurs mistral-embed d'un lot de textes ; nouvelle tentative après une limite de débit (429)."""
+    for essai in range(MISTRAL_ESSAIS):
+        r = requests.post(
+            MISTRAL_URL_EMBEDDINGS, headers={"Authorization": f"Bearer {MISTRAL_API_KEY}"},
+            json={"model": MISTRAL_MODELE_EMBEDDING, "input": textes}, timeout=120,
+        )
+        if r.status_code != 429:
+            break
+        time.sleep(2 ** essai)
     r.raise_for_status()
-    resultat = r.json()["embeddings"]
+    resultat = [d["embedding"] for d in sorted(r.json()["data"], key=lambda d: d["index"])]
     if len(resultat) != len(textes):
         raise ValueError(f"{len(resultat)} embeddings reçus pour {len(textes)} textes")
     return resultat
@@ -94,7 +82,6 @@ def _supprimer_collection(client, nom):
 
 def charger_chroma(chunks):
     """Remplace la collection referentiel_immobilier par les chunks ; renvoie le nombre de chunks chargés."""
-    _reveiller_embedding()
     client = _client_chroma()
     _supprimer_collection(client, COLLECTION_CHROMA_TRAVAIL)
     travail = client.create_collection(name=COLLECTION_CHROMA_TRAVAIL, metadata={"hnsw:space": "cosine"})

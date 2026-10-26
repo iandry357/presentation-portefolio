@@ -4,7 +4,7 @@ S'exécute en LOCAL dans le venv scripts/venv-explore, PAS dans Docker. Depuis r
     python -m pipeline.referentiel.orchestrator [--etape collecte|transformation|validation|chargement|tout] [--force]
                                                 [--piste-env sandbox|production] [--vers chroma|bigquery|tout] [--dry-run]
 Rafraîchir le corpus : --etape collecte --force, puis --etape tout (sans --force, une collecte existante est réutilisée).
-Prérequis : pipeline/.env (PISTE_*, CHROMA_*, OVH_ORCHESTRATOR_URL, EMBEDDING_SERVICE_URL) et gcp_sa_immobilier.json.
+Prérequis : pipeline/.env (PISTE_*, CHROMA_*, MISTRAL_API_KEY) et gcp_sa_immobilier.json.
 """
 import argparse
 import logging
