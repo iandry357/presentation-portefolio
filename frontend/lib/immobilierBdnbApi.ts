@@ -184,6 +184,27 @@ export interface LoyersResponse {
   cellules: LoyersCellule[];
 }
 
+// Assistant bailleur (miroir de backend/routers/immobilier/assistant_schemas.py)
+export interface MessageHistorique {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface SourceCitee {
+  reference: string;             // ex. « Loi n° 89-462 du 6 juillet 1989, art. 6 »
+  type_texte: string;            // loi, code, décret, arrêté, BOFiP, loi de finances
+  statut: string;                // « en vigueur »
+  date_version: string | null;
+  url: string;
+}
+
+export interface AssistantReponse {
+  reponse: string;               // citations [n] renumérotées dans l'ordre d'apparition
+  sources: SourceCitee[];        // construites par le serveur depuis les métadonnées
+  refus: boolean;                // vrai si aucune source du corpus ne répond
+  modele: string | null;
+}
+
 // ============================================================================
 // Appels (via le proxy /backend : le cookie d'accès est first-party)
 // ============================================================================
@@ -234,4 +255,9 @@ export async function getBdnbLoyers(
     valeurs?.forEach(valeur => params.append(dimension, valeur)),
   );
   return request<LoyersResponse>(`/immobilier/bdnb/loyers?${params.toString()}`);
+}
+
+// Assistant bailleur : public, avec limite de débit par visiteur côté backend ; les sources sont construites par le serveur
+export async function postAssistantChat(question: string, historique: MessageHistorique[]): Promise<AssistantReponse> {
+  return request<AssistantReponse>('/immobilier/assistant/chat', { method: 'POST', body: { question, historique } });
 }
