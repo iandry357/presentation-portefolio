@@ -23,6 +23,7 @@ from routers.gestion_patrimoine.router import router as gp_router
 from routers.top_offres.router import router as top_offres_router
 from routers.immobilier.router import router as immobilier_router
 from routers.immobilier.bdnb_router import router as immobilier_bdnb_router
+from routers.immobilier.assistant_router import router as immobilier_assistant_router
 
 
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -98,6 +99,7 @@ app.include_router(gp_router)
 app.include_router(top_offres_router)
 app.include_router(immobilier_router)
 app.include_router(immobilier_bdnb_router)
+app.include_router(immobilier_assistant_router)
 
 @app.get("/")
 async def root():
