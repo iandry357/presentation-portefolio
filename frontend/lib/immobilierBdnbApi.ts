@@ -284,3 +284,36 @@ export async function postAssistantChat(question: string, historique: MessageHis
 export async function getGeorisques(lat: number, lon: number): Promise<GeorisquesReponse> {
   return request<GeorisquesReponse>(`/immobilier/georisques?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}`);
 }
+
+
+// Adresse la plus proche, parcelle du point et zone d'urbanisme (API ouvertes de l'IGN) : public, 422 hors de Paris
+export async function getPoint(lat: number, lon: number): Promise<PointReponse> {
+  return request<PointReponse>(`/immobilier/point?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}`);
+}
+
+
+// Point cliqué : adresse, parcelle et zone d'urbanisme (miroir de backend/routers/immobilier/point_router.py)
+export interface AdresseProche {
+  libelle: string;
+  distance_m: number | null;
+}
+
+export interface ParcelleDuPoint {
+  id: string;                      // 14 caractères
+  section: string | null;
+  numero: string | null;
+  contenance_m2: number | null;    // surface cadastrale
+}
+
+export interface ZoneUrbanisme {
+  code: string | null;             // ex. « US »
+  libelle: string | null;          // ex. « Zone urbaine Sauvegardée »
+  type_zone: string | null;        // U, AU, A ou N
+}
+
+export interface PointReponse {
+  adresse: AdresseProche | null;
+  parcelle: ParcelleDuPoint | null;   // null si le point n'est dans aucune parcelle (voie publique)
+  zones_urbanisme: ZoneUrbanisme[];
+  donnees_partielles: boolean;        // un des trois appels aux API de l'IGN a échoué
+}

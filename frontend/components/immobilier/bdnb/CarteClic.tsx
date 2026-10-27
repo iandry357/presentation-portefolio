@@ -1,14 +1,23 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { CircleMarker, MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { CircleMarker, LayersControl, MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+
 
 // Paramètres
 const CENTRE: [number, number] = [48.8566, 2.3522];
 const ZOOM = 12;
 const ZOOM_MIN = 11;
 const LIMITES: [[number, number], [number, number]] = [[48.78, 2.18], [48.94, 2.52]];
-const URL_TUILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ZOOM_MAX = 19;
+const COUCHE_FOND = 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2';
+const COUCHE_CADASTRE = 'CADASTRALPARCELS.PARCELLAIRE_EXPRESS';   // autre choix : CADASTRALPARCELS.PARCELS (noir et blanc)
+const ATTRIBUTION = '&copy; <a href="https://www.ign.fr/">IGN</a>';
+
+// Tuiles WMTS de la Géoplateforme (Web Mercator), sans clé
+const urlTuiles = (couche: string) =>
+  `https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${couche}&STYLE=normal&FORMAT=image/png` +
+  '&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
 
 export interface PointCarte {
   lat: number;
@@ -31,13 +40,16 @@ export default function CarteClic({ point, onChoix }: Props) {
       center={CENTRE}
       zoom={ZOOM}
       minZoom={ZOOM_MIN}
+      maxZoom={ZOOM_MAX}
       maxBounds={LIMITES}
       className="h-80 w-full rounded-lg z-0"
     >
-      <TileLayer
-        url={URL_TUILES}
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      />
+      <TileLayer url={urlTuiles(COUCHE_FOND)} attribution={ATTRIBUTION} maxZoom={ZOOM_MAX} />
+      <LayersControl position="topright">
+        <LayersControl.Overlay name="Cadastre">
+          <TileLayer url={urlTuiles(COUCHE_CADASTRE)} maxZoom={ZOOM_MAX} />
+        </LayersControl.Overlay>
+      </LayersControl>
       <Ecoute onChoix={onChoix} />
       {point && (
         <CircleMarker
