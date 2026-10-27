@@ -106,8 +106,14 @@ export function libelleAppariement(appariement: string): string {
 export const NON_RENSEIGNE = 'non renseigné';   // valeur renvoyée par l'API
 export const PIECES_PLAFOND = 6;                // pipeline/analyse/config.py (PIECES_MAX) : 6 = « 6 et plus »
 
+// Le cube « Analyse » et le cube avec attributs du bâti se lisent de la même façon (prix médian et ventes)
+export function estVentes(source: SourceAnalyse): boolean {
+  return source === 'ventes' || source === 'ventes_bati';
+}
+
 export const SOURCES_ANALYSE: { id: SourceAnalyse; libelle: string }[] = [
   { id: 'ventes', libelle: 'Ventes' },
+  { id: 'ventes_bati', libelle: 'Ventes et bâti' },
   { id: 'dpe', libelle: 'DPE' },
 ];
 
@@ -115,6 +121,10 @@ export const SOURCES_ANALYSE: { id: SourceAnalyse; libelle: string }[] = [
 export const DIMENSIONS_ANALYSE: Record<SourceAnalyse, DimensionAnalyse[]> = {
   ventes: ['pieces', 'etiquette', 'arrondissement', 'tranche_surface', 'trimestre', 'rattachee'],
   dpe: ['pieces', 'etiquette', 'arrondissement', 'tranche_surface', 'trimestre'],
+  ventes_bati: [
+    'epoque_ff', 'taille_copro', 'inondation', 'patrimoine', 'pieces', 'etiquette', 'arrondissement',
+    'tranche_surface', 'trimestre', 'usage_batiment', 'rattachee',
+  ],
 };
 
 export function libelleDimension(dimension: DimensionAnalyse, source: SourceAnalyse): string {
@@ -125,10 +135,16 @@ export function libelleDimension(dimension: DimensionAnalyse, source: SourceAnal
     case 'tranche_surface': return 'Surface';
     case 'etiquette': return source === 'dpe' ? 'Étiquette du logement' : 'Étiquette de l’immeuble';
     case 'rattachee': return 'Immeuble identifié';
+    case 'epoque_ff': return 'Époque de construction';
+    case 'taille_copro': return 'Taille de la copropriété';
+    case 'inondation': return 'Inondation par débordement';
+    case 'patrimoine': return 'Patrimoine';
+    case 'usage_batiment': return 'Usage de l’immeuble';
   }
 }
 
 export function libelleModalite(dimension: DimensionAnalyse, valeur: string): string {
+  if (dimension === 'taille_copro' && valeur === NON_RENSEIGNE) return 'Hors registre des copropriétés';
   if (valeur === NON_RENSEIGNE) return majuscule(valeur);
   switch (dimension) {
     case 'pieces':
@@ -147,6 +163,17 @@ export function libelleModalite(dimension: DimensionAnalyse, valeur: string): st
       return valeur === 'oui' ? 'Oui' : 'Non';   // axe « Immeuble identifié » : vente reliée ou non à un immeuble de la BDNB
     case 'etiquette':
       return majuscule(valeur);   // A à G, ou « inconnue »
+    case 'epoque_ff':
+      return majuscule(valeur.replace(/^\d\s+/, '')).replace('Apres', 'Après');   // rang de tri retiré
+    case 'taille_copro': {
+      const texte = majuscule(valeur.replace(/^\d\s+/, ''));   // rang de tri retiré
+      return texte.endsWith(' et plus') ? texte.replace(' et plus', ' logements et plus') : `${texte} logements`;
+    }
+    case 'inondation':
+    case 'patrimoine':
+      return majuscule(valeur);
+    case 'usage_batiment':
+      return valeur;
   }
 }
 

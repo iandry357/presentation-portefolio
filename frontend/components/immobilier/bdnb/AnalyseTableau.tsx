@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import type { AnalyseCellule, DimensionAnalyse, SourceAnalyse } from '@/lib/immobilierBdnbApi';
-import { libelleDimension, libelleModalite, minuscule } from '@/lib/immobilierBdnb';
+import { estVentes, libelleDimension, libelleModalite, minuscule } from '@/lib/immobilierBdnb';
 import { SEUIL_VENTES_FIABLES } from '@/lib/immobilierBdnbTextes';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 
@@ -19,7 +19,7 @@ const cle = (ligne: string, colonne: string) => `${ligne}\u0000${colonne}`;
 function Cellule({ cellule, source }: { cellule: AnalyseCellule | undefined; source: SourceAnalyse }) {
   // Pas de cellule : groupe masqué (accès verrouillé) ou combinaison sans observation
   if (!cellule) return <span className="text-gray-300">–</span>;
-  const ventes = source === 'ventes';
+  const ventes = estVentes(source);
   const valeur = ventes ? cellule.mediane : cellule.part_pct;
   const fragile = ventes && cellule.n < SEUIL_VENTES_FIABLES;
   return (
@@ -49,7 +49,7 @@ export default function AnalyseTableau({ source, axes, cellules, lignes, colonne
         Lignes : {minuscule(libelleDimension(axes[0], source))} · Colonnes : {minuscule(libelleDimension(axes[1], source))}
       </p>
       <p className="text-xs text-gray-600 mb-2">
-        {source === 'ventes'
+        {estVentes(source)
           ? `Dans chaque case : le prix médian au m², puis le nombre de ventes. En gris : moins de ${SEUIL_VENTES_FIABLES} ventes, à lire avec prudence. Le total est le nombre de ventes de la ligne. « – » : aucune vente, ou trop peu pour être affichée tant que l’accès est verrouillé.`
           : 'Dans chaque case : la part de la ligne (en %), puis le nombre de DPE. Le total est le nombre de DPE de la ligne. « – » : aucun DPE, ou trop peu pour être affiché tant que l’accès est verrouillé.'}
       </p>
@@ -82,7 +82,7 @@ export default function AnalyseTableau({ source, axes, cellules, lignes, colonne
                   <div className="font-medium">
                     {formatEntier(colonnesAffichees.reduce((somme, colonne) => somme + (parCle.get(cle(ligne, colonne))?.n ?? 0), 0))}
                   </div>
-                  <div className="text-xs text-gray-400">{source === 'ventes' ? 'ventes' : 'DPE'}</div>
+                  <div className="text-xs text-gray-400">{estVentes(source) ? 'ventes' : 'DPE'}</div>
                 </td>
               </tr>
             ))}

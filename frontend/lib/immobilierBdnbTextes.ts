@@ -3,7 +3,7 @@ import type {
 } from '@/lib/immobilierBdnbApi';
 import { formatEntier, formatPourcentage } from '@/lib/immobilier';
 import {
-  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, MesureLoyers, formatLoyer, libelleAppariement, libelleEnergie,
+  CLASSES_DPE, LIBELLE_ENERGIE_AUTRES, NON_RENSEIGNE, POSTES, MesureLoyers, estVentes, formatLoyer, libelleAppariement, libelleEnergie,
   libelleModalite, libelleModaliteLoyers, libelleMethodeRattachement, libellePeriode, ordrePeriode, minuscule,
 } from '@/lib/immobilierBdnb';
 
@@ -272,7 +272,7 @@ export function alertePieces(recouvrement: number): string {
 // comptage : DPE par trimestre, la barre donne le nombre de diagnostics et non une part
 export function voirAnalyse(source: SourceAnalyse, axes: string[], comptage = false): string {
   const selon = axes.map(minuscule).join(' et ');
-  if (source === 'ventes') {
+  if (estVentes(source)) {
     return `Le prix médian au m² des logements vendus à Paris, selon ${selon}. La moitié des ventes s’est faite en dessous de ce prix, l’autre moitié au-dessus.`;
   }
   return comptage
@@ -301,7 +301,7 @@ export function retenirAnalyse(data: AnalyseResponse): string | null {
     );
   }
 
-  if (data.meta.source === 'ventes') {
+  if (estVentes(data.meta.source)) {
     const fiables = comparables.filter(c => c.n >= SEUIL_VENTES_FIABLES && c.mediane !== null);
     if (fiables.length < 2) return null;
     const bas = fiables.reduce((a, b) => ((b.mediane as number) < (a.mediane as number) ? b : a));
@@ -331,7 +331,11 @@ export function attentionAnalyse(data: AnalyseResponse): string | null {
       : base;
   }
 
-  const base = 'Ces prix sont bruts : ils ne tiennent compte que des critères choisis, ni de l’état du bien, ni de son étage.';
+  const base =
+    'Ces prix sont bruts : ils ne tiennent compte que des critères choisis, ni de l’état du bien, ni de son étage.' +
+    (data.meta.source === 'ventes_bati'
+      ? ' Un écart entre deux groupes ne prouve pas que l’attribut en est la cause : il peut venir du quartier, de la surface ou de l’époque.'
+      : '');
   const fragiles = data.cellules.filter(c => c.n < SEUIL_VENTES_FIABLES);
   if (fragiles.length === 0) return base;
   if (data.meta.axes.length === 1) {

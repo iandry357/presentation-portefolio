@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import {
   AnalyseCellule, AnalyseResponse, DimensionAnalyse, FiltresAnalyse, SourceAnalyse, getBdnbAnalyse,
 } from '@/lib/immobilierBdnbApi';
-import { DIMENSIONS_ANALYSE, NON_RENSEIGNE, libelleDimension, libelleModalite, minuscule } from '@/lib/immobilierBdnb';
+import { DIMENSIONS_ANALYSE, NON_RENSEIGNE, estVentes, libelleDimension, libelleModalite, minuscule } from '@/lib/immobilierBdnb';
 import {
   ALERTE_REFORME_DPE, SEUIL_VENTES_FIABLES, alertePieces, attentionAnalyse, retenirAnalyse, voirAnalyse,
 } from '@/lib/immobilierBdnbTextes';
@@ -116,7 +116,7 @@ export default function AnalyseView() {
   const donnees = data && typologieSeule ? sansNonRenseigne(data) : data;
   // DPE par trimestre : le nombre de diagnostics est plus parlant que la part de chaque trimestre
   const comptage = meta?.source === 'dpe' && meta.axes.length === 1 && meta.axes[0] === 'trimestre';
-  const ventes = meta?.source === 'ventes';
+  const ventes = !!meta && estVentes(meta.source);
   const unAxe = meta?.axes.length === 1;
   const libellesAxes = meta ? meta.axes.map(a => minuscule(libelleDimension(a, meta.source))) : [];
   const modalites = meta && meta.source === source ? meta.modalites : {};
@@ -223,6 +223,14 @@ export default function AnalyseView() {
                     Une vente est reliée à un immeuble de la BDNB par sa parcelle cadastrale ou son adresse. Sur les ventes
                     de référence de la BDNB, le bon immeuble est retrouvé dans 97,8 % des cas.
                   </p>
+                  {meta.source === 'ventes_bati' && (
+                    <p>
+                      Les attributs du bâti viennent de la BDNB (CSTB) : année de construction des fichiers fonciers (souvent
+                      arrondie à la décennie dans le parc ancien), registre des copropriétés (« hors registre » veut dire absent
+                      du registre, pas forcément sans copropriété), aléa d’inondation par débordement de cours d’eau, monument
+                      historique et bâti patrimonial des plans locaux d’urbanisme. Une vente non reliée à un immeuble n’a aucun de ces attributs.
+                    </p>
+                  )}
                 </>
               ) : (
                 <>
