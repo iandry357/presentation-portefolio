@@ -14,7 +14,7 @@ import logging
 import time
 from datetime import date
 
-from pipeline.organisation import cube_batiment, cube_croise, cube_dvf, cube_loyers
+from pipeline.organisation import cube_batiment, cube_croise, cube_dvf, cube_loyers, qualite, sources
 from pipeline.organisation.brut import construire_vues
 from pipeline.organisation.config import DATE_DEBUT, DATE_FIN, DEPARTEMENT, LIVRAISON
 from pipeline.organisation.parametres import ecrire
@@ -38,8 +38,8 @@ def main():
         help="fin de la période, incluse (défaut : config.py ; absent = jusqu'aux dernières données)",
     )
     parser.add_argument(
-        "--etape", choices=["vues", "cubes", "tout"], default="tout",
-        help="vues brutes seules ; cubes seuls (les vues doivent exister), suivis de la table des paramètres ; ou les deux (défaut)",
+        "--etape", choices=["vues", "cubes", "sources", "tout"], default="tout",
+        help="vues brutes seules ; cubes seuls, suivis de la table des paramètres ; sources et qualité seules (les cubes doivent exister) ; ou tout (défaut)",
     )
     args = parser.parse_args()
 
@@ -54,6 +54,11 @@ def main():
         cube_croise.construire_dpe(args.debut, args.fin)
         cube_loyers.construire(args.livraison, args.departement, args.debut, args.fin)
         ecrire(args.livraison, args.departement, args.debut, args.fin)
+
+    if args.etape in ("sources", "tout"):
+        sources.construire()
+        qualite.construire()
+
 
     logger.info("Terminé (%.0f s)", time.time() - debut)
 
