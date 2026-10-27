@@ -68,6 +68,7 @@ BDNB_REL_BATIMENT_PARCELLE = "bdnb_rel_batiment_parcelle"
 # Tables écrites par l'étape attributs (recréées à chaque exécution)
 TABLE_ATTRIBUTS_BATIMENT = "bdnb_batiment_attributs"
 TABLE_ATTRIBUTS_PARCELLE = "bdnb_parcelle_attributs"
+TABLE_CUBE_BATI = "agg_analyse_bati"  # cube des ventes avec attributs du bâti (étape cube), recréé à chaque exécution
 
 # Époque de construction d'après l'année des fichiers fonciers : mêmes libellés que l'encadrement des loyers
 # (pipeline/loyers/config.py) ; (année maximale incluse, libellé), puis le libellé au-delà
@@ -76,8 +77,8 @@ EPOQUE_DERNIERE = "Apres 1990"
 PAS_ANNEE_ARRONDIE = 10  # une année multiple de ce pas est marquée « arrondie » (BDNB : 1900, 1880, 1890… très fréquentes)
 
 # Taille de copropriété d'après le nombre de logements du registre : bornes basses incluses, libellés préfixés pour l'ordre
-TRANCHES_COPRO = [10, 50]
-LIBELLES_COPRO = ["1 moins de 10", "2 de 10 à 49", "3 50 et plus"]
+TRANCHES_COPRO = [10, 20, 50]
+LIBELLES_COPRO = ["1 moins de 10", "2 de 10 à 19", "3 de 20 à 49", "4 50 et plus"]
 
 # Inondation par débordement (BDNB) : valeur de la colonne -> libellé ; absence de valeur = aucun aléa cartographié
 MODALITES_DEBORDEMENT = {"Faible": "faible", "Moyen": "moyen ou fort", "Fort": "moyen ou fort"}
