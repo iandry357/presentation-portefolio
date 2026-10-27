@@ -112,8 +112,10 @@ export interface SourcesResponse {
 }
 
 // Analyse (cube ventes / DPE)
-export type SourceAnalyse = 'ventes' | 'dpe';
-export type DimensionAnalyse = 'trimestre' | 'arrondissement' | 'pieces' | 'tranche_surface' | 'etiquette' | 'rattachee';
+export type SourceAnalyse = 'ventes' | 'dpe' | 'ventes_bati';   // ventes_bati : cube des ventes avec attributs du bâti (/immobilier/bdnb/bati/analyse)
+export type DimensionAnalyse =
+  | 'trimestre' | 'arrondissement' | 'pieces' | 'tranche_surface' | 'etiquette' | 'rattachee'
+  | 'epoque_ff' | 'taille_copro' | 'inondation' | 'patrimoine' | 'usage_batiment';
 export type FiltresAnalyse = Partial<Record<DimensionAnalyse, string[]>>;
 
 export interface AnalyseCellule {
@@ -250,12 +252,13 @@ export async function getBdnbAnalyse(
   axes: DimensionAnalyse[],
   filtres: FiltresAnalyse,
 ): Promise<AnalyseResponse> {
-  const params = new URLSearchParams({ source });
+  const bati = source === 'ventes_bati';
+  const params = new URLSearchParams(bati ? {} : { source });
   axes.forEach(axe => params.append('axe', axe));
   (Object.entries(filtres) as [DimensionAnalyse, string[] | undefined][]).forEach(([dimension, valeurs]) =>
     valeurs?.forEach(valeur => params.append(dimension, valeur)),
   );
-  return request<AnalyseResponse>(`/immobilier/bdnb/analyse?${params.toString()}`);
+  return request<AnalyseResponse>(`/immobilier/bdnb/${bati ? 'bati/' : ''}analyse?${params.toString()}`);
 }
 
 // Public : si l'accès est verrouillé, les groupes de moins de `seuil` ventes sont retirés par le backend
