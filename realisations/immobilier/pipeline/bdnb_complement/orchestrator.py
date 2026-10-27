@@ -2,7 +2,7 @@
 
 S'exécute en LOCAL dans le venv scripts/venv-explore, PAS dans Docker (les données BDNB ne sont pas embarquées dans l'image).
 Depuis realisations/immobilier, venv activé :
-    python -m pipeline.bdnb_complement.orchestrator [--tables t1 t2 ...] [--dry-run]
+    python -m pipeline.bdnb_complement.orchestrator [--etape chargement|attributs|tout] [--tables t1 t2 ...] [--dry-run]
 Prérequis : pipeline/.env et gcp_sa_immobilier.json (réutilisés de la V1), Parquet produits par scripts/convert_bdnb_parquet.py
 (--tables batiment_groupe_ffo_bat batiment_groupe_bdtopo_bat batiment_groupe_rnc batiment_groupe_risques
 batiment_groupe_urbanisme parcelle_sitadel). Indépendant de pipeline/bdnb : ses tables et sa config ne sont pas touchées.
@@ -13,6 +13,7 @@ import time
 
 import polars as pl
 
+from pipeline.bdnb_complement.attributs import construire_batiments, construire_parcelles
 from pipeline.bdnb_complement.config import TABLES
 from pipeline.bdnb_complement.loader import charger_parquet
 from pipeline.bdnb_complement.selection import ecrire_parquet
@@ -62,13 +63,25 @@ def executer(table, dry_run):
 
 def main():
     parser = argparse.ArgumentParser(description="Chargement BDNB complémentaire vers BigQuery")
+    parser.add_argument(
+        "--etape", choices=["chargement", "attributs", "tout"], default="chargement",
+        help="chargement des tables bdnb_* (défaut), tables d'attributs (immeuble et parcelle), ou les deux dans cet ordre",
+    )
     parser.add_argument("--tables", nargs="+", choices=list(TABLES), default=list(TABLES), help="tables à charger (défaut : toutes)")
     parser.add_argument("--dry-run", action="store_true", help="sélection et contrôle, sans écriture BigQuery")
     args = parser.parse_args()
 
-    for table in args.tables:
-        executer(table, args.dry_run)
+    if args.etape in ("chargement", "tout"):
+        for table in args.tables:
+            executer(table, args.dry_run)
+    if args.dry_run:
+        logger.info("--dry-run : attributs non construits")
+        return
+    if args.etape in ("attributs", "tout"):
+        construire_batiments()
+        construire_parcelles()
 
 
 if __name__ == "__main__":
     main()
+

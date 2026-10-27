@@ -59,3 +59,35 @@ TABLES = {
         "lignes": 11485,
     },
 }
+
+
+# Tables lues (dataset BQ_DATASET) : tables de ce paquet et tables de pipeline/bdnb
+BDNB_BATIMENT_GROUPE = "bdnb_batiment_groupe"
+BDNB_REL_BATIMENT_PARCELLE = "bdnb_rel_batiment_parcelle"
+
+# Tables écrites par l'étape attributs (recréées à chaque exécution)
+TABLE_ATTRIBUTS_BATIMENT = "bdnb_batiment_attributs"
+TABLE_ATTRIBUTS_PARCELLE = "bdnb_parcelle_attributs"
+
+# Époque de construction d'après l'année des fichiers fonciers : mêmes libellés que l'encadrement des loyers
+# (pipeline/loyers/config.py) ; (année maximale incluse, libellé), puis le libellé au-delà
+EPOQUES_BORNES = [(1945, "Avant 1946"), (1970, "1946-1970"), (1990, "1971-1990")]
+EPOQUE_DERNIERE = "Apres 1990"
+PAS_ANNEE_ARRONDIE = 10  # une année multiple de ce pas est marquée « arrondie » (BDNB : 1900, 1880, 1890… très fréquentes)
+
+# Taille de copropriété d'après le nombre de logements du registre : bornes basses incluses, libellés préfixés pour l'ordre
+TRANCHES_COPRO = [10, 50]
+LIBELLES_COPRO = ["1 moins de 10", "2 de 10 à 49", "3 50 et plus"]
+
+# Inondation par débordement (BDNB) : valeur de la colonne -> libellé ; absence de valeur = aucun aléa cartographié
+MODALITES_DEBORDEMENT = {"Faible": "faible", "Moyen": "moyen ou fort", "Fort": "moyen ou fort"}
+ORDRE_INONDATION = ["aucun", "faible", "moyen ou fort"]  # du moins au plus exposé
+# Patrimoine : monument historique prime sur le bâti patrimonial du PLU
+ORDRE_PATRIMOINE = ["aucun", "bâti patrimonial (PLU)", "monument historique"]
+VALEURS_BOOLEENNES = {"0", "1"}  # monument_historique et zone_plu_bati_patrimonial
+
+# Contrôles de l'étape attributs, relevés à l'exploration (millésime BDNB 2026-02.b, Paris) ; à mettre à jour avec le millésime
+ATTENDU_BATIMENTS = 74212
+ATTENDU_SANS_ANNEE = 8699
+ATTENDU_COPRO = 43712
+ATTENDU_INONDATION = {"aucun": 57110, "faible": 10701, "moyen ou fort": 6401}
