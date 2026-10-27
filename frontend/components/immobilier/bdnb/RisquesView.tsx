@@ -2,10 +2,11 @@
 
 import dynamic from 'next/dynamic';
 import { useRef, useState } from 'react';
-import { GeorisquesReponse, Risque, getGeorisques } from '@/lib/immobilierBdnbApi';
+import { GeorisquesReponse, PointReponse, Risque, getGeorisques, getPoint } from '@/lib/immobilierBdnbApi';
 import { CarteGraphique } from '../ImmobilierCharts';
 import type { PointCarte } from './CarteClic';
 import Lecture from './Lecture';
+import PanneauPoint from './PanneauPoint';
 
 // Leaflet touche à `window` : la carte n'est rendue que côté navigateur
 const CarteClic = dynamic(() => import('./CarteClic'), {
@@ -48,24 +49,38 @@ export default function RisquesView() {
   const [reponse, setReponse] = useState<GeorisquesReponse | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
+  const [infoPoint, setInfoPoint] = useState<PointReponse | null>(null);
+  const [erreurPoint, setErreurPoint] = useState<string | null>(null);
+  const [enCoursPoint, setEnCoursPoint] = useState(false);
   const dernier = useRef(0);   // ignore la réponse d'un clic dépassé par un clic plus récent
 
-  async function choisir(lat: number, lon: number) {
+  // Géorisques et la Géoplateforme sont interrogés en parallèle : une panne de l'un ne bloque pas l'autre
+  function choisir(lat: number, lon: number) {
     const numero = ++dernier.current;
+    const courant = () => numero === dernier.current;
     setPoint({ lat, lon });
     setEnCours(true);
     setErreur(null);
-    try {
-      const r = await getGeorisques(lat, lon);
-      if (numero === dernier.current) setReponse(r);
-    } catch (e) {
-      if (numero === dernier.current) {
+    setEnCoursPoint(true);
+    setErreurPoint(null);
+
+    getGeorisques(lat, lon)
+      .then(r => { if (courant()) setReponse(r); })
+      .catch(e => {
+        if (!courant()) return;
         setReponse(null);
         setErreur(e instanceof Error ? e.message : 'Erreur inattendue');
-      }
-    } finally {
-      if (numero === dernier.current) setEnCours(false);
-    }
+      })
+      .finally(() => { if (courant()) setEnCours(false); });
+
+    getPoint(lat, lon)
+      .then(r => { if (courant()) setInfoPoint(r); })
+      .catch(e => {
+        if (!courant()) return;
+        setInfoPoint(null);
+        setErreurPoint(e instanceof Error ? e.message : 'Erreur inattendue');
+      })
+      .finally(() => { if (courant()) setEnCoursPoint(false); });
   }
 
   const trier = (famille: Risque['famille']) =>
@@ -75,32 +90,34 @@ export default function RisquesView() {
 
   return (
     <CarteGraphique
-      titre="Risques"
-      sousTitre="Cliquez sur la carte : risques naturels et technologiques recensés à ce point de Paris"
+      titre="Carte"
+      sousTitre="Cliquez sur la carte : adresse, parcelle et risques recensés à ce point de Paris"
     >
       <Lecture
-        voir="Les risques que Géorisques recense à l’endroit cliqué, avec leur statut à ce point et pour l’ensemble de la commune."
+        voir="L’adresse la plus proche, la parcelle cadastrale et la zone d’urbanisme du point cliqué, puis les risques que Géorisques recense à cet endroit, avec leur statut à ce point et pour l’ensemble de la commune."
         retenir="« Risque non Connu » ou « non Concerne » à l’adresse signifie qu’aucun aléa n’est cartographié à ce point, pas qu’il n’existe pas."
-        attention="Information générale, non contractuelle ; elle ne remplace pas l’état des risques réglementaire d’une vente ou d’une location."
+        attention="La zone d’urbanisme est donnée à titre indicatif : le règlement du plan local d’urbanisme fait foi. Information générale, non contractuelle ; elle ne remplace pas l’état des risques réglementaire d’une vente ou d’une location."
       />
 
       <CarteClic point={point} onChoix={choisir} />
 
+      <PanneauPoint point={point} donnees={infoPoint} enCours={enCoursPoint} erreur={erreurPoint} />
+
       <div className="mt-4" aria-live="polite">
-        {!point && <p className="text-sm text-gray-500">Cliquez sur un point de la carte pour afficher ses risques.</p>}
+        {!point && <p className="text-sm text-gray-500">Cliquez sur un point de la carte pour afficher son adresse, sa parcelle et ses risques.</p>}
         {enCours && <p className="text-sm text-gray-500 animate-pulse">Interrogation de Géorisques…</p>}
         {erreur && <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{erreur}</p>}
 
         {reponse && !enCours && (
           <>
             <p className="text-sm text-gray-700">
-              Adresse la plus proche : <span className="font-medium text-gray-900">{reponse.adresse ?? 'non trouvée'}</span>
+              Adresse retenue par Géorisques : <span className="font-medium text-gray-900">{reponse.adresse ?? 'non trouvée'}</span>
             </p>
             <Famille titre="Risques naturels" risques={trier('naturel')} />
             <Famille titre="Risques technologiques" risques={trier('technologique')} />
             {reponse.risques.length === 0 && <p className="text-sm text-gray-500 mt-3">Aucun risque recensé.</p>}
             <p className="mt-4 text-[11px] text-gray-400">
-              Source : Géorisques (ministère de la Transition écologique, BRGM), API ouverte. Fond de carte © OpenStreetMap.
+              Source : Géorisques (ministère de la Transition écologique, BRGM), API ouverte. Adresse, parcelle, urbanisme, fond de carte et cadastre : IGN (Géoplateforme, API Carto).
               {reponse.url_rapport && (
                 <>
                   {' '}

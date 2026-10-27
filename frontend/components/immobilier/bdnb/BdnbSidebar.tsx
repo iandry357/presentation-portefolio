@@ -15,7 +15,7 @@ const VIEWS: { id: BdnbView; label: string; icon: string }[] = [
   { id: 'analyse', label: 'Analyse', icon: '🔎' },
   { id: 'loyers', label: 'Loyers', icon: '🏠' },
   { id: 'assistant', label: 'Assistant immobilier', icon: '⚖️' },
-  { id: 'risques', label: 'Risques', icon: '🌊' },
+  { id: 'risques', label: 'Carte', icon: '🌊' },
   { id: 'sources', label: 'Sources et qualité', icon: '🧾' },
 ];
 
