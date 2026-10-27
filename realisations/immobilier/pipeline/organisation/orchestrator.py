@@ -14,7 +14,7 @@ import logging
 import time
 from datetime import date
 
-from pipeline.organisation import cube_batiment, cube_croise, cube_dvf, cube_loyers, qualite, sources
+from pipeline.organisation import cube_batiment, cube_croise, cube_dpe, cube_dvf, cube_loyers, qualite, sources
 from pipeline.organisation.brut import construire_vues
 from pipeline.organisation.config import DATE_DEBUT, DATE_FIN, DEPARTEMENT, LIVRAISON
 from pipeline.organisation.parametres import ecrire
@@ -51,7 +51,7 @@ def main():
         cube_dvf.construire(args.livraison, args.departement, args.debut, args.fin)
         cube_batiment.construire()
         cube_croise.construire_ventes(args.livraison, args.departement, args.debut, args.fin)
-        cube_croise.construire_dpe(args.debut, args.fin)
+        cube_dpe.construire(args.debut, args.fin)
         cube_loyers.construire(args.livraison, args.departement, args.debut, args.fin)
         ecrire(args.livraison, args.departement, args.debut, args.fin)
 

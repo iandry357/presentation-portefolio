@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 def _pct(partie, total):
-    return round(100 * partie / total, 1) if total else None
+    """Pourcentage à la française (virgule), pour les commentaires affichés."""
+    return f"{100 * partie / total:.1f}".replace(".", ",") if total else "—"
 
 
 def _dvf(connexion, p):
@@ -58,7 +59,7 @@ def _dpe_ademe(connexion, p):
     total = r["total"]
     resultat = [
         ("DPE ADEME", "DPE collectés", total, "DPE", "depuis le début de la collecte"),
-        ("DPE ADEME", "DPE remplaçants", r["remplacants"], "DPE", f"{_pct(r['remplacants'], total)} % : ils remplacent un DPE plus ancien, resté dans le jeu"),
+        ("DPE ADEME", "DPE remplaçants", r["remplacants"], "DPE", f"{_pct(r['remplacants'], total)} % : ils remplacent un DPE plus ancien, le plus souvent absent du jeu"),
         ("DPE ADEME", "DPE sans arrondissement", r["sans_arrondissement"], "DPE", "code INSEE absent ou hors de Paris"),
     ]
     for ligne in lignes(connexion, f"""

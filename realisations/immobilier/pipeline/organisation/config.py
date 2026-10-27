@@ -80,7 +80,7 @@ SOURCES = [
         "publiee": None, "utilisee_par": "DPE",
         "mesure": {"table": TABLE_DPE_ADEME, "colonne": "date_etablissement_dpe", "type": "date"}, "chargee": TABLE_DPE_ADEME,
         "fenetre": True,
-        "limites": "Une ligne par version de DPE : les DPE remplacés restent présents.",
+        "limites": "Un DPE qui en remplace un autre en indique l’ancien numéro ; l’ancien DPE est le plus souvent absent du jeu.",
     },
     {
         "source": "DPE dans la BDNB", "editeur": "ADEME, assemblé par la BDNB (CSTB)", "version": "millésime 2026-09",
@@ -121,3 +121,15 @@ SOURCES_BDNB_REPRISES = [
     ("Fichiers fonciers", "Bâtiment"),
     ("DVF open (Cerema)", "Qualité du rattachement"),
 ]
+
+# Cube DPE de la partie DPE (table org_dpe_ademe), recréé à chaque exécution
+TABLE_CUBE_DPE = "org_cube_dpe"
+
+# Niveau d'un DPE d'après methode_application_dpe (quatre valeurs sur les 218 309 DPE de 2025-05 à 2026-10). Une méthode absente de
+# cette liste arrête la construction : le niveau en dépend.
+NIVEAUX_DPE = {
+    "dpe appartement individuel": "logement individuel",
+    "dpe maison individuelle": "logement individuel",
+    "dpe appartement généré à partir des données DPE immeuble": "logement déduit de l'immeuble",
+    "dpe immeuble collectif": "immeuble",
+}
