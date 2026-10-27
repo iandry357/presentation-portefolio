@@ -1,4 +1,4 @@
-"""Nouvelle organisation Immobilier : vues « tableau brut », cubes DVF et Bâtiment, table des paramètres (BigQuery).
+"""Nouvelle organisation Immobilier : vues « tableau brut », cubes DVF, Bâtiment, Croisé et loyers, table des paramètres (BigQuery).
 
 S'exécute en LOCAL dans le venv scripts/venv-explore, PAS dans Docker.
 Depuis realisations/immobilier, venv activé :
@@ -6,14 +6,15 @@ Depuis realisations/immobilier, venv activé :
                                                  [--debut 2025-05-01] [--fin AAAA-MM-JJ]
                                                  [--etape vues|cubes|tout]
 Prérequis : pipeline/.env et gcp_sa_immobilier.json (réutilisés de la V1), tables dvf_etalab, bdnb_batiment_groupe,
-bdnb_batiment_attributs, bdnb_rel_batiment_adresse, bdnb_adresse et vue dvf_etalab_ventes_logement déjà construites.
+bdnb_batiment_attributs, bdnb_rel_batiment_adresse, bdnb_adresse, bdnb_dpe_logement, bdnb_rel_dpe_batiment, dpe_typologie_ademe
+et vues dvf_etalab_ventes_logement, dvf_etalab_ventes_batiment, loyers_ventes déjà construites.
 """
 import argparse
 import logging
 import time
 from datetime import date
 
-from pipeline.organisation import cube_batiment, cube_dvf
+from pipeline.organisation import cube_batiment, cube_croise, cube_dvf, cube_loyers
 from pipeline.organisation.brut import construire_vues
 from pipeline.organisation.config import DATE_DEBUT, DATE_FIN, DEPARTEMENT, LIVRAISON
 from pipeline.organisation.parametres import ecrire
@@ -49,6 +50,9 @@ def main():
     if args.etape in ("cubes", "tout"):
         cube_dvf.construire(args.livraison, args.departement, args.debut, args.fin)
         cube_batiment.construire()
+        cube_croise.construire_ventes(args.livraison, args.departement, args.debut, args.fin)
+        cube_croise.construire_dpe(args.debut, args.fin)
+        cube_loyers.construire(args.livraison, args.departement, args.debut, args.fin)
         ecrire(args.livraison, args.departement, args.debut, args.fin)
 
     logger.info("Terminé (%.0f s)", time.time() - debut)

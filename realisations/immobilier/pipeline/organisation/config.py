@@ -22,6 +22,7 @@ TRANCHES_SURFACE = [25, 40, 60, 80, 120]   # bornes en m², borne basse incluse
 LIBELLES_SURFACE = ["1 moins de 25", "2 de 25 à 40", "3 de 40 à 60", "4 de 60 à 80", "5 de 80 à 120", "6 120 et plus"]
 PRIX_M2_MIN = 2000               # règle V1 : ventes hors bornes écartées du cube (jamais du tableau brut)
 PRIX_M2_MAX = 30000
+ETIQUETTE_INCONNUE = "inconnue"  # ventes non rattachées à un bâtiment (ou bâtiment sans classe), comme pipeline/analyse/config.py
 
 # Règle V1 d'une vente de logement (mêmes valeurs que pipeline/dvf_etalab/config.py) :
 # une mutation de nature « Vente », un seul logement, aucun local commercial
@@ -36,6 +37,11 @@ BDNB_BATIMENT_GROUPE = "bdnb_batiment_groupe"
 BDNB_ATTRIBUTS_BATIMENT = "bdnb_batiment_attributs"
 BDNB_REL_BATIMENT_ADRESSE = "bdnb_rel_batiment_adresse"
 BDNB_ADRESSE = "bdnb_adresse"
+BDNB_DPE = "bdnb_dpe_logement"
+BDNB_REL_DPE_BATIMENT = "bdnb_rel_dpe_batiment"
+VUE_VENTES_BATIMENT = "dvf_etalab_ventes_batiment"   # vue V1 des ventes rattachées à un bâtiment
+VUE_VENTES_LOYER = "loyers_ventes"                    # vue des ventes rattachées avec loyers de référence
+TABLE_TYPOLOGIE = "dpe_typologie_ademe"               # pièces des DPE (typologie ADEME), construite par pipeline/analyse
 
 # Objets écrits (recréés à chaque exécution)
 VUE_DVF_BRUT = "org_dvf_brut"
@@ -43,3 +49,6 @@ VUE_BATIMENT_BRUT = "org_batiment_brut"
 TABLE_CUBE_DVF = "org_cube_dvf"
 TABLE_CUBE_BATIMENT = "org_cube_batiment"
 TABLE_PARAMETRES = "org_parametres"
+TABLE_CUBE_CROISE_VENTES = "org_cube_croise_ventes"
+TABLE_CUBE_CROISE_DPE = "org_cube_croise_dpe"
+TABLE_CUBE_LOYERS = "org_cube_loyers"
