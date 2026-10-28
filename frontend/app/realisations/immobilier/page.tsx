@@ -15,7 +15,7 @@ import { Lexique } from '@/components/immobilier/Reperes';
 import { cn } from '@/lib/utils';
 
 // Bascule vers la nouvelle organisation : false masque les anciens onglets (code conservé), seule OrgPage s'affiche
-const ANCIENS_ONGLETS_VISIBLES = true;
+const ANCIENS_ONGLETS_VISIBLES = false;
 
 const ONGLETS = [
   { id: 'marche', label: 'Marché (DPE + DVF)' },
