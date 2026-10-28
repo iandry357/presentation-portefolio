@@ -7,7 +7,8 @@ Depuis realisations/immobilier, venv activé :
 
 Prérequis : pipeline/.env et gcp_sa_immobilier.json (réutilisés de la V1), Parquet produits par scripts/convert_bdnb_parquet.py
 (--tables batiment_groupe_ffo_bat batiment_groupe_bdtopo_bat batiment_groupe_rnc batiment_groupe_risques
-batiment_groupe_urbanisme parcelle_sitadel). Indépendant de pipeline/bdnb : ses tables et sa config ne sont pas touchées.
+batiment_groupe_urbanisme parcelle_sitadel batiment_groupe_merimee batiment_groupe_contrainte_opportunite_renovation).
+Indépendant de pipeline/bdnb : ses tables et sa config ne sont pas touchées.
 """
 import argparse
 import logging
