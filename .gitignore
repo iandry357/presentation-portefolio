@@ -172,6 +172,7 @@ realisations/immobilier/key_b64.txt
 realisations/immobilier/scripts/venv-explore/
 realisations/immobilier/pipeline/data/bdnb/
 realisations/immobilier/pipeline/data/referentiel/
+realisations/immobilier/pipeline/data/dpe_ademe/
 gcp/immobilier/infra/terraform.tfvars
 gcp/immobilier/infra/*.json
 gcp/immobilier/infra/key_b64.txt

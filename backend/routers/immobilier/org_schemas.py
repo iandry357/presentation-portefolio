@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -162,3 +162,41 @@ class PrixDpeResponse(BaseModel):
     prix_m2_max: Optional[int] = None
     classes: List[PrixDpeLigne]
     ecart: Optional[EcartPrix] = None     # absent si l'accès est verrouillé et qu'un des deux groupes est sous le seuil
+# ============================================================================
+# Tableaux bruts (privé)
+# ============================================================================
+
+class BrutColonne(BaseModel):
+    nom: str                              # nom technique de la colonne dans le jeu
+    libelle: str
+    description: str
+    defaut: bool                          # colonne présente si aucune sélection n'est demandée
+    sensible: bool                        # adresse, coordonnée ou identifiant (marqueur d'affichage, pas de garde de plus)
+
+
+class BrutJeu(BaseModel):
+    jeu: str                              # dvf | dpe | batiment
+    libelle: str
+    source: str
+    colonne_date: Optional[str] = None    # colonne à laquelle s'applique la période ; absente = jeu sans date
+    colonnes: List[BrutColonne]
+
+
+class BrutCatalogueResponse(BaseModel):
+    plafond_lignes: int
+    lignes_apercu: int
+    formats: List[str]
+    format_defaut: str
+    date_debut_defaut: str                # début de la période paramétrée (org_parametres)
+    jeux: List[BrutJeu]
+
+
+class BrutApercuResponse(BaseModel):
+    jeu: str
+    arrondissement: int
+    date_debut: Optional[str] = None      # période appliquée ; absente pour un jeu sans date
+    date_fin: Optional[str] = None
+    nb_lignes: int                        # lignes du jeu pour cet arrondissement et cette période
+    plafond_lignes: int
+    colonnes: List[BrutColonne]
+    lignes: List[Dict[str, Any]]          # aperçu : les premières lignes

@@ -47,6 +47,7 @@ TABLE_TYPOLOGIE = "dpe_typologie_ademe"               # pièces des DPE (typolog
 # Objets écrits (recréés à chaque exécution)
 VUE_DVF_BRUT = "org_dvf_brut"
 VUE_BATIMENT_BRUT = "org_batiment_brut"
+VUE_DPE_BRUT = "org_dpe_brut"
 TABLE_CUBE_DVF = "org_cube_dvf"
 TABLE_CUBE_BATIMENT = "org_cube_batiment"
 TABLE_PARAMETRES = "org_parametres"

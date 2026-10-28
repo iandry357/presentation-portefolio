@@ -5,19 +5,22 @@ Toutes publiques : aucune donnée de transaction, de bâtiment ni d'adresse.
 """
 import logging
 
+from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.concurrency import run_in_threadpool
 
-from app.core.access_control import get_access_state
+from app.core.access_control import get_access_state, require_access
+from app.services import immobilier_org_brut as brut
 from app.services.immobilier_org_analyse import (
     modalites, modalites_par_dimension, pivoter, pivoter_loyers, prix_groupe, recouvrement_typologie, resume, resume_loyers,
 )
 from app.services.immobilier_org_bigquery import fetch_cube, fetch_loyers, fetch_parametres, fetch_qualite, fetch_sources
 from app.services.immobilier_org_cubes import CUBE_LOYERS, CUBES
 from routers.immobilier.org_schemas import (
-    AnalyseCellule, AnalyseMeta, AnalyseResponse, EcartPrix, LoyersCellule, LoyersMeta, LoyersResponse, ParametresResponse,
+    AnalyseCellule, AnalyseMeta, AnalyseResponse, BrutApercuResponse, BrutCatalogueResponse, BrutColonne, BrutJeu,
+    EcartPrix, LoyersCellule, LoyersMeta, LoyersResponse, ParametresResponse,
     PrixDpeLigne, PrixDpeResponse, QualiteLigne, QualiteResponse, SourceLigne, SourcesResponse,
 )
 
@@ -250,4 +253,110 @@ async def get_ecart_prix(response: Response, deverrouille: bool = Depends(get_ac
             PrixDpeLigne(classe_dpe=c["modalites"][0], nb_ventes=c["n"], prix_m2_median=c["mediane"]) for c in cellules
         ],
         ecart=ecart,
+    )
+
+
+# ============================================================================
+# GET /immobilier/org/brut/* — Tableaux bruts (privé : garde stricte, 403 sans code)
+# ============================================================================
+
+async def _bq_brut(fonction, *args):
+    try:
+        return await run_in_threadpool(fonction, *args)
+    except brut.ErreurBrut:
+        raise
+    except Exception as e:
+        logger.error(f"[immobilier_org] Erreur lecture BigQuery (tableau brut) : {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Erreur lecture BigQuery")
+
+
+async def _preparer_brut(jeu: str, arrondissement: int, debut: Optional[date], fin: Optional[date], colonnes: Optional[List[str]]):
+    """Valide la demande et retourne (colonnes choisies, début, fin, nombre de lignes) ; 422 si le jeu, une colonne, la période
+    ou la taille (plafond) est refusé. Un jeu sans date ignore la période."""
+    try:
+        choisies = brut.choisir_colonnes(jeu, colonnes)
+        if brut.colonne_date(jeu) is None:
+            debut = fin = None
+        else:
+            if debut is None:
+                debut = date.fromisoformat((await _lire(fetch_parametres, "org_parametres"))[0]["date_debut"])
+            if fin is not None and fin < debut:
+                raise brut.ErreurBrut(f"Période incohérente : fin {fin} avant début {debut}")
+        nb_lignes = await _bq_brut(brut.compter, jeu, arrondissement, debut, fin)
+        if nb_lignes > brut.PLAFOND_LIGNES:
+            raise brut.ErreurBrut(
+                f"{nb_lignes} lignes pour un plafond de {brut.PLAFOND_LIGNES} : réduire la période"
+            )
+    except brut.ErreurBrut as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    return choisies, debut, fin, nb_lignes
+
+
+@router.get("/brut/catalogue", response_model=BrutCatalogueResponse, dependencies=[Depends(require_access)])
+async def get_brut_catalogue(response: Response):
+    """Jeux, colonnes (défaut, sensible, description), plafond et période par défaut."""
+    response.headers["X-Robots-Tag"] = NOINDEX
+    parametres = (await _lire(fetch_parametres, "org_parametres"))[0]
+    return BrutCatalogueResponse(
+        plafond_lignes=brut.PLAFOND_LIGNES,
+        lignes_apercu=brut.LIGNES_APERCU,
+        formats=brut.FORMATS,
+        format_defaut=brut.FORMAT_DEFAUT,
+        date_debut_defaut=parametres["date_debut"],
+        jeux=[
+            BrutJeu(
+                jeu=cle, libelle=d["libelle"], source=d["source"], colonne_date=d["colonne_date"],
+                colonnes=[BrutColonne(**c) for c in d["colonnes"]],
+            )
+            for cle, d in brut.JEUX.items()
+        ],
+    )
+
+
+@router.get("/brut/{jeu}", response_model=BrutApercuResponse, dependencies=[Depends(require_access)])
+async def get_brut_apercu(
+    jeu: str,
+    response: Response,
+    arrondissement: int = Query(..., ge=1, le=20),
+    debut: Optional[date] = None,
+    fin: Optional[date] = None,
+    colonnes: Optional[List[str]] = Query(None),
+):
+    """Aperçu (premières lignes) et nombre total de lignes ; début par défaut = début de la période paramétrée."""
+    response.headers["X-Robots-Tag"] = NOINDEX
+    choisies, debut, fin, nb_lignes = await _preparer_brut(jeu, arrondissement, debut, fin, colonnes)
+    lignes = await _bq_brut(brut.lire, jeu, arrondissement, debut, fin, choisies, brut.LIGNES_APERCU)
+    return BrutApercuResponse(
+        jeu=jeu,
+        arrondissement=arrondissement,
+        date_debut=debut.isoformat() if debut else None,
+        date_fin=fin.isoformat() if fin else None,
+        nb_lignes=nb_lignes,
+        plafond_lignes=brut.PLAFOND_LIGNES,
+        colonnes=[BrutColonne(**c) for c in choisies],
+        lignes=lignes,
+    )
+
+
+@router.get("/brut/{jeu}/export", dependencies=[Depends(require_access)])
+async def get_brut_export(
+    jeu: str,
+    arrondissement: int = Query(..., ge=1, le=20),
+    debut: Optional[date] = None,
+    fin: Optional[date] = None,
+    colonnes: Optional[List[str]] = Query(None),
+    format_csv: str = Query(brut.FORMAT_DEFAUT, alias="format", pattern="^(excel|standard)$"),
+    libelles: bool = False,
+):
+    """CSV du jeu (au plus PLAFOND_LIGNES lignes, sinon 422) : en-têtes aux noms techniques, ou aux libellés si libelles."""
+    choisies, debut, fin, _ = await _preparer_brut(jeu, arrondissement, debut, fin, colonnes)
+    lignes = await _bq_brut(brut.lire, jeu, arrondissement, debut, fin, choisies, brut.PLAFOND_LIGNES)
+    return Response(
+        content=brut.csv_bytes(lignes, choisies, format_csv, libelles),
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="immobilier_{jeu}_arr{arrondissement:02d}.csv"',
+            "X-Robots-Tag": NOINDEX,
+            "Cache-Control": "no-store",
+        },
     )

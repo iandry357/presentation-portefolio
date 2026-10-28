@@ -4,8 +4,8 @@ from google.cloud import bigquery
 
 from pipeline.organisation.config import (
     BDNB_ADRESSE, BDNB_ATTRIBUTS_BATIMENT, BDNB_BATIMENT_GROUPE, BDNB_REL_BATIMENT_ADRESSE, BQ_DATASET,
-    GCP_PROJECT_ID, GCP_SA_KEY_PATH, NATURE_VENTE, TABLE_DVF, TYPE_LOCAL_COMMERCIAL, TYPES_LOGEMENT,
-    VUE_BATIMENT_BRUT, VUE_DVF_BRUT, VUE_VENTES,
+    GCP_PROJECT_ID, GCP_SA_KEY_PATH, NATURE_VENTE, NIVEAUX_DPE, TABLE_DPE_ADEME, TABLE_DVF, TYPE_LOCAL_COMMERCIAL,
+    TYPES_LOGEMENT, VUE_BATIMENT_BRUT, VUE_DPE_BRUT, VUE_DVF_BRUT, VUE_VENTES,
 )
 
 logger = logging.getLogger(__name__)
@@ -92,6 +92,18 @@ def creer_vue_batiment(client):
         LEFT JOIN adresses d ON d.batiment_groupe_id = t.batiment_groupe_id
     """).result()
     logger.info("Vue %s créée", VUE_BATIMENT_BRUT)
+    
+    
+def creer_vue_dpe(client):
+    """Une ligne par DPE de org_dpe_ademe (aucun filtre), avec le niveau du DPE d'après sa méthode d'application
+    (même règle que le cube DPE : NIVEAUX_DPE)."""
+    cas = " ".join(f"WHEN {_litteral(methode)} THEN {_litteral(niveau)}" for methode, niveau in NIVEAUX_DPE.items())
+    client.query(f"""
+        CREATE OR REPLACE VIEW {_table(VUE_DPE_BRUT)} AS
+        SELECT d.*, CASE d.methode_application_dpe {cas} END AS niveau_dpe
+        FROM {_table(TABLE_DPE_ADEME)} d
+    """).result()
+    logger.info("Vue %s créée", VUE_DPE_BRUT)
 
 
 def verifier(client):
@@ -107,7 +119,16 @@ def verifier(client):
         raise ValueError(
             f"{VUE_BATIMENT_BRUT} : {bati['lignes']} lignes dont {bati['distincts']} immeubles distincts pour {attendu} attendus"
         )
-    logger.info("Vues conformes : %d ventes (= vue V1), %d immeubles", brut, attendu)
+    dpe = _compter(client, f"""
+        SELECT COUNT(*) AS lignes, COUNTIF(methode_application_dpe IS NOT NULL AND niveau_dpe IS NULL) AS sans_niveau
+        FROM {_table(VUE_DPE_BRUT)}
+    """)
+    attendu_dpe = _compter(client, f"SELECT COUNT(*) AS n FROM {_table(TABLE_DPE_ADEME)}")["n"]
+    if dpe["lignes"] != attendu_dpe or dpe["sans_niveau"]:
+        raise ValueError(
+            f"{VUE_DPE_BRUT} : {dpe['lignes']} lignes pour {attendu_dpe} dans {TABLE_DPE_ADEME}, {dpe['sans_niveau']} sans niveau"
+        )
+    logger.info("Vues conformes : %d ventes (= vue V1), %d immeubles, %d DPE", brut, attendu, attendu_dpe)
     return brut, attendu
 
 
@@ -115,4 +136,5 @@ def construire_vues():
     client = _client()
     creer_vue_dvf(client)
     creer_vue_batiment(client)
+    creer_vue_dpe(client)
     return verifier(client)
