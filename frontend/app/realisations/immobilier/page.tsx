@@ -10,12 +10,17 @@ import DpeView from '@/components/immobilier/DpeView';
 import PrixView from '@/components/immobilier/PrixView';
 import ChangementsView from '@/components/immobilier/ChangementsView';
 import BdnbOnglet from '@/components/immobilier/bdnb/BdnbOnglet';
+import OrgPage from '@/components/immobilier/org/OrgPage';
 import { Lexique } from '@/components/immobilier/Reperes';
 import { cn } from '@/lib/utils';
+
+// Bascule vers la nouvelle organisation : false masque les anciens onglets (code conservé), seule OrgPage s'affiche
+const ANCIENS_ONGLETS_VISIBLES = true;
 
 const ONGLETS = [
   { id: 'marche', label: 'Marché (DPE + DVF)' },
   { id: 'bdnb', label: 'Bâtiments (BDNB)' },
+  { id: 'org', label: 'Nouvelle organisation' },
 ] as const;
 
 type Onglet = (typeof ONGLETS)[number]['id'];
@@ -24,7 +29,7 @@ type Onglet = (typeof ONGLETS)[number]['id'];
 export default function ImmobilierPage() {
   const { state, unlocked } = useAccess();
   const [vue, setVue] = useState<ImmobilierView>('dpe');
-  const [onglet, setOnglet] = useState<Onglet>('marche');
+  const [onglet, setOnglet] = useState<Onglet>(ANCIENS_ONGLETS_VISIBLES ? 'marche' : 'org');
   const verrouille = vue === 'changements' && !unlocked;
 
   return (
@@ -43,32 +48,36 @@ export default function ImmobilierPage() {
           Paris · DPE (ADEME) · Prix de vente (DVF) · Pipeline Python · BigQuery · FastAPI
         </p>
       </div>
-      <div
-        className="mb-6 inline-flex overflow-hidden rounded border border-gray-200"
-        role="group"
-        aria-label="Source des données"
-      >
-        {ONGLETS.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setOnglet(id)}
-            aria-pressed={onglet === id}
-            className={cn(
-              'px-4 py-2 text-sm font-medium transition-colors',
-              onglet === id ? 'bg-blue-50 text-blue-700' : 'bg-white text-gray-600 hover:bg-gray-50',
-            )}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {ANCIENS_ONGLETS_VISIBLES && (
+        <div
+          className="mb-6 inline-flex overflow-hidden rounded border border-gray-200"
+          role="group"
+          aria-label="Source des données"
+        >
+          {ONGLETS.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setOnglet(id)}
+              aria-pressed={onglet === id}
+              className={cn(
+                'px-4 py-2 text-sm font-medium transition-colors',
+                onglet === id ? 'bg-blue-50 text-blue-700' : 'bg-white text-gray-600 hover:bg-gray-50',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
 
       <div className="mb-6">
         <Lexique />
       </div>
 
       {onglet === 'bdnb' && <BdnbOnglet />}
+      {onglet === 'org' && <OrgPage />}
 
       {onglet === 'marche' && (
         <>
