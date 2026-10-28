@@ -40,6 +40,13 @@ BDNB_REL_BATIMENT_ADRESSE = "bdnb_rel_batiment_adresse"
 BDNB_ADRESSE = "bdnb_adresse"
 BDNB_DPE = "bdnb_dpe_logement"
 BDNB_REL_DPE_BATIMENT = "bdnb_rel_dpe_batiment"
+# Tables chargées par pipeline/bdnb_complement (TABLES de son config.py), lues par la vue Bâtiment brute
+BDNB_FFO_BAT = "bdnb_ffo_bat"
+BDNB_BDTOPO_BAT = "bdnb_bdtopo_bat"
+BDNB_RNC = "bdnb_rnc"
+BDNB_URBANISME = "bdnb_urbanisme"
+BDNB_MERIMEE = "bdnb_merimee"
+BDNB_RENOVATION = "bdnb_renovation"
 VUE_VENTES_BATIMENT = "dvf_etalab_ventes_batiment"   # vue V1 des ventes rattachées à un bâtiment
 VUE_VENTES_LOYER = "loyers_ventes"                    # vue des ventes rattachées avec loyers de référence
 TABLE_TYPOLOGIE = "dpe_typologie_ademe"               # pièces des DPE (typologie ADEME), construite par pipeline/analyse

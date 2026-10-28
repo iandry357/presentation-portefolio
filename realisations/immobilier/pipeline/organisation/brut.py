@@ -3,9 +3,10 @@ import logging
 from google.cloud import bigquery
 
 from pipeline.organisation.config import (
-    BDNB_ADRESSE, BDNB_ATTRIBUTS_BATIMENT, BDNB_BATIMENT_GROUPE, BDNB_REL_BATIMENT_ADRESSE, BQ_DATASET,
-    GCP_PROJECT_ID, GCP_SA_KEY_PATH, NATURE_VENTE, NIVEAUX_DPE, TABLE_DPE_ADEME, TABLE_DVF, TYPE_LOCAL_COMMERCIAL,
-    TYPES_LOGEMENT, VUE_BATIMENT_BRUT, VUE_DPE_BRUT, VUE_DVF_BRUT, VUE_VENTES,
+    BDNB_ADRESSE, BDNB_ATTRIBUTS_BATIMENT, BDNB_BATIMENT_GROUPE, BDNB_BDTOPO_BAT, BDNB_FFO_BAT, BDNB_MERIMEE,
+    BDNB_REL_BATIMENT_ADRESSE, BDNB_RENOVATION, BDNB_RNC, BDNB_URBANISME, BQ_DATASET, GCP_PROJECT_ID, GCP_SA_KEY_PATH,
+    NATURE_VENTE, NIVEAUX_DPE, TABLE_DPE_ADEME, TABLE_DVF, TYPE_LOCAL_COMMERCIAL, TYPES_LOGEMENT, VUE_BATIMENT_BRUT,
+    VUE_DPE_BRUT, VUE_DVF_BRUT, VUE_VENTES,
 )
 
 logger = logging.getLogger(__name__)
@@ -71,8 +72,9 @@ def creer_vue_dvf(client):
 
 
 def creer_vue_batiment(client):
-    """Une ligne par immeuble (bdnb_batiment_attributs) avec l'arrondissement, l'emprise, l'IRIS et les adresses
-    concaténées (un immeuble peut en avoir plusieurs)."""
+    """Une ligne par immeuble (bdnb_batiment_attributs) avec l'arrondissement, l'emprise, l'IRIS, les adresses
+    concaténées (un immeuble peut en avoir plusieurs) et les colonnes complémentaires de la BDNB (bâti, copropriété,
+    patrimoine, rénovation) : une jointure par table, chacune à une ligne par immeuble (contrôlé par verifier)."""
     client.query(f"""
         CREATE OR REPLACE VIEW {_table(VUE_BATIMENT_BRUT)} AS
         WITH adresses AS (
@@ -86,10 +88,24 @@ def creer_vue_batiment(client):
                SAFE_CAST(g.code_commune_insee AS INT64) - 75100 AS arrondissement,
                t.annee_construction, t.annee_arrondie, t.epoque_ff, t.usage_batiment, t.nb_niveau, t.nb_log, t.hauteur,
                t.copro_rnc, t.taille_copro, t.periode_rnc, t.inondation, t.patrimoine,
-               g.s_geom_groupe, g.code_iris, d.adresses
+               g.s_geom_groupe, g.code_iris, d.adresses,
+               f.mat_mur_txt AS materiau_murs, f.mat_toit_txt AS materiau_toit,
+               b.l_nature AS nature_bdtopo, b.l_etat AS etat_bdtopo, b.altitude_sol_mean AS altitude_sol_m,
+               c.nb_lot_tot AS nb_lots_total, c.nb_lot_garpark AS nb_lots_stationnement, c.nb_lot_tertiaire AS nb_lots_tertiaire,
+               u.contrainte_urbanisme_ac1 AS perimetre_monument_ac1, u.source_monument_historique AS source_monument,
+               u.distance_monument_historique AS distance_monument_m,
+               m.distance_batiment_historique_plus_proche AS distance_batiment_historique_m,
+               m.nom_batiment_historique_plus_proche AS nom_batiment_historique,
+               r.* EXCEPT (batiment_groupe_id)
         FROM {_table(BDNB_ATTRIBUTS_BATIMENT)} t
         JOIN {_table(BDNB_BATIMENT_GROUPE)} g ON g.batiment_groupe_id = t.batiment_groupe_id
         LEFT JOIN adresses d ON d.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_FFO_BAT)} f ON f.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_BDTOPO_BAT)} b ON b.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_RNC)} c ON c.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_URBANISME)} u ON u.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_MERIMEE)} m ON m.batiment_groupe_id = t.batiment_groupe_id
+        LEFT JOIN {_table(BDNB_RENOVATION)} r ON r.batiment_groupe_id = t.batiment_groupe_id
     """).result()
     logger.info("Vue %s créée", VUE_BATIMENT_BRUT)
     

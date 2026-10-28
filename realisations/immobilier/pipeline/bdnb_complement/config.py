@@ -20,19 +20,21 @@ MOTIF_COLONNES_INTERDITES = r"denomination|siren|siret|l_nom|nom_copro|nom_pdl|n
 TABLES = {
     "bdnb_ffo_bat": {
         "source": "batiment_groupe_ffo_bat",
-        "colonnes": ["batiment_groupe_id", "annee_construction", "nb_niveau", "nb_log", "usage_niveau_1_txt"],
+        "colonnes": [
+            "batiment_groupe_id", "annee_construction", "nb_niveau", "nb_log", "usage_niveau_1_txt", "mat_mur_txt", "mat_toit_txt",
+        ],
         "cluster": ["batiment_groupe_id"],
         "lignes": 70765,
     },
     "bdnb_bdtopo_bat": {
         "source": "batiment_groupe_bdtopo_bat",
-        "colonnes": ["batiment_groupe_id", "hauteur_mean", "max_hauteur"],
+        "colonnes": ["batiment_groupe_id", "hauteur_mean", "max_hauteur", "l_nature", "l_etat", "altitude_sol_mean"],
         "cluster": ["batiment_groupe_id"],
         "lignes": 74009,
     },
     "bdnb_rnc": {
         "source": "batiment_groupe_rnc",
-        "colonnes": ["batiment_groupe_id", "nb_log", "nb_lot_tot", "periode_construction_max"],
+        "colonnes": ["batiment_groupe_id", "nb_log", "nb_lot_tot", "periode_construction_max", "nb_lot_garpark", "nb_lot_tertiaire"],
         "cluster": ["batiment_groupe_id"],
         "lignes": 43712,
     },
@@ -44,7 +46,10 @@ TABLES = {
     },
     "bdnb_urbanisme": {
         "source": "batiment_groupe_urbanisme",
-        "colonnes": ["batiment_groupe_id", "monument_historique", "zone_plu_bati_patrimonial"],
+        "colonnes": [
+            "batiment_groupe_id", "monument_historique", "zone_plu_bati_patrimonial", "contrainte_urbanisme_ac1",
+            "source_monument_historique", "distance_monument_historique",
+        ],
         "cluster": ["batiment_groupe_id"],
         "lignes": 72341,
     },
@@ -57,6 +62,23 @@ TABLES = {
         ],
         "cluster": ["parcelle_id"],
         "lignes": 11485,
+    },
+    "bdnb_merimee": {
+        "source": "batiment_groupe_merimee",
+        "colonnes": ["batiment_groupe_id", "distance_batiment_historique_plus_proche", "nom_batiment_historique_plus_proche"],
+        "cluster": ["batiment_groupe_id"],
+        "lignes": 71289,
+    },
+    "bdnb_renovation": {
+        "source": "batiment_groupe_contrainte_opportunite_renovation",
+        "colonnes": [
+            "batiment_groupe_id", "batenr_eligibilite_gmi_nappe_200", "batenr_potentiel_geothermique_nappe",
+            "batenr_potentiel_implantation_puits_nappe", "batenr_eligibilite_gmi_sonde_200", "batenr_zone_geothermie_profonde",
+            "batenr_potentiel_prod_solaire_thermique_annuelle", "batenr_potentiel_prod_solaire_thermique_ete",
+            "batenr_favorabilite_geothermie_nappe", "batenr_favorabilite_geothermie_sonde", "batenr_favorabilite_solaire_thermique",
+        ],
+        "cluster": ["batiment_groupe_id"],
+        "lignes": 73845,
     },
 }
 
