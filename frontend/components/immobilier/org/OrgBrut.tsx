@@ -13,6 +13,9 @@ import Lecture from '../bdnb/Lecture';
 // Paramètres
 const ARRONDISSEMENT_DEFAUT = 1;     // aperçu chargé à l'ouverture
 const DELAI_APERCU_MS = 300;         // attente après le dernier changement avant de relire l'aperçu
+// TEMPORAIRE (démonstration) : true ouvre les tableaux bruts sans code. À remettre à false, avec le même drapeau
+// ACCES_LIBRE de backend/routers/immobilier/org_router.py.
+const ACCES_LIBRE = true;
 const LIBELLES_FORMAT: Record<FormatCsv, string> = {
   excel: 'Excel (séparateur « ; », virgule décimale)',
   standard: 'Standard (séparateur « , », point décimal)',
@@ -27,6 +30,8 @@ function formaterCellule(valeur: string | number | boolean | null): string {
 
 export default function OrgBrut({ jeu }: { jeu: JeuBrut }) {
   const { state, unlocked } = useAccess();
+  const acces = ACCES_LIBRE || unlocked;
+  const pret = ACCES_LIBRE || state !== 'loading';
   const [catalogue, setCatalogue] = useState<OrgBrutCatalogue | null>(null);
   const [arrondissement, setArrondissement] = useState(ARRONDISSEMENT_DEFAUT);
   const [debut, setDebut] = useState('');
@@ -44,7 +49,7 @@ export default function OrgBrut({ jeu }: { jeu: JeuBrut }) {
 
   // Catalogue : lu une fois l'accès connu (privé : 403 sans code)
   useEffect(() => {
-    if (state === 'loading' || !unlocked) return;
+    if (!pret || !acces) return;
     getOrgBrutCatalogue()
       .then(c => {
         setCatalogue(c);
@@ -53,7 +58,7 @@ export default function OrgBrut({ jeu }: { jeu: JeuBrut }) {
         setColonnes(c.jeux.find(j => j.jeu === jeu)?.colonnes.filter(col => col.defaut).map(col => col.nom) ?? []);
       })
       .catch(e => setError(e instanceof Error ? e.message : 'Erreur de chargement'));
-  }, [state, unlocked, jeu]);
+  }, [pret, acces, jeu]);
 
   const parametres = useMemo<ParametresBrut>(
     () => ({
@@ -67,7 +72,7 @@ export default function OrgBrut({ jeu }: { jeu: JeuBrut }) {
 
   // Aperçu : relu après chaque changement (attente courte : plusieurs cases cochées de suite font une seule lecture)
   useEffect(() => {
-    if (!catalogue || !unlocked || colonnes.length === 0) return;
+    if (!catalogue || !acces || colonnes.length === 0) return;
     const numero = ++derniereRequete.current;
     const minuteur = setTimeout(async () => {
       setLoading(true);
@@ -85,11 +90,11 @@ export default function OrgBrut({ jeu }: { jeu: JeuBrut }) {
       }
     }, DELAI_APERCU_MS);
     return () => clearTimeout(minuteur);
-  }, [catalogue, unlocked, jeu, parametres, colonnes.length]);
+  }, [catalogue, acces, jeu, parametres, colonnes.length]);
 
-  if (state === 'loading') return <div className="min-h-[40vh]" aria-busy="true" />;
+  if (!pret) return <div className="min-h-[40vh]" aria-busy="true" />;
 
-  if (!unlocked) {
+  if (!acces) {
     return (
       <div className="px-4 py-16 text-center">
         <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />

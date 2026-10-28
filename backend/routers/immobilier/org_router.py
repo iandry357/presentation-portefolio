@@ -11,7 +11,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.concurrency import run_in_threadpool
 
-from app.core.access_control import get_access_state, require_access
+from app.core.access_control import get_access_state
 from app.services import immobilier_org_brut as brut
 from app.services.immobilier_org_analyse import (
     modalites, modalites_par_dimension, pivoter, pivoter_loyers, prix_groupe, recouvrement_typologie, resume, resume_loyers,
@@ -31,6 +31,9 @@ router = APIRouter(prefix="/immobilier/org", tags=["Immobilier organisation"])
 
 NOINDEX = "noindex, nofollow"
 SEUIL_ANALYSE = 5      # groupes de moins de N observations masqués si l'accès est verrouillé (comme les analyses existantes)
+# TEMPORAIRE (démonstration) : True ouvre les tableaux bruts sans code. À remettre à False ; garder la même valeur que
+# ACCES_LIBRE de frontend/components/immobilier/org/OrgBrut.tsx.
+ACCES_LIBRE = True
 PRIX_M2_MIN = 2000     # bornes de prix des cubes de ventes (pipeline/organisation/config.py, copiées comme dans bati_router.py)
 PRIX_M2_MAX = 30000
 SEUIL_LOYERS = 5       # loyers : groupes de moins de N ventes masqués si l'accès est verrouillé
@@ -259,6 +262,12 @@ async def get_ecart_prix(response: Response, deverrouille: bool = Depends(get_ac
 # ============================================================================
 # GET /immobilier/org/brut/* — Tableaux bruts (privé : garde stricte, 403 sans code)
 # ============================================================================
+async def _garde_brut(deverrouille: bool = Depends(get_access_state)) -> None:
+    """Garde des tableaux bruts : le code d'accès, sauf si ACCES_LIBRE (démonstration)."""
+    if not (ACCES_LIBRE or deverrouille):
+        raise HTTPException(status_code=403, detail="Accès privé : code requis")
+
+
 
 async def _bq_brut(fonction, *args):
     try:
@@ -292,7 +301,8 @@ async def _preparer_brut(jeu: str, arrondissement: int, debut: Optional[date], f
     return choisies, debut, fin, nb_lignes
 
 
-@router.get("/brut/catalogue", response_model=BrutCatalogueResponse, dependencies=[Depends(require_access)])
+# @router.get("/brut/catalogue", response_model=BrutCatalogueResponse, dependencies=[Depends(require_access)])
+@router.get("/brut/catalogue", response_model=BrutCatalogueResponse, dependencies=[Depends(_garde_brut)])
 async def get_brut_catalogue(response: Response):
     """Jeux, colonnes (défaut, sensible, description), plafond et période par défaut."""
     response.headers["X-Robots-Tag"] = NOINDEX
@@ -313,7 +323,8 @@ async def get_brut_catalogue(response: Response):
     )
 
 
-@router.get("/brut/{jeu}", response_model=BrutApercuResponse, dependencies=[Depends(require_access)])
+# @router.get("/brut/{jeu}", response_model=BrutApercuResponse, dependencies=[Depends(require_access)])
+@router.get("/brut/{jeu}", response_model=BrutApercuResponse, dependencies=[Depends(_garde_brut)])
 async def get_brut_apercu(
     jeu: str,
     response: Response,
@@ -338,7 +349,8 @@ async def get_brut_apercu(
     )
 
 
-@router.get("/brut/{jeu}/export", dependencies=[Depends(require_access)])
+# @router.get("/brut/{jeu}/export", dependencies=[Depends(require_access)])
+@router.get("/brut/{jeu}/export", dependencies=[Depends(_garde_brut)])
 async def get_brut_export(
     jeu: str,
     arrondissement: int = Query(..., ge=1, le=20),
