@@ -5,13 +5,11 @@ import { EntreeOrg } from '@/lib/immobilierOrg';
 import OrgEntrees from './OrgEntrees';
 import OrgPeriode from './OrgPeriode';
 import OrgPartie from './OrgPartie';
+import OrgCroise from './OrgCroise';
 import QualiteOrg from './QualiteOrg';
 import SourcesOrg from './SourcesOrg';
+import OrgExploration from './OrgExploration';
 
-// Étape de livraison où chaque entrée restante est branchée (en construction)
-const ETAPES: Partial<Record<EntreeOrg, string>> = {
-  croise: '6e', exploration: '6e',
-};
 
 const ENTREE_DEFAUT: EntreeOrg = 'dvf';
 
@@ -22,16 +20,13 @@ export default function OrgPage() {
     <div className="space-y-6">
       <OrgPeriode />
       <OrgEntrees active={entree} onChange={setEntree} />
-      {entree === 'dvf' && <OrgPartie cube="dvf" />}
-      {entree === 'dpe' && <OrgPartie cube="dpe" />}
-      {entree === 'batiment' && <OrgPartie cube="batiment" />}
+      {entree === 'dvf' && <OrgPartie cube="dvf" onCroisement={() => setEntree('croise')} />}
+      {entree === 'dpe' && <OrgPartie cube="dpe" onCroisement={() => setEntree('croise')} />}
+      {entree === 'batiment' && <OrgPartie cube="batiment" onCroisement={() => setEntree('croise')} />}
       {entree === 'sources' && <SourcesOrg />}
       {entree === 'qualite' && <QualiteOrg />}
-      {(entree === 'croise' || entree === 'exploration') && (
-        <div className="px-4 py-16 text-center text-sm text-gray-500 border rounded-lg bg-white">
-          Cette partie arrive à l’étape {ETAPES[entree]}.
-        </div>
-      )}
+      {entree === 'croise' && <OrgCroise />}
+      {entree === 'exploration' && <OrgExploration />}
     </div>
   );
 }

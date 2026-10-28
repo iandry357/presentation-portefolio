@@ -15,13 +15,34 @@ const VUES = [
 ] as const;
 type Vue = (typeof VUES)[number]['id'];
 
-// Une partie du site (DVF, DPE, Bâtiment, Croisé) : ses analyses et, quand elle en a un, son tableau brut
-export default function OrgPartie({ cube }: { cube: CubeOrg }) {
+// Ce que chaque partie n'utilise pas, et la question qu'elle laisse au Croisement
+const RAPPEL: Partial<Record<CubeOrg, { seul: string; question: string }>> = {
+  dvf: { seul: 'les ventes', question: 'Le prix change-t-il selon la note énergétique ou l’âge de l’immeuble ?' },
+  dpe: { seul: 'les diagnostics de l’ADEME', question: 'Les logements énergivores se vendent-ils moins cher ?' },
+  batiment: { seul: 'les immeubles', question: 'Comment le prix des ventes varie-t-il selon l’immeuble ?' },
+};
+
+interface Props {
+  cube: CubeOrg;
+  onCroisement: () => void;   // ouvre l'entrée Croisement
+}
+
+// Une partie du site (Ventes, Diagnostics, Immeubles) : ses analyses et, quand elle en a un, son tableau brut
+export default function OrgPartie({ cube, onCroisement }: Props) {
   const jeu = JEUX_BRUTS[cube];
+  const rappel = RAPPEL[cube];
   const [vue, setVue] = useState<Vue>('analyses');
 
   return (
     <div className="space-y-6">
+      {rappel && (
+        <p className="text-sm text-gray-600 bg-indigo-50 border border-indigo-100 rounded-lg px-4 py-3">
+          Cette partie n’utilise que {rappel.seul}. {rappel.question}{' '}
+          <button type="button" onClick={onCroisement} className="font-medium text-indigo-700 hover:underline">
+            Voir le Croisement
+          </button>
+        </p>
+      )}
       {jeu && (
         <div className="inline-flex overflow-hidden rounded border border-gray-200" role="group" aria-label="Contenu de la partie">
           {VUES.map(({ id, libelle }) => (

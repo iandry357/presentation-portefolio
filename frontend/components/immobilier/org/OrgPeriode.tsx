@@ -28,7 +28,7 @@ export default function OrgPeriode() {
       <span className="font-medium text-gray-900">Période commune</span> : depuis le {formatDate(parametres.date_debut)}{' '}
       {parametres.date_fin ? `jusqu’au ${formatDate(parametres.date_fin)}` : 'jusqu’aux dernières données'}.
       Ventes couvertes : du {formatDate(parametres.premiere_vente)} au {formatDate(parametres.derniere_vente)}.
-      Le bâtiment (BDNB) est un état du parc au millésime, sans période.
+      Les immeubles (BDNB) sont un état du parc au millésime, sans période.
     </p>
   );
 }

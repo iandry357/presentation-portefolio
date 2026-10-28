@@ -175,7 +175,7 @@ JEUX = {
         ],
     },
     "batiment": {
-        "libelle": "Bâtiments (BDNB)",
+        "libelle": "Immeubles (BDNB)",
         "source": "BDNB (CSTB) : un immeuble par ligne, état du parc au millésime, sans date",
         "table": "org_batiment_brut",
         "colonne_date": None,

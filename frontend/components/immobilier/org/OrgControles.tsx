@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import type { CubeOrg, FiltresOrg } from '@/lib/immobilierOrgApi';
-import { CUBES_ORG, libelleDimensionOrg, libelleModaliteOrg, trierModalites } from '@/lib/immobilierOrgCubes';
+import { CUBES_ORG, descriptionDimensionOrg, libelleDimensionOrg, libelleModaliteOrg, trierModalites } from '@/lib/immobilierOrgCubes';
 
 interface Props {
   cube: CubeOrg;
@@ -34,11 +34,13 @@ function Selecteur({
   valeur,
   options,
   onChange,
+  aide,
 }: {
   libelle: string;
   valeur: string;
   options: { id: string; libelle: string }[];
   onChange: (valeur: string) => void;
+  aide: string;
 }) {
   return (
     <label className="block text-sm text-gray-600">
@@ -54,6 +56,7 @@ function Selecteur({
           </option>
         ))}
       </select>
+      <span className="block mt-1 text-xs text-gray-500">{aide}</span>
     </label>
   );
 }
@@ -64,12 +67,18 @@ export default function OrgControles({ cube, axe, onAxe, croiser, onCroiser, mod
 
   return (
     <div className="border rounded-lg bg-white p-4 space-y-4">
+      <p className="text-sm text-gray-600">
+        <span className="font-medium text-gray-900">Regrouper par</span> : ce qui forme les barres du graphique, une par
+        valeur. <span className="font-medium text-gray-900">Croiser avec</span> : ajoute un second critère, le graphique
+        devient un tableau à deux entrées.
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Selecteur
           libelle="Regrouper par"
           valeur={axe}
           options={dimensions.map(d => ({ id: d, libelle: libelleDimensionOrg(d, cube) }))}
           onChange={onAxe}
+          aide={descriptionDimensionOrg(axe, cube)}
         />
         <Selecteur
           libelle="Croiser avec"
@@ -79,8 +88,27 @@ export default function OrgControles({ cube, axe, onAxe, croiser, onCroiser, mod
             ...dimensions.filter(d => d !== axe).map(d => ({ id: d, libelle: libelleDimensionOrg(d, cube) })),
           ]}
           onChange={valeur => onCroiser(valeur === '' ? null : valeur)}
+          aide={croiser ? descriptionDimensionOrg(croiser, cube) : 'Facultatif : sans second critère, le résultat est un graphique.'}
         />
       </div>
+
+      <details>
+        <summary className="cursor-pointer text-sm text-blue-700 hover:underline select-none">
+          Explication de chaque critère
+        </summary>
+        <dl className="mt-3 space-y-2 text-sm text-gray-600">
+          {dimensions.map(d => (
+            <div key={d}>
+              <dt className="font-medium text-gray-800">{libelleDimensionOrg(d, cube)}</dt>
+              <dd>{descriptionDimensionOrg(d, cube)}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 text-sm text-gray-600">
+          <span className="font-medium text-gray-800">Filtres</span> : ne garder que certaines valeurs d’un critère, par
+          exemple seulement le 9e et le 10e arrondissement.
+        </p>
+      </details>
 
       <details>
         <summary className="cursor-pointer text-sm text-blue-700 hover:underline select-none">

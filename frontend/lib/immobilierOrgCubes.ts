@@ -41,7 +41,7 @@ export const CUBES_ORG: Record<CubeOrg, ConfigCube> = {
     ],
   },
   dpe: {
-    libelle: 'DPE',
+    libelle: 'Diagnostics',
     unite: 'DPE',
     axeDefaut: 'etiquette',
     dimensions: ['etiquette', 'niveau_dpe', 'type_batiment', 'periode_construction', 'chauffage', 'arrondissement', 'mois'],
@@ -53,18 +53,18 @@ export const CUBES_ORG: Record<CubeOrg, ConfigCube> = {
     ],
   },
   batiment: {
-    libelle: 'Bâtiments',
+    libelle: 'Immeubles',
     unite: 'immeubles',
     axeDefaut: 'epoque_ff',
     dimensions: ['epoque_ff', 'usage_batiment', 'taille_copro', 'inondation', 'patrimoine', 'arrondissement'],
-    source: 'Bâtiments : BDNB (CSTB), état du parc au millésime.',
+    source: 'Immeubles : BDNB (CSTB), état du parc au millésime.',
     explication: [
       'Immeubles de la BDNB (CSTB) à Paris : un état du parc au millésime de la base, sans date de transaction, donc sans période.',
       'Époque de construction : Fichiers fonciers (souvent arrondie à la décennie dans le parc ancien). Copropriétés : registre national (« hors registre » veut dire absent du registre, pas forcément sans copropriété). Inondation par débordement de cours d’eau, monument historique et bâti patrimonial viennent des plans locaux d’urbanisme et des bases nationales.',
     ],
   },
   croise_ventes: {
-    libelle: 'Ventes, DPE et bâti',
+    libelle: 'Ventes reliées aux immeubles',
     unite: 'ventes',
     axeDefaut: 'pieces',
     dimensions: [
@@ -79,7 +79,7 @@ export const CUBES_ORG: Record<CubeOrg, ConfigCube> = {
     ],
   },
   croise_dpe: {
-    libelle: 'DPE de la BDNB',
+    libelle: 'Diagnostics reliés aux immeubles',
     unite: 'DPE',
     axeDefaut: 'etiquette',
     dimensions: ['etiquette', 'pieces', 'arrondissement', 'tranche_surface', 'mois'],
@@ -123,6 +123,53 @@ export function libelleDimensionOrg(dimension: string, cube: CubeOrg): string {
     case 'periode_construction': return 'Période de construction';
     case 'chauffage': return 'Chauffage';
     default: return dimension;
+  }
+}
+// Explication d'une dimension, en langage d'agent ; elle dépend du cube quand la même dimension n'y veut pas dire la même chose
+export function descriptionDimensionOrg(dimension: string, cube: CubeOrg): string {
+  const ventes = cube === 'dvf' || cube === 'croise_ventes';
+  switch (dimension) {
+    case 'mois':
+      return ventes ? 'Mois de la vente.' : 'Mois d’établissement du diagnostic.';
+    case 'arrondissement':
+      return cube === 'batiment' ? 'Arrondissement de Paris (1 à 20) où se situe l’immeuble.' : 'Arrondissement de Paris (1 à 20) où se situe le logement.';
+    case 'type_local':
+      return 'Appartement ou maison.';
+    case 'pieces':
+      return ventes
+        ? 'Nombre de pièces principales du logement vendu (6 = six pièces et plus).'
+        : 'Nombre de pièces d’après la typologie du diagnostic (T1, T2, T3…) : elle est déclarative et rarement renseignée.';
+    case 'tranche_surface':
+      return ventes
+        ? 'Surface bâtie déclarée du logement vendu, par tranche : moins de 25 m², 25 à 40, 40 à 60, 60 à 80, 80 à 120, 120 et plus.'
+        : 'Surface habitable du logement diagnostiqué, par tranche : moins de 25 m², 25 à 40, 40 à 60, 60 à 80, 80 à 120, 120 et plus.';
+    case 'etiquette':
+      if (cube === 'croise_ventes') {
+        return 'Note de l’immeuble où a eu lieu la vente : note médiane des diagnostics de ses logements, de A (très économe) à G (très énergivore). « Inconnue » : vente non reliée à un immeuble, ou immeuble sans diagnostic.';
+      }
+      return 'Lettre du diagnostic du logement, de A (très économe) à G (très énergivore). F et G sont les « passoires thermiques ».';
+    case 'rattachee':
+      return 'Dit si la vente a pu être reliée à un immeuble de la base nationale des bâtiments. Sans ce lien, on ne connaît ni la note ni les caractéristiques de l’immeuble.';
+    case 'epoque_ff':
+      return 'Époque de construction de l’immeuble : avant 1946, 1946-1970, 1971-1990, après 1990 (d’après l’année des Fichiers fonciers).';
+    case 'taille_copro':
+      return 'Taille de la copropriété de l’immeuble, en nombre de logements. « Hors registre » : l’immeuble ne figure pas au registre national des copropriétés.';
+    case 'inondation':
+      return 'Risque d’inondation par débordement de cours d’eau autour de l’immeuble : aucun, faible, moyen ou fort.';
+    case 'patrimoine':
+      return 'Immeuble classé monument historique, immeuble en périmètre de bâti patrimonial d’un plan local d’urbanisme, ou aucun des deux.';
+    case 'usage_batiment':
+      return 'Usage principal de l’immeuble (Fichiers fonciers).';
+    case 'niveau_dpe':
+      return 'Diagnostic « logement individuel » (fait pour le logement), « logement déduit de l’immeuble » (calculé à partir du diagnostic de l’immeuble, sans visite du logement) ou « immeuble » (immeuble collectif).';
+    case 'type_batiment':
+      return 'Type de bâtiment indiqué dans le diagnostic : appartement, maison ou immeuble.';
+    case 'periode_construction':
+      return 'Période de construction du bâtiment indiquée dans le diagnostic (avant 1948, 1948-1974…).';
+    case 'chauffage':
+      return 'Chauffage principal électrique ou autre énergie (gaz, fioul, réseau de chaleur…).';
+    default:
+      return '';
   }
 }
 
