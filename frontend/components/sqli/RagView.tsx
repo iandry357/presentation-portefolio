@@ -5,10 +5,14 @@ import { fetchSqliRag, RagResponse } from '@/lib/sqliApi';
 import { Badge } from '@/components/ui/badge';
 
 const SUGGESTED_QUESTIONS = [
-  "Quelles sont les dernières actualités de SQLI ?",
-  "Quels sont les projets ou clients récents de SQLI ?",
-  "Quelles acquisitions ou partenariats concernent SQLI ?",
-  "Comment SQLI se positionne-t-elle sur l'IA et la data ?",
+  "Quelles offres SQLI couvrent la stratégie data, la gouvernance et le Master Data Management ?",
+  "Comment SQLI renforce-t-elle son offre data et analytics, notamment avec Station10 ?",
+  "Quelles certifications et spécialisations SQLI met-elle en avant (Azure, Acquia, ISO 27001) ?",
+  "Comment SQLI développe-t-elle ses équipes et sa capacité de production au Maroc ?",
+  "Quelles références SQLI a-t-elle dans l'assurance et l'énergie ?",
+  "Quels gains SQLI obtient-elle en appliquant l'IA à ses propres projets (tests, architecture, migration) ?",
+  "Quels cas clients SQLI montrent l'IA appliquée aux tâches data et DevOps ?",
+  "Quels résultats l'optimisation du taux de conversion et la personnalisation ont-elles apportés à des clients de SQLI ?",
 ];
 
 export default function RagView() {
