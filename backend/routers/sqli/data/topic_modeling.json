@@ -1,0 +1,1174 @@
+{
+  "n_topics": 7,
+  "total_docs": 104,
+  "topics": [
+    {
+      "topic_id": 0,
+      "label": "Strat\u00e9gie IA et data",
+      "keywords": [
+        "ia",
+        "clients",
+        "\u00e9quipes",
+        "donn\u00e9es",
+        "client",
+        "exp\u00e9rience",
+        "data",
+        "directeur",
+        "expertise",
+        "croissance"
+      ],
+      "lang": "fr",
+      "summary": "SQLI, groupe sp\u00e9cialis\u00e9 en data et IA, renforce ses capacit\u00e9s via des acquisitions comme Station10 et des partenariats (Microsoft Azure, RTE). Pr\u00e9sent \u00e0 Nantes et \u00e0 l\u2019international, il modernise des applications et d\u00e9veloppe des p\u00f4les strat\u00e9giques d\u00e9di\u00e9s \u00e0 l\u2019innovation."
+    },
+    {
+      "topic_id": 1,
+      "label": "Croissance internationale des PME",
+      "keywords": [
+        "growth",
+        "pme",
+        "compartiment",
+        "demande",
+        "documents",
+        "international",
+        "quatre",
+        "comment",
+        "fin",
+        "client"
+      ],
+      "lang": "fr",
+      "summary": "SQLI, groupe international sp\u00e9cialis\u00e9 dans le digital, renforce sa croissance par des acquisitions (comme Star Republic en Europe du Nord) et des nominations strat\u00e9giques (Philippe Donche-Gay \u00e0 la pr\u00e9sidence). Il accompagne les entreprises dans la transformation digitale, l\u2019exp\u00e9rience client et le *Digital Workplace*, avec une pr\u00e9sence m\u00e9diatique et des interventions d\u2019experts comme Joanna Pomian."
+    },
+    {
+      "topic_id": 2,
+      "label": "Croissance des revendeurs tech",
+      "keywords": [
+        "veut",
+        "entreprises",
+        "cybers\u00e9curit\u00e9",
+        "ouvre",
+        "solutions",
+        "trois",
+        "synnex",
+        "td synnex",
+        "td",
+        "revendeurs"
+      ],
+      "lang": "fr",
+      "summary": "SQLI, groupe tech fran\u00e7ais, affiche une croissance r\u00e9guli\u00e8re de son chiffre d'affaires (d\u00e9passant 200 M\u20ac) et de ses b\u00e9n\u00e9fices, notamment via des acquisitions comme Wax Interactive et des partenariats (Alpenite). Pr\u00e9sent en France, il mise sur le multi-cloud Salesforce et des recrutements strat\u00e9giques (ex : Christelle Chappaz en RH)."
+    },
+    {
+      "topic_id": 3,
+      "label": "Recrutement IT au Maroc",
+      "keywords": [
+        "ia",
+        "profils",
+        "casablanca",
+        "maroc",
+        "logiciels",
+        "tanger",
+        "exp\u00e9riment\u00e9s",
+        "morocco",
+        "code",
+        "site"
+      ],
+      "lang": "fr",
+      "summary": "SQLI, groupe IT fran\u00e7ais, recrute massivement au Maroc (Casablanca, Rabat, Oujda) avec des centaines de postes ouverts. Il affiche aussi une croissance en France (Lyon) et des recrutements techniques, malgr\u00e9 un recul de son CA en 2020."
+    },
+    {
+      "topic_id": 4,
+      "label": "Certification s\u00e9curit\u00e9 internationale",
+      "keywords": [
+        "commerce",
+        "certification",
+        "time",
+        "europe",
+        "november",
+        "cross",
+        "border",
+        "cross border",
+        "director",
+        "iso"
+      ],
+      "lang": "en",
+      "summary": "SQLI renforce sa certification ISO 27001 en France et au Maroc, tout en d\u00e9veloppant ses activit\u00e9s (recrutement de 400 ing\u00e9nieurs au Maroc d\u2019ici 2025) et en participant \u00e0 des \u00e9v\u00e9nements sectoriels comme le *Cross-Border Commerce Europe C Suite Spring 2026*. L\u2019entreprise est \u00e9galement cit\u00e9e dans des nominations (Digital Trustee \u00e0 l\u2019Imperial War Museum) et des webinaires (Field Service Management, Allianz UK)."
+    },
+    {
+      "topic_id": 5,
+      "label": "Expertise data et commerce",
+      "keywords": [
+        "data",
+        "acquia",
+        "station10",
+        "expertise",
+        "clients",
+        "experience",
+        "commerce",
+        "customer",
+        "application",
+        "includes"
+      ],
+      "lang": "en",
+      "summary": "SQLI, groupe international, se sp\u00e9cialise dans l\u2019expertise data et le commerce, avec des projets concrets comme la modernisation d\u2019applications (RTE) ou des acquisitions (Station10 pour l\u2019IA). Pr\u00e9sent au Maroc et prim\u00e9 (Acquia, Emerce 100), il organise aussi des \u00e9v\u00e9nements clients et des webinaires."
+    },
+    {
+      "topic_id": 6,
+      "label": "\u00c9volution de l'identit\u00e9 corporate",
+      "keywords": [
+        "teams",
+        "thielemans",
+        "olivier thielemans",
+        "olivier",
+        "financial",
+        "november",
+        "growth",
+        "service",
+        "technical",
+        "identity"
+      ],
+      "lang": "en",
+      "summary": "Ce groupe couvre des projets de transformation digitale (UX/UI, webinaires) et des nominations strat\u00e9giques (CFO, Digital Trustee). Il intervient pour des clients comme Alstom, Allianz UK ou l'Imperial War Museum, avec une expansion au Maroc."
+    }
+  ],
+  "docs": [
+    {
+      "id": "sqli_site_23409975fe3d2d16",
+      "source": "sqli_site",
+      "title": "Moderniser une application mobile sant\u00e9 avec une approche incr\u00e9mentale de l'IA",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/modernisation-application-mobile-sante-ia-assurance",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.518
+    },
+    {
+      "id": "sqli_site_67b282c9d6d4d781_chunk_0",
+      "source": "sqli_site",
+      "title": "Aider les professionnels \u00e0 trouver le bon outil gr\u00e2ce au Product Advice",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/kyocera-fastening-solutions-conseil-produit-tool-finder",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.601
+    },
+    {
+      "id": "sqli_site_8b7fb504aafd359b",
+      "source": "sqli_site",
+      "title": "Prioriser les tests de non-r\u00e9gression gr\u00e2ce \u00e0 l\u2019intelligence artificielle",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/priorisation-tests-non-regression-ia-e-commerce",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.709
+    },
+    {
+      "id": "sqli_site_944b3c4b9740c825",
+      "source": "sqli_site",
+      "title": "Acc\u00e9l\u00e9rer une \u00e9tude d\u2019architecture technique gr\u00e2ce \u00e0 l\u2019IA",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/etude-architecture-technique-ia-industrie",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.657
+    },
+    {
+      "id": "sqli_site_7bf7d5f5b6401965",
+      "source": "sqli_site",
+      "title": "D\u00e9ployer un agent d\u00e9veloppeur pour automatiser les les t\u00e2ches Data et DevOps",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/agent-developpeur-ia-data-devops",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.518
+    },
+    {
+      "id": "sqli_site_4ced566ce7a93c12",
+      "source": "sqli_site",
+      "title": "Migrer vers Acquia Source malgr\u00e9 l\u2019absence de donn\u00e9es d\u2019entrainement IA",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/migration-acquia-source-ia-reassurance",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.619
+    },
+    {
+      "id": "sqli_site_6bd75998ba4524fb_chunk_0",
+      "source": "sqli_site",
+      "title": "Mobility : comment l\u2019IA a transform\u00e9 notre mani\u00e8re de d\u00e9velopper une application m\u00e9tier pour Evoriel",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/mobility-ia-developpement-application-metier-evoriel",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.726
+    },
+    {
+      "id": "sqli_site_4a17dce0aee48a1b_chunk_0",
+      "source": "sqli_site",
+      "title": "Du clic \u00e0 la candidature : comment Station10 et Capita ont transform\u00e9 le recrutement de l\u2019Arm\u00e9e britannique gr\u00e2ce \u00e0 la data et \u00e0 la personnalisation",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/armee-britannique-recrutement-data-personnalisation",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.964
+    },
+    {
+      "id": "sqli_site_948f51f869f4e85b",
+      "source": "sqli_site",
+      "title": "Key Equity Release confie son programme CRO \u00e0 Station10 by SQLI",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/station10-by-sqli-pilotera-le-programme-cro-de-key",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_site_c020972c76d9dd5f_chunk_0",
+      "source": "sqli_site",
+      "title": "\u00ab J\u2019ai eu plus souvent tort que raison \u00bb : comment John Rowley de Greene King a d\u00e9montr\u00e9 la valeur de l\u2019exp\u00e9rimentation",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/case-studies/greene-king",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.987
+    },
+    {
+      "id": "sqli_site_a6891666536d3a66",
+      "source": "sqli_site",
+      "title": "Data & AI",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/expertise/data-ai",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_site_44d312f67850df7f",
+      "source": "sqli_site",
+      "title": "Migration vers Sylius : l'IA au service du replatforming e-commerce",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/migration-e-commerce-sylius-ia-acteur-edition",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.954
+    },
+    {
+      "id": "sqli_site_bb9dac24ebc4f4bd",
+      "source": "sqli_site",
+      "title": "R\u00e9duire la dette de s\u00e9curit\u00e9 tout en modernisant un parc applicatif critique",
+      "date": "2026-11-06",
+      "url": "https://www.sqli.com/fr-fr/cas-clients/modernisation-parc-applicatif-securite-energie",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.637
+    },
+    {
+      "id": "sqli_sqli_fr_3c2b5540c3b6cd44",
+      "source": "google_news",
+      "title": "J\u00e9r\u00f4me Leroy et Michael Thieulin, SQLI : Code g\u00e9n\u00e9r\u00e9 par l'IA : ce ne sont pas de meilleurs mod\u00e8les, mais de meilleurs garde-fous qui font la diff\u00e9rence concurrentielle - ZDNET",
+      "date": "2026-10-30",
+      "url": "https://news.google.com/rss/articles/CBMiqAJBVV95cUxOYkJjQ2M4cS1tbVVyZTI5MTBWWFlFclBHYTVDQlNHaVMtZE1VWF9mcGtuV2E1anVrTFJ6eWxPVVZ2UVFicUdvellock5pcmZzSFdsb2dBd3VhbG5aTmdGWTJRQWNSaVp3cWhsbGVyTTd3Ymh3aldNYXJzWlQ2eUJoVFRnVzM2c0VmQ05LWHF1N0tpMWljSzhjaE03ZjV2NVJEb1VPRnlXcWJXRmFxT1lVV0Y2Y2VSVThtWUwzeWlWZ3dORFc1amZYeVRSSjRKLUFTejJlamg3S193TDI0cmIzVUtTOHhCZE81ajNlSmFRbkxVX3FodElmWUpsN21WaEVlS2M2XzRtRlRKNHUtTHlZMU5HcldVc3V0Q0tHd1hBNkhmM1kxSzNZZg?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.724
+    },
+    {
+      "id": "sqli_sqli_news_2ef37e57bb87ccb5",
+      "source": "google_news",
+      "title": "Stages de fin d\u2019\u00e9tudes: SQLI recrute des stagiaires en France - Dreamjob.ma",
+      "date": "2026-10-30",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOTmlGTmlSVktRTXlROFNJMGFKd1piVlV5NmU3LTVxQUVUb29Nc0VCUFYwb0RZb2J5SHJxRlZxSkV4eHhUd3VCTmtPWWwxWHY0TzlVM0lxbXdFQ3FzaERXN0lXc1RrRWxsWnE5b2wxa0VOOGthME5MSExYUXUwLXdOTlI4UFZZb3k3SDExbTdSQ2Q2bUExVndqTkwyb2VWeEhsZ0lKZkJENkE?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_news_5c11fb676e824a03_chunk_0",
+      "source": "google_news",
+      "title": "SQLI se dote d'une expertise data - CFNEWS",
+      "date": "2026-10-17",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQVGJCSk45SVlTR3ZWVUdfQlQ5VHNyZmZ6UWN0Zkx1VkN6UEwwb0FjXzU4Y19WNzZCX0hiRG1LTUpmbjNPcWFFVVItVFJKWjY3M052ZFhiM2tzV2Qwc0I1OXlvaFJCTFhHV2M2Q3ZVVW1DdmVIRzhVWmo5emlWajNjTGQyZ1hEOTlFeUJiZ1RwYnd2VjZIcmNMbHVkcndFX2loSFBoZFdqVG8yTFc0S0s5cVRGdTR5OWdhVjVXcm84RHQ?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.68
+    },
+    {
+      "id": "sqli_sqli_news_3a245fe923960f50",
+      "source": "google_news",
+      "title": "Jean-Dominique Trouillard rejoint SQLI au poste de chief growth & marketing officer - ChannelNews",
+      "date": "2026-10-05",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNNXhQMERtQ09VeC1uUGFSdzBhX3dGSlRXMVJzWjZ2b1hKSm5pQXZRcWl3TjBJNHU4TTFJa0ljamZtWkRzRmxieWRldl9IV256bEw5cVYwV1piMEM0SlV1bDI3VnVTRjc0S0drTW13OG9IVWNrT3lYUEl2Vll4eDItRHI4VGRBenpVbDd6T3dVTkFyWWpnLUZQQnFiLTFXY3pfNDVUVE41NVhINTUySVRKakVjNkRFZw?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.575
+    },
+    {
+      "id": "sqli_sqli_news_7b9c90f119e437b8",
+      "source": "google_news",
+      "title": "CMA Media, ODIGO, SQLI : les nominations de la semaine dans la tech et les m\u00e9dias - Frenchweb.fr",
+      "date": "2026-10-02",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPZ3pkdE5yZ2lYZG10MEdJNkRybW1oakhjQThyOUVKOWhDWWdhV1BtRVphYWNKb1lPdXJ1RnRBRVA5ZWpFRGFaRkJHVkdaejN3eC0tUmlxb0plNmZ6X3BCcmNLeGRNTHVNcnRKd202NjZiX3lxMDNPNjZHMThRQUtocEc0N2xNRU5mdnVrZm0zcnJMTTdlUFVPbUJrWDNJU19fNUU5T1pvdHpENkxITGc?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.398
+    },
+    {
+      "id": "sqli_sqli_news_ef2183e8c2106ee4_chunk_0",
+      "source": "google_news",
+      "title": "SQLI nomme un Chief Growth Officer pour piloter sa strat\u00e9gie IA - Presse Agence",
+      "date": "2026-09-30",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQM215eG1uVjJIeXZ4RUFqYjVLaDRmbWJadldWdnRxS0FiWTdhdGNBNHZyMko5VmJrTnR1SEFaV2RNeFY1VHQ5c25WLXdRdy1aY0N2alk1eUpROC01N1VaRHlMdzJ4VGdxZUpLR3docFg0ZHVHRnBIUklCUUhaM1ctUlp2V3VtY3BwUERTaG1ic3ZRMXNlczB6bG85bXNJWUZjazdBb1F2QVJ5OGxKY0ZRYzFTLXJXbHVsWnRGcTdBc200bXhsTi1FdkZQSWYxdw?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.926
+    },
+    {
+      "id": "sqli_site_20c01bdee52ba594",
+      "source": "sqli_site",
+      "title": "ISO 27001 : SQLI renouvelle sa certification et poursuit son d\u00e9ploiement en France et au Maroc",
+      "date": "2026-05-06",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/certification-iso27001-sqli",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.743
+    },
+    {
+      "id": "sqli_site_e3f76706fe387261",
+      "source": "sqli_site",
+      "title": "SQLI renforce son leadership sur le march\u00e9 avec une double reconnaissance au classement Emerce 100",
+      "date": "2026-04-21",
+      "url": "https://www.sqli.com/fr-fr/insights/sqli-strengthens-market-leadership-with-double-Emerce-100-2026Recognition",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.986
+    },
+    {
+      "id": "sqli_site_134fc2627aa9f1ff_chunk_0",
+      "source": "sqli_site",
+      "title": "SQLI r\u00e9compens\u00e9 par un Acquia Partner Awards 2025",
+      "date": "2026-04-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/acquia-partner-awards-sqli",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.993
+    },
+    {
+      "id": "sqli_site_18ada1a1c499c313",
+      "source": "sqli_site",
+      "title": "SQLI modernise le site corporate d\u2019Alstom et d\u00e9ploie sa nouvelle identit\u00e9 UX/UI",
+      "date": "2026-03-10",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/sqli-modernise-site-corporate-alstom",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.952
+    },
+    {
+      "id": "sqli_sqli_news_66fbd9eb21d14ddd",
+      "source": "google_news",
+      "title": "SQLI poursuit sa progression dans la gestion de l'exp\u00e9rience client - Distributique",
+      "date": "2026-03-04",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOUzFXZ0NQcl9hY1NNSFotS1RqMHM2eVBPZS13MnhXWUQ1bzJEdlF5SVdabE1LSFMzN1pYTTYzU0hEMHIxR3NQaXdPR3hhWmN4Qll2V2sxX3NoOUdEdURZc2R6MDhMRnY3bzVEQTN3Y3ViRW9fX2xUNUJzM0pCNVlma1lhcDExc1MzWWNNNTBlYXZDMm9LaUd0MUFGYkVYMVBZLV84UF9OV1JTNXEzWEdObjhoZUYwbUhkQXlaMnpwY2hWUQ?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_site_8220123f75b4c6f7_chunk_0",
+      "source": "sqli_site",
+      "title": "SQLI acquiert Station10 et renforce ses capacit\u00e9s en data et analytics pilot\u00e9es par l\u2019IA",
+      "date": "2026-03-04",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/sqli-acquiert-station10",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.993
+    },
+    {
+      "id": "sqli_site_95d1ce44452a2814_chunk_0",
+      "source": "sqli_site",
+      "title": "SQLI obtient la sp\u00e9cialisation \"Plateforme IA sur Microsoft Azure\"",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/sqli-obtient-la-specialisation-plateforme-ia-sur-microsoft",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.993
+    },
+    {
+      "id": "sqli_site_a75a25dc2e90bda6",
+      "source": "sqli_site",
+      "title": "SQLI nomme Marie Henl\u00e9 au poste de Directrice Groupe Talent Acquisition & Marque Employeur",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/nomination-marie-henle-group-talent-acquisition-employer-branding-director",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.976
+    },
+    {
+      "id": "sqli_site_462e7da4fc0e7808",
+      "source": "sqli_site",
+      "title": "SQLI nomme Pierre-Alexandre Metayer au poste de Group Revenue Operations Director",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/nomination-pierre-alexandre-metayer-group-revenue-operations-director",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.988
+    },
+    {
+      "id": "sqli_site_4b672f9cc17d1e1d",
+      "source": "sqli_site",
+      "title": "SQLI annonce ses nouveaux locaux sur l\u2019\u00eele de Nantes : un site strat\u00e9gique au c\u0153ur de l\u2019innovation",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/inauguration-site-nantes-2025",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.99
+    },
+    {
+      "id": "sqli_site_8d2c03600b1d24bb_chunk_0",
+      "source": "sqli_site",
+      "title": "SQLI nomme Jean-Christophe Ravaux au poste de Directeur G\u00e9n\u00e9ral de la zone internationale",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/nommination-jean-christophe-ravaux-directeur-general-zone-internationale",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.993
+    },
+    {
+      "id": "sqli_site_c3c75ac83742fb6a_chunk_0",
+      "source": "sqli_site",
+      "title": "SQLI modernise l\u2019application \u00e9CO2mix de RTE",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/sqli-modernise-application-eco2mix-rte",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.99
+    },
+    {
+      "id": "sqli_site_42c701a30062f6fc",
+      "source": "sqli_site",
+      "title": "SQLI nomme Olivier Thielemans au poste de Directeur Financier Groupe",
+      "date": "2025-12-18",
+      "url": "https://www.sqli.com/fr-fr/actualites-evenements/sqli-nomme-olivier-thielemans-au-poste-de-directeur-financier-groupe",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.99
+    },
+    {
+      "id": "sqli_sqli_fr_a673ef312c5c876c",
+      "source": "google_news",
+      "title": "SQLI renforce ses activit\u00e9s \u00e0 l'international - Distributique",
+      "date": "2025-12-12",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNWGFDQ1JzRURzcUh5R01uOC1yOHlZbUZaaGxOZHNFdXJmNHh2LVc3N0RRMVBvOUVTUWJQcmNEQ1EwUVpkMEQxUmV5M1JHUVV5UGRQMmQ1Z29RZGZaZHFDbjByNzRudHNQaWZHQjdiYTg4UjJEWktpTHFic2Y5a1UtcUVYVEhFNlAtVFBIYk9nbWFjQlM5RHlBblpJd0dRZTJWNU5SZw?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_dd26d431c4cbf9db",
+      "source": "google_news",
+      "title": "SQLI : Jean-Christophe Ravaux devient directeur g\u00e9n\u00e9ral de la zone internationale - CB News",
+      "date": "2025-12-09",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQcHFpTnZFY19FYmlWSy1jN3prUUdGX3NFeWJIYVh6c2lwcWtBNnBGNWVxbW1veHJjQUFpUUVkbnpVcklaeVNkaWxwcDh2X2ZwNFdlbGFSakhNNzdIbXdLYnMxdUZXTW9EQjdVLVVUOGxONzJjbXJHVnQ5M2lENG53VjJQS2d0eDl1NU8ySW9XU0paYWdxb094LUI1S3pYMnYxZ2h6MmQwV2FOdw?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.977
+    },
+    {
+      "id": "sqli_sqli_news_affdf12414b865f1_chunk_0",
+      "source": "google_news",
+      "title": "Piloter une ESN : Erwan Le Duff, un r\u00e9veil conqu\u00e9rant - Alliancy",
+      "date": "2025-12-01",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTVptYndPczM2bk4tbnpLcF9OTWdwalFQNmxHZFpJc2hvNExVMXFCbTJnQUlIT1lnVnlYTGdTX25sSTRQLVMwVE1FcWNJMldNUTN6QmNDaDBIb2R2UlBSVlQ0Y0k3MEJrMnY3dU93NVFyWlBMVUxKSjVaM3lvSFBjZnE4ZmFXVTVlMVk3WV85U2pKQURMS0pDbXBxOWZBb3ZDaEpDZ1RUZ3lUYWc?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.987
+    },
+    {
+      "id": "sqli_sqli_news_145b6b3f79a00222_chunk_0",
+      "source": "google_news",
+      "title": "SQLI inaugure son p\u00f4le strat\u00e9gique IA \u00e0 Nantes - RelationclientMag.fr",
+      "date": "2025-11-04",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOV1B5RTdfOTBHZ3J5dkRCcnRDOFpOcUJoTkdLejRyVU5Eb2k4WVptSXdXcWYwQWNEdXVuZy01OFREYmFVY0M5YnQ1YXFpNVgtSjdLNnJLMjdCR1BTTDJiV2ZDSTM1ZjZMYmVUc1JWRmQwc3E4Zk9sOW9ISGVTemE3NTB4LVpZLXRzenlvOEZDaDlTSmdBLTZvRmhkbFlJVGpUdzg0eU93ZmdCaVBSV2kxbUI1VG1pd2lkTlNldHUzWkxEd9IBxwFBVV95cUxNenBSV3QzdzY3NFhQZkQtX0hoZ0hxcFl5UWdyZGFWNDMwd3ljc3dTT0dxcmhyNm1IN3FKelBkWFlZd3R0R3FVMnlISnRMTldfRl82bnJCTzVEbm1uXzBoaXNCZ09xWG55aU9LWmV0bURJWXUxSTJWX3JxMjJxYlhXMkVaRGtmM1JOcTBnSUNxYVBpWENOdXdLV3NCQXJySXFrSmEtN1VxdWtFN3JpX1J5SjlTRGZjbk9SQndSNGxZQzNPRFo1ZEQ0?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_fr_f02a89f7b0d2467c",
+      "source": "google_news",
+      "title": "Nouvelle nomination chez SQLI - CB News",
+      "date": "2025-07-20",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9YdXp0d1V0NDJvYzFrVHVuR1ZhdTV0QW85aUtZU2kwNVQ0TGJDNVBoMXk3ZmRLWVRHdEhuS0xNYVEtSm40YW01aXlIWUdLMlotRnY5WS1ZX1EtVGp1Tnh3TEQyQ28tdjRmTFlycUY0cw?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.977
+    },
+    {
+      "id": "sqli_sqli_news_5ed179c65dd25a0f",
+      "source": "google_news",
+      "title": "Casablanca & Rabat: plusieurs postes IT ouverts chez SQLI, candidatures imm\u00e9diates - Dreamjob.ma",
+      "date": "2025-07-14",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPdkZqeGdBSF9oZnZRQWNEaldmYjk1eDVZaDZmVGpnZEVvb0dDZHZFRW8tLUVhNVNXS2Y0SHE5RU1xYU5RT25EMG9WNHUtb0FCMEk2S1dwQUhtSlZsUkhhWkQ0b0p6RDF4aG9mUFk5OUpzdGFTMnpqUnp0bjhBaDhHQ2pWMTQ2MVNrV3BoeEduYmdGUE1YRjFaLXBUSkFoRklrSmZWZ2FxT09ZQk9hQi1Z?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_fr_1f359d503d7336c6_chunk_0",
+      "source": "google_news",
+      "title": "SQLI renforce sa strat\u00e9gie RH avec Christelle Chappaz - RelationclientMag.fr",
+      "date": "2025-07-09",
+      "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPUmgyanR1S3BjZ3owWVFhTk00cWpLSkwycllEMkJKTjdVZnF1dEdYYjNVUUJhQzk5TEV4RnhkcF8zZnh4UU5oT0ZZbWlnemdtcXFQNzYyank5VmYwQV9PSVgwUFRTMEI5MG5TSzZOMlFxZkxiZEVuSndMLTBrZUV5ZHFpdEItSnJ1X1Z4NVZRTW1rek5KaW1wb0k5Q0pVc3YtajBlNXF5TlBmWjZIM0FPRXVqRTFlQjJIQWRVckFTU1BmMXIyNzBONU8zcmpKRGNUcXZDVDRvbWhZZm42LVHSAeMBQVVfeXFMTTNVVnZqcnloVW1LVFRjaUQzTmkzcWJYUjlpc3U2ZG11ejNJR0h4RV9Uc0ZTRThlOFAyWUNPUjAyT2tOQ1N1YmZMbDBjOVBWT1NTUXVndVhtVzQ3MEhPNzl1X1dkSVJycWNLRzZTOGZnNkNSVHVyWFpqMGNPQ250d09vTzd2SlVMM0NZS2h3V215Qi01b21Fb0FuRV9BWjJGaWNHby05XzZYbDk0ekdmc3M2NmxaSXJpVlh6cjRtemNLekRQdnR2WGhrX19iNlFPWW1SSUp3NGctbWJVWHlFMDNBYW8?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_fr_3ed3bb90d846ef69",
+      "source": "google_news",
+      "title": "Christelle Chappaz recrut\u00e9e par SQLI pour chapeauter les RH - Distributique",
+      "date": "2025-07-09",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQZDV1b2pWTDRZNHVNckVIYmJEaWlzazgtdVhRYjhGV0hVU1F6emxTOE9ycTBEaE1Fck83b0kwN2ctcGxDNmV0LTlMRGtRMmxtVHAxZ3pwSUZ5aTVfWlRvQ1VHZHNfOTFaRWs4Z1hvemF4UURNY2NWbXBUbFZUU285U2g4UFhrWkZHTW85WVVqRFVWNHpnM1JFdlVDT3RsbU95VllodVN2MnFjT2ZJOExwanh0eU1aaG8?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_6752577cfbd68965",
+      "source": "google_news",
+      "title": "SQLI recrute massivement \u00e0 Rabat, Oujda et Casablanca \u2013 400 Postes - Dreamjob.ma",
+      "date": "2025-06-12",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNY1pJOGhFVWl2azlfX080ZzdXZWxrVHY3Mk15YjNNZ0RPdHFQYUQ1ZW5wcFFtRGhEeGY2bTBSR3hzdGtyNUNnVTY0MFJIcVc4d1NtXzNpR2l0Q1JJV2FkWE9FejQ4WnA4S0g5MThJNndfUzhaeDFGQ2pnaFQzMWhIYU02VHYxaDV5a3pjcjhmRkN5NGFybDA3Vm5zWQ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_news_dc996d12ca66324a",
+      "source": "google_news",
+      "title": "Innovation: SQLI Maroc inaugure un Digital Lab \u00e0 Rabat - Infom\u00e9diaire",
+      "date": "2025-05-15",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQMVphckNWaDRpbF8tQ2Jhb19aamprV0thTDNhVGNIcWNycTFkaEtHOFFGRjBVcUVBRGt3V0k1RlM5elJZUk5fbUpvT2pleGk1c3JHRGpWZXJCLURhNm0xMUdGMW44MldzQ21qdXZpTEZYWWstb3B4WUc4NTFJUHpkZVlCRko0OEx2eTRZ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.911
+    },
+    {
+      "id": "sqli_sqli_news_2b60106b3d5ae99a",
+      "source": "google_news",
+      "title": "Innovation technologique : SQLI Maroc ouvre un Digital Lab \u00e0 Rabat - Maroc Hebdo",
+      "date": "2025-05-15",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPbU9xZlRla0hJTnlwdzdVejhzbDZzajJGSGtJQ1d3WmhLLXJXVk5aeU92Ym5rUUVVZVhCbk8tbjd1U2N5WnhjdjZ6dTVXY21Ob3ZVaHZJR2J2ZVhSNlA4NlhuSko0ZUVUcUFiYzg0Z3hralB0QWx5cTI4SjZ6YUwzNG5DUUUwRlJlZUhoNHFrajlTcDJiYkU5S0JOaFU4d1d5NkE?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.527
+    },
+    {
+      "id": "sqli_sqli_news_0ac0536fc9c69d18",
+      "source": "google_news",
+      "title": "SQLI Maroc inaugure son Digital Lab \u00e0 Rabat - Le Nouvelliste Maroc",
+      "date": "2025-05-14",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1zSjIwc2NlbTlFZTVrVlZ5QUR6T195MUZzT01zTGFaaURNVHpJRlNnYVBfVnp1TElQeWZDZTZnVFRSZXNoZG9BaDlPVW02MkhmR2RaWVZzaXh2V0lyN3BVUFNFNXFMMDlxTjZLeXpSZDBCY2p0NTY0cTJ1RURtZw?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.414
+    },
+    {
+      "id": "sqli_sqli_news_d40bf42b89edf7bd",
+      "source": "google_news",
+      "title": "SQLI Maroc inaugure son Digital Lab \u00e0 Rabat en pr\u00e9sence du Ministre de l'Industrie et du Commerce - La Releve.ma",
+      "date": "2025-05-14",
+      "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTE1MZWoteHJrUkJOcnQtdkVRZE5kSjZnYzhHa3dyLUlrQXZTd3dkdXc4RXFzeC1uVFBlcExLaUZ2Wk4?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.889
+    },
+    {
+      "id": "sqli_sqli_fr_10985f09a3858523",
+      "source": "google_news",
+      "title": "Nominations: Kramer Group, SQLI, Adionics, B&B Hotels - Le Moci",
+      "date": "2025-04-17",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOWDVENnFqanNPaW9GaTRFellDZDF5RWdMWlVhdldvVENLOEFEWlFUWW9LYldaTjF1U09WbXZCZ1pYN2cwMzBRRG1qNnRySFQzaUF0T2I3OThnQkEwUHhBcldQS3RUTFhGckdrdm5ZY2owOVF0eUFrN09aUXA2MzR0Qnc0Tm16WUpXN2YzN19XdlVRMDdUVXlQXw?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.941
+    },
+    {
+      "id": "sqli_sqli_fr_a33995b30bfafa85",
+      "source": "google_news",
+      "title": "Entreprises, en bref : Optical Center, Qista, SQLI, Patrowl - Le Moci",
+      "date": "2025-04-16",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOdG5IbWNfRlYzUHJyTnNtOHdGLXVnN3dfWUE1NElzUG1qSmE3cUgwRnhOUlNVaFJfbzEzYmRaZm9pdm5jZjlLY2ZHNmtqbzdaMVBMZUM5eHNMWDFGUUNTNnZ0UGQ5Z0lLMU1pY2VScWwyWmFfa2JUTUlEX1JNaElVUi1ubFdQMGZMUkFBWDdLWXh0aGFHQTY1X2pBNA?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.945
+    },
+    {
+      "id": "sqli_sqli_news_8037e7fd46ef4b1c_chunk_0",
+      "source": "google_news",
+      "title": "PARIS : SQLI et Mozzaik365 s\u2019unissent pour moderniser les espaces de travail num\u00e9riques des entreprises - Presse Agence",
+      "date": "2025-01-23",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQSkxFeW1XUGRzTjd3T3ZfNGM3bTZ1ckpMVkdwYi1RRjI5YjN2NjZWRWJSNmRLcGlzaktNY2k5YllXc01xU09tZEhTVlZXdjd3LVJPd3J0bENTWG9vLUpsVHlUYlBMVm15R1lYVjJqbERMa3hhXzNaYnNOWmY5aFJXNmE5Y3FOZDRHZklmRnI2QmZ3R2dOLXBMOGstUDVpZUpob3V2NDVmUGRnVTRHd0hrd21JMDhia2VGYkN4Q0JkUDlobmc?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.986
+    },
+    {
+      "id": "sqli_sqli_fr_6e550252668ecb70",
+      "source": "google_news",
+      "title": "SQLI accueille Erwan Le Duff comme nouveau directeur g\u00e9n\u00e9ral - ICTjournal",
+      "date": "2025-01-08",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOM0dLcmNkcWZmck9CRzM2UHhxQ1VkUC1WR0xsdndWX1ZUbEgzcFRsQVdibDJMeExPUDhpV1lUMmFwc0w2cVdyYkl5eTRzTlVfelZVSllkTHM1bjd5LVNXcmhRMDdxNzA1QnBCS2ktdmlRbUlwNC1TNlVRYnBGRGxOdjhmbmJzU1lpQTc0d3BtV0ZQU01qaTN4Q0Zhd21xbEhfUjBxbA?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.576
+    },
+    {
+      "id": "sqli_sqli_fr_996d01d79b8f6d9b",
+      "source": "google_news",
+      "title": "SQLI change de directeur g\u00e9n\u00e9ral - Distributique",
+      "date": "2025-01-07",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQOVNKQ1JxOWlnVHJjZFU2OGtHNk9LQkhVUExtLVhKcVVFODBwZGJkc1AzOHB2Y2paN3BJcjhobzNOM1ZXRTdid0ZYWDZxbjRmTXNyR0xYZjBqMXZtZnpTU2NYY3JYVFNsb3o1cjlaSzQwRkdjRTJKYmIxOVpNamp2TmRHLURBY2Q1WmZwVjBZY2p3cjA?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_fr_d3306cf5432b577c",
+      "source": "google_news",
+      "title": "SQLI : Erwan Le Duff devient directeur g\u00e9n\u00e9ral - Solutions-Numeriques",
+      "date": "2025-01-07",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQVjlicmI3aC1zMzRyUkJNVWZ1RkFoOTFmZC1DS1Q4dGRvaHpTNGRkeVViTzVPU2xoekdYZ0otek0zR19FTXVMUktVOGhHalRraS1nVllOcUFFWm85YXl4ZHRROE91VFpXRWI0cGkwMlRqOWxjeHctOFJpU3VWTnhjekJpSHhZdjR4Rmc?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_sqli_group_en_58e5ef11f95b569a",
+      "source": "google_news",
+      "title": "DBAY ADVISORS CROSSES THE THRESHOLD OF 90% OF SQLI'S CAPITAL AND VOTING RIGHTS - Actusnews",
+      "date": "2024-11-12",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxORkpxN2ZGNnBOTkhhSVE0OWJNaHVZcEp3VGxINFAzNWVjd3l1VlljbzJhcXJJY3NTa0wtNFpYYzNsUkJtM0N5MGhXblUteGstMGFUU0s4aFd6TW9jaC1KSGxZcnpTd21Eb2dlTXJWZzRLV3gyZTRyOThfS2VkcHZOdUdIVjM3UmtWek80VHFIb3BUZjA2bDBTQnF6VmczSkdJVTU0dWtXaV82UUpIQTZBMWs5a0RySUd3dUlTZ0RQb09sMVluVlh0eE9oSWhhSG_SAdQBQVVfeXFMT28zNXpsNC1rU24xS0VGbTlkTXFLQjhlRTlXTEZoLUQwTjllVzdnRER0UVFxVkdNTUlGRzZmN2ptVlJLSW5ZdVBmaDNQdGN2N2xlTWJuTXBrYmhkZEpCd1IxTmZON2VpYzFRdVlUZlJ5bXFKRmtUNjlhUHAyeU83Z0hKZklKMUp4WVZqSUlVSFRrZU9Mb0VUVm9EdGZZX2l0UTNTVW1iMi1UTENjUkRNdmZCV0J6SzZXcGJEZWUydGxfN3g2elYyMWVGcFFGdk5EZTRCVS0?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.972
+    },
+    {
+      "id": "sqli_sqli_fr_45f2123dad4c3975",
+      "source": "google_news",
+      "title": "SQLI : une porte de sortie g\u00e9n\u00e9reuse - Le Revenu",
+      "date": "2024-09-23",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNQzBHM291RTE0cV91QmtQQUdFd0Mya3hlelFXNzdJaHhmV29PMWFtNFpSRjFCY2lyU3RZVUdFa1NJVE55YlR1MWN1SkVVOERLRFZYX3pURl9RNUpvY18zdTdDVURrUW14N09VMDdSUTB5UHNGVDhCdk9SYkJyTE42UHRyWFVqWmg2Tlk3am1XdEFieUROS3c?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.868
+    },
+    {
+      "id": "sqli_sqli_fr_477730357231fb89",
+      "source": "google_news",
+      "title": "Sqli : Une cotation en Bourse ne se justifie plus pour SQLI qui fait l'objet d'une OPA - BFM Bourse",
+      "date": "2024-09-20",
+      "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPcnRBSnNRNGhkYjdQaWN3T214bGV5TnIyTEROZGVLdlJLNXRWcGg3c3RSckVpZ0FKb3ZYZWt3VGNZV3d6RVpiRG5NNktyUUZyV1E4b29ZcGtXMXVyTTlEckpOM0x6c2dhUEJrVWRlVHJ2UTJ5ZHZlRHFCSHBmbWFtZHE2TkZHeHFfYXFCLWdOZkpnSGJxeEJleXprcGItVU9mNzdmUFFjSVlIYk5wOTdjSlpLbmtSOUVNUk5ZQ09WeXBYMGk5THM0QzdlcVVHcUZpYzlmelFhYlZ6NDlmUG5PT2p6cWw2S0lP?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.915
+    },
+    {
+      "id": "sqli_sqli_news_62f59495d9def257",
+      "source": "google_news",
+      "title": "Rejoignez SQLI Maroc: Candidature Spontan\u00e9e - Dreamjob.ma",
+      "date": "2024-06-27",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9iQ2RrWThObUVQQkEtOWh1SFU2aHJtTWxFOXVDRmZpYW1RenNrNkZid1R3eGxaYTJCX05YZ3B6UzJ5Zm1UdUljaDZFLUxvV3hOWFRqLUVMbjdncVlZU2VEd01lQUJRRnFUUFJ4MWcxVEI0UQ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_fr_5539a5c9f807e68e_chunk_0",
+      "source": "google_news",
+      "title": "Le groupe Talis rach\u00e8te l\u2019\u00e9cole Aston \u00e0 SQLI - Le Journal des Entreprises",
+      "date": "2024-04-12",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQSHpJaUVZQTBHckhEeWp0azJoSDhZWUUxa0hYZkdfZTFUcGtqb3l1R05mOF9sd3NQY0pTcktGRW03RDhvSk9GMmFxX3cwRmJ4V1RLTWwyNVlqLThKVF90NWhDQ1FsblNtaU1iMVNTVXk4SkNHeERRMzBXU0ZiYThWZFVNX0xJNUUyYXV5cFlSWDJzamlTeXZqbExvVQ?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.644
+    },
+    {
+      "id": "sqli_sqli_fr_eff7ba8be53ce890_chunk_0",
+      "source": "google_news",
+      "title": "SQLI : SQLI FINALISE LA CESSION D'ASTON AU GROUPE TALIS EDUCATION - Boursorama",
+      "date": "2024-04-08",
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOa2NsVXNRNlNJXzl0akJqMjRxdl9nUngwYWZOYWtpOUlOU2hOQ1JEd2FaUHUydEc0X1JsczkzcmUxOXVuX1c5a0NkLWtVVmFFUHRMNnlTeUVFYUFta3NrTjduRW1rbHdwUm5QVHdldXNZNlRsaXlXdzgtcXJRbW01OGliWVdUUFlSOUdib0RNeHBWUU1ud2ZRenhGU0hvdzNZMUllMTJ4WVFUVk95VGdxcXRmNXdKRnRwTTYxTlc3UEI0RHktTS1YWmxHQXBWanlva1o4UWNlTXPSAd4BQVVfeXFMTTdILVJTNndpTm91bW0ta1JBcDJhZFVlU1duYlBMNVlKeno4dEEwczhOOU5CellhOUtkbUl6cVMxTkc4eTJ2VlZxeHJLVHZrUS1SVnloU0tzQWhtMFdLVmlULWJNeXJJZnNyMEdOeXRJZVFfR2x1eHIweG5ZVmxYLWN0d1BRa2J3SngtTXgwTXZBLWRvNzBDQzFjdG9EVE5DeWhoSktEMlV6T1J0SmMxVzlVNHhjUWxsNW40Yk8wdEZzVkpxeDB6aU5qenI5UUFHd2M2dnBzOXktc0lmNFRR?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.525
+    },
+    {
+      "id": "sqli_sqli_group_en_8c8504174c00fc02",
+      "source": "google_news",
+      "title": "Serigne Barro guides firms\u2019 digital strategy with People Input - We are Tech",
+      "date": "2022-06-15",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNV2RYTlN4VWppM19TR1pnSUZsOHpqMllmY2JTV1RiN2pJU004ZjU0VXJRR2dUeGNILXoxcmI1Q2UxeWRna0FWdi1RSF9tZlVwQ2JkRUllVllUT1hMdzdhcFNSSDBFeW5heUxkdjZjdzF1cHRCS3draUpaYmNlSHlSS2Zla2d2TEJObWdvNER5S1hiX0hjQ0VTMjJOU2NkWllPcTdsLTNRMGJMV1FvbE1CZm5R?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.551
+    },
+    {
+      "id": "sqli_sqli_fr_833d2daab2ef449d",
+      "source": "google_news",
+      "title": "Annuels SQLI : les b\u00e9n\u00e9fices repartent fortement \u00e0 la hausse - Distributique",
+      "date": "2022-03-16",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNZkxjTkhlSWFZYURzZDVBTElEWkNXR2JXMDl6bUFsVVhCQnM3ZDNoZ1hVWG5Tb1prSDI3TVI4MGV1aWtiWUs5YmZ1WjE2cWFsQU5OWGpNWUxzR3VvY0UyLTFlcXd0UVZXYjNvQmpyR0NGVElwcDM5UlgzUG14eldxbE9raGJxcDRrNjMyR2ljRnkwYkpzLXJqSElwa29nM29LUW9FM1ZFb20tNU9QLWZMaHlacDRYZw?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_fr_46cfab43ca56416f",
+      "source": "google_news",
+      "title": "Thierry Mileo prend la direction g\u00e9n\u00e9rale de SQLI France - Le Monde Informatique",
+      "date": "2022-02-25",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOelVpTVZKREFmVlI3Z3J0R0cxOEtEbEVmNVc5M1VLWHBSMURQRktkV01tMU9CeDhSNUpsOVkxR2hCMVE3RVVUMlQ3Wk1iQnJKUEdrbi0tOS1Zd0ppNUN2UE1abjd5V3BaSnoxa2RCYWQ4eVJqQ1lLeThPODlDRTItTHFvV0NsME1RTV9tT1pHdVhGd2xXRklrQUQ0UVMyQXQ5NGphNm9CRllLT0NENkRaLTFrS2tXNlhUSnfSAb4BQVVfeXFMTzQ2UzNONzRPUXRHa2w4RHhfSkRVampqR1FXS1NjLU84UWZld3hEbWI4dGQ3eW81MGZxUXhVSUU3aHJLZksycWdKb3BSUWJRVDA3dFFZenFmOW9xSDhkLXNOM1lXOENYZUNFMzFHMEZFdUsySzFvZGRJZEVRalV2NDBQcXA4cWNielBJZ0pCaFgyY2ZFakp2VDhPdkVzTlRmXzVVX0xYMS1aMFV6QkxLdTFXWjNRUHlZZXZBdXN6UQ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.62
+    },
+    {
+      "id": "sqli_sqli_fr_661259e4374d7946",
+      "source": "google_news",
+      "title": "Itesoft : Apr\u00e8s SQLI, l'\u00e9diteur de logiciels Itesoft va faire l'objet \u00e0 son tour d'une OPA - BFM Bourse",
+      "date": "2021-10-01",
+      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQN3pZa0xzRzU4UF80SGlzWmU5MzB1ZFE0ekFNbXY2ODk0eWZfWkt5RkhHcWlyVzFYaWFwU0c1LWd5WFhpNUtES0hTOElHUDEycElJTE1qdUppWWxlMWgwZFZjMWpsV050elNzRHJNNVlJMXBSUDFnXzVhbXAyQ2R1LWlBV0lNQ2hKSUpDVTc3eGNDX2s5VXBQTGtZNkQxbjBRRWt5ZFhDandOY1ZhR1R4ZWNWbk95Z05GcUhiUFhiT251MEJGcEJFSDhlWDBHN3lVX1lUOHQ2dGlGOEdfbFprcWQ4bm9WWDBXNFlvRmdPVQ?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.914
+    },
+    {
+      "id": "sqli_sqli_news_744e43312f9234f3",
+      "source": "google_news",
+      "title": "Les r\u00e9sultats 2020 de SQLI reculent en France - Solutions-Numeriques",
+      "date": "2021-03-12",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNbF9GMUU1bDdXQVZoUkNGLW1aaGEyYVVJMkFqcVZ0UUJHb3huYTl1c3pMU3hBZWFLaDNDZ3drRXBOUkRJazRicXFEblJuazRHWnJHZW5nck1IRHlIQlVtazIwV09nY3VSYnB3YWxyalh4S3N1R2tOYkVUcXllelh4MFZ1QjRHLUN2RExn?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.988
+    },
+    {
+      "id": "sqli_sqli_fr_1055ae5ed68a3adf",
+      "source": "google_news",
+      "title": "SQLI est rest\u00e9e de peu dans le vert en 2020 - Distributique",
+      "date": "2021-03-11",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNQ2VRcjBvbWVEYUhvMm9Qekc3LWxNdWxvU1Vndk44ZDF3d0I2bTEzaUhVX0xYZ2g1ZzM0bGFPSFkxLTFNQlZKUDRhZWJqNl9MWXJRemR2SWowTmlEV0pfNGxPMW5oUHFiRDVQYmswR0x2Q3FlMlNScDBFV3M3c2IwRU5wcmZKVl9WNnJIR2FkUk5GVFhZZ0hFS3RuZTJEZkVDcWc?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_de2fa7f48a0c808b",
+      "source": "google_news",
+      "title": "SQLI affiche un CA 2020 en recul malgr\u00e9 une bonne performance \u00e0 l\u2019international - Solutions-Numeriques",
+      "date": "2021-02-10",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQeUplaWlnZUJNamJIVENzaUpIX284RDB1X1FjWTVVZ0l0eXpuY3NsVVJHNDV6MjBwMEl1aFRtdUwyZ0s3bTd3Zl83dmxTUDloU1FJYXhhRzllVGQtOGxqV2lWelhROS11TXhsLVJ2QlhGSmtQYTRDNTJCSEo2eEwzM2drVWNRNjFJcUYzaXhndWhPVU91Vk1CdHRJQWkxMTRpdmJOa2lXcXFlVUg5SGVFdm9rME1hN00?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.988
+    },
+    {
+      "id": "sqli_sqli_fr_e32590f0784f0bd8",
+      "source": "google_news",
+      "title": "L\u2019activit\u00e9 de SQLI a recul\u00e9 de 24% en France : les explications de son pr\u00e9sident Philippe Donche-Gay - ChannelNews",
+      "date": "2021-02-05",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNb3RlVTNGcmxYNkJaVzZpaHp0T2F4M2YydjV3YXJxUkRZR2FsbVJyTVFaWFR6YkJ5M2tLanZGUGZYZTRFRUZ4U2htVDNyMm5hQlgzbndZVVdlMm9jQnRKUzU3ZUVDLV9GZFB5eGU1UjZKTmJVeTlUZUU3LVpXM1J0WFNyS18yZTFaQUstNFV5RFdqelMwVkdaclpOSDhBdTkyNTZZazVtb2pldTZLSzFadkt6MFhTTmpWMmw4aVZfTXhJamwzYTJJZjRn?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.57
+    },
+    {
+      "id": "sqli_sqli_fr_f4432ce478fd7c3a",
+      "source": "google_news",
+      "title": "Didier Fauque quitte la direction g\u00e9n\u00e9rale de SQLI - Solutions-Numeriques",
+      "date": "2020-09-23",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPNDd0WnBhZ09JZDVQN1JkckdKdDJlM0p4TUFJQlo5TURWb3o0VTgtODRCX3Axb3A3bW5NZ0pTaXRtVE1sZG5ILUNSYm0zTm8wSnFwTUpCX3V0TERYbVFuS2g0amctY3Q0eXRtUzhVSm9TOUM0MmlYWV9ZUktiY2RHenRHWWZrUTd6SnhhOHFvd0R3QQ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_sqli_news_2a4573e1d72898f1",
+      "source": "google_news",
+      "title": "SQLI recrute Plusieurs Profils - Dreamjob.ma",
+      "date": "2020-01-16",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9IOUlkYUE1clRMaFRIa291bE5GdE9QeDBPTGk0bEQzR21rQnZqZHhmM0w4QUIwLXRKZk9hSEQ4STNub2RYejMwWmd6TW83QWU4clpNR0FhOGJUbWEzQmNXY2d3RTZZOVgwbWREaDJwWQ?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_fr_63ac62464874c04c",
+      "source": "google_news",
+      "title": "NOMINATION DE PHILIPPE DONCHE-GAY AU POSTE DE PR\u00c9SIDENT et \u00c9LARGISSEMENT DU CONSEIL D'ADMINISTRATION - ActusNews.com",
+      "date": "2019-06-27",
+      "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOYk5MWWJ4RDhvR0NkRDRFYkdTVE1oZEpsbUxIVGJGMHVRWjhabGlMWnRUSjd2TEs1YlJ3ZmZTZFRyOFUtdXFVTFNQZnFqalRxeVJhTlBfcGRNNnVfNEVhWXBSc2xYeHpHU3FEbFYwNFNlWVdvTmN0aFFScVI0WlI1UjU0MXpVU1BDWnZNUUhpcHFzbnI0RldmZ01QZGl1SHpmMmw2MUVmWWtaYldGQkpncDM4VERjTWMzc1BHQi1tUXpVTWZVMlRDTkduOUNCMXZXNXR0d25Ib3d4TGNJdW15UXp30gHnAUFVX3lxTE1yZHZJRFlFaEx3Qm0yOGZyQ1JPa1BTU1FlT0k3LUJZd1VFdUNSSHdZdExia0lTYkJGcUtJN09RMjY5TWtMNExBS0owUWhwR05UMnlBeUZCZ3YydWhJLV9LTW9LNHFSdktweGFYQm1OSnFPdU43cjk0S0hVQ1AwejR2NTV5cVl4djFTZXJ5UkZSeW9JclBiX0JKZEFWRkVXSG1CeF9scUlSaGYtSU5zYm1qRDhQdHZRWlhHZUlzSDBqSXo0VTYxWmdJYjIzLUtpbnBZclE0YW9VcF96dEdWNjh4NXlaVXd3NA?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.975
+    },
+    {
+      "id": "sqli_sqli_news_6d3dcf07d9bf995d_chunk_0",
+      "source": "google_news",
+      "title": "Success Story \u2013 SQLI impl\u00e9mente la solution Procure-to-Pay de Determine avec 2 semaines d\u2019avance sur l... - Decision-achats.fr",
+      "date": "2019-03-29",
+      "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxOaXhYOEJncVFIRGpPeDA4dFF4SFdhWG9YNmVSX0JXWVd3V2hWVklEQl9OLWVEX1NJZWE2RmwzbFI4UE5pblFVVk9RYkJiamJ3eElCNlBmZnBHaWR4M1c0VmRQYzctWTFnelRDY0lYSjhVRnBCSURrR3Z4WmtKQU1VbGZIbWo4MjZZeHFZN0xNRzI2WUtsS0hiU2tGQjJIWmZHVmRUMjkxVU82eGhSNjdLcHhMOWRvcnItc21xYlNVY2VuTWZuVDBjZDdmOWpiODRDLU1BV3MtMzVSNUk0TmFyVWZCaHFJS1ZsUEVwM1lBRDlfUkYwejNVTk5XdHlIY1I0bTVrb0l5LU5sMHVPbFRzVVhtekhvcFIzcnVQZFUtd29MY3dnNkHSAasCQVVfeXFMTVY0M1NiQW56cmFkb1UteTVheFRPLXJxcUlXSVozZ091emVJTHhNTVFTY05RWXZ2Q09WaDVmc3owZk04WmhEM3ltWEVkNVluNEpKTHdkYzlFay1seThTVEIxYlA3SHlMdmtKX1VwTEN4U0JoRzZxNkstc0x5ZlUzOS1QS1NacFdBVXgtd1pLUkhJT2IyME5oeF96MGV5NUVlbWxzOFl2NkdBWnowWUJpTDZFelRlNWdVZnkxWng3V3Y4Qk50X25waUkzdU9RWlA1b2ZZZnQyZFFFOEcyM1JUUVU1SXNVR01rMkNvMFN4Y21PZTNmUDZPNVdscS1aVEJmRWJJb05GbW93VURIdHh5VDlvVjdjcDIyQlZPeUdiYnMzYkNweVRVX3k0cTg?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.755
+    },
+    {
+      "id": "sqli_sqli_fr_8e0cb207a0dbabad",
+      "source": "google_news",
+      "title": "SQLI et Alpenite lancent Invent Commerce pour pousser le multi-cloud Salesforce en France - Distributique",
+      "date": "2019-03-15",
+      "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQRXBkb2RMUTY5eGgxbGlRRGxmQmVMcThkTVZmSHVXa2F0dmFIb0pxNk5ibERyN1dVNWpaSWExMm8tbW9wb2RSM25xV01tbnI0d0VkX1VaSnRoUXVCS25UcXVVYTFjT2xXNEM2T3UxN3dWOE9iOEVDQ2dmZ2xzZWdtQnpqLUloa3Bqd1JGWlkxMnVUU1h0QWNDWUgtX255bVpBZzU5OFBaR0kzeGpiOGZyMi1hSEV2ZmlCWThpOHpydmM3ZzhPdkVBY1BsWUZCSHlhWjJOUWQ4X0U5NFZMTEZJ?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_7f934d1a4f3557b1",
+      "source": "google_news",
+      "title": "SQLI Suisse r\u00e9compens\u00e9 pour son innovation digitale - agefi.com",
+      "date": "2018-11-14",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPaHM2amprdDMzdFhtUTViZFgzZGhTRjZPcVk1MW9lUXAzTnBrRXdHeklPSEFZNVVrNWlCb0pjaVNMa2FKeWpmTnc5Qy1kcHhPMi0tNE1PTmR0X2J5N3pwTmt5NUJyaTFhTk1qZEplVmdIeXphS0Fabl9VaWJmaUxYUzZiMm45TW9pVFJRUm5wNzlDbVUwQWRj?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.987
+    },
+    {
+      "id": "sqli_sqli_fr_3f7de278b0530618",
+      "source": "google_news",
+      "title": "Bordeaux : SQLI dote son agence de locaux flambant neufs - ChannelNews",
+      "date": "2018-11-08",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPd0xZY2V3dzhFcWlIb21PVHhndU9aWFNGektmLVJPb3Zzb3JBOV9rYk5QNklDUDlWSGRFT0x0cVlncmZtNHB5aDZzY0lMZndfUzd0LTQ4ekhHYnhoQnctR083OWoxT0h4cGN4VU5oRFg5cWhjamppaEQtQUh5NGlTbXVQbnpMUTFXYWt3NVlFX3V3Zlc2?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.561
+    },
+    {
+      "id": "sqli_sqli_fr_a1711dfd653e38db",
+      "source": "google_news",
+      "title": "Huiti\u00e8me semestre de croissance continue pour SQLI - Distributique",
+      "date": "2018-07-30",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQOTdJaml3Vndpb0Zlc29HRTVjdEVuVmp0dGcwc21fbGhzSHBUUFRPako3WlY5eGdSYnRxMTlzMlEtTzRURTlMa3QzOGN5dzU3YWpETm5oWlAzMnJoLWpzRzJqd0F1THpYR1ZUU0E0dnBoRHVDY0ZXVi1URUEySDVFclVHVllOeFRZblJOOHhVVG9GNGRDc1hocTNRdW0tcE9VZWtwenJrOWpjNXM?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_57adf6ee2303cd78",
+      "source": "google_news",
+      "title": "SQLI effectue sa mue en agence digitale int\u00e9gr\u00e9e - agefi.com",
+      "date": "2018-07-18",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQTzlSSDFuUnh5RGtqUGVIcXNBMDRfRE84Y1pwYkxyVXB2QmRFeVdLaUw5NkNMRlpTa1JPdFUxdDhFdGxUeDVLc2liekNzVHhrcXJnamh3eHNQaGJSNmdJZ2swRGJpMkxVTXV1UnZqNHF2bjNMdmRVMjY2ZTVqVUtTc0dxUEp5VHpkeGtzaWhrUTdqdlE?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.986
+    },
+    {
+      "id": "sqli_sqli_news_2b3027a95c7e4f34",
+      "source": "google_news",
+      "title": "Didier Fauque Pdg SQLI : \"Nous sommes tr\u00e8s positifs sur l'ann\u00e9e 2018\" - www.labourseetlavie.com",
+      "date": "2018-04-20",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOdzgtVHNjeV92MHNKMnBTcFJEc2pucTFreTJEc3lxVGJZSS1BZW94YUJFWnVDSTcyYXZrUTZMaHRvSjc1d1RMLWlmYnNkVDVQelZjQ3dDSHFaZnlGaGVWeEdZaHlfV0NicVctWXFkV24xY2o4UDFMWlktaUxuNU41VGRlVmczUTIybWhTRW1RZVR6YmdzSlktM1VLZjBkcGpobC1ieEVVSmx2MUxyYkRCZlAxVUFxc002S1VZ?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.803
+    },
+    {
+      "id": "sqli_sqli_fr_e08f5b9866c91f25",
+      "source": "google_news",
+      "title": "SQLI franchit le cap des 200 M\u20ac de chiffre d'affaires - Distributique",
+      "date": "2018-02-09",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPeURFQXdOMDVBZXhydHdvX0IwaVNoMlhJcUkteEdHMFZyOVBrZkZoTVdSdDBieUZEeklRMXZXWDhLbVBNRUVYZjIxYTltWHBVelBqWmFHOHdseERrYnJkcEJYVXBsYWY3SEJHd3pUZWhCSEtlbGtGcG1rQlRZMjA0bm5xc3FfQk1NSl81dFBDMk5IRU5aUmg2WUN1SEZpRUg3d2dFYmtmVm1oYUl0MVpMMlFRZHB3UQ?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_621532a22f9639b1",
+      "source": "google_news",
+      "title": "SQLI continue d'\u00e9toffer sa marque Wax Interactive - Distributique",
+      "date": "2018-01-05",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNUWlHWlctUVlOcVBCcXVPUllkOVhzNTVZZUFYWEtycVVxZnBJdmZwRzhqUHRqY2VrUTFNeDNFdThuN0JRYnBCdE0yQmphR2l5ckY0enlQSFVwemg5MmpkMXhJYktsdUVsR0tpbFRVaEE4R1FaOXFQbmd4OWFsaElLYmpwcHJDSnZNRmI2QzR1S05EaXBhaXBLSUtUZ2lKNkFVNVB3MzFJNE4wZw?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_fe22e11730a2ebbe",
+      "source": "google_news",
+      "title": "Le groupe SQLI rach\u00e8te Osudio - agefi.com",
+      "date": "2017-10-16",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9wUXpvYjJLRHdLbWJhellDeUxmLUJ0Y2pCYnhnMnYxVTBvaGZWbEhJeWxXZ0VGZWJIeDg0OVRmRlJuWEpzWFB5bGsyMlF6RkJYdnZ4NFluaG5mVm9XTk1hNVI3OGFsSEYwM1NmX2J5TkkzZTl2NTIxTDZB?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.987
+    },
+    {
+      "id": "sqli_sqli_news_2da7e54cf29fb505",
+      "source": "google_news",
+      "title": "ACQUISITION DE L'AGENCE DIGITALE STAR REPUBLIC ET RENFORCEMENT EN EUROPE DU NORD - ActusNews.com",
+      "date": "2017-05-04",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOWm5FY3JlT3RLakdmb1hnLWpONDdfNXJZZ0xiWF93ZWVzRENQSW13ZThMN2xYLU9KYlYxcFlrZnhmQWlhOUZBTm9GQVp0QlFuR2tHZEdVaTNWeDdJczBlS2VjVUYwdEk4SDRtY2dqS01nc0pncTUwX3VWc0loT0RmZFUxblNiWGpPQ0UtenV4UERXdFVOZ2ZVQXZOaHZPekVjQWdXTU5wenplM3pyS0FCalJJS09HRG1TcHN1NEF2Z2ZzZzJOZFV3WGZCNEXSAcwBQVVfeXFMTlpuRWNyZU90S2pHZm9YZy1qTjQ3XzVyWWdMYlhfd2Vlc0RDUEltd2U4TDdsWC1PSmJWMXBZa2Z4ZkFpYTlGQU5vRkFadEJRbkdrR2RHVWkzVng3SXMwZUtlY1VGMHRJOEg0bWNnaktNZ3NKZ3E1MF91VnNJaE9EZmRVMW5TYlhqT0NFLXp1eFBEV3RVTmdmVUF2Tmh2T3pFY0FnV01OcHp6ZTN6cktBQmpSSUtPR0RtU3BzdTRBdmdmc2cyTmRVd1hmQjRF?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.974
+    },
+    {
+      "id": "sqli_sqli_fr_b7203404df404332",
+      "source": "google_news",
+      "title": "SQLI Lyon recrute 120 nouveaux collaborateurs au profils techniques - Solutions-Numeriques",
+      "date": "2017-04-26",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWo0OTZ6Q3FvZGZRTHpubUd5ZllHckJEbGFyZ0YzeDVGdG1sWUgyWi1UQ3c0ak1YWmR3Qmc4YkU2Z0ZlYzk5SG1wOU9BY29FZDJUYXJCZnJGVW9Kc04xMUNCVm5Jc3pBSUxYMkdHUkZ0aXdEOWRuR1ZVMmZBbmFNZ2lPQktNTEx4YjFTUTl3bVk3a2ZaVGtkckg3WjVUZzM1SWdYZktrU3Y?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_sqli_fr_90bb39518f8abca0",
+      "source": "google_news",
+      "title": "Semestriels SQLI : Les b\u00e9n\u00e9fices bondissent de 183% - Distributique",
+      "date": "2016-09-26",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxObFVvSXhHODRReUVxbzEweGQ2U1NNQXF5MmczaVRKLWx6Vi1EbGh2QnMwWVdaOGxqRERGVVUyd25wMjNPWjU2RWVidFJtWkRzdkpiaUpiT1NLNW9oQjJIcUFncHhXdXhJc051VjRWUE84dmZpbVN5a1BHdFVULWtrODJrWjNCWDdILTFraTNoU05hRG1NaUk5VzRPZVV5VGhRenM4bkFHdnQ?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_c7ed6187cf227b64_chunk_0",
+      "source": "google_news",
+      "title": "Eric Marillet, SQLI - L\u2019exp\u00e9rience client \u00e0 l'\u00e8re du digital - Entreprise - Xerfi Canal",
+      "date": "2016-09-05",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTm1Wajd2VHkwZ0xpZHVmQ0lTSXRhNmtNYkdCNXVGSXlsRHAtd0E4UzVZbVZabTlCYnhSVTJadUd5d0NnNm1FTVNsa2xNWWFjUWR1aDROQ180RGZrZWNwVWhZeGExczBUZlJTaC02S2owQy0waHBEdHRXX0dlVnVxSFB5MllEcTBtbFNodVJnaWxuTmpVaEN6NHk0TEdqOXhneHB4d3VvZldxdEE?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.983
+    },
+    {
+      "id": "sqli_sqli_fr_2c6c1b6cc0346ca5",
+      "source": "google_news",
+      "title": "Hausse de 7% du chiffre d'affaires de SQLI au premier trimestre 2016 - Distributique",
+      "date": "2016-05-16",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQZUVuZkFSMmxQUTktQ21XVndVTnVWeWtXSGZuZHNJSDB5aVg3T3pYTXhDQWM0S3Nhbnd4ZmRyNmM0R2k0VURxS05LOXVhQUQwWlF3VG43R3lFM21UZ2REQmlqQWsteTVuczctN1NGbUxJOHltRFVUQ1Q4bFVYWEgzRS1Za1Q5bmtGU3dSX3B3S3ZjNGpFQi1MZEJMeHp6SGJPYWtmZlBPU3czX2IwXzVKemVQWGlPZTlQX1RYM3BYeTRKZw?oc=5",
+      "dominant_topic": 2,
+      "dominant_label": "Croissance des revendeurs tech",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_sqli_news_de00b10bdb614175",
+      "source": "google_news",
+      "title": "Didier Fauque Directeur G\u00e9n\u00e9ral SQLI : \"La demande est forte pour nos offres dans le digital\" - www.labourseetlavie.com",
+      "date": "2016-04-15",
+      "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPV0dCLXFjSnpuWUs0S3M2aGl5ZlRoZXRVMzlPVFRpQjJCY2hEYlNjQ1psbjM2ZGhEd2xCZldJaFAyd09YRERmZy15am8yVENpdXZ5ZUFDVkVtZXR6aDdBb1E4VGRYS0JNbURRbXRCWmk3VjVsTENDcExrQ0ZmeTUteWJzdXlfUmVYbkJ4SmhSYm9JdExYQU9MeURJd3I2RWk5dHh3amFQMVBjUEpVRkgydUluSE5mQV9HX1BWMDR5S1dXeGhRajZFNGhZMWNBeEEyS211UXlCM2lwZi01?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.66
+    },
+    {
+      "id": "sqli_sqli_news_bf1aa1c78ea54a67_chunk_0",
+      "source": "google_news",
+      "title": "Joanna Pomian, SQLI - Pourquoi le Digital workplace devient incontournable - Entreprise - Xerfi Canal",
+      "date": "2015-10-07",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQRG9SWVZvVkNiTUJqMHlwX3huRjFwSVVhd3NJZVZDa0F4VC1mV2dBSzhBeXN6dFpyWXpFUW9oLV8ybzlOU0oxMEsxQnk0QTR4MVhPUzhiQlVRVkhnOFhPM2stcGU5cXpGQUdKUEhMQzBYcFBBUnJPNGJWVXI1amNXYmRwUHZnUl9sRnl1T1FFenZ3Ymw1N3M4T3Zrek1ZeXk1SWtyWThBVlRBVlBLYzlTS2JUMkZDLWx5b1AwRVp3?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.982
+    },
+    {
+      "id": "sqli_sqli_news_88bf4754b62e2b49",
+      "source": "google_news",
+      "title": "SQLI recrute 500 nouveaux collaborateurs - Solutions-Numeriques",
+      "date": "2015-05-28",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPSlJGZTNWMXFMMDZCSjJkd0pGcklEM195SDM3UlF6TDZkNlhXZGNXd0JyZ3ZINWNvMk51VFZKdW40aW53MXUyNFJyOXY4UElsSng4OUZINnFralhvVEZ3OVFtSXlnRjhNN01TZlRGakZMU2ZaS0tOdVlIOUxVcVdMQ2V0bXE?oc=5",
+      "dominant_topic": 3,
+      "dominant_label": "Recrutement IT au Maroc",
+      "confidence": 0.989
+    },
+    {
+      "id": "sqli_sqli_news_283828724e542cb3",
+      "source": "google_news",
+      "title": "Didier Fauque Pdg SQLI : \"\u00catre \u00e0 l'\u00e9coute du march\u00e9 et des technologies et pouvoir les int\u00e9grer pour nos clients\" - labourseetlavie.com",
+      "date": "2015-05-17",
+      "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQUmh5dGJVVFY5YVNXSTRqeDFtMVFJclFSQW1SU0MwNENBOHVvNWRCTUJnWVFTb0NJeDBOY0hqWFJGZzBFUHVUMkNMY3ZBbW9oR3BsQUU0ZkNVUnQ0U3N3MGRWYV9BUkRrQlBLVTAyajBQWXlFMnRpOFZORTk1T0lvX3p0bHFqV2xER3JRY0tFWlBMQXRhclpHdS1tb01aeVF4TUpBcldNQlJBdnA5U2VPVDktNUlUZl9LYzhJVG5OWlB5TGo0RGx3ZlZ1UjA0RzZVTUhzMkFGZmJvazIwT2NIWV9qWlItSElJRTI1Tjk1OWE?oc=5",
+      "dominant_topic": 0,
+      "dominant_label": "Strat\u00e9gie IA et data",
+      "confidence": 0.847
+    },
+    {
+      "id": "sqli_sqli_news_c5f3da0290e9a951_chunk_0",
+      "source": "google_news",
+      "title": "Tribune Joanna Pomian (SQLI) : \u00ab Le Digital Assets Management, une opportunit\u00e9 pour optimiser l... - ITespresso.fr",
+      "date": "2015-05-05",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOQVZjUW1fOVljSk1jbURhU3p6eUh5RzMwNHFXZ08ycFRROEg5WjV1LUZwZEp2RDlkQ3hmNkZWcmNaM2V6MmIybDBrWUdTTDFGREs0UXNfaFVvR19yNzE3S3ZnLUpCVlRIUXpDX3cycUxfZDdWSGx6VkFVSHMyUEpSWE5TU3ZBRnlXdnZ5QnZVMG43azNPUXVMNWp6OVhJQ1Y5R1ZRd2hoc3U5M2V6M2dram85dDJVemRiMHFjaDFqOW8wbXQ3aXNuVWN3NFdOa0dHOEU1d0xIVnJfbmxFal9ON2k4RjNfVS02RUHSAe8BQVVfeXFMUE9UdS13ZnRweTltbzdhRS1VS3NldVkzeWw2OXZZMUZiVnhOQk56Tnk2SWl0cFZjNmdqbDg1cTNaLWZLakVXNXVDZVdfZVZib1ZQVUZLVV9EVXYtbmpQVVZpejVkM0NFXzBqTWNITlJrNmJaem5kUmFsMThzaEpNcm1nQ19YX1JLOUtFUVBLS3JycUt1NENRbkpCSHk0bjc0OE05bmxUVXV0MDVLQ1VPNzVTMGhJdGFSUU5JQkFUY19MMkUxWXJycDhLaFloM1lhS1ZOVE5ZQ3R5aC14TXFyQV9sSjBER1Y4cXlEV2lEcFk?oc=5",
+      "dominant_topic": 1,
+      "dominant_label": "Croissance internationale des PME",
+      "confidence": 0.636
+    },
+    {
+      "id": "sqli_site_5b4fdd00a159ba10",
+      "source": "sqli_site",
+      "title": "SQLI renews and expands its ISO 27001 certification in France and Morocco",
+      "date": "2026-05-06",
+      "url": "https://www.sqli.com/int-en/news-events/sqli-iso-27001-certification",
+      "dominant_topic": 4,
+      "dominant_label": "Certification s\u00e9curit\u00e9 internationale",
+      "confidence": 0.995
+    },
+    {
+      "id": "sqli_site_4962090933e3c6ad",
+      "source": "sqli_site",
+      "title": "SQLI at Cross-Border Commerce Europe C Suite Spring 2026",
+      "date": "2026-04-21",
+      "url": "https://www.sqli.com/int-en/news-events/sqli-cross-border-commerce-europe-c-suite-spring-2026",
+      "dominant_topic": 4,
+      "dominant_label": "Certification s\u00e9curit\u00e9 internationale",
+      "confidence": 0.994
+    },
+    {
+      "id": "sqli_site_822c3c2a7a85e250",
+      "source": "sqli_site",
+      "title": "SQLI Strengthens Market Leadership with Double Emerce 100 Recognition",
+      "date": "2026-04-21",
+      "url": "https://www.sqli.com/int-en/insights/sqli-strengthens-market-leadership-with-double-Emerce-100-2026Recognition",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.993
+    },
+    {
+      "id": "sqli_site_1c21e3045789cb35",
+      "source": "sqli_site",
+      "title": "SQLI recognized with an Acquia Partner Award 2025",
+      "date": "2026-04-01",
+      "url": "https://www.sqli.com/int-en/news-events/acquia-partner-awards-sqli",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.997
+    },
+    {
+      "id": "sqli_site_86f2a0392c865961",
+      "source": "sqli_site",
+      "title": "SQLI modernises Alstom's corporate website and rolls out its new UX/UI identity",
+      "date": "2026-03-10",
+      "url": "https://www.sqli.com/int-en/actualites-evenements/sqli-modernises-alstom-corporate-website",
+      "dominant_topic": 6,
+      "dominant_label": "\u00c9volution de l'identit\u00e9 corporate",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_site_8dc0f152a49ed20a",
+      "source": "sqli_site",
+      "title": "SQLI acquires Station10 to strengthen AI-driven data and analytics capability",
+      "date": "2026-03-04",
+      "url": "https://www.sqli.com/int-en/actualites-evenements/sqli-acquires-station10",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.997
+    },
+    {
+      "id": "sqli_site_1b0f891517642d33",
+      "source": "sqli_site",
+      "title": "[Webinar] Elevate your Field Service Management",
+      "date": "2026-01-12",
+      "url": "https://www.sqli.com/int-en/news-events/webinar-elevate-your-field-service-management",
+      "dominant_topic": 6,
+      "dominant_label": "\u00c9volution de l'identit\u00e9 corporate",
+      "confidence": 0.985
+    },
+    {
+      "id": "sqli_site_e2df466f46b290d0",
+      "source": "sqli_site",
+      "title": "SQLI modernises RTE\u2019s \u00e9CO2mix application",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/int-en/actualites-evenements/sqli-modernises-rte-eco2mix-application",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.996
+    },
+    {
+      "id": "sqli_site_b3781aa37f6d3b24",
+      "source": "sqli_site",
+      "title": "SQLI appoints Olivier Thielemans as Group Chief Financial Officer",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/int-en/actualites-evenements/appointment-olivier-thielemans-cfo",
+      "dominant_topic": 6,
+      "dominant_label": "\u00c9volution de l'identit\u00e9 corporate",
+      "confidence": 0.995
+    },
+    {
+      "id": "sqli_site_8a44ad2efd3c5360",
+      "source": "sqli_site",
+      "title": "Annual Customer Event",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/int-en/news-events/annual-customer-event",
+      "dominant_topic": 4,
+      "dominant_label": "Certification s\u00e9curit\u00e9 internationale",
+      "confidence": 0.98
+    },
+    {
+      "id": "sqli_site_40e308fefa9c3596",
+      "source": "sqli_site",
+      "title": "Webinar Recording: The CRO journey with Allianz UK Personal Lines & Vue: from first tests to scaling impact",
+      "date": "2026-01-01",
+      "url": "https://www.sqli.com/int-en/news-events/cro-journey-allianz-vue-first-tests-scaling-impact",
+      "dominant_topic": 6,
+      "dominant_label": "\u00c9volution de l'identit\u00e9 corporate",
+      "confidence": 0.991
+    },
+    {
+      "id": "sqli_sqli_group_en_70b7cc16bb519ac9",
+      "source": "google_news",
+      "title": "SQLI Morocco to recruit 400 engineers by 2025 to fuel growth and innovation - Yabiladi.com",
+      "date": "2025-04-14",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQNmdvbldoWWNsbmxxVnNGMG1pVEFORHkxZXc0aWhNSUd1dG5DWUhDQ2IzS1oxekVxbU1DVUstcEVnd3RtS0VuRTRKUnNtYTVyekJqUFdlZkU5eXlvNFMtY0o2eDltU3BCdDFVdUtsMmp3WWNCWHhtZDY0a0JCYXktQm5qdG9hWWJVSUFv?oc=5",
+      "dominant_topic": 4,
+      "dominant_label": "Certification s\u00e9curit\u00e9 internationale",
+      "confidence": 0.661
+    },
+    {
+      "id": "sqli_sqli_agency_en_4a3ceb3e96d6bb5b",
+      "source": "google_news",
+      "title": "10 things we learned making the new issue of Positive News magazine - Positive News",
+      "date": "2024-04-24",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPTGF6TDdubGhYOTN0c1NVbzhSbUtQX2FpWFBnbUdtU3ZfODN4c1BpMHBrdkdEQ1Q5b3FSdlRDcWl5V0ZiNWZ3WkFUUzNDS0NsRVhlZ3NIem5pVHc1cHppY2RvRWh2MEZ5c2pRREs0TVhhTkFIR1FnWGFBWkdXTG1hTEl5eTY3cGtRN3NGaHJWVQ?oc=5",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.912
+    },
+    {
+      "id": "sqli_sqli_agency_en_d3b56cece615889a",
+      "source": "google_news",
+      "title": "Imperial War Museum elects Chair and Digital Trustee - Arts Professional",
+      "date": "2023-12-20",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPVzQ4MHpxX3JKTHg0V29sOUtwb3lRU3hFaUZPSjBTVFpxMHR6bDV5NXZaOUJXZ3pRR0Y2ZmZyQ21WSFEyYVJWdllPTTVlZjBVZkVabU1YTGlCOWI3c3BXdWJNX0EzWUozYnExT1QyQU9NemstNFYyTXhveXlEQzNMTV90emppdGk2aEdoT3BwMlJYbE1Edml6VXRPM1M2R2FjNC11Uw?oc=5",
+      "dominant_topic": 4,
+      "dominant_label": "Certification s\u00e9curit\u00e9 internationale",
+      "confidence": 0.992
+    },
+    {
+      "id": "sqli_sqli_group_en_ccefd57ff29ba48f",
+      "source": "google_news",
+      "title": "Digital Trustee appointed to the Imperial War Museum - GOV.UK",
+      "date": "2023-12-14",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNRTN2MU9jTXozMUdYNHVUNU1mRmRXSmJ0RGNGQl9kS1ItQzJPMmg3Yjcwa0lsczlBaWtsSDczUjJubFdFVjlGaERzWE9pc1JzRHR0b1pBdV9JbkJ5MlFqWHdFNVRveGdRZ3dpTy1OZU5MMEVDME8tQjQtNFJ2Q3FNRmlUWHBLeFExYXJLbWh6b1Y?oc=5",
+      "dominant_topic": 5,
+      "dominant_label": "Expertise data et commerce",
+      "confidence": 0.985
+    },
+    {
+      "id": "sqli_sqli_group_en_c0fd1d24fa1d530b",
+      "source": "google_news",
+      "title": "2016 MBAs To Watch: Hassan El-Majidi, Georgia Tech (Scheller) - Poets&Quants",
+      "date": "2016-06-21",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQcURjcTl5Z0Z2eE5QbTZaQzhQN1JKZ2p3SHNVdTQ0c2NwbndTZk1aWlhSTFJGTXpiRE9tYmxjV3hwT1pGOTRGa3h0WF9sdjgwdmhIUEJLZXRsaU5SNFBoS0w3LUVwMm1OQ1NYS3ZzYUJZS0JZaXVBYzl3ZTNJYnRXQ1RCcW5sREVuR1hGY0VzMkpiQVFSOXdSdg?oc=5",
+      "dominant_topic": 6,
+      "dominant_label": "\u00c9volution de l'identit\u00e9 corporate",
+      "confidence": 0.983
+    }
+  ]
+}
