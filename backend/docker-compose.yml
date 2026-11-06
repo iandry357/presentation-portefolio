@@ -101,6 +101,7 @@ services:
       - ./scheduler:/app/scheduler
       - ./gcp_sa_sanofi.json:/app/gcp_sa_sanofi.json:ro
       - ./routers:/app/routers
+
     networks:
       - portfolio_rag_network
       - portefolio-network

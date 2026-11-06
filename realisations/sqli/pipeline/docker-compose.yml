@@ -1,0 +1,19 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    image: sqli-pipeline
+    container_name: sqli-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ../../sg/sg-assurances/gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+      - ../ml:/app/ml
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true

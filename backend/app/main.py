@@ -28,7 +28,7 @@ from routers.immobilier.georisques_router import router as immobilier_georisques
 from routers.immobilier.bati_router import router as immobilier_bati_router
 from routers.immobilier.point_router import router as immobilier_point_router
 from routers.immobilier.org_router import router as immobilier_org_router
-
+from routers.sqli.router import router as sqli_router
 
 
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -109,6 +109,7 @@ app.include_router(immobilier_georisques_router)
 app.include_router(immobilier_bati_router)
 app.include_router(immobilier_point_router)
 app.include_router(immobilier_org_router)
+app.include_router(sqli_router)
 
 @app.get("/")
 async def root():
