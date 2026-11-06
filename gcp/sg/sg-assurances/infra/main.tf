@@ -114,3 +114,13 @@ resource "google_bigquery_dataset" "sg_assurance_veille" {
     prevent_destroy = true
   }
 }
+
+resource "google_bigquery_dataset" "sqli_veille" {
+  dataset_id  = "sqli_veille"
+  location    = var.bq_location
+  description = "Veille SQLI — Google News RSS (POC)"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
