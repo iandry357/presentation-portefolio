@@ -1,3 +1,5 @@
+import { request } from '@/lib/api';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // ─────────────────────────────────────────
@@ -149,14 +151,15 @@ export const fetchWavestoneStats = () => apiFetch<WavestoneStats>('/wavestone/st
 export const fetchWavestoneNews = (p: { langue?: string; section?: string; limit?: number; offset?: number }) =>
   apiFetch<NewsResponse>(`/wavestone/news${query(p)}`);
 
+// Routes à accès privé : via le proxy /backend (cookie d'accès first-party)
 export const fetchWavestoneRag = (question: string, nResults = 8) =>
-  apiFetch<RagResponse>('/wavestone/rag', {
+  request<RagResponse>('/wavestone/rag', {
     method: 'POST',
-    body: JSON.stringify({ question, n_results: nResults }),
+    body: { question, n_results: nResults },
   });
 
 export const fetchWavestoneTopicModeling = () =>
   apiFetch<TopicModelingResponse>('/wavestone/ml/topic-modeling');
 
 export const fetchWavestoneRecrutement = () =>
-  apiFetch<RecrutementResponse>('/wavestone/recrutement');
+  request<RecrutementResponse>('/wavestone/recrutement');

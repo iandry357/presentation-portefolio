@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="//www.wavestone.com/wp-content/plugins/wordpress-seo/css/main-sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<url>
+		<loc>https://www.wavestone.com/de/capability/projektmanagement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/projektmanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/project-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/project-management/" />
+		<lastmod>2026-11-19T15:04:21+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/cyber-security/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cyber-security/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<lastmod>2026-11-18T14:50:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/data-intelligence-artificielle/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/daten-kunstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<lastmod>2026-11-19T14:50:40+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/daten-kunstliche-intelligenz/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/daten-kunstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<lastmod>2026-11-19T14:51:28+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/industrie-5-0/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/industrie-5-0-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/industrie-5-0/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<lastmod>2026-04-22T11:09:22+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/industrie-5-0-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/industrie-5-0-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/industrie-5-0/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<lastmod>2026-06-25T09:58:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/marketing-fr/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/marketing-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/marketing/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/marketing-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/marketing/" />
+		<lastmod>2026-07-14T10:10:52+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/marketing-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/marketing-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/marketing/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/marketing-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/marketing/" />
+		<lastmod>2026-07-14T10:10:41+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/agilite-et-modele-operationnel/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/operating-model-agilitat/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/agilite-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<lastmod>2026-11-19T15:33:23+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/operating-model-agilitat/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/operating-model-agilitat/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/agilite-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<lastmod>2026-11-19T15:14:14+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/organisation-et-conduite-du-changement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/organisation-change/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/organisation-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<lastmod>2026-11-19T15:33:23+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/organisation-change/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/organisation-change/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/organisation-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<lastmod>2026-11-19T15:14:14+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/gestion-de-projet/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/projektmanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/project-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/project-management/" />
+		<lastmod>2026-11-19T15:06:59+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/cybersecurite/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cyber-security/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<lastmod>2026-11-20T07:26:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/sap-fr/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sap-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sap/" />
+		<lastmod>2026-11-19T14:34:28+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/sap-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sap-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sap/" />
+		<lastmod>2026-10-29T15:08:23+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/logiciel-application/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/software-application-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/software-application/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/logiciel-application/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/software-application/" />
+		<lastmod>2026-11-19T15:06:59+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/software-application-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/software-application-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/software-application/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/logiciel-application/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/software-application/" />
+		<lastmod>2026-11-19T15:04:21+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/sourcing-et-optimisation-de-services/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sourcing-et-optimisation-de-services/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<lastmod>2026-09-22T07:41:31+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/optimierung-von-sourcing-services/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sourcing-et-optimisation-de-services/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<lastmod>2026-09-22T07:43:07+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/supply-chain-fr/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/supply-chain-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/supply-chain-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<lastmod>2026-10-23T08:48:55+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/supply-chain-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/supply-chain-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/supply-chain-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<lastmod>2026-10-23T08:47:39+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/transformation-et-strategie/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/strategie-transformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transformation-et-strategie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<lastmod>2026-11-19T15:33:23+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/strategie-transformation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/strategie-transformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transformation-et-strategie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<lastmod>2026-11-19T15:14:14+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/transition-ecologique-et-societale/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sustainability-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transition-ecologique-et-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<lastmod>2026-11-17T08:55:38+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/sustainability-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sustainability-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transition-ecologique-et-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<lastmod>2026-10-07T08:52:25+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/sourcing-services-optimization/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sourcing-et-optimisation-de-services/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sourcing-services-optimization/" />
+		<lastmod>2026-09-29T09:03:10+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/compliance-risk-resilience/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/compliance-risiko-resilienz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conformite-risque-et-resilience/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<lastmod>2026-11-09T14:57:59+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/corporate-functions/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/corporate-functions-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/fonctions-de-lentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<lastmod>2026-09-09T11:03:22+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/customer-experience/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/customer-experience-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<lastmod>2026-10-29T14:55:19+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/cybersecurity/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cyber-security/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cybersecurity/" />
+		<lastmod>2026-11-17T16:53:18+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/data-ai/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/daten-kunstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/data-ai/" />
+		<lastmod>2026-11-19T14:50:05+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/industry-5-0/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/industrie-5-0-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/industrie-5-0/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/industry-5-0/" />
+		<lastmod>2026-04-22T11:08:26+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/marketing/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/marketing-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/marketing/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/marketing-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/marketing/" />
+		<lastmod>2026-07-14T10:10:44+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/operating-model-agility/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/operating-model-agilitat/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/agilite-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/operating-model-agility/" />
+		<lastmod>2026-11-19T15:31:33+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/organization-change/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/organisation-change/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/organisation-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/organization-change/" />
+		<lastmod>2026-11-19T15:31:33+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/project-management/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/projektmanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/project-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/project-management/" />
+		<lastmod>2026-11-19T15:05:14+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/sap/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/sap-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sap/" />
+		<lastmod>2026-10-29T15:09:08+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/software-application/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/software-application-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/software-application/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/logiciel-application/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/software-application/" />
+		<lastmod>2026-11-19T15:05:14+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/cio-cto-advisory/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cio-cto-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conseil-au-cio-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<lastmod>2026-10-15T13:39:02+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/strategy-transformation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/strategie-transformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transformation-et-strategie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/strategy-transformation/" />
+		<lastmod>2026-11-19T15:31:33+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/supply-chain/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/supply-chain-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/supply-chain-fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/supply-chain/" />
+		<lastmod>2026-10-23T08:45:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/capability/sustainability/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/sustainability-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/transition-ecologique-et-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/sustainability/" />
+		<lastmod>2026-11-05T14:34:06+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/conseil-au-cio-cto/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cio-cto-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conseil-au-cio-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<lastmod>2026-10-15T13:39:03+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/cio-cto-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/cio-cto-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conseil-au-cio-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/cio-cto-advisory/" />
+		<lastmod>2026-10-15T13:38:46+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/conformite-risque-et-resilience/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/compliance-risiko-resilienz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conformite-risque-et-resilience/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<lastmod>2026-10-15T13:27:49+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/compliance-risiko-resilienz/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/compliance-risiko-resilienz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/conformite-risque-et-resilience/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/compliance-risk-resilience/" />
+		<lastmod>2026-11-09T15:11:42+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/fonctions-de-lentreprise/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/corporate-functions-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/fonctions-de-lentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<lastmod>2026-09-09T11:03:04+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/corporate-functions-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/corporate-functions-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/fonctions-de-lentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/corporate-functions/" />
+		<lastmod>2026-08-06T14:21:10+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/capability/experience-client/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/customer-experience-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<lastmod>2026-11-19T14:34:28+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/capability/customer-experience-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/capability/customer-experience-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/capability/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/capability/customer-experience/" />
+		<lastmod>2026-10-29T14:56:02+00:00</lastmod>
+	</url>
+</urlset>
+<!-- XML Sitemap generated by Yoast SEO -->

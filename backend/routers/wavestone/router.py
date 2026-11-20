@@ -9,10 +9,11 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
+from app.core.access_control import get_access_state, require_access
 from app.core.config import settings
 from routers.wavestone.schemas import (
     SectionCount, WavestoneStats,
@@ -195,9 +196,9 @@ def get_news(
 # ─────────────────────────────────────────
 # RAG
 # ─────────────────────────────────────────
-@router.post("/rag", response_model=RagResponse)
+@router.post("/rag", response_model=RagResponse, dependencies=[Depends(require_access)])
 async def rag(body: RagRequest):
-    """RAG — ChromaDB wavestone_veille (site, presse, fiches d'offres) + LLM."""
+    """RAG — ChromaDB wavestone_veille (site, presse, fiches d'offres) + LLM. Privé : code d'accès requis."""
     await wake("embedding-service")
     await heartbeat("embedding-service")
     try:
@@ -245,8 +246,10 @@ async def get_topic_modeling():
 # Recrutement
 # ─────────────────────────────────────────
 @router.get("/recrutement", response_model=RecrutementResponse)
-def get_recrutement():
-    """Postes Wavestone regroupés par intitulé (republications fusionnées), familles et adéquation au profil."""
+def get_recrutement(unlocked: bool = Depends(get_access_state)):
+    """Postes Wavestone regroupés par intitulé (republications fusionnées) et familles.
+    L'adéquation au profil (score, catégorie, métier cible) n'est renvoyée qu'avec l'accès privé ;
+    sans accès, les postes sont triés par date pour que l'ordre ne trahisse pas le classement."""
     try:
         rows = _query(
             f"""
@@ -284,13 +287,15 @@ def get_recrutement():
                 contrat=r.dernier["type_contrat_libelle"],
                 source=r.dernier["source"],
                 url=r.dernier["url_offre"],
-                score_max=r.score_max,
-                categorie=r.categorie,
-                cible_intitule=r.cible_intitule,
+                score_max=r.score_max if unlocked else None,
+                categorie=r.categorie if unlocked else None,
+                cible_intitule=r.cible_intitule if unlocked else None,
                 a_texte_complet=bool(r.a_texte_complet),
             )
             for r in rows
         ]
+        if not unlocked:
+            postes.sort(key=lambda p: p.derniere_date or "", reverse=True)
 
         familles: dict = {}
         for p in postes:

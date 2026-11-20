@@ -1,0 +1,135 @@
+[
+  {
+    "name": "id_unique",
+    "type": "STRING"
+  },
+  {
+    "name": "groupe_doublon",
+    "type": "STRING"
+  },
+  {
+    "name": "source",
+    "type": "STRING"
+  },
+  {
+    "name": "titre",
+    "type": "STRING"
+  },
+  {
+    "name": "titre_normalise",
+    "type": "STRING"
+  },
+  {
+    "name": "entreprise_nom",
+    "type": "STRING"
+  },
+  {
+    "name": "entreprise_normalise",
+    "type": "STRING"
+  },
+  {
+    "name": "localisation_libelle",
+    "type": "STRING"
+  },
+  {
+    "name": "type_contrat",
+    "type": "STRING"
+  },
+  {
+    "name": "type_contrat_libelle",
+    "type": "STRING"
+  },
+  {
+    "name": "salaire_libelle",
+    "type": "STRING"
+  },
+  {
+    "name": "url_offre",
+    "type": "STRING"
+  },
+  {
+    "name": "date_publication",
+    "type": "DATE"
+  },
+  {
+    "name": "date_collecte",
+    "type": "TIMESTAMP"
+  },
+  {
+    "name": "score",
+    "type": "INTEGER"
+  },
+  {
+    "name": "categorie",
+    "type": "STRING"
+  },
+  {
+    "name": "raison",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "alertes",
+    "type": "STRING"
+  },
+  {
+    "name": "cible_proche",
+    "type": "STRING"
+  },
+  {
+    "name": "similarite",
+    "type": "FLOAT"
+  },
+  {
+    "name": "liste",
+    "type": "STRING"
+  },
+  {
+    "name": "motif_masque",
+    "type": "STRING"
+  },
+  {
+    "name": "date_run",
+    "type": "DATE"
+  },
+  {
+    "name": "type_annonceur",
+    "type": "STRING"
+  },
+  {
+    "name": "naf_libelle",
+    "type": "STRING"
+  },
+  {
+    "name": "secteur",
+    "type": "STRING"
+  },
+  {
+    "name": "secteur_source",
+    "type": "STRING"
+  },
+  {
+    "name": "type_entreprise",
+    "type": "STRING"
+  },
+  {
+    "name": "origine_entreprise",
+    "type": "STRING"
+  },
+  {
+    "name": "confiance_entreprise",
+    "type": "FLOAT"
+  },
+  {
+    "name": "entreprise_exclue",
+    "type": "BOOLEAN"
+  },
+  {
+    "name": "rang_dans_entreprise",
+    "type": "INTEGER"
+  },
+  {
+    "name": "nb_offres_entreprise",
+    "type": "INTEGER"
+  }
+]

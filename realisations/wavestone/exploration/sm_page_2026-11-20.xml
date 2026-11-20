@@ -1,0 +1,2192 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="//www.wavestone.com/wp-content/plugins/wordpress-seo/css/main-sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<url>
+		<loc>https://www.wavestone.com/en/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-18T08:23:39+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-17T16:41:10+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-19T14:30:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/financial-calendar/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzkalender/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/calendrier-financier/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<lastmod>2024-12-10T09:15:46+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/calendrier-financier/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzkalender/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/calendrier-financier/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<lastmod>2024-12-10T09:17:12+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/finanzkalender/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzkalender/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/calendrier-financier/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-calendar/" />
+		<lastmod>2024-12-13T12:11:17+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/protection-des-donnees-personnelles/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/datenschutz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/data-protection/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/protection-des-donnees-personnelles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/data-protection/" />
+		<lastmod>2024-12-16T15:47:49+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/creadesk/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<lastmod>2024-12-17T11:57:11+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/creadesk-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/creadesk/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<lastmod>2024-12-17T11:57:12+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/creadesk-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/creadesk/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/creadesk/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/creadesk/" />
+		<lastmod>2024-12-17T11:57:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/creadesk-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/cert-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<lastmod>2024-12-17T14:18:26+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cert-wavestone-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/aktionar-werden/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionar-werden/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/devenir-actionnaire/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<lastmod>2024-12-18T11:28:56+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/devenir-actionnaire/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionar-werden/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/devenir-actionnaire/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<lastmod>2024-12-18T11:29:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/aktionarsclub/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarsclub/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/wave-club-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<lastmod>2024-12-18T11:34:25+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/documents-financiers/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzdokumente-praesentationen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-financiers/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<lastmod>2024-12-19T10:32:34+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/lettres-aux-actionnaires/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionaersbriefe/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/lettres-aux-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<lastmod>2024-12-19T10:33:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/letters-to-shareholders/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionaersbriefe/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/lettres-aux-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<lastmod>2024-12-19T10:33:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/aktionaersbriefe/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionaersbriefe/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/lettres-aux-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/letters-to-shareholders/" />
+		<lastmod>2024-12-19T10:56:40+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/finanzdokumente-praesentationen/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzdokumente-praesentationen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-financiers/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<lastmod>2024-12-19T10:56:50+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/becoming-a-shareholder/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionar-werden/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/devenir-actionnaire/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/becoming-a-shareholder/" />
+		<lastmod>2024-12-27T08:59:16+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/shareholders-club/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarsclub/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/wave-club-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<lastmod>2024-12-27T10:40:01+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/wave-club-actionnaires/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarsclub/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/wave-club-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-club/" />
+		<lastmod>2024-12-27T14:01:59+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/information-reglementee/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/pflichtveroeffentlichungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/information-reglementee/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<lastmod>2025-01-10T09:54:02+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/regulated-information/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/pflichtveroeffentlichungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/information-reglementee/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<lastmod>2025-01-10T09:55:06+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/pflichtveroeffentlichungen/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/pflichtveroeffentlichungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/information-reglementee/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/regulated-information/" />
+		<lastmod>2025-01-10T09:56:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/careers/personal-data-processing-during-recruitment/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/personal-data-processing-during-recruitment/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/traitement-des-donnees-personnelles-dans-le-cadre-du-recrutement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/personal-data-processing-during-recruitment/" />
+		<lastmod>2025-02-05T14:58:45+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/carrieres/traitement-des-donnees-personnelles-dans-le-cadre-du-recrutement/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/personal-data-processing-during-recruitment/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/traitement-des-donnees-personnelles-dans-le-cadre-du-recrutement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/personal-data-processing-during-recruitment/" />
+		<lastmod>2025-02-05T15:50:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/cookie-policy/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/cookie-einstellungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/cookie-policy/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/politique-de-cookies/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/cookie-policy/" />
+		<lastmod>2025-02-12T08:36:04+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/sitemap/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/sitemap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/sitemap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/plan-du-site/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/sitemap/" />
+		<lastmod>2025-02-12T08:36:55+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/politique-de-cookies/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/cookie-einstellungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/cookie-policy/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/politique-de-cookies/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/cookie-policy/" />
+		<lastmod>2025-02-12T08:39:24+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/plan-du-site/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/sitemap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/sitemap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/plan-du-site/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/sitemap/" />
+		<lastmod>2025-02-12T08:40:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/sitemap-de/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/sitemap-de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/sitemap/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/plan-du-site/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/sitemap/" />
+		<lastmod>2025-02-12T08:41:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/cookie-einstellungen/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/cookie-einstellungen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/cookie-policy/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/politique-de-cookies/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/cookie-policy/" />
+		<lastmod>2025-02-12T08:42:01+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/datenschutz/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/datenschutz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/data-protection/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/protection-des-donnees-personnelles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/data-protection/" />
+		<lastmod>2025-02-12T08:42:46+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/impressum/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/impressum/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/legal-notices/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/mentions-legales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/legal-notices/" />
+		<lastmod>2025-02-12T08:43:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/evenements/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/events/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/evenements/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<lastmod>2025-02-13T07:25:06+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/events/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/events/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/evenements/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<lastmod>2025-02-13T07:25:42+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/events/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/events/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/evenements/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/events/" />
+		<lastmod>2025-02-13T07:26:26+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/client-stories/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cas-clients/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<lastmod>2025-02-13T07:27:42+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/client-stories/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cas-clients/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<lastmod>2025-02-13T07:27:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/cas-clients/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cas-clients/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/client-stories/" />
+		<lastmod>2025-02-13T07:27:54+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-actualites/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/news/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-actualites/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<lastmod>2025-02-13T07:29:30+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/news/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/news/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-actualites/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<lastmod>2025-02-13T07:30:20+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/news/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/news/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-actualites/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/news/" />
+		<lastmod>2025-02-13T07:31:31+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/get-in-touch/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/kontakt/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/get-in-touch/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/contact/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/get-in-touch/" />
+		<lastmod>2025-02-13T07:51:52+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/kontakt/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/kontakt/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/get-in-touch/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/contact/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/get-in-touch/" />
+		<lastmod>2025-02-13T07:53:52+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/mentions-legales/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/impressum/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/legal-notices/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/mentions-legales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/legal-notices/" />
+		<lastmod>2025-03-14T13:15:34+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-bureaux-dans-lemonde/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/standorte/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/locations/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-bureaux-dans-lemonde/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/locations/" />
+		<lastmod>2025-03-20T07:08:37+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-locations-c1ad1a.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/data-protection/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/datenschutz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/data-protection/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/protection-des-donnees-personnelles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/data-protection/" />
+		<lastmod>2025-04-22T12:34:05+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/contact/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/kontakt/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/get-in-touch/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/contact/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/get-in-touch/" />
+		<lastmod>2025-05-27T07:22:08+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/cybersecurite/cert-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<lastmod>2025-06-12T13:39:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cert-wavestone-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/documents-assemblee-generale/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/dokumente-zur-hauptversammlung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<lastmod>2025-06-20T08:31:49+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/general-meeting-documents/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/dokumente-zur-hauptversammlung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<lastmod>2025-06-20T10:32:04+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/guide-des-actionnaires/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarshandbuch/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/guide-des-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<lastmod>2025-07-01T13:18:16+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/shareholders-handbook/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarshandbuch/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/guide-des-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<lastmod>2025-07-01T13:25:44+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/aktionarshandbuch/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/aktionarshandbuch/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/guide-des-actionnaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/shareholders-handbook/" />
+		<lastmod>2025-07-01T13:33:37+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/financial-documents/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/finanzdokumente-praesentationen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-financiers/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/financial-documents/" />
+		<lastmod>2025-07-17T11:13:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/sustainability/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformation-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<lastmod>2025-07-22T16:03:45+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/technology-driven-transformation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/technologiebasierte-geschaeftstransformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformations-technologiques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<lastmod>2025-07-22T16:28:43+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/10/tech-driven-banner-new.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/transformations-technologiques/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/technologiebasierte-geschaeftstransformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformations-technologiques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<lastmod>2025-07-22T16:35:52+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/10/Night_mountain_road_motorcycle_track_empty_road.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/reglementations-risques/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/regulatorik-risikomanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/reglementations-risques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<lastmod>2025-07-22T16:37:01+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/risk-regulation-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/transformation-ecologique-societale/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformation-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<lastmod>2025-07-22T16:40:46+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/hero-sustainability-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/sustainability/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformation-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/sustainability/" />
+		<lastmod>2025-07-22T16:47:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/07/hero-sustainability-1920x1080-1-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/technologiebasierte-geschaeftstransformation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/technologiebasierte-geschaeftstransformation/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/transformations-technologiques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/technology-driven-transformation/" />
+		<lastmod>2025-07-22T16:47:54+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/10/tech-driven-banner-new.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/regulatorik-risikomanagement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/regulatorik-risikomanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/reglementations-risques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<lastmod>2025-07-22T16:49:42+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/risk-regulation-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/notre-demarche-conseil-responsable/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/responsible-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/notre-demarche-conseil-responsable/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<lastmod>2025-07-24T11:16:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/commitments/responsible-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/responsible-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/notre-demarche-conseil-responsable/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<lastmod>2025-07-28T13:24:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/carrieres/parcours-candidat/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/my-candidate-journey/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/parcours-candidat/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/my-candidate-journey/" />
+		<lastmod>2025-07-29T06:57:42+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/responsible-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/notre-demarche-conseil-responsable/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/our-responsible-consulting-approach/" />
+		<lastmod>2025-07-31T08:32:51+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/carrieres/carriere-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/my-career-path/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/carriere-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/my-career-path/" />
+		<lastmod>2025-08-19T08:31:22+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/cert-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/cert-wavestone/" />
+		<lastmod>2025-08-19T09:30:20+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cert-wavestone-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/insights/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/insights/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/insights/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<lastmod>2025-09-23T13:00:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/insights/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/insights/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/insights/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<lastmod>2025-09-23T14:15:43+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/data-intelligence-artificielle/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/daten-kuenstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<lastmod>2025-10-16T07:13:09+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/sky.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/daten-kuenstliche-intelligenz/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/daten-kuenstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<lastmod>2025-10-16T07:31:51+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/sky.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/locations/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/standorte/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/locations/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-bureaux-dans-lemonde/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/locations/" />
+		<lastmod>2025-11-17T08:59:00+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-locations-c1ad1a.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/standorte/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/standorte/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/locations/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-bureaux-dans-lemonde/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/locations/" />
+		<lastmod>2025-11-17T09:58:25+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-locations-c1ad1a.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/royaume-uni/</loc>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/royaume-uni/" />
+		<lastmod>2025-11-26T13:12:54+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/regulation-risk/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/regulatorik-risikomanagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/reglementations-risques/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/regulation-risk/" />
+		<lastmod>2025-11-26T13:33:49+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/risk-regulation-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/dokumente-zur-hauptversammlung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/dokumente-zur-hauptversammlung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/documents-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/general-meeting-documents/" />
+		<lastmod>2025-11-26T13:58:31+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/statement-accessibility/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/statement-accessibility/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/statement-accessibility/" />
+		<lastmod>2025-11-27T20:00:47+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/declaration-accessibilite/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/barrierefreiheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/declaration-accessibilite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<lastmod>2025-11-28T08:22:18+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/barrierefreiheit/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/barrierefreiheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/declaration-accessibilite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<lastmod>2025-11-28T08:22:56+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/accessibility-statement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/barrierefreiheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/declaration-accessibilite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/accessibility-statement/" />
+		<lastmod>2025-11-28T08:23:54+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/cybersecurite/riskinsight-newsletter/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<lastmod>2025-12-02T10:43:27+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/riskinsight-newsletter-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<lastmod>2025-12-02T10:54:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/riskinsight-newsletter-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/riskinsight-newsletter/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/riskinsight-newsletter/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/riskinsight-newsletter/" />
+		<lastmod>2025-12-02T10:57:48+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/riskinsight-newsletter-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/automobilindustrie/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automobilindustrie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile-2/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<lastmod>2026-01-09T07:44:16+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/automobile-2/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automobilindustrie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile-2/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<lastmod>2026-01-09T07:46:57+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/soziales-engagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/initiatives-societales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<lastmod>2026-01-15T16:29:18+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/initiatives-societales/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/soziales-engagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/initiatives-societales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<lastmod>2026-01-15T16:30:07+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/commitments/soziales-engagement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/soziales-engagement/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/initiatives-societales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/societal-initiatives/" />
+		<lastmod>2026-01-15T16:31:37+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/careers/my-candidate-journey/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/my-candidate-journey/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/parcours-candidat/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/my-candidate-journey/" />
+		<lastmod>2026-01-29T17:36:29+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/careers/my-career-path/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/my-career-path/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/carriere-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/my-career-path/" />
+		<lastmod>2026-01-29T17:38:32+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/automotive/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automobilindustrie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile-2/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive/" />
+		<lastmod>2026-02-23T06:48:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/data-ai/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/daten-kuenstliche-intelligenz/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/data-ai/" />
+		<lastmod>2026-03-12T09:02:22+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/sky.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/diversite-et-inclusion/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/vielfalt-und-inklusion/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/diversite-et-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<lastmod>2026-03-23T13:58:42+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/commitments/vielfalt-und-inklusion/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/vielfalt-und-inklusion/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/diversite-et-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<lastmod>2026-03-23T14:39:05+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/vielfalt-und-inklusion/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/diversite-et-inclusion/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/diversity-and-inclusion/" />
+		<lastmod>2026-03-30T08:15:46+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/shakeup-is-wavestone-startups-accelerator/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/shakeup-is-wavestone-startups-accelerator/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/shakeup-is-wavestone-startups-accelerator/" />
+		<lastmod>2026-04-22T06:59:07+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/shakeup-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/shakeup/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<lastmod>2026-04-22T07:03:10+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/shakeup-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/shakeup/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<lastmod>2026-04-22T07:03:10+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/shakeup-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/shakeup/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/shakeup/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/shakeup/" />
+		<lastmod>2026-04-23T09:12:54+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/shakeup-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/cybersecurity/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/cybersicherheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<lastmod>2026-04-29T09:32:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/06/header-cyber.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/cybersecurite/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/cybersicherheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<lastmod>2026-04-29T09:34:43+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/06/header-cyber.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/key-indicators/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/indicateurs-cles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<lastmod>2026-06-04T12:59:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/key-indicators/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/indicateurs-cles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<lastmod>2026-06-04T13:03:41+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/indicateurs-cles/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/indicateurs-cles/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/key-indicators/" />
+		<lastmod>2026-06-04T13:05:47+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/" />
+		<lastmod>2026-06-08T12:27:01+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-whatwethink-1080x1920-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/" />
+		<lastmod>2026-06-08T12:38:07+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-whatwethink-1080x1920-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/beauty-luxury/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/luxury-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/luxe-beaute/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<lastmod>2026-06-10T07:57:44+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/luxury-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/government-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-oeffentlicher-sektor/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/secteur-public-institutions-internationales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<lastmod>2026-06-10T08:00:26+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/business-insurance-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-versicherung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/conseil-assurance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<lastmod>2026-06-10T08:01:00+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/06/insurance-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/industry-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/industrie-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/industrie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<lastmod>2026-06-10T08:01:52+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/industry-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/retail-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-retail/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/distribution-biens-de-consommation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<lastmod>2026-06-10T08:02:11+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/retail-consumer-good-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/consulting-logistics/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/unternehmensberatung-logistik-reisen-transport/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transport-voyage-logistique/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<lastmod>2026-06-10T08:02:41+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/wealth-asset-management/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/wealth-asset-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<lastmod>2026-06-10T08:03:19+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/iot-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<lastmod>2026-06-10T08:06:12+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/software-consulting-services/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/softwareentwicklung-anwendungen-und-integration/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/developpement-et-integration-de-logiciels-et-dapplications/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<lastmod>2026-06-10T08:08:31+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/it-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategie-it-et-conseil-au-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<lastmod>2026-06-10T08:15:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/compliance-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/compliance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/compliance-risques-resilience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<lastmod>2026-06-10T08:17:47+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/customer-experience-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/experience-client-marketing-et-innovation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<lastmod>2026-06-10T08:18:08+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/operating-model-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/operating-model-design-operational-agility/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/agile-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<lastmod>2026-06-10T08:19:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/change-management-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/change-management-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/efficacite-organisationnelle-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<lastmod>2026-06-10T08:21:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/project-management-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/projektmanagement-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/direction-de-programme-et-gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<lastmod>2026-06-10T08:21:56+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/business-strategy-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/strategieberatung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transformation-et-strategie-dentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<lastmod>2026-06-10T08:24:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/supply-chain-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/supply-chain-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<lastmod>2026-06-10T08:24:09+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/supply-chain-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/corporate-finance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/finance-achats-rh-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<lastmod>2026-06-10T08:26:11+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/corporate-finance-multipush-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/insights/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/insights/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/insights/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/insights/" />
+		<lastmod>2026-06-10T09:45:24+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/iot-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<lastmod>2026-06-11T13:21:41+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/market2.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/it-strategy-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/it-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategie-it-et-conseil-au-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<lastmod>2026-06-11T13:22:19+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/it-strategy-multi-mobile-0b4ad8.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/softwareentwicklung-anwendungen-und-integration/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/softwareentwicklung-anwendungen-und-integration/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/developpement-et-integration-de-logiciels-et-dapplications/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<lastmod>2026-06-11T13:23:17+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/core-b2.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/customer-experience-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/experience-client-marketing-et-innovation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<lastmod>2026-06-11T13:56:40+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/market2.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/corporate-finance-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/corporate-finance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/finance-achats-rh-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<lastmod>2026-06-11T13:57:29+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/corporate-finance-multipush-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/sustainability-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transition-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<lastmod>2026-06-11T13:57:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/operating-model-design-operational-agility/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/operating-model-design-operational-agility/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/agile-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<lastmod>2026-06-11T13:58:02+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/change-management-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/change-management-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/efficacite-organisationnelle-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<lastmod>2026-06-11T13:58:39+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/organi2-2.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/projektmanagement-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/projektmanagement-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/direction-de-programme-et-gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<lastmod>2026-06-11T13:58:52+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/strategieberatung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/strategieberatung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transformation-et-strategie-dentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<lastmod>2026-06-11T13:59:54+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/busine2.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/supply-chain-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/supply-chain-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<lastmod>2026-06-11T14:00:11+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/supply-chain-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/banking-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/banque/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<lastmod>2026-06-11T14:02:17+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/beratung-oeffentlicher-sektor/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-oeffentlicher-sektor/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/secteur-public-institutions-internationales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<lastmod>2026-06-11T14:02:41+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/consulting-retail/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-retail/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/distribution-biens-de-consommation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<lastmod>2026-06-11T14:03:27+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/retail-consumer-good-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/healthcare-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/healthcare-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/life-sciences/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<lastmod>2026-06-11T14:04:20+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/life-science-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/unternehmensberatung-logistik-reisen-transport/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/unternehmensberatung-logistik-reisen-transport/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transport-voyage-logistique/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<lastmod>2026-06-11T14:05:02+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/wealth-asset-management-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/wealth-asset-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<lastmod>2026-06-11T14:05:54+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/luxury-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/luxury-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/luxe-beaute/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<lastmod>2026-06-11T14:08:19+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/luxury-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/automotive-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<lastmod>2026-06-11T15:36:43+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/developpement-et-integration-de-logiciels-et-dapplications/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/softwareentwicklung-anwendungen-und-integration/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/developpement-et-integration-de-logiciels-et-dapplications/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/software-consulting-services/" />
+		<lastmod>2026-06-11T15:40:12+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/iot-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/iot-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/iot-consulting/" />
+		<lastmod>2026-06-11T15:40:38+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/strategie-it-et-conseil-au-cto/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/it-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategie-it-et-conseil-au-cto/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/it-strategy-consulting-cto-advisory/" />
+		<lastmod>2026-06-11T15:41:13+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/direction-de-programme-et-gestion-de-projet/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/projektmanagement-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/direction-de-programme-et-gestion-de-projet/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/project-management-consulting/" />
+		<lastmod>2026-06-11T15:43:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/efficacite-organisationnelle-et-conduite-du-changement/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/change-management-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/efficacite-organisationnelle-et-conduite-du-changement/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/change-management-consulting/" />
+		<lastmod>2026-06-11T15:44:12+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/experience-client-marketing-et-innovation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/experience-client-marketing-et-innovation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/customer-experience-consulting/" />
+		<lastmod>2026-06-11T15:45:06+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/finance-achats-rh-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/corporate-finance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/finance-achats-rh-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/corporate-finance-consulting-procurement-hr/" />
+		<lastmod>2026-06-11T15:45:26+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/corporate-finance-multipush-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/agile-et-modele-operationnel/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/operating-model-design-operational-agility/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/agile-et-modele-operationnel/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/operating-model-consulting/" />
+		<lastmod>2026-06-11T15:45:53+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/supply-chain/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/supply-chain-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/supply-chain/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/supply-chain-consulting/" />
+		<lastmod>2026-06-11T15:46:48+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/supply-chain-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/transformation-et-strategie-dentreprise/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/strategieberatung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transformation-et-strategie-dentreprise/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-strategy-consulting/" />
+		<lastmod>2026-06-11T15:47:13+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/compliance-risques-resilience-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/compliance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/compliance-risques-resilience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<lastmod>2026-06-11T15:47:58+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/conseil-assurance/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-versicherung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/conseil-assurance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<lastmod>2026-06-11T15:49:48+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/06/insurance-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/automobile/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<lastmod>2026-06-11T15:50:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/banque/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/banque/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<lastmod>2026-06-11T15:50:38+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/distribution-biens-de-consommation/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-retail/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/distribution-biens-de-consommation/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/retail-consulting/" />
+		<lastmod>2026-06-11T15:51:13+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/retail-consumer-good-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/energie-utilities/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-energiewirtschaft/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/energie-utilities/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<lastmod>2026-06-11T15:51:44+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/industrie/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/industrie-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/industrie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<lastmod>2026-06-11T15:52:30+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/industry-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/life-sciences/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/healthcare-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/life-sciences/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<lastmod>2026-06-11T15:52:55+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/life-science-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/luxe-beaute/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/luxury-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/luxe-beaute/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/beauty-luxury/" />
+		<lastmod>2026-06-11T15:53:16+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/luxury-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/secteur-public-institutions-internationales/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-oeffentlicher-sektor/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/secteur-public-institutions-internationales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/government-consulting/" />
+		<lastmod>2026-06-11T15:53:45+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/transport-voyage-logistique/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/unternehmensberatung-logistik-reisen-transport/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transport-voyage-logistique/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/consulting-logistics/" />
+		<lastmod>2026-06-11T15:54:18+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/wealth-asset-management/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/wealth-asset-management-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/wealth-asset-management/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/wealth-asset-management/" />
+		<lastmod>2026-06-11T15:54:46+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/participer-assemblee-generale/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/hauptversammlung-teilnehmen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/participer-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<lastmod>2026-06-19T12:30:27+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/hauptversammlung-teilnehmen/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/hauptversammlung-teilnehmen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/participer-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<lastmod>2026-06-19T12:33:57+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/hauptversammlung-teilnehmen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/participer-assemblee-generale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/how-to-participate-to-the-general-annual-meeting/" />
+		<lastmod>2026-06-19T12:38:15+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/energy-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-energiewirtschaft/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/energie-utilities/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<lastmod>2026-06-19T19:36:49+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/partnerschaften-und-allianzen/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/partnerschaften-und-allianzen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/partenariats-alliances/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<lastmod>2026-06-26T14:26:40+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/hero-sustainability-cover-373x530-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/partenariats-alliances/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/partnerschaften-und-allianzen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/partenariats-alliances/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<lastmod>2026-06-30T07:41:51+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/hero-sustainability-cover-373x530-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/karriere/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/karriere/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/" />
+		<lastmod>2026-07-02T14:55:50+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/join-us-header-v2-desktop-1440-x-660.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/carrieres/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/karriere/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/" />
+		<lastmod>2026-07-02T14:57:40+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/join-us-header-v2-desktop-1440-x-660.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/lead-the-shift/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/lead-the-shift-plan/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/lead-the-shift-2030/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<lastmod>2026-07-07T11:12:03+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/lead-the-shift-2030/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/lead-the-shift-plan/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/lead-the-shift-2030/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<lastmod>2026-07-13T14:14:49+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/cybersicherheit/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/cybersicherheit/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/cybersecurity/" />
+		<lastmod>2026-07-24T12:00:17+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/06/header-cyber.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/lead-the-shift-plan/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/lead-the-shift-plan/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/lead-the-shift-2030/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/lead-the-shift/" />
+		<lastmod>2026-07-24T14:08:08+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/customer-experience/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<lastmod>2026-07-27T07:46:23+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/banner-customer-experience-horizontal-1-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-denken/customer-experience/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<lastmod>2026-07-27T07:46:50+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/02/customer-experience-landing.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/perspectives/experience-client/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/experience-client/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/customer-experience/" />
+		<lastmod>2026-07-27T07:47:01+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/banner-customer-experience-horizontal-1-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/legal-notices/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/impressum/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/legal-notices/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/mentions-legales/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/legal-notices/" />
+		<lastmod>2026-07-28T12:55:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/consulting-versicherung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/consulting-versicherung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/conseil-assurance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/business-insurance-consulting/" />
+		<lastmod>2026-07-29T13:48:20+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/06/insurance-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/gouvernance/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/gouvernance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<lastmod>2026-07-30T14:12:22+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/corporate-governance/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/gouvernance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<lastmod>2026-07-30T14:25:27+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/corporate-governance/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/gouvernance/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/corporate-governance/" />
+		<lastmod>2026-07-30T14:32:40+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/beratung-energiewirtschaft/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/beratung-energiewirtschaft/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/energie-utilities/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/energy-consulting/" />
+		<lastmod>2026-08-11T08:37:11+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/compliance-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/compliance-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/compliance-risques-resilience-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/compliance-consulting/" />
+		<lastmod>2026-08-26T08:05:21+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/automotive-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/automobile/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/automotive-consulting/" />
+		<lastmod>2026-08-26T08:06:18+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/industrie-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/industrie-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/industrie/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/industry-consulting/" />
+		<lastmod>2026-08-26T08:08:33+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/industry-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/careers/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/karriere/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/" />
+		<lastmod>2026-09-02T07:19:36+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/07/join-us-header-v2-desktop-1440-x-660.png</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/life-sciences-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/healthcare-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/life-sciences/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/life-sciences-consulting/" />
+		<lastmod>2026-09-02T13:37:37+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/03/life-science-multi-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-think/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-denken/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-think/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/perspectives/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-think/" />
+		<lastmod>2026-09-10T11:44:54+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/" />
+		<lastmod>2026-09-11T12:53:31+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/" />
+		<lastmod>2026-09-11T12:59:05+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-investors-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/" />
+		<lastmod>2026-09-11T13:00:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-investors-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/strategic-sourcing-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<lastmod>2026-09-21T12:51:47+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/sourcing-services-optimization-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/optimierung-von-sourcing-services/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<lastmod>2026-09-21T12:53:18+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/sourcing-services-optimization-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/optimierung-von-sourcing-services/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/strategic-sourcing-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/strategic-sourcing-consulting/" />
+		<lastmod>2026-09-21T13:07:26+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/sourcing-services-optimization-header.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/cybersecurity-services/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<lastmod>2026-09-24T09:14:42+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cybersecurity-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/cybersecurite/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<lastmod>2026-09-24T09:18:08+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cybersecurity-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/commitments/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<lastmod>2026-09-25T06:45:25+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-csr.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/commitments/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<lastmod>2026-09-25T06:48:32+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-csr.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/" />
+		<lastmod>2026-09-25T08:07:50+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-csr.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/leadership/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/management/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/equipe-dirigeante/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<lastmod>2026-09-25T14:30:05+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/equipe-dirigeante/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/management/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/equipe-dirigeante/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<lastmod>2026-09-25T14:34:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/investisseurs/action-dividende-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/wavestone-aktie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/action-dividende-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<lastmod>2026-09-29T13:35:00+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/sap-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sap-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<lastmod>2026-09-30T11:29:12+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/sap-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sap-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<lastmod>2026-09-30T11:29:36+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/sap-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sap-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/sap-consulting/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sap-consulting/" />
+		<lastmod>2026-09-30T11:29:57+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/investors/wavestone-share/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/wavestone-aktie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/action-dividende-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<lastmod>2026-10-12T09:58:21+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/investoren/wavestone-aktie/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/investoren/wavestone-aktie/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/investisseurs/action-dividende-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/investors/wavestone-share/" />
+		<lastmod>2026-10-15T14:40:02+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/" />
+		<lastmod>2026-10-15T15:00:31+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-career-new.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/" />
+		<lastmod>2026-10-15T15:03:39+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-career-new.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/" />
+		<lastmod>2026-10-15T15:05:08+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-career-new.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/data-intelligence-artificielle/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/ki-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<lastmod>2026-10-25T22:08:08+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/data-ai-multipush-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/management/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/management/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/equipe-dirigeante/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/leadership/" />
+		<lastmod>2026-11-03T15:21:48+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/who-we-are/commitments/business-ethics/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/geschaeftsethik/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/ethique-des-affaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<lastmod>2026-11-04T08:36:40+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/wer-wir-sind/commitments/geschaeftsethik/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/geschaeftsethik/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/ethique-des-affaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<lastmod>2026-11-04T08:37:59+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/ethique-des-affaires/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/wer-wir-sind/commitments/geschaeftsethik/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/decouvrir-wavestone/nos-engagements-rse/ethique-des-affaires/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/who-we-are/commitments/business-ethics/" />
+		<lastmod>2026-11-04T08:38:53+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/sustainability-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transition-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<lastmod>2026-11-06T07:24:55+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/ki-beratung/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/ki-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<lastmod>2026-11-06T07:37:52+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/data-ai-multipush-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/careers/our-offers/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/our-offers/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/nos-offres/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/our-offers/" />
+		<lastmod>2026-11-16T08:44:39+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/carrieres/nos-offres/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/careers/our-offers/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/carrieres/nos-offres/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/careers/our-offers/" />
+		<lastmod>2026-11-16T08:55:56+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/ai-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/ki-beratung/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/data-intelligence-artificielle/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/ai-consulting/" />
+		<lastmod>2026-11-16T10:25:35+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/05/data-ai-multipush-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/partnerships-alliances/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/partnerschaften-und-allianzen/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/partenariats-alliances/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/partnerships-alliances/" />
+		<lastmod>2026-11-16T10:26:58+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/09/hero-sustainability-cover-373x530-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/transition-ecologique-societale/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/transition-ecologique-societale/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/sustainability-consulting/" />
+		<lastmod>2026-11-16T12:19:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2025/04/sustainability-multipush.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/" />
+		<lastmod>2026-11-17T16:31:16+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-whatwedo-new-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/nos-expertises/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/" />
+		<lastmod>2026-11-17T16:36:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-whatwedo-new-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/" />
+		<lastmod>2026-11-17T16:38:37+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/header-whatwedo-new-1920x1080-1.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/fr/acceuil/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-17T16:41:10+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-18T08:23:39+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/what-we-do/banking-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/banque/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/banking-consulting/" />
+		<lastmod>2026-11-18T08:41:05+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/en/terms-and-conditions-for-suppliers/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/terms-and-conditions-for-suppliers/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/terms-and-conditions-for-suppliers/" />
+		<lastmod>2026-11-19T14:10:43+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/home/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/" />
+		<lastmod>2026-11-19T14:30:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/05/test-hp-vega.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/</loc>
+		<xhtml:link rel="alternate" hreflang="de" href="https://www.wavestone.com/de/was-wir-tun/cyber-security-consulting/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<xhtml:link rel="alternate" hreflang="fr" href="https://www.wavestone.com/fr/nos-expertises/cybersecurite/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://www.wavestone.com/en/what-we-do/cybersecurity-services/" />
+		<lastmod>2026-11-20T08:09:44+00:00</lastmod>
+		<image:image>
+			<image:loc>https://www.wavestone.com/wp-content/uploads/2024/11/cybersecurity-mobile.jpg</image:loc>
+		</image:image>
+	</url>
+</urlset>
+<!-- XML Sitemap generated by Yoast SEO -->
