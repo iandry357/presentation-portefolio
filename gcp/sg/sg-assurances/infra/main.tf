@@ -134,3 +134,13 @@ resource "google_bigquery_dataset" "beelix_veille" {
     prevent_destroy = true
   }
 }
+
+resource "google_bigquery_dataset" "wavestone_veille" {
+  dataset_id  = "wavestone_veille"
+  location    = var.bq_location
+  description = "Wavestone — veille entreprise (site FR/EN + Google News) et offres Wavestone collectées (POC cooptation)"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
