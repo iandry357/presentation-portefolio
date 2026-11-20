@@ -222,8 +222,10 @@ BigQuery emploi_marche.offres_brutes
         │ déclenchement fire-and-forget si succès
         ▼
 Cloud Run Job "dbt-emploi-marche"
-   ├── dbt run  → staging (dédup) + intermediate (agrégats jour/entreprise/localisation)
-   └── dbt test → échec bloquant si tests qualité KO
+   ├── dbt source freshness → fraîcheur de offres_brutes (signal : exécution en échec au-delà de 48 h, non bloquant)
+   └── dbt build → staging (dédup) + intermediate (agrégats jour/entreprise/localisation), chaque
+                   modèle testé avant ses descendants : un test KO saute la reconstruction en aval
+                   (agrégats de la veille conservés). stg_offres reste une vue, non protégée.
         │
         ▼
 Frontend /market (Q01–Q10 sur tables agrégées, Q11 direct sur offres_brutes)
