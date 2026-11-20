@@ -14,6 +14,9 @@ psycopg2-binary>=2.9.9
 # ── Vector & Embeddings ────────────────────────────────────────
 pgvector>=0.2.5
 voyageai>=0.2.1
+# ChromaDB (client HTTP vers le serveur OVH) — déclaré explicitement : crewai ne l'installe plus
+chromadb-client==0.5.20
+bcrypt==4.1.3
 
 # ── AI / Agents ────────────────────────────────────────────────
 # litellm et httpx sont des dépendances transitives de crewai,
