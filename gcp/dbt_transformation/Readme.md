@@ -16,8 +16,9 @@ sync-ft-bigquery (FT + Gmail)
         ▼
 dbt-emploi-marche (Cloud Run Job)
         │
-        ├── dbt run   → matérialise staging (view) + intermediate (table)
-        └── dbt test  → tests qualité, échec = Job marqué "Failed"
+        ├── dbt source freshness → fraîcheur de offres_brutes (échec = Job "Failed", non bloquant)
+        └── dbt build → chaque nœud testé avant ses descendants : un test KO saute
+                        la reconstruction en aval (int_* de la veille conservés)
         ▼
 emploi_marche.stg_offres            (view, dédupliquée sur id_unique)
 emploi_marche.int_offres_agg_jour   (table, grain jour×source×dimensions)
@@ -102,8 +103,9 @@ gcloud logging read "resource.type=cloud_run_job AND resource.labels.job_name=db
 ```
 
 Chercher la ligne finale `=== [dbt] Transformation terminée avec succès ===`
-— si elle est absente, `dbt run` ou `dbt test` a échoué (le Job apparaît
-alors en "Failed" dans son historique d'exécution).
+— si elle est absente, `dbt build` a échoué (modèles en aval non reconstruits) ou la
+fraîcheur de `offres_brutes` est en échec (aucune collecte depuis 48 h) ; le Job
+apparaît alors en "Failed" dans son historique d'exécution.
 
 ---
 
@@ -170,7 +172,7 @@ gcp/dbt_transformation/
 ├── packages.yml
 ├── requirements.txt
 ├── Dockerfile
-├── entrypoint.sh              # dbt run puis dbt test, échec explicite loggé
+├── entrypoint.sh              # source freshness (signal) puis dbt build (tests bloquants en aval)
 ├── .dockerignore
 ├── models/
 │   ├── staging/
