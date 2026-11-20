@@ -1,0 +1,64 @@
++------------+-----------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+|     d      |                                                      titre                                                      | localisation_libelle | type_contrat_libelle |       source       |
++------------+-----------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| 2026-11-20 | IA & SI – Consultant·e Junior - CTO Advisory - stage de fin d'études                                            | Paris (75)           | NULL                 | email_indeed       |
+| 2026-11-20 | IA & Digital Workplace - Consultant• e Junior en Transformation Digitale - CTO Advisory - CDI                   | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-20 | Smart Connectivity - Consultant·e Junior en Transformation Digitale - CTO Advisory - CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-18 | Cloud & IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)                          | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-18 | Plateformes digitales & IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)          | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-18 | CTO, CIO & IA - Consultant-e Junior en Transformation Digitale - CTO/CIO Advisory - CDI (H/F)                   | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-17 | Accompagner les CTO à l'ère de l'IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F) | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-17 | Consultant·e Transport Industry Energy - Data & IA H/F                                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-17 | Plateformes digitales & IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)          | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-17 |  IA & SI - Consultant-e Junior - CTO Advisory - CDI  (H/F)                                                      | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-17 | IA & Digital Workplace - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)              | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-15 | Data Analytics & ai Consultant - Luxe Retail Hospitalité Services - CDI H/F                                     | NULL                 | NULL                 | email_hellowork    |
+| 2026-11-15 | Plateformes digitales & IA - Consultant·e Junior enTransformationDigitale - CTO Advisory - CDI                  | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-14 | Accompagner les CTO à l'ère de l'IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F) | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-14 | Analyste UX, UI & Industrialisation du Design - Digital Customer – CDI                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-14 | Manager - Lead Data Scientist (H/F)                                                                             | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-14 | Cloud & IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)                          | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-14 |  IA & SI - Consultant-e Junior - CTO Advisory - CDI  (H/F)                                                      | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-14 | IA & Digital Workplace - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)              | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-14 | Plateformes digitales & IA - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)          | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-14 | CTO, CIO & IA - Consultant-e Junior en Transformation Digitale - CTO/CIO Advisory - CDI (H/F)                   | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-13 | Senior Consultant.e - Data Scientist (H/F)                                                                      | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-13 | Consultant·e en Agilité / IT operating model – CDI                                                              | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-12 | Financial Services - Consultant·e Confirmé·e H/F                                                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-12 | Smart Connectivity - Consultant·e Junior en Transformation Digitale - CTO Advisory – CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-12 | Consultant·e Transport Industry Energy - Data & IA H/F                                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-11 | Financial Services - Consultant·e Confirmé·e H/F                                                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-11 | Consultant·e en Agilité / IT operating model – CDI                                                              | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-11 | Smart Connectivity - Consultant·e Junior en Transformation Digitale - CTO Advisory – CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-11 | IA & Digital Workplace - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI (H/F)              | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-11 |  IA & SI - Consultant-e Junior - CTO Advisory - CDI  (H/F)                                                      | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-09 | Analyste UX, UI & Industrialisation du Design - Digital Customer – CDI                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-09 | Consultant·e Transport Industry Energy - Data & IA H/F                                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-08 | Consultant·e Confirmé·e - Data Science & IA H/F                                                                 | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-08 | Cloud & IA - Consultant·e Junior en Transformation Digitale - CTO Advisory – CDI                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-08 | Lead Data Scientist & AI Transformation Manager                                                                 | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-08 | Manager – Lead Data Scientist (H/F)                                                                             | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-08 | Consultant·e en Agilité / IT operating model – CDI                                                              | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-07 | AI Strategy & Business Transformation – Consultant.e junior / CDI (H/F)                                         | Puteaux (92)         | NULL                 | email_indeed       |
+| 2026-11-07 | Analyste UX, UI & Industrialisation du Design - Digital Customer – CDI                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-07 | Data, Analytics & AI Consultant - Luxe, Retail, Hospitalité, Services - CDI                                     | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-07 | Consultant.e en transformation digitale (Data & IA) – Banque & Assurance – CDI                                  | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-06 | Senior Consultant - Product Data Scientist (H/F)                                                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-06 | CTO, CIO & IA - Consultant-e Junior en Transformation Digitale - CTO/CIO Advisory - CDI (H/F)                   | 92 - Nanterre        | CDI                  | france_travail_api |
+| 2026-11-05 | Smart Connectivity - Consultant·e Junior en Transformation Digitale - CTO Advisory – CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-04 | Consultant·e Transport Industry Energy - Data & IA H/F                                                          | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-03 | Senior Consultant – AI Security                                                                                 | Puteaux (92)         | NULL                 | email_indeed       |
+| 2026-11-03 | Smart Connectivity - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-11-02 | IA & Digital Workplace – Consultant·e Junior en Transformation Digitale – CTO Advisory – CDI                    | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-31 | Smart Connectivity - Consultant-e Junior en Transformation Digitale - CTO Advisory - CDI                        | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-30 | IA & SI – Consultant·e Junior - CTO Advisory - CDI                                                              | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-30 | Manager - Lead Data Scientist (H/F)                                                                             | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-28 | Consultant.e Senior – Data & IA (H/F) – Financial services - CDI                                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-28 | Plateformes digitales & IA - Consultant·e Junior en\u202fTransformation\u202fDigitale – CTO Advisory - CDI                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-28 | Manager - Lead Data Scientist (H/F)                                                                             | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-28 | Senior Consultant.e - Data Scientist (H/F)                                                                      | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-27 | IA & SI – Consultant·e Junior - CTO Advisory - CDI                                                              | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-24 | Senior Consultant – AI Security                                                                                 | Puteaux (92)         | NULL                 | email_indeed       |
+| 2026-10-23 | Senior Consultant - Product Data Scientist (H/F)                                                                | NULL                 | NULL                 | email_jobijoba     |
+| 2026-10-20 | Consultant.e Data – Luxe, Retail, Hospitalité, Services - CDI                                                   | Paris (75)           | NULL                 | email_indeed       |
++------------+-----------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
