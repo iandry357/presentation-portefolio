@@ -426,7 +426,7 @@ function BadgeScore({ score }: { score: number | null }) {
   return <span className={`text-sm font-semibold px-2 py-0.5 rounded ${classe}`}>{score}</span>;
 }
 
-function LignePoste({ p }: { p: PosteItem }) {
+function LignePoste({ p, prive }: { p: PosteItem; prive: boolean }) {
   return (
     <div className="border rounded-lg p-4 bg-white">
       <div className="flex items-start justify-between gap-4">
@@ -445,24 +445,27 @@ function LignePoste({ p }: { p: PosteItem }) {
             {p.nb_publications} publication{p.nb_publications > 1 ? 's' : ''} · du {formatDate(p.premiere_date)} au {formatDate(p.derniere_date)}
           </p>
         </div>
-        <div className="text-right shrink-0">
-          <BadgeScore score={p.score_max} />
-          {p.categorie && <p className="text-xs text-gray-500 mt-1">{CATEGORIE_LIBELLES[p.categorie] ?? p.categorie}</p>}
-          {p.cible_intitule && <p className="text-xs text-gray-400 mt-0.5 max-w-[180px]">{p.cible_intitule}</p>}
-        </div>
+        {prive && (
+          <div className="text-right shrink-0">
+            <BadgeScore score={p.score_max} />
+            {p.categorie && <p className="text-xs text-gray-500 mt-1">{CATEGORIE_LIBELLES[p.categorie] ?? p.categorie}</p>}
+            {p.cible_intitule && <p className="text-xs text-gray-400 mt-0.5 max-w-[180px]">{p.cible_intitule}</p>}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export function RecrutementView() {
+export function RecrutementView({ unlocked }: { unlocked: boolean }) {
   const [data, setData] = useState<RecrutementResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [famille, setFamille] = useState<string | null>(null);
 
   useEffect(() => {
+    setError(null);
     fetchWavestoneRecrutement().then(setData).catch(e => setError(messageErreur(e)));
-  }, []);
+  }, [unlocked]);   // rechargé au déverrouillage / verrouillage (score visible ou non)
 
   if (error) return <Erreur message={error} />;
   if (!data) return <Chargement />;
@@ -476,7 +479,9 @@ export function RecrutementView() {
         Offres Wavestone repérées par ma collecte quotidienne (France Travail et alertes de sites d&apos;emploi) du{' '}
         {formatDate(data.periode_debut)} au {formatDate(data.periode_fin)} : {data.total_offres} publications pour{' '}
         {data.intitules_distincts} postes distincts (les republications d&apos;un même intitulé sont regroupées).
-        Le score indique l&apos;adéquation du poste à mon profil data / IA (0 à 100), calculée chaque jour par un LLM local.
+        {unlocked
+          ? <> Le score indique l&apos;adéquation du poste à mon profil data / IA (0 à 100), calculée chaque jour par un LLM local.</>
+          : <> Postes du plus récent au plus ancien.</>}
       </p>
 
       <div className="border rounded-lg bg-white p-4 space-y-3 mb-6">
@@ -498,7 +503,7 @@ export function RecrutementView() {
         onChange={setFamille}
       />
       <div className="space-y-2">
-        {postes.map(p => <LignePoste key={`${p.titre}-${p.derniere_date}`} p={p} />)}
+        {postes.map(p => <LignePoste key={`${p.titre}-${p.derniere_date}`} p={p} prive={unlocked} />)}
       </div>
     </div>
   );

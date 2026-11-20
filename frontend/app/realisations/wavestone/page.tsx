@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Lock } from 'lucide-react';
+import { useAccess } from '@/components/AccessProvider';
 import {
   NewsView, RagView, TopicView, RecrutementView, formatDate,
 } from '@/components/wavestone/WavestoneViews';
@@ -9,8 +11,8 @@ import { fetchWavestoneStats, WavestoneStats } from '@/lib/wavestoneApi';
 
 type Vue = 'rag' | 'news' | 'topics' | 'recrutement';
 
-const VUES: { id: Vue; label: string }[] = [
-  { id: 'rag', label: 'Ask AI' },
+const VUES: { id: Vue; label: string; prive?: boolean }[] = [
+  { id: 'rag', label: 'Ask AI', prive: true },
   { id: 'news', label: 'Actualités' },
   { id: 'topics', label: 'Thèmes' },
   { id: 'recrutement', label: 'Recrutement' },
@@ -27,8 +29,13 @@ function Tuile({ valeur, libelle, detail }: { valeur: string; libelle: string; d
 }
 
 export default function WavestonePage() {
-  const [vue, setVue] = useState<Vue>('rag');
+  const { state, unlocked } = useAccess();
+  const [choix, setChoix] = useState<Vue | null>(null);
   const [stats, setStats] = useState<WavestoneStats | null>(null);
+
+  // Par défaut : Ask AI si déverrouillé, sinon les actualités publiques
+  const vue: Vue = choix ?? (unlocked ? 'rag' : 'news');
+  const verrouille = !!VUES.find(v => v.id === vue)?.prive && !unlocked;
 
   useEffect(() => {
     fetchWavestoneStats().then(setStats).catch(() => setStats(null));
@@ -78,31 +85,47 @@ export default function WavestonePage() {
         {VUES.map(v => (
           <button
             key={v.id}
-            onClick={() => setVue(v.id)}
-            className={`px-4 py-2 text-sm -mb-px border-b-2 transition-colors ${
+            onClick={() => setChoix(v.id)}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 text-sm -mb-px border-b-2 transition-colors ${
               vue === v.id
                 ? 'border-blue-600 text-blue-700 font-medium'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             {v.label}
+            {v.prive && !unlocked && <Lock className="w-3.5 h-3.5" />}
           </button>
         ))}
       </div>
 
-      {vue === 'rag' && <RagView />}
-      {vue === 'news' && <NewsView />}
-      {vue === 'topics' && <TopicView />}
-      {vue === 'recrutement' && <RecrutementView />}
+      {/* Rien n'est monté tant que l'état d'accès n'est pas connu : évite des appels voués au 403 */}
+      {state === 'loading' && <div className="min-h-[40vh]" aria-busy="true" />}
+
+      {state !== 'loading' && verrouille && (
+        <div className="px-4 py-16 text-center">
+          <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
+          <h2 className="text-lg font-semibold text-gray-900">Zone privée</h2>
+          <p className="mt-1 text-sm text-gray-500">Utilisez le bouton « Déverrouiller » en haut de la page.</p>
+        </div>
+      )}
+
+      {state !== 'loading' && !verrouille && (
+        <>
+          {vue === 'rag' && <RagView />}
+          {vue === 'news' && <NewsView />}
+          {vue === 'topics' && <TopicView />}
+          {vue === 'recrutement' && <RecrutementView unlocked={unlocked} />}
+        </>
+      )}
 
       {/* Méthode */}
       <div className="mt-10 border rounded-lg p-4 bg-gray-50 text-xs text-gray-500 space-y-1">
         <p className="font-semibold text-gray-600">Méthode et limites</p>
         <p>Site : pages listées par les sitemaps de wavestone.com (communiqués, publications, cas clients), en français et en anglais ; robots.txt respecté, l&apos;API WordPress n&apos;est pas utilisée ; les pages « expertises » ne sont pas reprises (adresses du sitemap périmées).</p>
         <p>Presse : Google News, hors articles publiés par Wavestone elle-même (déjà couverts par le site) ; titre et résumé seulement.</p>
-        <p>Ask AI : recherche sémantique sur les pages, la presse et les fiches d&apos;offres ; les réponses citent leurs sources et ne donnent pas de totaux.</p>
+        <p>Ask AI (accès privé) : recherche sémantique sur les pages, la presse et les fiches d&apos;offres ; les réponses citent leurs sources et ne donnent pas de totaux.</p>
         <p>Thèmes : LDA, un modèle par langue, sur le début de chaque document ; libellés générés par un LLM.</p>
-        <p>Recrutement : offres collectées par ma veille emploi (data / IA, Île-de-France) sur 90 jours ; le score mesure l&apos;adéquation à mon profil, pas la qualité du poste.</p>
+        <p>Recrutement : offres collectées par ma veille emploi (data / IA, Île-de-France) sur 90 jours ; le score d&apos;adéquation à mon profil (pas la qualité du poste) n&apos;est visible qu&apos;avec l&apos;accès privé.</p>
       </div>
     </div>
   );
