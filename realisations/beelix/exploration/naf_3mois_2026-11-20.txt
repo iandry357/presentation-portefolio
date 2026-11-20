@@ -1,0 +1,73 @@
++----------+---------------------------------------------------------------------------------------+-----------+----------------+
+| division |                                    exemple_libelle                                    | nb_offres | nb_entreprises |
++----------+---------------------------------------------------------------------------------------+-----------+----------------+
+| NULL     | NULL                                                                                  |      4855 |            513 |
+| 70       | Activités spécialisées, scientifiques et techniques                                   |      2140 |            161 |
+| 62       | Information et communication                                                          |      1734 |            313 |
+| 71       | Activités spécialisées, scientifiques et techniques                                   |       513 |             81 |
+| 82       | Activités de services administratifs et de soutien                                    |       283 |             34 |
+| 78       | Activités de services administratifs et de soutien                                    |       249 |             41 |
+| 64       | Activités financières et d'assurance                                                  |       229 |             38 |
+| 63       | Information et communication                                                          |       212 |             30 |
+| 68       | Activités immobilières                                                                |       171 |             46 |
+| 47       | Commerce ; réparation d'automobiles et de motocycles                                  |       158 |             27 |
+| 58       | Information et communication                                                          |       140 |             51 |
+| 65       | Activités financières et d'assurance                                                  |       134 |             20 |
+| 66       | Activités financières et d'assurance                                                  |       133 |             42 |
+| 46       | Commerce ; réparation d'automobiles et de motocycles                                  |       119 |             43 |
+| 94       | Autres activités de services                                                          |       111 |             32 |
+| 49       | Transports et entreposage                                                             |       101 |              6 |
+| 26       | Industrie manufacturière                                                              |        88 |              9 |
+| 73       | Activités spécialisées, scientifiques et techniques                                   |        85 |             14 |
+| 74       | Activités spécialisées, scientifiques et techniques                                   |        79 |             15 |
+| 69       | Activités spécialisées, scientifiques et techniques                                   |        67 |             11 |
+| 85       | Enseignement                                                                          |        63 |             22 |
+| 72       | Activités spécialisées, scientifiques et techniques                                   |        57 |             22 |
+| 84       | Administration publique                                                               |        48 |             18 |
+| 56       | Hébergement et restauration                                                           |        47 |             16 |
+| 88       | Santé humaine et action sociale                                                       |        40 |              7 |
+| 43       | Construction                                                                          |        38 |             14 |
+| 35       | Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné      |        37 |              9 |
+| 28       | Industrie manufacturière                                                              |        31 |              3 |
+| 86       | Santé humaine et action sociale                                                       |        30 |              8 |
+| 45       | Commerce ; réparation d'automobiles et de motocycles                                  |        27 |              4 |
+| 33       | Industrie manufacturière                                                              |        26 |              4 |
+| 59       | Information et communication                                                          |        24 |              6 |
+| 53       | Transports et entreposage                                                             |        24 |              2 |
+| 90       | Arts, spectacles et activités récréatives                                             |        22 |              5 |
+| 61       | Information et communication                                                          |        19 |              8 |
+| 77       | Activités de services administratifs et de soutien                                    |        16 |              9 |
+| 10       | Industrie manufacturière                                                              |        15 |              3 |
+| 60       | Information et communication                                                          |        14 |              3 |
+| 96       | Autres activités de services                                                          |        13 |              6 |
+| 93       | Arts, spectacles et activités récréatives                                             |        13 |              8 |
+| 51       | Transports et entreposage                                                             |        12 |              2 |
+| 41       | Construction                                                                          |        12 |              1 |
+| 42       | Construction                                                                          |        11 |              4 |
+| 52       | Transports et entreposage                                                             |        10 |              3 |
+| 25       | Industrie manufacturière                                                              |         9 |              3 |
+| 55       | Hébergement et restauration                                                           |         9 |              4 |
+| 20       | Industrie manufacturière                                                              |         8 |              2 |
+| 80       | Activités de services administratifs et de soutien                                    |         8 |              2 |
+| 29       | Industrie manufacturière                                                              |         8 |              1 |
+| 30       | Industrie manufacturière                                                              |         7 |              3 |
+| 02       | Agriculture, sylviculture et pêche                                                    |         6 |              1 |
+| 14       | Industrie manufacturière                                                              |         5 |              1 |
+| 21       | Industrie manufacturière                                                              |         4 |              2 |
+| 32       | Industrie manufacturière                                                              |         4 |              2 |
+| 36       | Production et distribution d'eau ; assainissement, gestion des déchets et dépollution |         4 |              2 |
+| 99       | Activités extra-territoriales                                                         |         4 |              2 |
+| 38       | Production et distribution d'eau ; assainissement, gestion des déchets et dépollution |         4 |              2 |
+| 91       | Arts, spectacles et activités récréatives                                             |         3 |              2 |
+| 27       | Industrie manufacturière                                                              |         3 |              2 |
+| 81       | Activités de services administratifs et de soutien                                    |         3 |              2 |
+| 92       | Arts, spectacles et activités récréatives                                             |         3 |              1 |
+| 18       | Industrie manufacturière                                                              |         2 |              1 |
+| 23       | Industrie manufacturière                                                              |         2 |              2 |
+| 95       | Autres activités de services                                                          |         1 |              1 |
+| 79       | Activités de services administratifs et de soutien                                    |         1 |              1 |
+| 00       | NULL                                                                                  |         1 |              1 |
+| 01       | Agriculture, sylviculture et pêche                                                    |         1 |              1 |
+| 75       | Activités spécialisées, scientifiques et techniques                                   |         1 |              1 |
+| 19       | Industrie manufacturière                                                              |         1 |              1 |
++----------+---------------------------------------------------------------------------------------+-----------+----------------+

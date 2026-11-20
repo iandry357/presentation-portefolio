@@ -124,3 +124,13 @@ resource "google_bigquery_dataset" "sqli_veille" {
     prevent_destroy = true
   }
 }
+
+resource "google_bigquery_dataset" "beelix_veille" {
+  dataset_id  = "beelix_veille"
+  location    = var.bq_location
+  description = "Beelix — signaux de prospection (offres collectées par secteur) + Google News (POC)"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}

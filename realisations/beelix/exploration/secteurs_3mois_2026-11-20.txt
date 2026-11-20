@@ -1,0 +1,204 @@
++------------------------------------------------------------------------------------------------------+---------------------+------+
+|                                               secteur                                                |   type_entreprise   |  nb  |
++------------------------------------------------------------------------------------------------------+---------------------+------+
+| Activités spécialisées, scientifiques et techniques                                                  | non_identifie       | 2942 |
+| Information et communication                                                                         | esn                 | 1324 |
+| Recrutement assisté par IA                                                                           | non_identifie       | 1163 |
+| Information et communication                                                                         | non_identifie       |  819 |
+| (inconnu)                                                                                            | non_identifie       |  737 |
+| Activités financières et d'assurance                                                                 | non_identifie       |  496 |
+| Activités de services administratifs et de soutien                                                   | non_identifie       |  487 |
+| NON DETERMINE                                                                                        | non_identifie       |  357 |
+| Accompagnement social, insertion professionnelle                                                     | non_identifie       |  356 |
+| (inconnu)                                                                                            | cabinet_recrutement |  331 |
+| Commerce ; réparation d'automobiles et de motocycles                                                 | non_identifie       |  304 |
+| Industrie manufacturière                                                                             | non_identifie       |  213 |
+| Activités immobilières                                                                               | non_identifie       |  171 |
+| Recrutement et placement                                                                             | non_identifie       |  157 |
+| Transports et entreposage                                                                            | non_identifie       |  147 |
+| Recrutement et ressources humaines                                                                   | non_identifie       |  142 |
+| Autres activités de services                                                                         | non_identifie       |  125 |
+| Aéronautique, espace, défense, sécurité, transport                                                   | non_identifie       |   93 |
+| Santé humaine et action sociale                                                                      | non_identifie       |   70 |
+| Enseignement                                                                                         | non_identifie       |   63 |
+| Construction                                                                                         | non_identifie       |   61 |
+| Hébergement et restauration                                                                          | non_identifie       |   56 |
+| Industrie de l'armement et de la défense                                                             | non_identifie       |   53 |
+| Administration publique                                                                              | non_identifie       |   51 |
+| Activités de services administratifs et de soutien                                                   | cabinet_recrutement |   46 |
+| Industrie aéronautique et spatiale                                                                   | non_identifie       |   44 |
+| Arts, spectacles et activités récréatives                                                            | non_identifie       |   41 |
+| Conseil en systèmes et logiciels informatiques                                                       | non_identifie       |   40 |
+| Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné                     | non_identifie       |   37 |
+| Consulting indépendant                                                                               | non_identifie       |   33 |
+| Recrutement et conseil en ressources humaines                                                        | non_identifie       |   28 |
+| Transformation numérique de la défense                                                               | non_identifie       |   28 |
+| Location-entretien de linge plat, vêtements de travail et équipements d'hygiène et de bien-être      | non_identifie       |   27 |
+| Conseil en ingénierie technologique et IA                                                            | non_identifie       |   27 |
+| Transformation digitale, IT, Finance de marché, Cybersécurité, Digital, E-commerce et DATA           | non_identifie       |   24 |
+| Défense et sécurité                                                                                  | non_identifie       |   24 |
+| Ingénierie et conseil en innovation                                                                  | non_identifie       |   22 |
+| Industrie aérospatiale et de défense                                                                 | non_identifie       |   22 |
+| Conseil en transformation numérique                                                                  | non_identifie       |   20 |
+| Intelligence artificielle                                                                            | non_identifie       |   19 |
+| Conseil en Intelligence Artificielle, Cybersécurité et Transformation digitale                       | non_identifie       |   18 |
+| Formation continue et recherche scientifique                                                         | non_identifie       |   18 |
+| Activités des sièges sociaux                                                                         | non_identifie       |   18 |
+| Consulting informatique et développement logiciel                                                    | non_identifie       |   17 |
+| Banque et services financiers                                                                        | non_identifie       |   17 |
+| Édition de journaux                                                                                  | non_identifie       |   16 |
+| Conseil en ingénierie et services informatiques                                                      | non_identifie       |   16 |
+| Santé privée                                                                                         | non_identifie       |   16 |
+| Recrutement                                                                                          | non_identifie       |   15 |
+| Recrutement et placement pour personnes handicapées                                                  | non_identifie       |   13 |
+| Solutions de haut débit Internet, audio-vidéo et énergie                                             | non_identifie       |   13 |
+| Grande distribution, distribution automobile, activités industrielles                                | non_identifie       |   13 |
+| Distribution de matériel électrique                                                                  | non_identifie       |   12 |
+| Éducation supérieure privée                                                                          | non_identifie       |   12 |
+| Bijouterie accessible                                                                                | non_identifie       |   12 |
+| Programmation informatique                                                                           | non_identifie       |   12 |
+| Hôtellerie et tourisme                                                                               | non_identifie       |   12 |
+| Recrutement et placement de main-d'œuvre                                                             | non_identifie       |   11 |
+| Field marketing                                                                                      | non_identifie       |   11 |
+| Assurance                                                                                            | non_identifie       |   10 |
+| Plateforme de recrutement en ligne                                                                   | non_identifie       |   10 |
+| Services de gestion de documents professionnels                                                      | non_identifie       |   10 |
+| Distribution de produits électriques                                                                 | non_identifie       |   10 |
+| Gestion de fonds                                                                                     | non_identifie       |    9 |
+| Vente d'électricité et de gaz naturel                                                                | non_identifie       |    9 |
+| Marketing opérationnel et services commerciaux                                                       | non_identifie       |    9 |
+| Ingénierie d'intelligence artificielle pour entreprises                                              | non_identifie       |    9 |
+| Développement d'intelligence artificielle                                                            | non_identifie       |    9 |
+| Pharmacie et fabrication de vaccins                                                                  | non_identifie       |    9 |
+| Fabrication et commercialisation de matériaux de construction                                        | non_identifie       |    9 |
+| Consulting en transformation et durabilité                                                           | non_identifie       |    9 |
+| Conseil pour les affaires et autres conseils de gestion                                              | non_identifie       |    8 |
+| Production et distribution d'eau ; assainissement, gestion des déchets et dépollution                | non_identifie       |    8 |
+| Recherche et développement en sécurité artificielle                                                  | non_identifie       |    8 |
+| Défense & Sécurité, Aéronautique & Spatial, Cyber & Digital                                          | non_identifie       |    8 |
+| Formation en ligne pour les professionnels                                                           | non_identifie       |    8 |
+| Technologie et messagerie visuelle                                                                   | non_identifie       |    8 |
+| Recrutement de travailleurs handicapés                                                               | non_identifie       |    8 |
+| Immobilier et services immobiliers                                                                   | non_identifie       |    8 |
+| Recrutement et formation pour les personnes en situation de handicap                                 | non_identifie       |    7 |
+| Recrutement IT et Digital                                                                            | non_identifie       |    7 |
+| Assurance immobilière et caution                                                                     | non_identifie       |    7 |
+| Ingénierie informatique et services numériques                                                       | non_identifie       |    7 |
+| Aéronautique et défense                                                                              | non_identifie       |    7 |
+| Agriculture, sylviculture et pêche                                                                   | non_identifie       |    7 |
+| Publicité, communication et marketing numérique pour les entreprises locales                         | non_identifie       |    7 |
+| E-commerce et services associés                                                                      | non_identifie       |    7 |
+| Consulting en affaires et gestion                                                                    | non_identifie       |    7 |
+| Conseil en Data, DevOps et Support Utilisateurs                                                      | non_identifie       |    6 |
+| Mode, Maroquinerie, Joaillerie, Parfumerie et Cosmétiques                                            | non_identifie       |    6 |
+| Thérapie en ligne                                                                                    | non_identifie       |    6 |
+| Recrutement temporaire, assistance aéroportuaire, ingénierie et maintenance                          | non_identifie       |    6 |
+| Développement intégré de l'énergie et des infrastructures                                            | non_identifie       |    6 |
+| Recrutement et sourcing                                                                              | non_identifie       |    6 |
+| Industrie pharmaceutique                                                                             | non_identifie       |    6 |
+| Maintenance et services informatiques                                                                | non_identifie       |    6 |
+| Télécommunications                                                                                   | non_identifie       |    6 |
+| Recrutement en ligne                                                                                 | non_identifie       |    6 |
+| Consulting et services professionnels                                                                | non_identifie       |    6 |
+| Recrutement et conseil pour les fonds d'investissement                                               | non_identifie       |    6 |
+| Recrutement IT                                                                                       | non_identifie       |    6 |
+| Conseil et gestion de grands projets industriels                                                     | non_identifie       |    6 |
+| Industrie du luxe                                                                                    | non_identifie       |    5 |
+| Éducation technique en intelligence artificielle                                                     | non_identifie       |    5 |
+| Conseil en management et en technologie                                                              | non_identifie       |    5 |
+| Études de marché et sondages d'opinion                                                               | non_identifie       |    5 |
+| Investissement et énergie renouvelable                                                               | non_identifie       |    5 |
+| Marketing et gestion de l'animation commerciale                                                      | non_identifie       |    5 |
+| Banque et gestion de patrimoine                                                                      | non_identifie       |    5 |
+| E-commerce et technologie pour le sport                                                              | non_identifie       |    5 |
+| Développement et édition de jeux vidéo                                                               | non_identifie       |    5 |
+| Transport ferroviaire                                                                                | non_identifie       |    5 |
+| Radio et divertissement                                                                              | non_identifie       |    5 |
+| Gestion de flux numériques pour les professionnels de santé et de l'assurance                        | non_identifie       |    5 |
+| Services de conseil et intégration IT                                                                | non_identifie       |    5 |
+| Services de collecte et d'étiquetage de données pour l'IA                                            | non_identifie       |    5 |
+| Activités extra-territoriales                                                                        | non_identifie       |    4 |
+| Consulting informatique, NTIC, sécurité électronique et ingénierie logicielle                        | non_identifie       |    4 |
+| Distribution de matériel sportif                                                                     | non_identifie       |    4 |
+| Consulting informatique et transformation digitale                                                   | non_identifie       |    4 |
+| Commerce électronique de vente en ligne                                                              | non_identifie       |    4 |
+| Recrutement et marketing de la main-d'oeuvre                                                         | non_identifie       |    4 |
+| Sélection et comparaison de logements de voyage                                                      | non_identifie       |    4 |
+| Conception et déploiement de solutions AI pour l'automatisation de processus et l'accélération de dé | non_identifie       |    4 |
+| Conseil en gestion et services de management                                                         | non_identifie       |    4 |
+| Recrutement et placement de personnel                                                                | non_identifie       |    4 |
+| Industrie de la défense                                                                              | non_identifie       |    4 |
+| Transport public                                                                                     | non_identifie       |    4 |
+| Ingénierie mécanique                                                                                 | non_identifie       |    4 |
+| Édition de logiciels de santé                                                                        | non_identifie       |    4 |
+| Cuisine panasiatique, distribution et voyages culinaires                                             | non_identifie       |    4 |
+| Santé psychiatrique et neurologique                                                                  | non_identifie       |    4 |
+| Assurance automobile                                                                                 | non_identifie       |    4 |
+| Conseil et prestations de services aux entreprises dans le domaine informatique, conception et comme | non_identifie       |    4 |
+| Ingénierie nucléaire et gestion de projets d'infrastructures critiques                               | non_identifie       |    4 |
+| Industrie des drones                                                                                 | non_identifie       |    4 |
+| Consulting en Business Intelligence (BI)                                                             | non_identifie       |    4 |
+| Gestion financière et comptable, développement et édition de logiciels                               | non_identifie       |    3 |
+| Transport partagé                                                                                    | non_identifie       |    3 |
+| Consulting et services informatiques                                                                 | non_identifie       |    3 |
+| Consulting en Data et Marketing relationnel                                                          | non_identifie       |    3 |
+| Services postaux, banque, logistique, presse                                                         | non_identifie       |    3 |
+| Electronic data processing (EDP) services                                                            | non_identifie       |    3 |
+| Activités des sociétés holding                                                                       | non_identifie       |    3 |
+| Consulting en intelligence artificielle                                                              | non_identifie       |    3 |
+| Assurance et bancaire                                                                                | non_identifie       |    3 |
+| Recrutement dans les secteurs de l'aéronautique, de la métallurgie, de l'ingénierie et des technolog | non_identifie       |    3 |
+| Recrutement et placement de main-d'oeuvre technique                                                  | non_identifie       |    3 |
+| Conception, édition, développement et exploitation d'algorithmes d'intelligence artificielle, collec | non_identifie       |    3 |
+| Communauté d'utilisateurs d'applications Oracle                                                      | non_identifie       |    3 |
+| Services funéraires                                                                                  | non_identifie       |    3 |
+| Collecte et annotation de données pour l'entraînement d'IA                                           | non_identifie       |    3 |
+| Vente immobilière                                                                                    | non_identifie       |    3 |
+| Transformation numérique, Google Cloud                                                               | non_identifie       |    3 |
+| Recherche et développement en intelligence artificielle                                              | non_identifie       |    3 |
+| Commerce électronique de ventes événementielles                                                      | non_identifie       |    3 |
+| Logistique et transport                                                                              | non_identifie       |    3 |
+| Production et distribution de vins et spiritueux                                                     | non_identifie       |    3 |
+| Distribution BtoB d'équipements et fournitures professionnels                                        | non_identifie       |    3 |
+| Édition de logiciels pour commerce en ligne                                                          | non_identifie       |    3 |
+| Gestion de connaissances basée sur l'IA                                                              | non_identifie       |    3 |
+| Biologie médicale et analyses                                                                        | non_identifie       |    3 |
+| Développement et conseil en logiciels et informatique                                                | non_identifie       |    3 |
+| Consulting en Data & AI                                                                              | non_identifie       |    3 |
+| Informatique de santé, analyse et interprétation de données génomiques                               | non_identifie       |    3 |
+| Gestion de patrimoine et solutions d'investissement                                                  | non_identifie       |    3 |
+| Investissement en capital-risque                                                                     | non_identifie       |    3 |
+| Commerce de détail spécialisé divers                                                                 | non_identifie       |    3 |
+| Conseil en technologie et développement de produits digitaux                                         | non_identifie       |    3 |
+| Santé informatique et radiologie                                                                     | non_identifie       |    2 |
+| Conseil en transformation digitale, data et IA                                                       | non_identifie       |    2 |
+| Services en logiciels libres                                                                         | non_identifie       |    2 |
+| Assurance et traitement automatisé de données                                                        | non_identifie       |    2 |
+| Industrie pétrolière et gazière                                                                      | non_identifie       |    2 |
+| Consulting en transformation numérique et AI                                                         | non_identifie       |    2 |
+| Exploitation et développement d'aéroports                                                            | non_identifie       |    2 |
+| Banque et finance                                                                                    | non_identifie       |    2 |
+| Crédit à la consommation                                                                             | non_identifie       |    2 |
+| Recrutement de talents commerciaux                                                                   | non_identifie       |    2 |
+| Santé universitaire et hospitalière                                                                  | non_identifie       |    2 |
+| Solutions technologiques                                                                             | non_identifie       |    2 |
+| Pharmaceutique et dermo-cosmétique                                                                   | non_identifie       |    2 |
+| Conseil, audit et expertise juridique et fiscale                                                     | non_identifie       |    2 |
+| Activités des agences de publicité                                                                   | non_identifie       |    2 |
+| Éducation supérieure spécialisée dans le sport business                                              | non_identifie       |    2 |
+| Ingénierie et construction d'ouvrages d'art et d'infrastructures                                     | non_identifie       |    2 |
+| Santé numérique                                                                                      | non_identifie       |    2 |
+| Édition de logiciels d'intelligence artificielle                                                     | non_identifie       |    2 |
+| Formation et accompagnement des entreprises dans le numérique                                        | non_identifie       |    2 |
+| Édition de logiciels CRM                                                                             | non_identifie       |    2 |
+| Recrutement Data, AI & Product                                                                       | non_identifie       |    2 |
+| Communication et marketing                                                                           | non_identifie       |    2 |
+| Travaux d'installation électrique                                                                    | non_identifie       |    2 |
+| Digital et Technologie                                                                               | non_identifie       |    2 |
+| Restauration collective et solutions de restauration d'entreprise                                    | non_identifie       |    2 |
+| Voyage et tourisme                                                                                   | non_identifie       |    2 |
+| Édition de logiciels open source                                                                     | non_identifie       |    2 |
+| Développement de plateformes de collecte de dettes utilisant l'intelligence artificielle             | non_identifie       |    2 |
+| Services énergétiques                                                                                | non_identifie       |    2 |
+| Transport aérien                                                                                     | non_identifie       |    2 |
++------------------------------------------------------------------------------------------------------+---------------------+------+
