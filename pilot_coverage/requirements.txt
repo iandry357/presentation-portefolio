@@ -1,0 +1,4 @@
+requests>=2.32
+beautifulsoup4>=4.12
+google-cloud-bigquery>=3.25
+ddgs>=9.0
