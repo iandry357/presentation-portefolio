@@ -181,3 +181,7 @@ gcp/immobilier/infra/.terraform.lock.hcl
 gcp/immobilier/infra/*.tfstate
 gcp/immobilier/infra/*.tfstate.*
 gcp/immobilier/infra/tfplan
+
+# --- POC SQLI / Wavestone ---
+realisations/sqli/ml/results/
+realisations/wavestone/ml/results/
