@@ -1,0 +1,15 @@
++----------------------+-------+----------------+----------------+--------------+
+|        source        |  nb   | desc_1000_plus | desc_moins_200 | longueur_moy |
++----------------------+-------+----------------+----------------+--------------+
+| email_jobijoba       | 11488 |              0 |          11487 |          172 |
+| email_hellowork      |  6551 |              0 |           6551 |         NULL |
+| email_indeed         |  5979 |              0 |           5979 |         NULL |
+| france_travail_api   |  5526 |           5270 |              8 |         2961 |
+| email_talent         |  3850 |              0 |           3850 |         NULL |
+| email_linkedin       |  1411 |              0 |           1411 |         NULL |
+| email_france_travail |  1282 |              0 |              0 |          281 |
+| email_apec           |  1279 |              0 |           1279 |         NULL |
+| email_freework       |   653 |              0 |            653 |         NULL |
+| email_jobleads       |   303 |              0 |            303 |         NULL |
+| email_meteojob       |   303 |              0 |            303 |         NULL |
++----------------------+-------+----------------+----------------+--------------+

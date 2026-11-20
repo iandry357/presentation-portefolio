@@ -1,0 +1,18 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    image: beelix-pipeline
+    container_name: beelix-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ../../sg/sg-assurances/gcp_sa_sg.json:/app/gcp_sa_sg.json:ro
+    networks:
+      - portefolio-network
+    restart: "no"
+
+networks:
+  portefolio-network:
+    external: true
