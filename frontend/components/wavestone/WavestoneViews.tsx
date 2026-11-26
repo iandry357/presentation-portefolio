@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import {
-  fetchWavestoneNews, fetchWavestoneRag, fetchWavestoneTopicModeling, fetchWavestoneRecrutement,
-  NewsItem, RagResponse, TopicModelingResponse, RecrutementResponse, PosteItem,
+  fetchWavestoneNews, fetchWavestoneRag, fetchWavestoneTopicModeling, fetchWavestoneRecrutement, fetchWavestoneCasClients,
+  NewsItem, RagResponse, TopicModelingResponse, RecrutementResponse, PosteItem, CasClientsResponse,
 } from '@/lib/wavestoneApi';
 
 // ─────────────────────────────────────────
@@ -307,7 +307,10 @@ export function RagView() {
 // Thèmes (topic modeling LDA par langue)
 // ─────────────────────────────────────────
 
-const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
+const COLORS = [
+  '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981',
+  '#06b6d4', '#ef4444', '#84cc16', '#6366f1', '#f97316',
+];
 
 export function TopicView() {
   const [data, setData] = useState<TopicModelingResponse | null>(null);
@@ -330,7 +333,7 @@ export function TopicView() {
       ...t,
       docs: data.docs
         .filter(d => d.dominant_topic === t.topic_id)
-        .sort((a, b) => b.confidence - a.confidence),
+        .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? '') || b.confidence - a.confidence),
     }));
   const nbDocs = topics.reduce((n, t) => n + t.docs.length, 0);
 
@@ -338,8 +341,8 @@ export function TopicView() {
     <div className="space-y-6 w-full max-w-full overflow-hidden">
       <div>
         <p className="text-sm text-gray-500 mb-4">
-          Thèmes dégagés automatiquement (LDA, un modèle par langue) des publications, cas clients et communiqués de Wavestone ;
-          libellés et résumés générés par un LLM à partir des titres.
+          Thèmes dégagés automatiquement (LDA, un modèle par langue) des communiqués, publications et articles de presse sur
+          Wavestone, hors cas clients (onglet « Cas clients ») ; libellés et résumés générés par un LLM à partir des titres.
         </p>
         <Puces
           options={[{ id: 'fr', label: 'Français' }, { id: 'en', label: 'English' }]}
@@ -399,6 +402,110 @@ export function TopicView() {
                 className="px-4 py-2 text-xs text-blue-600 hover:underline text-left w-full"
               >
                 {expanded[topic.topic_id] ? '− Réduire' : `+ ${topic.docs.length - 5} autres documents`}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────
+// Cas clients (secteur × type de mission)
+// ─────────────────────────────────────────
+
+const AUTRE = 'Autre';
+
+export function CasClientsView() {
+  const [data, setData] = useState<CasClientsResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [langue, setLangue] = useState<string | null>('fr');
+  const [type, setType] = useState<string | null>(null);
+  const [ouverts, setOuverts] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    fetchWavestoneCasClients().then(setData).catch(e => setError(messageErreur(e)));
+  }, []);
+
+  if (error) return <Erreur message={error} />;
+  if (!data) return <Chargement />;
+
+  const cas = data.cas.filter(c => c.lang === langue && (!type || c.types_mission.includes(type)));
+  const typesPresents = data.types_mission.filter(t => data.cas.some(c => c.lang === langue && c.types_mission.includes(t)));
+  const parSecteur = data.secteurs
+    .map(s => ({
+      secteur: s,
+      cas: cas.filter(c => c.secteur === s).sort((a, b) => (b.date ?? '').localeCompare(a.date ?? '')),
+    }))
+    .filter(g => g.cas.length > 0)
+    .sort((a, b) => (a.secteur === AUTRE ? 1 : b.secteur === AUTRE ? -1 : b.cas.length - a.cas.length));
+  const max = parSecteur.length ? Math.max(...parSecteur.map(g => g.cas.length)) : 0;
+
+  return (
+    <div className="space-y-6 w-full max-w-full overflow-hidden">
+      <div>
+        <p className="text-sm text-gray-500 mb-4">
+          Cas clients publiés par Wavestone, rangés par secteur du client et type de mission. Les catégories ne sont pas fixées
+          à la main : un LLM décrit librement chaque cas à partir de son texte, puis regroupe ces descriptions en catégories.
+        </p>
+        <Puces
+          options={[{ id: 'fr', label: 'Français' }, { id: 'en', label: 'English' }]}
+          valeur={langue}
+          onChange={setLangue}
+        />
+        <Puces
+          options={[{ id: null, label: 'Tous les types de mission' }, ...typesPresents.map(t => ({ id: t, label: t }))]}
+          valeur={type}
+          onChange={setType}
+        />
+        <p className="text-xs text-gray-400">{cas.length} cas clients → {parSecteur.length} secteurs</p>
+      </div>
+
+      <div className="border rounded-lg bg-white p-4 space-y-3">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Secteurs</p>
+        {parSecteur.map(g => (
+          <div key={g.secteur} className="grid grid-cols-[minmax(0,220px)_1fr_40px] gap-3 items-center text-sm">
+            <span className="text-gray-700 truncate">{g.secteur}</span>
+            <Barre valeur={g.cas.length} max={max} />
+            <span className="text-right text-xs text-gray-500">{g.cas.length}</span>
+          </div>
+        ))}
+      </div>
+
+      {parSecteur.map((g, i) => (
+        <div key={g.secteur} className="bg-white border rounded-lg overflow-hidden">
+          <div
+            className="flex items-center gap-3 px-4 py-3 border-b border-l-4"
+            style={{ borderLeftColor: COLORS[i % COLORS.length] }}
+          >
+            <p className="font-semibold text-gray-900 text-sm">{g.secteur}</p>
+            <p className="text-xs text-gray-400">{g.cas.length} cas</p>
+          </div>
+          <div className="divide-y">
+            {g.cas.slice(0, ouverts[g.secteur] ? g.cas.length : 5).map(c => (
+              <div key={c.id ?? c.title} className="px-4 py-3">
+                <div className="flex flex-wrap items-center gap-2 mb-1 text-xs text-gray-400">
+                  <span>{formatDate(c.date)}</span>
+                  {c.client && <span>· {c.client}</span>}
+                  {c.types_mission.map(t => <Badge key={t} texte={t} classe="bg-gray-100 text-gray-700" />)}
+                </div>
+                {c.url ? (
+                  <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">
+                    {c.title}
+                  </a>
+                ) : (
+                  <p className="text-sm text-gray-800">{c.title}</p>
+                )}
+                {c.resume && <p className="text-xs text-gray-600 mt-1 leading-relaxed">{c.resume}</p>}
+              </div>
+            ))}
+            {g.cas.length > 5 && (
+              <button
+                onClick={() => setOuverts(o => ({ ...o, [g.secteur]: !o[g.secteur] }))}
+                className="px-4 py-2 text-xs text-blue-600 hover:underline text-left w-full"
+              >
+                {ouverts[g.secteur] ? '− Réduire' : `+ ${g.cas.length - 5} autres cas`}
               </button>
             )}
           </div>
