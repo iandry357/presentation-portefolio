@@ -107,6 +107,30 @@ class TopicModelingResponse(BaseModel):
 
 
 # ─────────────────────────────────────────
+# Cas clients
+# ─────────────────────────────────────────
+
+class CasClient(BaseModel):
+    id: Optional[str]
+    title: Optional[str]
+    date: Optional[str]
+    url: Optional[str]
+    lang: Optional[str] = None
+    secteur: str
+    types_mission: List[str]
+    client: Optional[str] = None
+    resume: Optional[str] = None
+
+
+class CasClientsResponse(BaseModel):
+    genere_le: Optional[str] = None
+    total: int
+    secteurs: List[str]
+    types_mission: List[str]
+    cas: List[CasClient]
+
+
+# ─────────────────────────────────────────
 # Recrutement
 # ─────────────────────────────────────────
 

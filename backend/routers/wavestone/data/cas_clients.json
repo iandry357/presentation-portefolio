@@ -1,0 +1,2346 @@
+{
+  "genere_le": "2026-11-26T00:49:47",
+  "total": 124,
+  "secteurs": [
+    "Assurance",
+    "Banque et services financiers",
+    "Énergie et utilities",
+    "Santé et pharmacie",
+    "Transport et logistique",
+    "Industrie et technologie",
+    "Secteur public",
+    "Distribution et services",
+    "Environnement et développement durable",
+    "Autre"
+  ],
+  "types_mission": [
+    "Transformation digitale",
+    "Optimisation des processus",
+    "Gouvernance et conformité",
+    "Modernisation technologique",
+    "Expérience client",
+    "Gestion du changement",
+    "Data & IA",
+    "Stratégie et organisation",
+    "Sécurité et résilience",
+    "Durabilité et RSE",
+    "Autre"
+  ],
+  "cas": [
+    {
+      "id": "wavestone_site_1e0eb05e0a89f837_chunk_0",
+      "title": "Comment la Croix-Rouge française prépare la transition solaire de 328 sites avec Wavestone",
+      "date": "2026-10-29",
+      "url": "https://www.wavestone.com/fr/clients-story/client-story-croix-rouge-francaise/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "secteur public",
+      "missions_libres": [
+        "transition écologique",
+        "optimisation énergétique"
+      ],
+      "client": "Croix-Rouge française",
+      "resume": "Wavestone a modélisé le potentiel solaire de 328 sites pour réduire de 1 200 tonnes les émissions de CO₂ et maîtriser les coûts énergétiques de la Croix-Rouge."
+    },
+    {
+      "id": "wavestone_site_3db6655f1c2125cb_chunk_0",
+      "title": "How Wavestone helped EPE harness ESG Data with AI",
+      "date": "2026-10-08",
+      "url": "https://www.wavestone.com/en/clients-story/how-wavestone-helped-epe-harness-esg-data-with-ai/",
+      "lang": "en",
+      "secteur": "Environnement et développement durable",
+      "types_mission": [
+        "Data & IA"
+      ],
+      "secteur_libre": "environnement et développement durable",
+      "missions_libres": [
+        "développement d'une plateforme ia",
+        "analyse de données esg"
+      ],
+      "client": "EPE (Entreprises pour l'Environnement)",
+      "resume": "Wavestone a co-développé avec EPE une plateforme IA analysant des milliers de pages de rapports ESG pour en extraire des insights actionnables sur l'eau et la résilience des entreprises."
+    },
+    {
+      "id": "wavestone_site_d8fa1c01f5293c25_chunk_0",
+      "title": "Elvetino modernises warehouse logistics with an integrated system landscape",
+      "date": "2026-10-08",
+      "url": "https://www.wavestone.com/en/clients-story/elvetino-modernises-warehouse-logistics-with-an-integrated-system-landscape/",
+      "lang": "en",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "logistique et transport",
+      "missions_libres": [
+        "modernisation de la logistique",
+        "intégration de systèmes"
+      ],
+      "client": "Elvetino AG",
+      "resume": "Wavestone a piloté la transformation du système de gestion d'entrepôt d'Elvetino, remplaçant l'ancien outil par une solution moderne et intégrée pour améliorer transparence et efficacité sans perturber les opérations."
+    },
+    {
+      "id": "wavestone_site_fa7367388989f7fb_chunk_0",
+      "title": "Wavestone et EPE : exploiter les données ESG grâce à l'IA",
+      "date": "2026-10-08",
+      "url": "https://www.wavestone.com/fr/clients-story/wavestone-et-epe-exploiter-les-donnees-esg-grace-a-lia/",
+      "lang": "fr",
+      "secteur": "Autre",
+      "types_mission": [
+        "Data & IA"
+      ],
+      "secteur_libre": "conseil en stratégie et transformation",
+      "missions_libres": [
+        "développement de solution ia",
+        "analyse de données esg"
+      ],
+      "client": "Entreprises pour l'Environnement (EPE)",
+      "resume": "Wavestone a co-construit avec EPE une plateforme d'analyse ESG par IA pour extraire des connaissances exploitables de milliers de pages de rapports, renforçant la résilience des entreprises face aux enjeux de l'eau."
+    },
+    {
+      "id": "wavestone_site_7a1014a10dfbd8b3_chunk_0",
+      "title": "Elvetino modernise sa logistique d’entrepôt grâce à un écosystème de systèmes intégré",
+      "date": "2026-10-08",
+      "url": "https://www.wavestone.com/fr/clients-story/elvetino-modernise-sa-logistique-de-stockage-grace-a-un-systeme-integre/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "modernisation de la supply chain",
+        "intégration de systèmes"
+      ],
+      "client": "Elvetino AG",
+      "resume": "Wavestone a piloté la transformation de la logistique d'Elvetino en remplaçant son système de gestion d'entrepôt par une solution moderne et intégrée, améliorant transparence et efficacité sans interruption des opérations."
+    },
+    {
+      "id": "wavestone_site_ce08142266612893_chunk_0",
+      "title": "How a major U.S. insurer is scaling AI across the software development lifecycle",
+      "date": "2026-10-05",
+      "url": "https://www.wavestone.com/en/clients-story/major-us-insurer-scaling-ai-software-development/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Data & IA"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "transformation ia dans le sdlc",
+        "évaluation d'outils ia"
+      ],
+      "client": "grand assureur américain",
+      "resume": "Wavestone a accompagné un assureur américain dans le déploiement d'IA à grande échelle dans son cycle de développement logiciel, validant des outils via un pilote de 12 semaines et structurant une adoption durable avec des gains mesurables."
+    },
+    {
+      "id": "wavestone_site_2e2c30dfc6cfc674_chunk_0",
+      "title": "Comment un grand assureur américain déploie l’IA à grande échelle tout au long du cycle de développement logiciel",
+      "date": "2026-10-05",
+      "url": "https://www.wavestone.com/fr/clients-story/assureur-americain-deploie-ia-cycle-developpement-logiciel/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Data & IA",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "déploiement d'ia à grande échelle",
+        "transformation du cycle de développement"
+      ],
+      "client": "grand assureur américain",
+      "resume": "Wavestone a accompagné un grand assureur américain dans le déploiement de l'IA tout au long du cycle de développement logiciel, en structurant une transformation mesurable et alignée sur les objectifs métier."
+    },
+    {
+      "id": "wavestone_site_50d22a1f7c9648a5_chunk_0",
+      "title": "Comment AI Builders réinvente le conseil grâce à Claude",
+      "date": "2026-09-30",
+      "url": "https://www.wavestone.com/fr/clients-story/ai-builders-reinvente-conseil-claude/",
+      "lang": "fr",
+      "secteur": "Autre",
+      "types_mission": [
+        "Transformation digitale",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "conseil en stratégie",
+      "missions_libres": [
+        "transformation digitale",
+        "optimisation des processus"
+      ],
+      "client": "AI Builders",
+      "resume": "Wavestone a aidé AI Builders à intégrer l'IA générative pour accélérer les analyses et renforcer la qualité des recommandations stratégiques avec une gouvernance éthique."
+    },
+    {
+      "id": "wavestone_site_b13a05fda9586b81_chunk_0",
+      "title": "Comment Sanofi et Wavestone ont accéléré les revues d’architecture cybersécurité avec Claude Code",
+      "date": "2026-09-29",
+      "url": "https://www.wavestone.com/fr/clients-story/sanofi-cyber-claude/",
+      "lang": "fr",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Optimisation des processus",
+        "Data & IA"
+      ],
+      "secteur_libre": "industrie pharmaceutique",
+      "missions_libres": [
+        "optimisation des processus",
+        "intégration de l'ia"
+      ],
+      "client": "Sanofi",
+      "resume": "Wavestone a développé un agent IA pour automatiser les revues de cybersécurité chez Sanofi, réduisant de 70 % le temps de traitement tout en améliorant la cohérence des évaluations."
+    },
+    {
+      "id": "wavestone_site_605ff023ae73416f_chunk_0",
+      "title": "How Sanofi and Wavestone used Claude Code to build a Cyber by Design AI assistant",
+      "date": "2026-09-29",
+      "url": "https://www.wavestone.com/en/clients-story/sanofi-cyber-by-design-ai-assistant-claude-code/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Data & IA",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "santé et pharmacie",
+      "missions_libres": [
+        "développement d'assistant ia",
+        "intégration de cybersécurité"
+      ],
+      "client": "Sanofi",
+      "resume": "Wavestone a conçu un assistant IA pour automatiser l'analyse des risques cyber des projets Sanofi, accélérant les revues et améliorant la cohérence des évaluations."
+    },
+    {
+      "id": "wavestone_site_1835025fcf331c30_chunk_0",
+      "title": "How a global technology company identified $40M in savings through IT sourcing optimization",
+      "date": "2026-09-22",
+      "url": "https://www.wavestone.com/en/clients-story/global-technology-company-it-sourcing-optimization/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Expérience client"
+      ],
+      "secteur_libre": "technologie",
+      "missions_libres": [
+        "optimisation des achats it",
+        "transformation de l'expérience client"
+      ],
+      "client": "entreprise technologique mondiale",
+      "resume": "Wavestone a optimisé l'écosystème de prestataires IT du client, identifiant 40M$ d'économies tout en alignant les services sur l'expérience client."
+    },
+    {
+      "id": "wavestone_site_d06718938e14839c_chunk_0",
+      "title": "Comment un groupe technologique mondial a identifié 40 M$ d’économies grâce à l’optimisation de son sourcing IT",
+      "date": "2026-09-22",
+      "url": "https://www.wavestone.com/fr/clients-story/groupe-technologique-mondial-optimisation-sourcing-it/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Expérience client"
+      ],
+      "secteur_libre": "technologie",
+      "missions_libres": [
+        "optimisation du sourcing it",
+        "amélioration de l'expérience client"
+      ],
+      "client": "groupe technologique mondial",
+      "resume": "Wavestone a évalué et optimisé l'écosystème de sourcing IT du client, identifiant 40 M$ d'économies tout en alignant les prestataires sur l'expérience client."
+    },
+    {
+      "id": "wavestone_site_62c1f1ea7a582179_chunk_0",
+      "title": "Data protection at scale: reducing risk across a global insurer",
+      "date": "2026-09-09",
+      "url": "https://www.wavestone.com/en/clients-story/data-protection-insurance/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Gouvernance et conformité"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "protection des données sensibles",
+        "gouvernance des risques"
+      ],
+      "client": "grand assureur international",
+      "resume": "Wavestone a automatisé la détection et la protection des données sensibles pour un assureur global, réduisant les risques et améliorant la visibilité et le contrôle sur son patrimoine data."
+    },
+    {
+      "id": "wavestone_site_379d9a9bdd514215_chunk_0",
+      "title": "Protection des données à grande échelle : réduire les risques à l’échelle d’un assureur mondial",
+      "date": "2026-09-09",
+      "url": "https://www.wavestone.com/fr/clients-story/protection-donnees-assurance/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Gouvernance et conformité"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "protection des données",
+        "gouvernance des risques"
+      ],
+      "client": "grand assureur mondial",
+      "resume": "Wavestone a automatisé la détection et la protection des données sensibles pour un assureur mondial, réduisant les risques et améliorant la conformité grâce à une gouvernance unifiée et des outils DSPM."
+    },
+    {
+      "id": "wavestone_site_4e138717dbe3e3c0_chunk_0",
+      "title": "IA agentique et migration d’applications : le succès d’une grande banque",
+      "date": "2026-08-26",
+      "url": "https://www.wavestone.com/fr/clients-story/ia-agentique-migration-dapplications-banque/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "banque et services financiers",
+      "missions_libres": [
+        "modernisation technologique",
+        "migration d'applications"
+      ],
+      "client": "grande banque internationale",
+      "resume": "Wavestone a accéléré la modernisation des applications bancaires en intégrant l'IA agentique pour automatiser et simplifier les migrations, réduisant les efforts manuels et améliorant l'efficacité."
+    },
+    {
+      "id": "wavestone_site_dea87651146de8e8_chunk_0",
+      "title": "Application migration: What a leading bank achieved with agentic AI",
+      "date": "2026-08-26",
+      "url": "https://www.wavestone.com/en/clients-story/application-migrations-with-agentic-ai-banking/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "modernisation technologique",
+        "migration d'applications"
+      ],
+      "client": "grande banque internationale",
+      "resume": "Wavestone a accéléré la migration d'applications legacy vers un nouveau socle technologique en combinant IA et expertise humaine, réduisant les délais et les coûts tout en garantissant qualité et sécurité."
+    },
+    {
+      "id": "wavestone_site_53574604aaef06c4_chunk_0",
+      "title": "Comment une grande banque Européenne réinvente la gestion des incidents IT grâce à l’IA",
+      "date": "2026-07-01",
+      "url": "https://www.wavestone.com/fr/clients-story/comment-banque-reinvente-gestion-incidents-it-gia/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Data & IA",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "déploiement d'ia agentique",
+        "optimisation de la gestion des incidents"
+      ],
+      "client": "grande banque européenne",
+      "resume": "Wavestone a conçu une solution d'IA agentique pour automatiser la détection et la résolution des incidents IT, réduisant de 80 % le temps de diagnostic."
+    },
+    {
+      "id": "wavestone_site_f7913a81f35272d6_chunk_0",
+      "title": "AI at VINCI: from field deployment to scaling up",
+      "date": "2026-07-01",
+      "url": "https://www.wavestone.com/en/clients-story/scaling-ai-vinci-leonard/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Data & IA",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "construction et infrastructures",
+      "missions_libres": [
+        "déploiement d'ia",
+        "scaling de solutions"
+      ],
+      "client": "VINCI",
+      "resume": "Wavestone a accompagné VINCI dans l'identification et la structuration de cas d'usage IA à fort potentiel, en ciblant des gains mesurables et une montée en échelle progressive."
+    },
+    {
+      "id": "wavestone_site_adfbbfbcb89acc08",
+      "title": "How a leading bank is reinventing IT incident management using AI",
+      "date": "2026-07-01",
+      "url": "https://www.wavestone.com/en/clients-story/leading-bank-reinventing-it-incident-management-using-ai/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Data & IA",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "déploiement d'ia agentique",
+        "optimisation de la gestion des incidents"
+      ],
+      "client": "une grande banque européenne",
+      "resume": "Wavestone a conçu et déployé une solution d'IA agentique pour automatiser le diagnostic des incidents IT, réduisant le temps de résolution de 80% et posant les bases d'une automatisation future."
+    },
+    {
+      "id": "wavestone_site_feef721cef9fb2a0",
+      "title": "A global energy leader transforms a liquidity crisis into rapid recovery",
+      "date": "2026-06-19",
+      "url": "https://www.wavestone.com/en/clients-story/a-global-energy-leader-transforms-a-liquidity-crisis/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "gestion de crise financière",
+        "optimisation des processus financiers"
+      ],
+      "client": "leader mondial de l'énergie",
+      "resume": "Wavestone a rétabli la trésorerie en 90 jours en relançant l'invoicing et en modernisant le processus order-to-cash, générant 178M$ de cash et une visibilité financière."
+    },
+    {
+      "id": "wavestone_site_a47d5f1965d8f020",
+      "title": "A major US health insurer modernizes its security operations",
+      "date": "2026-06-01",
+      "url": "https://www.wavestone.com/en/clients-story/a-major-us-health-insurer-modernizes-its-security-operations/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "assurance santé",
+      "missions_libres": [
+        "modernisation des opérations de sécurité",
+        "optimisation des processus"
+      ],
+      "client": "grand assureur américain",
+      "resume": "Wavestone a restructuré les processus de sécurité du client, réduisant les retards de 70% et accélérant les cycles de revue de 75 à 25 jours tout en formant 1400 développeurs."
+    },
+    {
+      "id": "wavestone_site_abf83910c0526844_chunk_0",
+      "title": "Repenser la feuille de route de la transformation des sinistres",
+      "date": "2026-04-17",
+      "url": "https://www.wavestone.com/fr/clients-story/repenser-la-feuille-de-route-de-la-transformation-des-sinistres-en-assurance/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Transformation digitale",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "transformation digitale",
+        "pilotage de programme"
+      ],
+      "client": "grand assureur britannique",
+      "resume": "Wavestone a redéfini une feuille de route de transformation des sinistres en 8 semaines, établissant une trajectoire claire vers une plateforme cloud unifiée pour 40 produits."
+    },
+    {
+      "id": "wavestone_site_2997bf69945b545b_chunk_0",
+      "title": "Resetting the roadmap for insurance claims transformation",
+      "date": "2026-04-17",
+      "url": "https://www.wavestone.com/en/clients-story/resetting-the-roadmap-for-insurance-claims-transformation/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Transformation digitale",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "transformation digitale",
+        "optimisation processus"
+      ],
+      "client": "grand assureur britannique",
+      "resume": "Wavestone a mené une phase de découverte en 8 semaines pour moderniser les processus de réclamations commerciales et définir une feuille de route cloud, avec l'appui du COO et du CIO."
+    },
+    {
+      "id": "wavestone_site_2f7fbd1389dc5fab_chunk_0",
+      "title": "Modernisation ERP avec Wavestone : PE Automotive se transforme avec Microsoft Dynamics 365",
+      "date": "2026-03-09",
+      "url": "https://www.wavestone.com/fr/clients-story/modernisation-erp-avec-wavestone-pe-automotive-se-transforme-avec-microsoft-dynamics-365/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Modernisation technologique",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "pièces automobiles",
+      "missions_libres": [
+        "modernisation erp",
+        "transformation digitale"
+      ],
+      "client": "PE Automotive",
+      "resume": "Wavestone a accompagné PE Automotive dans la migration vers Microsoft Dynamics 365 pour unifier ses processus et données, améliorant ainsi l'efficacité et la scalabilité."
+    },
+    {
+      "id": "wavestone_site_d88f4b4eeef9cc94_chunk_0",
+      "title": "ERP modernization with Wavestone: PE Automotive transforms with Microsoft Dynamics 365",
+      "date": "2026-03-09",
+      "url": "https://www.wavestone.com/en/clients-story/erp-modernization-with-wavestone-pe-automotive-transforms-with-microsoft-dynamics-365/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Modernisation technologique",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "pièces automobiles",
+      "missions_libres": [
+        "modernisation erp",
+        "transformation digitale"
+      ],
+      "client": "PE Automotive",
+      "resume": "Wavestone a accompagné PE Automotive dans la modernisation de son ERP avec Microsoft Dynamics 365 pour harmoniser ses processus et centraliser ses données, améliorant ainsi la qualité et le contrôle des opérations."
+    },
+    {
+      "id": "wavestone_site_eb22df9da0fc4765_chunk_0",
+      "title": "Chemin de fer rhétique: optimisation de la demande sur l’une des lignes ferroviaires les plus prisées au monde",
+      "date": "2026-01-30",
+      "url": "https://www.wavestone.com/fr/clients-story/optimisation-demande-ligne-bernina/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Data & IA"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "optimisation de la demande",
+        "analyse de données"
+      ],
+      "client": "Chemins de fer rhétiques",
+      "resume": "Wavestone a analysé les goulots d'étranglement de la ligne Bernina et proposé des solutions pour réguler la demande et améliorer la gestion des groupes, réduisant ainsi les surcharges."
+    },
+    {
+      "id": "wavestone_site_9a65d7dd2f257663_chunk_0",
+      "title": "Rhaetian Railway: demand optimization on one of the world’s most popular rail routes",
+      "date": "2026-01-30",
+      "url": "https://www.wavestone.com/en/clients-story/rhaetian-railway-demand-optimization/",
+      "lang": "en",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "transport ferroviaire",
+      "missions_libres": [
+        "optimisation de la demande",
+        "gestion des capacités"
+      ],
+      "client": "Rhaetian Railway",
+      "resume": "Wavestone a analysé les goulots d'étranglement de la Bernina Express Line et proposé un plan d'action pour lisser la demande et améliorer la gestion des groupes, avec des solutions adaptées aux pics de fréquentation."
+    },
+    {
+      "id": "wavestone_site_73b8e6570b8bfba0_chunk_0",
+      "title": "Powering renewable growth with scalable monitoring",
+      "date": "2026-01-19",
+      "url": "https://www.wavestone.com/en/clients-story/powering-renewable-growth-with-scalable-monitoring/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Modernisation technologique",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "énergie renouvelable",
+      "missions_libres": [
+        "modernisation de plateforme cloud",
+        "gestion du changement"
+      ],
+      "client": "Energie Baden-Württemberg AG",
+      "resume": "Wavestone a conçu et déployé une plateforme cloud Azure pour EnBW, permettant une surveillance intelligente des actifs renouvelables et réduisant les pannes imprévues grâce à la maintenance prédictive."
+    },
+    {
+      "id": "wavestone_site_87fb016af8ca4643_chunk_0",
+      "title": "EnBW étend la surveillance des énergies renouvelables",
+      "date": "2026-01-19",
+      "url": "https://www.wavestone.com/fr/clients-story/enbw-etend-la-surveillance-des-energies-renouvelables/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Transformation digitale",
+        "Data & IA"
+      ],
+      "secteur_libre": "énergie renouvelable",
+      "missions_libres": [
+        "transformation digitale",
+        "gestion des données"
+      ],
+      "client": "EnBW",
+      "resume": "Wavestone a modernisé la surveillance des actifs renouvelables d'EnBW avec une plateforme cloud Azure, intégrant la maintenance prédictive pour réduire les pannes et optimiser les ressources."
+    },
+    {
+      "id": "wavestone_site_46b1a38e58d7df8b_chunk_0",
+      "title": "Maturité de la gestion des identités et des accès: feuille de route pour un assureur international",
+      "date": "2026-01-12",
+      "url": "https://www.wavestone.com/fr/clients-story/maturite-de-la-gestion-des-identites-et-des-acces-pour-un-assureur-international/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Gouvernance et conformité"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "évaluation de maturité iam",
+        "feuille de route de remédiation"
+      ],
+      "client": "filiale britannique d'un groupe d'assurance international",
+      "resume": "Wavestone a évalué la maturité IAM du client via un cadre dédié, identifiant des risques et proposant une feuille de route pour structurer les remédiations et améliorer la gouvernance."
+    },
+    {
+      "id": "wavestone_site_c6f524037da6fce2",
+      "title": "Evaluating IAM maturity and building a remediation roadmap for a multi-national insurer",
+      "date": "2026-01-12",
+      "url": "https://www.wavestone.com/en/clients-story/evaluating-iam-maturity-for-a-multi-national-insurer/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "évaluation maturité iam",
+        "construction feuille de route"
+      ],
+      "client": "branche britannique d'un assureur international",
+      "resume": "Wavestone a évalué la maturité IAM du client avec son cadre d'analyse, identifiant des risques et priorités pour construire une feuille de route de remédiation efficace."
+    },
+    {
+      "id": "wavestone_site_758ff63dba87abf8_chunk_0",
+      "title": "SNCF Connect & Tech, la tech company française au service des mobilités, engage une démarche RSE volontaire pour éclairer sa stratégie 2025–2030",
+      "date": "2026-01-09",
+      "url": "https://www.wavestone.com/fr/clients-story/sncf-connect-tech-csrd-strategie-rse-2025-2030/",
+      "lang": "fr",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "transport et mobilité",
+      "missions_libres": [
+        "analyse de double matérialité",
+        "bilan carbone"
+      ],
+      "client": "SNCF Connect & Tech",
+      "resume": "Wavestone a accompagné SNCF Connect & Tech dans une démarche RSE volontaire pour éclairer sa stratégie 2025-2030 via une analyse de double matérialité et un bilan carbone non réglementaire."
+    },
+    {
+      "id": "wavestone_site_6d376eef309d4fc0_chunk_0",
+      "title": "SNCF Connect & Tech, the French tech company serving mobility, embarks on a voluntary CSR approach to guide its 2025–2030 strategy",
+      "date": "2026-01-09",
+      "url": "https://www.wavestone.com/en/clients-story/sncf-connect-tech-mobility-csrd-csr-strategy-2025-2030/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "analyse de double matérialité",
+        "évaluation carbone"
+      ],
+      "client": "SNCF Connect & Tech",
+      "resume": "Wavestone a accompagné SNCF Connect & Tech dans une analyse de double matérialité et une évaluation carbone pour structurer sa stratégie CSR 2025-2030 et identifier des axes de réduction d'émissions."
+    },
+    {
+      "id": "wavestone_site_ed799cdfeacd7865_chunk_0",
+      "title": "Construire l’hospitalité durable de demain : Accor mise sur le reporting ESG pour renforcer son leadership",
+      "date": "2025-09-22",
+      "url": "https://www.wavestone.com/fr/clients-story/accor-publie-rapport-durabilite-csrd-avec-wavestone/",
+      "lang": "fr",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "hôtellerie-restauration",
+      "missions_libres": [
+        "cadrage de reporting esg",
+        "transformation durable"
+      ],
+      "client": "Accor",
+      "resume": "Wavestone a structuré le reporting ESG d'Accor pour la CSRD, consolidant des centaines de données et fédérant 100 contributeurs, accélérant ainsi sa transformation durable."
+    },
+    {
+      "id": "wavestone_site_0d9320262efd3cd6_chunk_0",
+      "title": "Driving sustainable growth in hospitality: Accor leverages ESG reporting to strengthen market leadership",
+      "date": "2025-09-22",
+      "url": "https://www.wavestone.com/en/clients-story/accor-drives-sustainable-growth-with-csrd-reporting/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "hôtellerie et restauration",
+      "missions_libres": [
+        "structuration de reporting esg",
+        "coordination de transformation durable"
+      ],
+      "client": "Accor",
+      "resume": "Wavestone a structuré et coordonné le reporting ESG d'Accor pour la CSRD, unifiant les équipes et accélérant sa transformation durable avec succès."
+    },
+    {
+      "id": "wavestone_site_428858ebf62d6645_chunk_0",
+      "title": "Libérer l’innovation en IA grâce à un modèle opérationnel des données évolutif et conforme",
+      "date": "2025-09-08",
+      "url": "https://www.wavestone.com/fr/clients-story/liberer-linnovation-en-ia-grace-a-un-modele-operationnel-des-donnees-evolutif-et-conforme/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Data & IA"
+      ],
+      "secteur_libre": "santé",
+      "missions_libres": [
+        "modélisation des données",
+        "gouvernance ia"
+      ],
+      "client": "grand groupe international de santé",
+      "resume": "Wavestone a co-conçu un modèle opérationnel des données fédéré pour unifier et sécuriser l'innovation en IA tout en respectant les réglementations transfrontalières."
+    },
+    {
+      "id": "wavestone_site_d3950c9d3d67f96d_chunk_0",
+      "title": "Helping a client identify the most impactful AI use cases for investment",
+      "date": "2025-09-08",
+      "url": "https://www.wavestone.com/en/clients-story/helping-client-identify-ai-use-cases-investment/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Data & IA"
+      ],
+      "secteur_libre": "gestion de patrimoine",
+      "missions_libres": [
+        "priorisation de cas d'usage ia",
+        "stratégie d'investissement ia"
+      ],
+      "client": "acteur majeur de la gestion d'actifs au Royaume-Uni",
+      "resume": "Wavestone a structuré et priorisé des cas d'usage IA pour le service client en alignant les opportunités sur les objectifs business et en identifiant les prototypes à fort ROI."
+    },
+    {
+      "id": "wavestone_site_6749371a34f5ffd5_chunk_0",
+      "title": "Unlocking AI innovation with a scalable, compliant Data Operating Model",
+      "date": "2025-09-08",
+      "url": "https://www.wavestone.com/en/clients-story/ai-innovation-data-operating-model/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Data & IA",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "santé et sciences du vivant",
+      "missions_libres": [
+        "conception d'un modèle de données",
+        "transformation digitale"
+      ],
+      "client": "leader international de la santé",
+      "resume": "Wavestone a co-construit un modèle opérationnel de données fédéré pour unifier et sécuriser l'innovation en santé tout en respectant les réglementations et en accélérant l'adoption de l'IA."
+    },
+    {
+      "id": "wavestone_site_19e715c329b51494_chunk_0",
+      "title": "How does Helvetia Group speed up document processing with GenAI?",
+      "date": "2025-09-02",
+      "url": "https://www.wavestone.com/en/clients-story/helvetia-document-processing-genai/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Data & IA",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "développement d'une solution genai",
+        "optimisation de processus documentaires"
+      ],
+      "client": "Helvetia Group",
+      "resume": "Wavestone a conçu une solution modulaire GenAI pour automatiser l'extraction de données de documents variés, réduisant significativement le temps de traitement manuel pour Helvetia Group."
+    },
+    {
+      "id": "wavestone_site_40cb0b15fb265ca2_chunk_0",
+      "title": "Comment Helvetia Group accélère le traitement des documents grâce à l’IA générative ?",
+      "date": "2025-09-02",
+      "url": "https://www.wavestone.com/fr/clients-story/helvetia-traitement-documents-ia-generative/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Data & IA",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "développement d'application ia",
+        "optimisation de processus"
+      ],
+      "client": "Helvetia Group",
+      "resume": "Wavestone a conçu une application interne d'extraction automatisée de données documentaires avec l'IA générative, réduisant le temps de traitement manuel pour Helvetia Group."
+    },
+    {
+      "id": "wavestone_site_fc1aa925f2e3c3fa_chunk_0",
+      "title": "Empowering strategic growth at a UK bank",
+      "date": "2025-08-29",
+      "url": "https://www.wavestone.com/en/clients-story/empowering-strategic-growth-uk-bank/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "intégration post-acquisition",
+        "modélisation opérationnelle"
+      ],
+      "client": "une banque britannique",
+      "resume": "Wavestone a piloté l'intégration de trois acquisitions pour une banque britannique, livrant des résultats dans les délais, budgets et avec une efficacité croissante à chaque deal."
+    },
+    {
+      "id": "wavestone_site_e6618363f060dacd_chunk_0",
+      "title": "Faire évoluer la gestion des collaborateurs et la coordination projet avec Microsoft Dynamics dans le secteur de l’énergie",
+      "date": "2025-08-18",
+      "url": "https://www.wavestone.com/fr/clients-story/gestion-des-collaborateurs-avec-microsoft-dynamics-dans-le-secteur-de-lenergie/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Modernisation technologique",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "modernisation des processus internes",
+        "coordination projet numérique"
+      ],
+      "client": "acteur majeur des infrastructures énergétiques",
+      "resume": "Wavestone a digitalisé la gestion des collaborateurs et la coordination projet avec Microsoft Dynamics, remplaçant les outils fragmentés par une solution centralisée, traçable et conforme au RGPD, améliorant l'efficacité et soutenant la croissance."
+    },
+    {
+      "id": "wavestone_site_8b4f75e5f3ab3113_chunk_0",
+      "title": "Scaling employee management & project coordination with Microsoft Dynamics in the energy sector",
+      "date": "2025-08-18",
+      "url": "https://www.wavestone.com/en/clients-story/employee-management-with-microsoft-dynamics-for-energy-sector/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Optimisation des processus",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "optimisation de processus internes",
+        "gestion de projets digitale"
+      ],
+      "client": "fournisseur d'infrastructures énergétiques",
+      "resume": "Wavestone a déployé une plateforme Microsoft Dynamics pour digitaliser la gestion des employés et la coordination de projets, améliorant l'efficacité opérationnelle et assurant la conformité RGPD."
+    },
+    {
+      "id": "wavestone_site_3cb490876ec07c99",
+      "title": "Performance et intelligence : Festo repense sa gestion fournisseurs avec Wavestone",
+      "date": "2025-08-18",
+      "url": "https://www.wavestone.com/fr/clients-story/festo-sap-gestion-fournisseurs/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Transformation digitale",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "automatisation industrielle",
+      "missions_libres": [
+        "transformation digitale des achats",
+        "optimisation des processus fournisseurs"
+      ],
+      "client": "Festo",
+      "resume": "Wavestone a modernisé la gestion des fournisseurs de Festo avec SAP Ariba et S/4HANA, réduisant les délais de qualification et automatisant les processus pour une meilleure efficacité."
+    },
+    {
+      "id": "wavestone_site_7e91c39f07f482f8",
+      "title": "Intelligence and efficiency: Festo optimizes supplier management with Wavestone",
+      "date": "2025-08-18",
+      "url": "https://www.wavestone.com/en/clients-story/festo-supplier-management/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "automatisation industrielle",
+      "missions_libres": [
+        "modernisation des processus fournisseurs",
+        "intégration sap ariba/s4hana"
+      ],
+      "client": "Festo",
+      "resume": "Wavestone a optimisé la gestion des fournisseurs de Festo en intégrant SAP Ariba et S/4HANA, réduisant les délais de qualification et améliorant la qualité des données."
+    },
+    {
+      "id": "wavestone_site_8e3713d3cb1e518d_chunk_0",
+      "title": "Alimenter la stratégie mondiale d'un fabricant d'équipements lourds de 36 milliards de dollars",
+      "date": "2025-08-12",
+      "url": "https://www.wavestone.com/fr/clients-story/alimenter-strategie-mondiale-fabricant-equipements-lourds-36-milliards-dollars/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "équipements industriels lourds",
+      "missions_libres": [
+        "stratégie mondiale",
+        "conduite du changement"
+      ],
+      "client": "fabricant d'équipements lourds de 36 milliards de dollars",
+      "resume": "Wavestone a transformé une vision stratégique floue en un plan concret et aligné, formant des leaders mondiaux et structurant une exécution à grande échelle."
+    },
+    {
+      "id": "wavestone_site_00693bc819a9595b",
+      "title": "Powering global strategy for a $36 billion-dollar heavy equipment manufacturer",
+      "date": "2025-08-12",
+      "url": "https://www.wavestone.com/en/clients-story/powering-global-strategy-for-a-36-billion-dollar-manufacturer/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "équipements industriels lourds",
+      "missions_libres": [
+        "stratégie opérationnelle globale",
+        "transformation organisationnelle"
+      ],
+      "client": "fabricant mondial de 36 milliards de dollars",
+      "resume": "Wavestone a transformé une vision stratégique floue en plan concret via des ateliers collaboratifs, alignant les leaders mondiaux sur un modèle opérationnel unique."
+    },
+    {
+      "id": "wavestone_site_445d2d04c21dcf1b_chunk_0",
+      "title": "Le renforcement d'un assureur global de sa résilience opérationnelle pour respecter l’échéance DORA",
+      "date": "2025-07-24",
+      "url": "https://www.wavestone.com/fr/clients-story/renforcement-assureur-global-resilience-operationnelle-dora/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Gouvernance et conformité",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "conformité réglementaire dora",
+        "résilience opérationnelle"
+      ],
+      "client": "division risques IARD et spécialisés d'un groupe d'assurance mondial",
+      "resume": "Wavestone a accompagné un assureur dans la mise en conformité DORA via une évaluation des écarts et une feuille de route de remédiation sur 24 mois pour renforcer sa résilience opérationnelle."
+    },
+    {
+      "id": "wavestone_site_ff33d9bcc25e1a76_chunk_0",
+      "title": "How a global insurer strengthened their operational resilience for the DORA deadline - and beyond",
+      "date": "2025-07-24",
+      "url": "https://www.wavestone.com/en/clients-story/how-global-insurer-strengthened-operational-resilience-dora/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Gouvernance et conformité",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "conformité réglementaire dora",
+        "résilience opérationnelle"
+      ],
+      "client": "division P&C et risques spécialisés d'un grand assureur mondial",
+      "resume": "Wavestone a accompagné un assureur global dans la mise en conformité DORA via un programme de remédiation de 24 mois, renforçant sa résilience opérationnelle et sa gestion des risques ICT."
+    },
+    {
+      "id": "wavestone_site_9b9b282ea08ec99a_chunk_0",
+      "title": "Re-dynamiser une initiative de migration de plateforme bancaire",
+      "date": "2025-07-21",
+      "url": "https://www.wavestone.com/fr/clients-story/redynamiser-migration-plateforme-bancaire/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "replatforming de système bancaire",
+        "transformation digitale"
+      ],
+      "client": "une banque britannique",
+      "resume": "Wavestone a relancé la migration de la plateforme bancaire en stabilisant le programme, renforçant la gouvernance et l'engagement des métiers pour une livraison réussie."
+    },
+    {
+      "id": "wavestone_site_daa410bc2bdc3b39_chunk_0",
+      "title": "Re-energizing a core banking transformation program",
+      "date": "2025-07-21",
+      "url": "https://www.wavestone.com/en/clients-story/re-energizing-core-banking-transformation-program/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "banque",
+      "missions_libres": [
+        "reprise de programme",
+        "transformation digitale"
+      ],
+      "client": "une banque britannique",
+      "resume": "Wavestone a relancé la migration vers une nouvelle plateforme bancaire en stabilisant le programme, renforçant la gouvernance et la collaboration pour assurer une livraison réussie et pérenne."
+    },
+    {
+      "id": "wavestone_site_fcbf52e3e5805f26_chunk_0",
+      "title": "EDF SEI, towards a new data ambition",
+      "date": "2025-07-08",
+      "url": "https://www.wavestone.com/en/clients-story/edf-sei-towards-a-new-data-ambition/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Data & IA",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "stratégie data",
+        "transformation digitale"
+      ],
+      "client": "EDF SEI",
+      "resume": "Wavestone a accompagné EDF SEI dans la refonte de sa stratégie data et la création d'un Data Office pour exploiter ses données et accélérer sa transition énergétique."
+    },
+    {
+      "id": "wavestone_site_bd4472324500f383_chunk_0",
+      "title": "EDF SEI, vers une nouvelle ambition Data",
+      "date": "2025-07-08",
+      "url": "https://www.wavestone.com/fr/clients-story/edf-sei-vers-une-nouvelle-ambition-data/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Data & IA",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "stratégie data",
+        "transformation digitale"
+      ],
+      "client": "EDF SEI",
+      "resume": "Wavestone a aidé EDF SEI à définir une nouvelle stratégie Data pour exploiter son patrimoine de données et soutenir la transition énergétique dans les territoires insulaires."
+    },
+    {
+      "id": "wavestone_site_f6a9e0d24a7dcc9b_chunk_0",
+      "title": "La mobilité alternative intelligente pour le transport régional",
+      "date": "2025-06-03",
+      "url": "https://www.wavestone.com/fr/clients-story/la-mobilite-alternative-intelligente-pour-le-transport-regional/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "optimisation des opérations",
+        "gestion des perturbations"
+      ],
+      "client": "RVO (filiale de DB Regio Bus)",
+      "resume": "Wavestone a développé une solution de mobilité alternative intelligente pour coordonner rapidement les bus de substitution lors des interruptions ferroviaires, améliorant la fiabilité des transports."
+    },
+    {
+      "id": "wavestone_site_929a6ad8432106d5_chunk_0",
+      "title": "Smart replacement transport for regional rail",
+      "date": "2025-06-03",
+      "url": "https://www.wavestone.com/en/clients-story/smart-replacement-transport-for-regional-rail/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Durabilité et RSE",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "optimisation de la mobilité alternative",
+        "gestion des perturbations logistiques"
+      ],
+      "client": "RVO (filiale de DB Regio Bus)",
+      "resume": "Wavestone a développé l'application SEM pour RVO, permettant une coordination instantanée des bus de remplacement en cas de fermeture de ligne ferroviaire, réduisant les retards et améliorant l'expérience passager."
+    },
+    {
+      "id": "wavestone_site_b093f4f012116082_chunk_0",
+      "title": "Comment un fournisseur d'énergie réussit à être véritablement centré sur le client grâce à la « Voice of the Customer ».",
+      "date": "2025-04-30",
+      "url": "https://www.wavestone.com/fr/clients-story/voice-of-customer-energie-client/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Expérience client"
+      ],
+      "secteur_libre": "fourniture d'énergie",
+      "missions_libres": [
+        "conception de dispositif voc",
+        "optimisation de l'expérience client"
+      ],
+      "client": "fournisseur d'énergie régional",
+      "resume": "Wavestone a mis en place un système pragmatique de Voice of the Customer pour améliorer durablement la satisfaction client et l'expérience globale."
+    },
+    {
+      "id": "wavestone_site_01bb10b32e641e5d_chunk_0",
+      "title": "How an energy provider achieved true customer centricity with Voice of the Customer",
+      "date": "2025-04-30",
+      "url": "https://www.wavestone.com/en/clients-story/energy-provider-customer-centric-voice-of-customer/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Expérience client"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "déploiement voc",
+        "amélioration expérience client"
+      ],
+      "client": "fournisseur d'énergie régional",
+      "resume": "Wavestone a conçu un concept VoC pragmatique pour ce fournisseur, structurant la collecte de feedback et alignant les actions d'amélioration sur sa stratégie, boostant ainsi la satisfaction client."
+    },
+    {
+      "id": "wavestone_site_79a83ed7b2b47cfa",
+      "title": "Breaking barriers: fast-tracking tech transformation",
+      "date": "2025-04-08",
+      "url": "https://www.wavestone.com/en/clients-story/breaking-barriers-fast-tracking-tech-transformation/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Modernisation technologique",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "fabrication de literie",
+      "missions_libres": [
+        "transformation technologique",
+        "gestion de projet"
+      ],
+      "client": "grand fabricant mondial de literie",
+      "resume": "Wavestone a relancé des projets ERP, CRM et PLM en 2 mois, formant des équipes internationales et générant 250+ heures d'économies mensuelles."
+    },
+    {
+      "id": "wavestone_site_d92d3d7fe126a1ba",
+      "title": "Leading transformation: Culture and performance in a $10 billion merger",
+      "date": "2025-04-08",
+      "url": "https://www.wavestone.com/en/clients-story/integrating-cultures-for-success/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "secteur industriel ou technologique",
+      "missions_libres": [
+        "fusion-acquisition",
+        "transformation culturelle"
+      ],
+      "client": "entreprise issue d'une fusion à 10 milliards de dollars",
+      "resume": "Wavestone a aidé à intégrer deux cultures d'entreprise opposées en créant un guide d'intégration managériale pour aligner les leaders et exploiter les synergies."
+    },
+    {
+      "id": "wavestone_site_b30116316fa3ee40",
+      "title": "Process redesigned: $25M+ in value and millions saved in operating expenses Process redesign: maximizing efficiency & reducing operating costs",
+      "date": "2025-04-04",
+      "url": "https://www.wavestone.com/en/clients-story/process-redesign/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Optimisation des processus",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "redesign de processus",
+        "transformation culturelle"
+      ],
+      "client": "grand groupe financier américain",
+      "resume": "Wavestone a simplifié et standardisé les processus avec Lean, formé 17 000 employés et généré plus de 25 millions de dollars de valeur tout en réduisant les coûts."
+    },
+    {
+      "id": "wavestone_site_8f822037b1fd1e1f",
+      "title": "Transforming healthcare IT: excellence in system validation & migration",
+      "date": "2025-04-04",
+      "url": "https://www.wavestone.com/en/clients-story/transforming-healthcare-it-excellence-in-system-validation-migration/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "pharmacie",
+      "missions_libres": [
+        "validation de systèmes",
+        "migration it"
+      ],
+      "client": "un groupe pharmaceutique mondial",
+      "resume": "Wavestone a piloté la validation et migration de 40 systèmes pour un spin-off, livré à temps et sous budget avec une documentation conforme et des tests rigoureux."
+    },
+    {
+      "id": "wavestone_site_eae015c6f5b2aaca",
+      "title": "Redesigning healthcare operations: lean training and process optimization at scale",
+      "date": "2025-04-04",
+      "url": "https://www.wavestone.com/en/clients-story/redesigning-healthcare-operations-lean-training-and-process-optimization-at-scale/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "santé publique",
+      "missions_libres": [
+        "optimisation des processus",
+        "transformation lean"
+      ],
+      "client": "hôpital public américain en difficulté financière",
+      "resume": "Wavestone a formé 2000 employés au Lean et repensé 200 processus, améliorant l'efficacité et la satisfaction patient tout en stabilisant financièrement l'hôpital."
+    },
+    {
+      "id": "wavestone_site_e26acbea697cd04d",
+      "title": "Strategic reorganization delivers annual savings",
+      "date": "2025-04-04",
+      "url": "https://www.wavestone.com/en/clients-story/strategic-reorganization-to-save-money/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "services de contrôle et certification",
+      "missions_libres": [
+        "réorganisation stratégique",
+        "optimisation des coûts"
+      ],
+      "client": "leader mondial des services de contrôle, inspection et certification",
+      "resume": "Wavestone a restructuré l'équipe finance des Amériques, identifiant 2 500 activités et générant 1,7M$ d'économies annuelles grâce à une nouvelle organisation."
+    },
+    {
+      "id": "wavestone_site_be060914e4c998a8",
+      "title": "Aligning portfolio strategy with transformational program management",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/aligning-portfolio-strategy/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "conglomérat multinational",
+      "missions_libres": [
+        "alignement stratégie portefeuille",
+        "gestion programmes transformation"
+      ],
+      "client": "multinational conglomérat",
+      "resume": "Wavestone a aligné un portefeuille de projets transformateurs sur la stratégie du client en mettant en place gouvernance et tableaux de bord, accélérant leur exécution et renforçant la transparence pour la direction."
+    },
+    {
+      "id": "wavestone_site_7beddd02f54d1572",
+      "title": "Automated data processing accelerates go-to-market time",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/automated-data-processing/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Transformation digitale",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "pharmacie mondiale",
+      "missions_libres": [
+        "transformation digitale",
+        "optimisation des processus"
+      ],
+      "client": "grand groupe pharmaceutique mondial",
+      "resume": "Wavestone a automatisé le traitement des données avec PowerApps et Power Automate, réduisant de 4 à 6 jours le délai de mise sur le marché des campagnes et générant 1,2M$ d'économies annuelles."
+    },
+    {
+      "id": "wavestone_site_bb73855968314b5e",
+      "title": "Strategy workshop sets 5-year vision and resolves organizational gaps",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/strategy-workshop-sets-5-year-vision-and-resolves-organizational-gaps/",
+      "lang": "en",
+      "secteur": "Secteur public",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "secteur public local",
+      "missions_libres": [
+        "stratégie et transformation",
+        "conduite du changement"
+      ],
+      "client": "une autorité tribale de logement",
+      "resume": "Wavestone a accompagné une autorité tribale de logement dans l'élaboration d'une stratégie quinquennale et la résolution de tensions culturelles et managériales via un atelier collaboratif de trois jours."
+    },
+    {
+      "id": "wavestone_site_d015d4ceec440cd1",
+      "title": "Activating leadership: a framework for effective change",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/activating-leadership/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Gestion du changement"
+      ],
+      "secteur_libre": "fournisseur de peinture",
+      "missions_libres": [
+        "activation du leadership",
+        "conduite du changement"
+      ],
+      "client": "fournisseur de peinture mondial",
+      "resume": "Wavestone a aidé un fournisseur de peinture à clarifier sa stratégie complexe et à motiver ses équipes, améliorant ainsi la communication et l'adhésion des leaders."
+    },
+    {
+      "id": "wavestone_site_78b843b46edf3845",
+      "title": "Enterprise PMO setup & IT org. alignment for the win",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/enterprise-pmo-setup/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "grande distribution",
+      "missions_libres": [
+        "création d'un epmo",
+        "alignement organisationnel"
+      ],
+      "client": "leader de la grande distribution dans le Nord-Est américain",
+      "resume": "Wavestone a mis en place un EPMO et aligné la DSI sur les objectifs stratégiques, améliorant la gouvernance et les compétences IT."
+    },
+    {
+      "id": "wavestone_site_e209425ee4b9dc5e",
+      "title": "Leading digital transformations for Medicaid",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/medicaid-digital-transformation/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Transformation digitale",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "santé",
+      "missions_libres": [
+        "transformation digitale",
+        "gestion du changement"
+      ],
+      "client": "grand prestataire de soins américain",
+      "resume": "Wavestone a mené une transformation digitale pour une unité Medicaid en combinant gestion du changement, formation et engagement des parties prenantes, améliorant l'acceptation et l'enthousiasme des utilisateurs finaux."
+    },
+    {
+      "id": "wavestone_site_6008fab7f1a92116",
+      "title": "Optimizing organizational structure",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/optimizing-organizational-structure/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "santé et recherche médicale",
+      "missions_libres": [
+        "restructuration organisationnelle",
+        "gestion des talents"
+      ],
+      "client": "fondation coopérative de recherche clinique",
+      "resume": "Wavestone a repensé la structure du département finance d'une fondation de recherche clinique, réduisant les risques de turnover et améliorant la collaboration et les opportunités de carrière."
+    },
+    {
+      "id": "wavestone_site_0e505fb640b28775",
+      "title": "Optimizing cloud architecture for cost savings and resource management",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/optimzing-cloud-architecture/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Modernisation technologique",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "logiciels",
+      "missions_libres": [
+        "optimisation d'architecture cloud",
+        "réduction des coûts"
+      ],
+      "client": "entreprise logicielle en forte croissance",
+      "resume": "Wavestone a repensé l'architecture Azure du client, réduisant les coûts de 9 000 $/mois et migrant 120 applications avec une approche progressive et sécurisée."
+    },
+    {
+      "id": "wavestone_site_bd18abe6c597c3fd",
+      "title": "Centralized PMO for global innovation",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/centralized-pmo/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "centralisation d'un pmo",
+        "gestion de portefeuille innovation"
+      ],
+      "client": "organisation nucléaire mondiale",
+      "resume": "Wavestone a centralisé le PMO et mis en place un processus de gestion de portefeuille innovation, améliorant la livraison à temps de 19% et le ROI de 34%."
+    },
+    {
+      "id": "wavestone_site_4d25a9c232bfdb91",
+      "title": "Organizational transformation drives ROI and accelerates growth",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/organizational-transformation-drives-roi-and-accelerates-growth/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "santé",
+      "missions_libres": [
+        "transformation organisationnelle",
+        "accompagnement du changement"
+      ],
+      "client": "grande organisation de santé",
+      "resume": "Wavestone a aidé une organisation de santé à clarifier sa stratégie et ses processus, accélérant la croissance et générant un retour sur investissement de 3:1 en 12 semaines."
+    },
+    {
+      "id": "wavestone_site_aedced636b127478",
+      "title": "Brand planning engages global teams",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/brand-planning/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "santé grand public",
+      "missions_libres": [
+        "stratégie de marque",
+        "transformation digitale"
+      ],
+      "client": "leader mondial de la santé grand public",
+      "resume": "Wavestone a conçu une approche globale de planification de marque pour harmoniser les processus et renforcer l'adoption par les équipes via des outils digitaux collaboratifs."
+    },
+    {
+      "id": "wavestone_site_53155c3e4209e611",
+      "title": "Research-driven success: creating a standout product strategy and value proposition",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/research-driven-success-creating-a-standout-product-strategy-and-value-proposition/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Expérience client",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "santé et technologies médicales",
+      "missions_libres": [
+        "recherche utilisateur approfondie",
+        "stratégie de valeur produit"
+      ],
+      "client": "grand groupe technologique santé",
+      "resume": "Wavestone a mené des recherches terrain et interviews pour transformer des données brutes en insights actionnables, guidant la refonte de la proposition de valeur et la stratégie produit du client."
+    },
+    {
+      "id": "wavestone_site_e512ba89f46f3376",
+      "title": "Enhancing customer experience through strategic insight",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/enhancing-customer-experience/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Expérience client",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "dispositifs médicaux",
+      "missions_libres": [
+        "amélioration de l'expérience client",
+        "stratégie d'alignement organisationnel"
+      ],
+      "client": "division d'un fabricant mondial de dispositifs médicaux",
+      "resume": "Wavestone a unifié l'expérience client en identifiant les points de friction et en proposant une stratégie pour renforcer la satisfaction et la fidélité des clients."
+    },
+    {
+      "id": "wavestone_site_228a535ed3b20f11",
+      "title": "Competitive advantage gained for OTC product launch",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/competitive-advantage/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Expérience client"
+      ],
+      "secteur_libre": "pharmacie",
+      "missions_libres": [
+        "stratégie concurrentielle",
+        "expérience client"
+      ],
+      "client": "grand laboratoire pharmaceutique",
+      "resume": "Wavestone a aidé un laboratoire à se différencier sur un marché OTC concurrentiel en créant un avantage stratégique et un playbook concurrentiel, menant à une croissance de part de marché et des récompenses."
+    },
+    {
+      "id": "wavestone_site_0fb001f5815f94ca",
+      "title": "Acquisition ready: career paths & performance assessment",
+      "date": "2025-04-03",
+      "url": "https://www.wavestone.com/en/clients-story/acquisition-ready-career-paths-performance-assessment/",
+      "lang": "en",
+      "secteur": "Secteur public",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "secteur public informatique",
+      "missions_libres": [
+        "modélisation des compétences",
+        "transformation des parcours professionnels"
+      ],
+      "client": "entreprise fédérale de technologies IT",
+      "resume": "Wavestone a aidé ce client à structurer ses parcours professionnels et évaluations de performance pour attirer et fidéliser les talents, facilitant ainsi son acquisition."
+    },
+    {
+      "id": "wavestone_site_d3179e16f350e9d8_chunk_0",
+      "title": "Des économies durables grâce à FinOps : l’histoire d’une transformation réussie",
+      "date": "2025-02-24",
+      "url": "https://www.wavestone.com/fr/clients-story/economies-durables-finops/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "réduction des coûts it",
+        "déploiement de finops"
+      ],
+      "client": "organisation mondiale de services",
+      "resume": "Wavestone a aidé le client à réduire ses coûts IT en mettant en place une approche FinOps pour une visibilité et un contrôle en temps réel, générant des économies durables."
+    },
+    {
+      "id": "wavestone_site_8260ba36b259a75b_chunk_0",
+      "title": "Sustainable savings with FinOps: a successful transformation story",
+      "date": "2025-02-24",
+      "url": "https://www.wavestone.com/en/clients-story/sustainable-savings-finops/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "transport et logistique",
+      "missions_libres": [
+        "réduction des coûts it",
+        "déploiement de finops"
+      ],
+      "client": "organisation de services mondiale",
+      "resume": "Wavestone a aidé le client à réduire ses coûts IT en mettant en place une stratégie de tagging et un outil FinOps pour une visibilité et un contrôle en temps réel, générant des économies durables."
+    },
+    {
+      "id": "wavestone_site_928aefd14dd8bb2d_chunk_0",
+      "title": "Optimizing for resilience: $200M savings powers strategic transformation",
+      "date": "2025-02-17",
+      "url": "https://www.wavestone.com/en/clients-story/optimizing-for-resilience-strategic-transformation/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Optimisation des processus",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "distribution et médias",
+      "missions_libres": [
+        "optimisation des coûts",
+        "transformation technologique"
+      ],
+      "client": "leader mondial de la distribution et des médias",
+      "resume": "Wavestone a aidé le client à réaliser 200M$ d'économies pour financer sa transformation stratégique et moderniser ses opérations technologiques en 2 mois."
+    },
+    {
+      "id": "wavestone_site_fe431d5af1566e8b_chunk_0",
+      "title": "Une transformation stratégique pour 200 millions de dollars d'économies",
+      "date": "2025-02-17",
+      "url": "https://www.wavestone.com/fr/clients-story/optimisation-meilleure-resilience-transformation-strategique/",
+      "lang": "fr",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "distribution et médias",
+      "missions_libres": [
+        "transformation stratégique",
+        "optimisation des coûts it"
+      ],
+      "client": "leader mondial du commerce de détail et des médias",
+      "resume": "Wavestone a aidé le client à moderniser son parc technologique et réduire ses coûts de 200 millions de dollars tout en intégrant l'IA et l'automatisation pour transformer ses opérations."
+    },
+    {
+      "id": "wavestone_site_2832e20132c98619_chunk_0",
+      "title": "Wavestone met en place un modèle opérationnel robuste pour un leader mondial de la pharmaceutique",
+      "date": "2025-01-24",
+      "url": "https://www.wavestone.com/fr/clients-story/modele-operationnel-leader-mondial-pharmaceutique/",
+      "lang": "fr",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Expérience client"
+      ],
+      "secteur_libre": "pharmaceutique et medtech",
+      "missions_libres": [
+        "transformation opérationnelle",
+        "optimisation expérience client"
+      ],
+      "client": "leader mondial des produits pharmaceutiques et MedTech",
+      "resume": "Wavestone a redéfini un modèle opérationnel robuste pour intégrer une nouvelle plateforme MedTech, réduisant les coûts et améliorant l'expérience client malgré des processus fragmentés."
+    },
+    {
+      "id": "wavestone_site_853c32a43574d984_chunk_0",
+      "title": "Delivering a fit-for-the-future operating model for a global pharmaceutical company",
+      "date": "2025-01-24",
+      "url": "https://www.wavestone.com/en/clients-story/delivering-operating-model-pharmaceutical-company/",
+      "lang": "en",
+      "secteur": "Santé et pharmacie",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Expérience client"
+      ],
+      "secteur_libre": "pharmacie et dispositifs médicaux",
+      "missions_libres": [
+        "redesign d'un modèle opérationnel",
+        "transformation de l'expérience client"
+      ],
+      "client": "leader mondial en pharmaceutique et MedTech",
+      "resume": "Wavestone a conçu un modèle opérationnel scalable pour intégrer une acquisition récente, améliorant l'efficacité et l'expérience client malgré des silos et des processus fragmentés."
+    },
+    {
+      "id": "wavestone_site_70651c8ba8d266dd_chunk_0",
+      "title": "Product Security Office de la SITA : définir de nouvelles normes de cybersécurité pour l'industrie du transport aérien",
+      "date": "2024-11-15",
+      "url": "https://www.wavestone.com/fr/clients-story/sita-client-story-cyber-transport-aerien/",
+      "lang": "fr",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "transport aérien",
+      "missions_libres": [
+        "création bureau sécurité produits",
+        "audit cybersécurité"
+      ],
+      "client": "SITA",
+      "resume": "Wavestone a aidé SITA à structurer un bureau de sécurité des produits pour renforcer la cybersécurité de ses solutions et répondre aux exigences réglementaires, avec un impact visible sur les appels d'offres."
+    },
+    {
+      "id": "wavestone_site_856eacab75bde57b_chunk_0",
+      "title": "SITA’s Product Security Office: Setting New Cybersecurity Standards for the Air Transport Industry",
+      "date": "2024-11-15",
+      "url": "https://www.wavestone.com/en/clients-story/sita-client-story-cyber-air-transport/",
+      "lang": "en",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "transport aérien",
+      "missions_libres": [
+        "création d'une pso",
+        "audit de sécurité"
+      ],
+      "client": "SITA",
+      "resume": "Wavestone a aidé SITA à structurer sa Product Security Office en réalisant un audit de 30 produits et en définissant une feuille de route pour aligner la sécurité sur les exigences clients et réglementaires."
+    },
+    {
+      "id": "wavestone_site_e0603b937d2fdd73_chunk_0",
+      "title": "SAP S/4HANA Transition: Kistler's Seamless Conversion",
+      "date": "2024-11-06",
+      "url": "https://www.wavestone.com/en/clients-story/sap-s-4hana-transition-kistlers-seamless-conversion/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Transformation digitale",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "mesure industrielle",
+      "missions_libres": [
+        "transformation digitale sap",
+        "conversion système erp"
+      ],
+      "client": "Kistler Group",
+      "resume": "Wavestone a accompagné Kistler dans la migration de son ERP SAP vers S/4HANA en 18 mois, assurant une transition fluide et préparant le terrain pour des innovations futures."
+    },
+    {
+      "id": "wavestone_site_d2514075518849b2_chunk_0",
+      "title": "Transition vers SAP S/4HANA : La conversion transparente de Kistler",
+      "date": "2024-11-06",
+      "url": "https://www.wavestone.com/fr/clients-story/transition-sap-s-4hana-conversion-transparente-kistler/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Modernisation technologique",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "industrie technologique",
+      "missions_libres": [
+        "transformation digitale erp",
+        "conduite du changement"
+      ],
+      "client": "Kistler",
+      "resume": "Wavestone a accompagné Kistler dans la migration transparente de son ERP SAP vers S/4HANA, préparant son avenir numérique avec des optimisations et une formation utilisateur."
+    },
+    {
+      "id": "wavestone_site_48b835d8cc1bd6f1_chunk_0",
+      "title": "Transforming Managed Services and Finding Cost Savings for a Global FinTech Leader",
+      "date": "2024-10-31",
+      "url": "https://www.wavestone.com/en/clients-story/finding-cost-savings-for-a-global-fintech-leader/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "optimisation des services externalisés",
+        "réduction des coûts"
+      ],
+      "client": "leader mondial des services financiers",
+      "resume": "Wavestone a transformé les services externalisés du client, générant 285M$ d'économies et améliorant la qualité opérationnelle et la réactivité."
+    },
+    {
+      "id": "wavestone_site_f5de3ccc5f4b700c_chunk_0",
+      "title": "Transformer des services et réaliser des économies pour un leader mondial de la FinTech",
+      "date": "2024-10-31",
+      "url": "https://www.wavestone.com/fr/clients-story/finding-cost-savings-for-a-global-fintech-leader/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "optimisation opérationnelle",
+        "sourcing stratégique"
+      ],
+      "client": "leader mondial de la FinTech",
+      "resume": "Wavestone a transformé les services d'un leader FinTech en générant 285M$ d'économies et améliorant la réactivité opérationnelle via une approche structurée et collaborative."
+    },
+    {
+      "id": "wavestone_site_bcb3b12bc60ae169_chunk_0",
+      "title": "Wavestone renforce le capital confiance d'un assureur mondial",
+      "date": "2024-10-30",
+      "url": "https://www.wavestone.com/fr/clients-story/wavestone-renforce-le-capital-confiance-dun-assureurmondial/",
+      "lang": "fr",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "sécurisation des données",
+        "migration vers le cloud"
+      ],
+      "client": "grand assureur mondial",
+      "resume": "Wavestone a sécurisé les données sensibles de 100 millions de clients lors de la migration de 120 applications vers le Cloud, renforçant ainsi la confiance client."
+    },
+    {
+      "id": "wavestone_site_f582ccfbc6583fb2_chunk_0",
+      "title": "Wavestone Strengthens Leading Global Insurer’s Customer Trust",
+      "date": "2024-10-30",
+      "url": "https://www.wavestone.com/en/clients-story/wavestone-strengthens-leading-global-insurers-customer-trust-by-securing-private-data/",
+      "lang": "en",
+      "secteur": "Assurance",
+      "types_mission": [
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "assurance",
+      "missions_libres": [
+        "sécurisation des données clients",
+        "migration cloud sécurisée"
+      ],
+      "client": "grand assureur américain",
+      "resume": "Wavestone a sécurisé la migration de 120 applications critiques vers le cloud pour un assureur, renforçant la confiance client en protégeant les données sensibles."
+    },
+    {
+      "id": "wavestone_site_389fd2521df3b6c0_chunk_0",
+      "title": "Stellantis place la liberté de mouvement au cœur du débat public",
+      "date": "2024-08-22",
+      "url": "https://www.wavestone.com/fr/clients-story/stellantis-place-la-liberte-de-mouvement-au-coeur-du-debat-public/",
+      "lang": "fr",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "automobile et mobilité",
+      "missions_libres": [
+        "animation de forum international",
+        "modération de débats publics"
+      ],
+      "client": "Stellantis",
+      "resume": "Wavestone a animé un forum annuel sur la mobilité durable pour Stellantis, réunissant des milliers de participants et experts internationaux afin de générer des solutions concrètes et inclusives."
+    },
+    {
+      "id": "wavestone_site_1812ebf5c930eb5f_chunk_0",
+      "title": "Stellantis places Freedom of Movement at the heart of Public Debate",
+      "date": "2024-08-22",
+      "url": "https://www.wavestone.com/en/clients-story/stellantis-places-freedom-of-movement-at-the-heart-of-public-debate/",
+      "lang": "en",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "automobile et mobilité",
+      "missions_libres": [
+        "animation de débat public",
+        "conseil en durabilité"
+      ],
+      "client": "Stellantis",
+      "resume": "Wavestone a animé un forum international annuel sur la mobilité décarbonée pour Stellantis, favorisant le dialogue entre experts et citoyens afin de générer des solutions concrètes."
+    },
+    {
+      "id": "wavestone_site_0f6d3b2bffc53390_chunk_0",
+      "title": "Success Story : un nouveau pilier informatique pour la Bausparkasse Schwäbisch Hall",
+      "date": "2024-05-17",
+      "url": "https://www.wavestone.com/fr/clients-story/un-nouveau-pilier-informatique-pour-la-bausparkasse-schwabisch-hall/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Transformation digitale",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "banque et assurance",
+      "missions_libres": [
+        "transformation digitale",
+        "modernisation it"
+      ],
+      "client": "Bausparkasse Schwäbisch Hall",
+      "resume": "Wavestone a accompagné la migration d'un système bancaire central obsolète vers une plateforme moderne basée sur SAP pour moderniser l'infrastructure et préparer l'avenir."
+    },
+    {
+      "id": "wavestone_site_139424745e456608_chunk_0",
+      "title": "A new IT base for Bausparkasse Schwäbisch Hall",
+      "date": "2024-05-17",
+      "url": "https://www.wavestone.com/en/clients-story/a-new-it-base-for-bausparkasse-schwabisch-hall/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "banque et assurance",
+      "missions_libres": [
+        "modernisation d'un système bancaire",
+        "intégration d'une nouvelle plateforme"
+      ],
+      "client": "Bausparkasse Schwäbisch Hall",
+      "resume": "Wavestone a remplacé le système bancaire obsolète de Schwäbisch Hall par une plateforme SAP moderne, permettant une croissance durable et une meilleure conformité réglementaire."
+    },
+    {
+      "id": "wavestone_site_de261cbe7ecd72fa_chunk_0",
+      "title": "Greater efficiency through machine learning with Gewobag",
+      "date": "2024-05-17",
+      "url": "https://www.wavestone.com/en/clients-story/greater-efficiency-through-machine-learning-with-gewobag/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Optimisation des processus",
+        "Data & IA"
+      ],
+      "secteur_libre": "immobilier et énergie",
+      "missions_libres": [
+        "optimisation des processus",
+        "automatisation par ia"
+      ],
+      "client": "Gewobag",
+      "resume": "Wavestone a automatisé la vérification de la plausibilité des données de consommation thermique pour des centaines de propriétés, réduisant l'effort manuel et améliorant l'efficacité."
+    },
+    {
+      "id": "wavestone_site_dc950daefe47c192_chunk_0",
+      "title": "Gewobag fait le choix du machine learning pour plus d’efficacité",
+      "date": "2024-05-17",
+      "url": "https://www.wavestone.com/fr/clients-story/gewobag-fait-choix-du-machine-learning-pour-plus-efficacite/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Optimisation des processus",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "immobilier et énergie",
+      "missions_libres": [
+        "optimisation de services",
+        "transformation digitale"
+      ],
+      "client": "Gewobag",
+      "resume": "Wavestone a aidé Gewobag à automatiser le contrôle de plausibilité des données énergétiques via le machine learning, améliorant l'efficacité et la durabilité de ses processus."
+    },
+    {
+      "id": "wavestone_site_f5dddf920197ed0e_chunk_0",
+      "title": "BNP Paribas rethinks its businesses and moves towards platform models",
+      "date": "2024-05-15",
+      "url": "https://www.wavestone.com/en/clients-story/bnp-paribas-platform-models-business/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Transformation digitale"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "stratégie de plateformes",
+        "transformation digitale"
+      ],
+      "client": "BNP Paribas",
+      "resume": "Wavestone a accompagné BNP Paribas dans la définition et la mise en œuvre d'une stratégie de plateformes pour ses activités d'assurance, crédit et services financiers, en alignant innovation, données et écosystèmes."
+    },
+    {
+      "id": "wavestone_site_781faf8d3c9bcd88_chunk_0",
+      "title": "BNP Paribas repense ses métiers et se tourne vers les modèles de plateformes",
+      "date": "2024-05-15",
+      "url": "https://www.wavestone.com/fr/clients-story/bnp-paribas-business-modeles-plateformes/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Transformation digitale",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "stratégie transformation digitale",
+        "modélisation économique"
+      ],
+      "client": "BNP Paribas",
+      "resume": "Wavestone a accompagné BNP Paribas dans la refonte de ses modèles métiers vers des plateformes digitales pour stimuler la croissance et l'innovation à l'échelle internationale."
+    },
+    {
+      "id": "wavestone_site_e6071f8d87003e43_chunk_0",
+      "title": "VINCI se dote d’un siège innovant et connecté pour rassembler ses entités",
+      "date": "2024-05-14",
+      "url": "https://www.wavestone.com/fr/clients-story/vinci-se-dote-dun-siege-innovant-et-connecte-pour-rassembler-ses-entites/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Transformation digitale",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "construction et infrastructures",
+      "missions_libres": [
+        "transformation digitale",
+        "optimisation it"
+      ],
+      "client": "VINCI",
+      "resume": "Wavestone a accompagné VINCI dans la création d'un siège innovant et connecté, unifiant ses entités avec une infrastructure IT sécurisée et moderne pour une collaboration fluide."
+    },
+    {
+      "id": "wavestone_site_584a2273ef51c62d_chunk_0",
+      "title": "Leroy Merlin automatise son stockage au service de ses équipes et de la performance",
+      "date": "2024-05-14",
+      "url": "https://www.wavestone.com/fr/clients-story/leroy-merlin-automatisation-stockage/",
+      "lang": "fr",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "distribution de bricolage",
+      "missions_libres": [
+        "automatisation d'entrepôt",
+        "optimisation logistique"
+      ],
+      "client": "Leroy Merlin",
+      "resume": "Wavestone a accompagné Leroy Merlin dans l'automatisation de son entrepôt de Réau pour améliorer la performance, réduire la pénibilité et sécuriser les flux logistiques."
+    },
+    {
+      "id": "wavestone_site_8ded5ef5a2b18049_chunk_0",
+      "title": "VINCI creates an innovative and connected head office to bring its business entities together",
+      "date": "2024-05-14",
+      "url": "https://www.wavestone.com/en/clients-story/vinci-creates-an-innovative-and-connected-head-office-to-bring-its-business-entities-together/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Transformation digitale",
+        "Modernisation technologique"
+      ],
+      "secteur_libre": "construction et gestion d'infrastructures",
+      "missions_libres": [
+        "transformation digitale",
+        "conseil en technologies"
+      ],
+      "client": "VINCI",
+      "resume": "Wavestone a accompagné VINCI dans la création d'un siège innovant et connecté, unifiant ses entités via un réseau nouvelle génération et des solutions cloud sécurisées pour une expérience utilisateur fluide."
+    },
+    {
+      "id": "wavestone_site_984371f3140b9565_chunk_0",
+      "title": "Leroy Merlin is automating their storage for the benefit of their teams and performance",
+      "date": "2024-05-14",
+      "url": "https://www.wavestone.com/en/clients-story/leroy-merlin-automating-storage/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Modernisation technologique",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "distribution de bricolage",
+      "missions_libres": [
+        "automatisation de la logistique",
+        "optimisation des flux"
+      ],
+      "client": "Leroy Merlin",
+      "resume": "Wavestone a accompagné Leroy Merlin dans l'automatisation partielle d'un entrepôt de 72 000 m² pour améliorer performance, sécurité et ergonomie des équipes tout en réduisant les besoins en recrutement."
+    },
+    {
+      "id": "wavestone_site_406b4bad10ad9ab1_chunk_0",
+      "title": "Accor, le groupe français leader du secteur de l’hôtellerie, accélère sa transformation durable",
+      "date": "2024-05-07",
+      "url": "https://www.wavestone.com/fr/clients-story/accor-le-groupe-francais-leader-du-secteur-de-lhotellerie-accelere-sa-transformation-durable/",
+      "lang": "fr",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Durabilité et RSE",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "hôtellerie et tourisme",
+      "missions_libres": [
+        "transformation durable",
+        "stratégie opérationnelle"
+      ],
+      "client": "Accor",
+      "resume": "Wavestone a accompagné Accor dans l'opérationnalisation de sa stratégie durable en 2022 pour transformer son modèle économique et répondre aux attentes des parties prenantes."
+    },
+    {
+      "id": "wavestone_site_d256f615a63b02c9_chunk_0",
+      "title": "France's leading hotel group Accor accelerates its sustainable transformation",
+      "date": "2024-05-07",
+      "url": "https://www.wavestone.com/en/clients-story/frances-leading-hotel-group-accor-accelerates-its-sustainable-transformation/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Durabilité et RSE",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "hôtellerie et tourisme",
+      "missions_libres": [
+        "intégration de la rse",
+        "transformation stratégique"
+      ],
+      "client": "Accor",
+      "resume": "Wavestone a accompagné Accor dans l'opérationnalisation de sa stratégie durable en 2022, structurant trois piliers clés pour transformer son modèle économique et répondre aux attentes des parties prenantes."
+    },
+    {
+      "id": "wavestone_site_eb887f683ecaa345_chunk_0",
+      "title": "L’Oréal monétise son offre de formation dédiée aux professionnels de la coiffure",
+      "date": "2024-05-06",
+      "url": "https://www.wavestone.com/fr/clients-story/loreal-monetise-offre-formation-coiffeurs/",
+      "lang": "fr",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Transformation digitale",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "cosmétiques et services professionnels",
+      "missions_libres": [
+        "transformation digitale des services",
+        "monétisation d'offres de formation"
+      ],
+      "client": "L'Oréal",
+      "resume": "Wavestone a accompagné L'Oréal dans la transformation de son offre de formation en ligne et hybride pour en faire une source de valeur monétisable et une référence dans l'industrie de la coiffure."
+    },
+    {
+      "id": "wavestone_site_b0957b0847b69477_chunk_0",
+      "title": "L’Oréal monetizes its haircare professional education offer",
+      "date": "2024-05-06",
+      "url": "https://www.wavestone.com/en/clients-story/loreal-monetizes-haircare-professional-education/",
+      "lang": "en",
+      "secteur": "Distribution et services",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "cosmétiques et luxe",
+      "missions_libres": [
+        "monétisation de services",
+        "stratégie de formation"
+      ],
+      "client": "L'Oréal",
+      "resume": "Wavestone a aidé L'Oréal à structurer et monétiser son offre de formation professionnelle en ligne et hybride pour les coiffeurs, créant un modèle réplicable et rentable."
+    },
+    {
+      "id": "wavestone_site_56b5ca8a252a0aac_chunk_0",
+      "title": "The French Army unlocks the potential of data to optimize personnel transfers",
+      "date": "2024-05-02",
+      "url": "https://www.wavestone.com/en/clients-story/army-mobility-data/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Optimisation des processus",
+        "Data & IA"
+      ],
+      "secteur_libre": "secteur public",
+      "missions_libres": [
+        "optimisation des processus rh",
+        "transformation par la donnée"
+      ],
+      "client": "Armée française",
+      "resume": "Wavestone a développé un algorithme de matching pour optimiser les transferts de personnel, réduisant le temps de gestion et améliorant la satisfaction des employés."
+    },
+    {
+      "id": "wavestone_site_3a3bc367ba0dfd9d_chunk_0",
+      "title": "L’armée de Terre française exploite le potentiel de la donnée pour optimiser les mobilités",
+      "date": "2024-05-02",
+      "url": "https://www.wavestone.com/fr/clients-story/armee-terre-mobilites-donnees/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Optimisation des processus",
+        "Data & IA"
+      ],
+      "secteur_libre": "secteur public",
+      "missions_libres": [
+        "optimisation des processus rh",
+        "transformation data"
+      ],
+      "client": "l’armée de Terre française",
+      "resume": "Wavestone a aidé l’armée de Terre à centraliser ses données de mobilité pour automatiser les affectations et améliorer l’efficacité des gestionnaires grâce à un outil d’aide à la décision."
+    },
+    {
+      "id": "wavestone_site_6445096ced42ee99_chunk_0",
+      "title": "Un fabricant aéronautique international mesure le \"coût total réel\" de ses décisions IT",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/fr/clients-story/impact-rse-dsi-industrielle/",
+      "lang": "fr",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Durabilité et RSE",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "fabrication aéronautique",
+      "missions_libres": [
+        "mesure d'impact rse",
+        "optimisation des coûts it"
+      ],
+      "client": "un fabricant aéronautique international",
+      "resume": "Wavestone a développé un outil pour lier réduction des coûts IT et émissions carbone, permettant de quantifier l'impact RSE de la transformation des centres de données."
+    },
+    {
+      "id": "wavestone_site_fc0f7ffe60160d80_chunk_0",
+      "title": "Enabling a global manufacturing organization to understand the 'True TCO' of IT decisions",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/en/clients-story/global-manufacturing-organisation-understand-true-tco/",
+      "lang": "en",
+      "secteur": "Industrie et technologie",
+      "types_mission": [
+        "Optimisation des processus",
+        "Durabilité et RSE"
+      ],
+      "secteur_libre": "aéronautique",
+      "missions_libres": [
+        "calcul du tco réel",
+        "réduction des coûts et carbone"
+      ],
+      "client": "grand groupe industriel aérospatial",
+      "resume": "Wavestone a développé un outil pour mesurer l'impact carbone et financier de la consolidation des data centers, permettant de quantifier les réductions réalisées."
+    },
+    {
+      "id": "wavestone_site_64896fda5505f9fa_chunk_0",
+      "title": "Voltalis fait monter en compétences ses collaborateurs sur le thème de la transition énergétique et écologique",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/fr/clients-story/voltalis-ateliers-energie/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "montée en compétences",
+        "conception d'ateliers"
+      ],
+      "client": "Voltalis",
+      "resume": "Wavestone a conçu 10 ateliers ludiques pour former les collaborateurs de Voltalis aux enjeux de la transition énergétique, renforçant leur expertise commerciale et technique."
+    },
+    {
+      "id": "wavestone_site_c90f9961de281d74_chunk_0",
+      "title": "Un département exécutif du Royaume-Uni identifie sa dette technique et obtient une vue globale de son patrimoine informatique",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/fr/clients-story/dette-technique-gouvernement-britannique/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique",
+        "Data & IA"
+      ],
+      "secteur_libre": "secteur public",
+      "missions_libres": [
+        "audit de dette technique",
+        "cartographie du patrimoine it"
+      ],
+      "client": "département exécutif du gouvernement britannique",
+      "resume": "Wavestone a identifié la dette technique et rationalisé les dépenses IT d'un département britannique en cartographiant son patrimoine informatique et ses dépendances pour réduire les coûts de maintenance."
+    },
+    {
+      "id": "wavestone_site_9126c6025c55d012_chunk_0",
+      "title": "Technical Debt Discovery for Large Government Department provides centralized view of IT Estate",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/en/clients-story/technical-debt-discovery-large-government-department/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Modernisation technologique",
+        "Data & IA"
+      ],
+      "secteur_libre": "secteur public",
+      "missions_libres": [
+        "audit de dette technique",
+        "cartographie du système d'information"
+      ],
+      "client": "grand département ministériel britannique",
+      "resume": "Wavestone a identifié et centralisé la vue de l'état du parc informatique du client pour réduire les coûts de maintenance et les risques d'obsolescence."
+    },
+    {
+      "id": "wavestone_site_312ac849e943aaed_chunk_0",
+      "title": "Voltalis upskills its employees on the themes of energy and environmental transitions",
+      "date": "2024-04-17",
+      "url": "https://www.wavestone.com/en/clients-story/voltalis-workshops-energy/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "énergie et utilités",
+      "missions_libres": [
+        "formation des employés",
+        "conception de modules"
+      ],
+      "client": "Voltalis",
+      "resume": "Wavestone a conçu 10 ateliers collaboratifs pour former les employés de Voltalis aux enjeux de la transition énergétique et environnementale."
+    },
+    {
+      "id": "wavestone_site_cdd444ed9b5e1e1e_chunk_0",
+      "title": "Le « change » au cœur de l’intégration de Fonroche Biogaz dans TotalEnergies",
+      "date": "2024-04-04",
+      "url": "https://www.wavestone.com/fr/clients-story/totalenergies-change-integration-fonroche-biogaz/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Gestion du changement",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "conduite du changement",
+        "intégration post-fusion"
+      ],
+      "client": "TotalEnergies",
+      "resume": "Wavestone a accompagné TotalEnergies dans l'intégration de Fonroche Biogaz en pilotant la conduite du changement et en organisant un événement marquant pour fédérer les équipes dès le closing."
+    },
+    {
+      "id": "wavestone_site_053a719c1b6dcc7f_chunk_0",
+      "title": "Change – at the heart of Fonroche Biogaz’s integration into TotalEnergies",
+      "date": "2024-04-04",
+      "url": "https://www.wavestone.com/en/clients-story/totalenergies-change-integration-fonroche-biogaz/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Gestion du changement"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "intégration post-fusion",
+        "gestion du changement"
+      ],
+      "client": "TotalEnergies",
+      "resume": "Wavestone a accompagné l'intégration de Fonroche Biogaz dans TotalEnergies en pilotant la gestion du changement et en organisant un événement de lancement marquant pour fédérer les équipes."
+    },
+    {
+      "id": "wavestone_site_06abee72e4e66be2_chunk_0",
+      "title": "Electricity North West met en place une nouvelle génération de services informatiques",
+      "date": "2024-03-17",
+      "url": "https://www.wavestone.com/fr/clients-story/electricity-north-west-services-it-nouvelle-generation/",
+      "lang": "fr",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Optimisation des processus",
+        "Stratégie et organisation"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "optimisation des services it",
+        "transformation des modèles opérationnels"
+      ],
+      "client": "Electricity North West",
+      "resume": "Wavestone a aidé ENWL à repenser son modèle IT et son sourcing pour moderniser ses services, remportant un prix international pour la création de valeur."
+    },
+    {
+      "id": "wavestone_site_762ec3741e91db97_chunk_0",
+      "title": "Helping Electricity North West Re-shape Their IT Services To Deliver Next-Generation Services",
+      "date": "2024-03-17",
+      "url": "https://www.wavestone.com/en/clients-story/helping-electricity-north-west-re-shape-their-it-services-to-deliver-next-generation-services/",
+      "lang": "en",
+      "secteur": "Énergie et utilities",
+      "types_mission": [
+        "Modernisation technologique",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "énergie et utilities",
+      "missions_libres": [
+        "redéfinir modèle opérationnel it",
+        "optimiser stratégie d'externalisation"
+      ],
+      "client": "Electricity North West",
+      "resume": "Wavestone a aidé ENWL à transformer son IT pour moderniser ses services et réduire les coûts tout en améliorant la fiabilité du réseau électrique."
+    },
+    {
+      "id": "wavestone_site_ab298df2b97a2772_chunk_0",
+      "title": "Operational Resilience Maturity Model for a Major British Bank",
+      "date": "2024-03-17",
+      "url": "https://www.wavestone.com/en/clients-story/operational-resilience-maturity-model/",
+      "lang": "en",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "modélisation de maturité opérationnelle",
+        "évaluation de résilience organisationnelle"
+      ],
+      "client": "une grande banque britannique",
+      "resume": "Wavestone a conçu un modèle de maturité en résilience opérationnelle pour une banque britannique, évalué son niveau actuel et établi un processus d'amélioration continue aligné sur les exigences réglementaires."
+    },
+    {
+      "id": "wavestone_site_bb81dbb47bbed15e",
+      "title": "Résilience opérationnelle : évaluation de la maturité d'une banque britannique",
+      "date": "2024-03-17",
+      "url": "https://www.wavestone.com/fr/clients-story/maturite-resilience-operationnelle-banque-britannique/",
+      "lang": "fr",
+      "secteur": "Banque et services financiers",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Sécurité et résilience"
+      ],
+      "secteur_libre": "services financiers",
+      "missions_libres": [
+        "évaluation de maturité",
+        "conseil en résilience"
+      ],
+      "client": "grande banque britannique",
+      "resume": "Wavestone a évalué et amélioré la résilience opérationnelle de la banque pour répondre aux exigences réglementaires de la BoE et de la FCA d'ici 2025."
+    },
+    {
+      "id": "wavestone_site_61dd88e9a7cd8ec7_chunk_0",
+      "title": "Une industrie pharmaceutique où les fusions & acquisitions sont légion",
+      "date": "2024-02-17",
+      "url": "https://www.wavestone.com/fr/clients-story/fusions-acquisitions-industrie-pharmaceutique/",
+      "lang": "fr",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "industrie pharmaceutique",
+      "missions_libres": [
+        "industrialisation des processus m&a",
+        "standardisation des pratiques"
+      ],
+      "client": "leader mondial de la biopharmaceutique",
+      "resume": "Wavestone a conçu un guide méthodologique pour structurer les fusions-acquisitions et optimiser les coûts IT, renforçant la compétitivité du groupe."
+    },
+    {
+      "id": "wavestone_site_1cda600221b20280_chunk_0",
+      "title": "A pharmaceutical industry where mergers and acquisitions are commonplace",
+      "date": "2024-02-17",
+      "url": "https://www.wavestone.com/en/clients-story/pharmaceutical-industry-mergers-acquisitions/",
+      "lang": "en",
+      "secteur": "Transport et logistique",
+      "types_mission": [
+        "Stratégie et organisation",
+        "Optimisation des processus"
+      ],
+      "secteur_libre": "industrie pharmaceutique",
+      "missions_libres": [
+        "industrialisation des processus m&a",
+        "standardisation des pratiques"
+      ],
+      "client": "leader mondial de la santé humaine",
+      "resume": "Wavestone a aidé un géant pharmaceutique à standardiser et industrialiser ses processus de fusions-acquisitions pour optimiser les coûts IT et renforcer sa compétitivité."
+    }
+  ]
+}

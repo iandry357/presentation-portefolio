@@ -20,6 +20,7 @@ from routers.wavestone.schemas import (
     NewsItem, NewsResponse,
     RagRequest, RagResponse, RagSource,
     TopicModelingResponse, Topic, TopicDoc,
+    CasClientsResponse,
     PosteItem, FamilleItem, RecrutementResponse,
 )
 from routers.wavestone import rag as rag_service
@@ -34,7 +35,9 @@ BQ_DATASET    = "wavestone_veille"
 T_NEWS        = f"`{BQ_PROJECT_ID}.{BQ_DATASET}.articles_bruts`"
 T_OFFRES      = f"`{BQ_PROJECT_ID}.{BQ_DATASET}.offres_wavestone`"
 
-TOPIC_MODELING_PATH = Path(os.getenv("WAVESTONE_TOPIC_MODELING_PATH", str(Path(__file__).parent / "data" / "topic_modeling.json")))
+DATA_DIR = Path(__file__).parent / "data"
+TOPIC_MODELING_PATH = Path(os.getenv("WAVESTONE_TOPIC_MODELING_PATH", str(DATA_DIR / "topic_modeling.json")))
+CAS_CLIENTS_PATH = DATA_DIR / "cas_clients.json"
 
 SECTIONS = ["news", "insight", "clients_story", "presse"]   # presse = google_news (pas de section en métadonnée)
 LANGUES = ["fr", "en"]
@@ -239,6 +242,22 @@ async def get_topic_modeling():
         )
     except Exception as e:
         logger.error(f"❌ /wavestone/ml/topic-modeling error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─────────────────────────────────────────
+# Cas clients
+# ─────────────────────────────────────────
+@router.get("/cas-clients", response_model=CasClientsResponse)
+async def get_cas_clients():
+    """Cas clients par secteur et type de mission — catégories tirées des données par un LLM, calculées en local."""
+    if not CAS_CLIENTS_PATH.exists():
+        raise HTTPException(status_code=404, detail="Cas clients non encore classés — lancez ml/cas_clients.py")
+    try:
+        with open(CAS_CLIENTS_PATH, "r", encoding="utf-8") as f:
+            return CasClientsResponse(**json.load(f))
+    except Exception as e:
+        logger.error(f"❌ /wavestone/cas-clients error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

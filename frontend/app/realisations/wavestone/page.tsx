@@ -5,16 +5,17 @@ import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { useAccess } from '@/components/AccessProvider';
 import {
-  NewsView, RagView, TopicView, RecrutementView, formatDate,
+  NewsView, RagView, TopicView, CasClientsView, RecrutementView, formatDate,
 } from '@/components/wavestone/WavestoneViews';
 import { fetchWavestoneStats, WavestoneStats } from '@/lib/wavestoneApi';
 
-type Vue = 'rag' | 'news' | 'topics' | 'recrutement';
+type Vue = 'rag' | 'news' | 'topics' | 'cas_clients' | 'recrutement';
 
 const VUES: { id: Vue; label: string; prive?: boolean }[] = [
   { id: 'rag', label: 'Ask AI', prive: true },
   { id: 'news', label: 'Actualités' },
   { id: 'topics', label: 'Thèmes' },
+  { id: 'cas_clients', label: 'Cas clients' },
   { id: 'recrutement', label: 'Recrutement' },
 ];
 
@@ -114,6 +115,7 @@ export default function WavestonePage() {
           {vue === 'rag' && <RagView />}
           {vue === 'news' && <NewsView />}
           {vue === 'topics' && <TopicView />}
+          {vue === 'cas_clients' && <CasClientsView />}
           {vue === 'recrutement' && <RecrutementView unlocked={unlocked} />}
         </>
       )}
@@ -124,7 +126,8 @@ export default function WavestonePage() {
         <p>Site : pages listées par les sitemaps de wavestone.com (communiqués, publications, cas clients), en français et en anglais ; robots.txt respecté, l&apos;API WordPress n&apos;est pas utilisée ; les pages « expertises » ne sont pas reprises (adresses du sitemap périmées).</p>
         <p>Presse : Google News, hors articles publiés par Wavestone elle-même (déjà couverts par le site) ; titre et résumé seulement.</p>
         <p>Ask AI (accès privé) : recherche sémantique sur les pages, la presse et les fiches d&apos;offres ; les réponses citent leurs sources et ne donnent pas de totaux.</p>
-        <p>Thèmes : LDA, un modèle par langue, sur le début de chaque document ; libellés générés par un LLM.</p>
+        <p>Thèmes : LDA, un modèle par langue, sur le début de chaque communiqué, publication et article de presse ; nombre de thèmes choisi automatiquement (cohérence et redondance des thèmes) ; libellés générés par un LLM.</p>
+        <p>Cas clients : un LLM décrit chaque cas à partir de son texte (secteur du client, type de mission, résumé), puis regroupe ces descriptions en catégories ; aucune catégorie n&apos;est fixée à la main.</p>
         <p>Recrutement : offres collectées par ma veille emploi (data / IA, Île-de-France) sur 90 jours ; le score d&apos;adéquation à mon profil (pas la qualité du poste) n&apos;est visible qu&apos;avec l&apos;accès privé.</p>
       </div>
     </div>

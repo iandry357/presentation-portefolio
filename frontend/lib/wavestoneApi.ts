@@ -86,6 +86,26 @@ export interface TopicModelingResponse {
   docs: TopicDoc[];
 }
 
+export interface CasClient {
+  id: string | null;
+  title: string | null;
+  date: string | null;
+  url: string | null;
+  lang: string | null;
+  secteur: string;
+  types_mission: string[];
+  client: string | null;
+  resume: string | null;
+}
+
+export interface CasClientsResponse {
+  genere_le: string | null;
+  total: number;
+  secteurs: string[];
+  types_mission: string[];
+  cas: CasClient[];
+}
+
 export interface PosteItem {
   titre: string;
   famille: string;
@@ -160,6 +180,9 @@ export const fetchWavestoneRag = (question: string, nResults = 8) =>
 
 export const fetchWavestoneTopicModeling = () =>
   apiFetch<TopicModelingResponse>('/wavestone/ml/topic-modeling');
+
+export const fetchWavestoneCasClients = () =>
+  apiFetch<CasClientsResponse>('/wavestone/cas-clients');
 
 export const fetchWavestoneRecrutement = () =>
   request<RecrutementResponse>('/wavestone/recrutement');
